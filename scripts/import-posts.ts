@@ -461,19 +461,30 @@ async function main(): Promise<void> {
 
   // Récupérer l'ID de l'admin pour l'affecter comme auteur des articles importés
   // (pas de req.user en Local API, le hook beforeValidate ne peut pas l'injecter)
-  const adminResult = await payload.find({
+  // Priorité : role='admin' → sinon premier user créé (create-first-user n'assigne pas toujours le rôle)
+  let adminDoc = (await payload.find({
     collection: 'users',
     where: { role: { equals: 'admin' } },
     limit: 1,
     overrideAccess: true,
-  })
-  const adminId = adminResult.docs[0]?.id
-  if (!adminId) {
-    console.error("  ✗ Aucun utilisateur admin trouvé dans Payload.")
-    console.error("    Créez d'abord un compte admin via npx payload create-user")
+  })).docs[0]
+
+  if (!adminDoc) {
+    adminDoc = (await payload.find({
+      collection: 'users',
+      sort: 'createdAt',
+      limit: 1,
+      overrideAccess: true,
+    })).docs[0]
+  }
+
+  if (!adminDoc) {
+    console.error("  ✗ Aucun utilisateur trouvé dans Payload.")
+    console.error("    Créez d'abord un compte via /admin/create-first-user")
     process.exit(1)
   }
-  console.log(`  ✓ Admin trouvé : ${adminResult.docs[0]?.email} (id=${adminId})`)
+  const adminId = adminDoc.id
+  console.log(`  ✓ Auteur des imports : ${adminDoc.email} (id=${adminId})`)
   console.log()
 
   // 4 ── Import
