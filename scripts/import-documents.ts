@@ -34,6 +34,15 @@ type DocumentCategorie =
   | 'magazines'
   | 'docs_politique_economique'
 
+const CATEGORY_ACCESS: Record<DocumentCategorie, 'public' | 'membres'> = {
+  textes_statutaires:        'public',
+  textes_reglementaires:     'public',
+  pv_reunion:                'membres',
+  ressources:                'membres',
+  magazines:                 'membres',
+  docs_politique_economique: 'membres',
+}
+
 interface PdfFile {
   filepath:  string
   filename:  string
@@ -163,7 +172,7 @@ async function main(): Promise<void> {
     for (const f of files) {
       const size = (fs.statSync(f.filepath).size / 1024).toFixed(0)
       console.log(`  • ${f.titre}`)
-      console.log(`    fichier: ${f.filename} (${size} Ko) | catégorie: ${f.categorie} | accès: membres`)
+      console.log(`    fichier: ${f.filename} (${size} Ko) | catégorie: ${f.categorie} | accès: ${CATEGORY_ACCESS[f.categorie!]}`)
     }
     console.log()
     console.log("  Relancer sans --dry-run pour lancer l'import réel.")
@@ -220,7 +229,7 @@ async function main(): Promise<void> {
           titre:     file.titre,
           fichier:   mediaDoc.id,
           categorie: file.categorie!,
-          acces:     'membres',
+          acces:     CATEGORY_ACCESS[file.categorie!],
         },
         overrideAccess: true,
       })
