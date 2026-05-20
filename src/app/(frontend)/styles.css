@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Couleurs institutionnelles CAP ── */
-  --color-cap-900: #0f2040;
-  --color-cap-800: #1b3a6b;
-  --color-cap-700: #1e4080;
-  --color-cap-600: #2a5298;
-  --color-cap-500: #3a6bc0;
-  --color-cap-100: #dce8f8;
-  --color-cap-50:  #f0f5fd;
+  /* ── Couleurs institutionnelles CAP Sénégal ── */
+  --color-cap-950: #071a07;
+  --color-cap-900: #0f3b0f;
+  --color-cap-800: #1b5e20;
+  --color-cap-700: #2e7d32;
+  --color-cap-600: #388e3c;
+  --color-cap-500: #43a047;
+  --color-cap-100: #c8e6c9;
+  --color-cap-50:  #e8f5e9;
 
-  --color-gold-500: #c9a227;
-  --color-gold-400: #d4b84a;
+  --color-gold-600: #f57f17;
+  --color-gold-500: #f9a825;
+  --color-gold-400: #fbc02d;
 }

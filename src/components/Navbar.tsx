@@ -15,7 +15,7 @@ const NAV_LINKS = [
 ]
 
 export function Navbar() {
-  const pathname  = usePathname()
+  const pathname        = usePathname()
   const [open, setOpen] = useState(false)
 
   return (
@@ -26,12 +26,12 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-bold tracking-wide hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2 hover:opacity-90 transition-opacity"
           >
             <span className="rounded bg-gold-500 px-2 py-0.5 text-cap-900 text-sm font-extrabold">
               CAP
             </span>
-            <span className="hidden sm:inline text-white/90 text-sm font-medium">
+            <span className="hidden sm:inline text-white/90 text-sm font-medium tracking-wide">
               Cercle des Administrateurs Publics
             </span>
           </Link>
@@ -43,10 +43,10 @@ export function Navbar() {
                 key={href}
                 href={href}
                 className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                  'px-3 py-2 text-sm font-medium transition-colors border-b-2',
                   pathname === href
-                    ? 'bg-cap-700 text-white'
-                    : 'text-white/80 hover:bg-cap-700 hover:text-white',
+                    ? 'text-white border-gold-500'
+                    : 'text-white/75 border-transparent hover:text-white hover:border-white/40',
                 )}
               >
                 {label}
@@ -58,7 +58,7 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Link
               href="/connexion"
-              className="hidden md:inline-flex items-center rounded-md bg-gold-500 px-4 py-2 text-sm font-semibold text-cap-900 hover:bg-gold-400 transition-colors"
+              className="hidden md:inline-flex items-center rounded-md bg-gold-500 px-4 py-2 text-sm font-semibold text-black hover:bg-gold-400 transition-colors"
             >
               Connexion
             </Link>
@@ -85,10 +85,10 @@ export function Navbar() {
                 href={href}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  'px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                  'px-3 py-2 text-sm font-medium border-l-2 transition-colors',
                   pathname === href
-                    ? 'bg-cap-700 text-white'
-                    : 'text-white/80 hover:bg-cap-700 hover:text-white',
+                    ? 'text-white border-gold-500 bg-cap-700/50'
+                    : 'text-white/75 border-transparent hover:text-white hover:border-white/40',
                 )}
               >
                 {label}
@@ -97,7 +97,7 @@ export function Navbar() {
             <Link
               href="/connexion"
               onClick={() => setOpen(false)}
-              className="mt-2 mb-1 inline-flex justify-center rounded-md bg-gold-500 px-4 py-2 text-sm font-semibold text-cap-900 hover:bg-gold-400 transition-colors"
+              className="mt-2 mb-1 inline-flex justify-center rounded-md bg-gold-500 px-4 py-2 text-sm font-semibold text-black hover:bg-gold-400 transition-colors"
             >
               Connexion
             </Link>
