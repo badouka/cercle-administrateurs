@@ -69,6 +69,11 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    membres: Membre;
+    activities: Activity;
+    posts: Post;
+    documents: Document;
+    'activity-registrations': ActivityRegistration;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +83,11 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    membres: MembresSelect<false> | MembresSelect<true>;
+    activities: ActivitiesSelect<false> | ActivitiesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    documents: DocumentsSelect<false> | DocumentsSelect<true>;
+    'activity-registrations': ActivityRegistrationsSelect<false> | ActivityRegistrationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -123,6 +133,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'membre' | 'gestionnaire' | 'admin';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -163,6 +174,157 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "membres".
+ */
+export interface Membre {
+  id: number;
+  /**
+   * Compte utilisateur associé à ce profil
+   */
+  user: number | User;
+  prenom: string;
+  nom: string;
+  photo?: (number | null) | Media;
+  biographie?: string | null;
+  poste?: {
+    titre?: string | null;
+    organisme?: string | null;
+    direction?: string | null;
+  };
+  coordonnees?: {
+    telephone?: string | null;
+    emailProfessionnel?: string | null;
+    linkedin?: string | null;
+  };
+  adhesion: {
+    numeroAdhesion?: string | null;
+    dateAdhesion?: string | null;
+    statut: 'actif' | 'inactif' | 'suspendu';
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities".
+ */
+export interface Activity {
+  id: number;
+  titre: string;
+  /**
+   * Auto-généré depuis le titre à la création. Modifiable manuellement.
+   */
+  slug?: string | null;
+  type?: ('atelier' | 'seminaire') | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  lieu?: string | null;
+  date_debut: string;
+  date_fin?: string | null;
+  image?: (number | null) | Media;
+  statut: 'a_venir' | 'en_cours' | 'termine';
+  places_disponibles?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  titre: string;
+  /**
+   * Auto-généré depuis le titre à la création.
+   */
+  slug?: string | null;
+  contenu: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (number | null) | Media;
+  categorie: 'actualites' | 'ateliers_seminaires';
+  statut: 'brouillon' | 'publie';
+  /**
+   * Renseigné automatiquement à la première publication.
+   */
+  publie_le?: string | null;
+  /**
+   * Défini automatiquement à la création.
+   */
+  auteur: number | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number;
+  titre: string;
+  /**
+   * Auto-généré depuis le titre à la création.
+   */
+  slug?: string | null;
+  fichier: number | Media;
+  categorie:
+    | 'textes_statutaires'
+    | 'textes_reglementaires'
+    | 'pv_reunion'
+    | 'ressources'
+    | 'magazines'
+    | 'docs_politique_economique';
+  acces: 'public' | 'membres';
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity-registrations".
+ */
+export interface ActivityRegistration {
+  id: number;
+  /**
+   * Auto-rempli depuis le profil de l'utilisateur connecté.
+   */
+  member: number | Membre;
+  activity: number | Activity;
+  statut: 'inscrit' | 'annule';
+  /**
+   * Renseigné automatiquement à la création.
+   */
+  inscrit_le?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -192,6 +354,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'membres';
+        value: number | Membre;
+      } | null)
+    | ({
+        relationTo: 'activities';
+        value: number | Activity;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'documents';
+        value: number | Document;
+      } | null)
+    | ({
+        relationTo: 'activity-registrations';
+        value: number | ActivityRegistration;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -240,6 +422,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -274,6 +457,100 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "membres_select".
+ */
+export interface MembresSelect<T extends boolean = true> {
+  user?: T;
+  prenom?: T;
+  nom?: T;
+  photo?: T;
+  biographie?: T;
+  poste?:
+    | T
+    | {
+        titre?: T;
+        organisme?: T;
+        direction?: T;
+      };
+  coordonnees?:
+    | T
+    | {
+        telephone?: T;
+        emailProfessionnel?: T;
+        linkedin?: T;
+      };
+  adhesion?:
+    | T
+    | {
+        numeroAdhesion?: T;
+        dateAdhesion?: T;
+        statut?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities_select".
+ */
+export interface ActivitiesSelect<T extends boolean = true> {
+  titre?: T;
+  slug?: T;
+  type?: T;
+  description?: T;
+  lieu?: T;
+  date_debut?: T;
+  date_fin?: T;
+  image?: T;
+  statut?: T;
+  places_disponibles?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  titre?: T;
+  slug?: T;
+  contenu?: T;
+  image?: T;
+  categorie?: T;
+  statut?: T;
+  publie_le?: T;
+  auteur?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  titre?: T;
+  slug?: T;
+  fichier?: T;
+  categorie?: T;
+  acces?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity-registrations_select".
+ */
+export interface ActivityRegistrationsSelect<T extends boolean = true> {
+  member?: T;
+  activity?: T;
+  statut?: T;
+  inscrit_le?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
