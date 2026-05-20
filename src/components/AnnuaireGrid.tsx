@@ -37,7 +37,7 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
           placeholder="Rechercher par nom ou organisme…"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-9 pr-4 text-sm focus:border-cap-600 focus:outline-none focus:ring-2 focus:ring-cap-600/20"
+          className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10"
         />
       </div>
 
@@ -45,7 +45,7 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
         <p className="text-gray-500 text-sm">Aucun membre ne correspond à votre recherche.</p>
       ) : (
         <>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-gray-400 mb-6">
             {filtered.length} membre{filtered.length > 1 ? 's' : ''}
             {query.trim() ? ` pour « ${query.trim()} »` : ''}
           </p>
@@ -60,10 +60,10 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
                 <Link
                   key={membre.id}
                   href={`/annuaire/${membre.id}`}
-                  className="group flex flex-col items-center rounded-xl border border-gray-200 p-5 text-center hover:border-cap-600 hover:shadow-md transition-all"
+                  className="group flex flex-col items-center rounded-xl border border-[#E5E5E5] bg-white p-5 text-center hover:border-black hover:shadow-md transition-all"
                 >
                   {/* Avatar */}
-                  <div className="mb-3 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-cap-100 ring-2 ring-cap-200 group-hover:ring-cap-600 transition-all">
+                  <div className="mb-3 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gray-100 ring-2 ring-gray-200 group-hover:ring-black transition-all">
                     {photo?.url ? (
                       <Image
                         src={photo.url}
@@ -74,7 +74,7 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center">
-                        <User size={32} className="text-cap-500" />
+                        <User size={32} className="text-gray-400" />
                       </div>
                     )}
                   </div>
@@ -86,7 +86,7 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
                     <p className="mt-1 text-xs text-gray-500 line-clamp-1">{membre.poste.titre}</p>
                   )}
                   {membre.poste?.organisme && (
-                    <p className="mt-0.5 text-xs font-medium text-cap-700 line-clamp-1">
+                    <p className="mt-0.5 text-xs font-medium text-gray-700 line-clamp-1">
                       {membre.poste.organisme}
                     </p>
                   )}

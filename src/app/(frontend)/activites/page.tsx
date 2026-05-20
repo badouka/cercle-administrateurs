@@ -21,14 +21,14 @@ function formatDateShort(dateStr: string): string {
 }
 
 const TYPE_CONFIG = {
-  atelier:   { label: 'Atelier',   cls: 'bg-cap-100 text-cap-800' },
-  seminaire: { label: 'Séminaire', cls: 'bg-gold-500/15 text-amber-800' },
+  atelier:   { label: 'Atelier' },
+  seminaire: { label: 'Séminaire' },
 }
 
 const STATUT_CONFIG = {
-  a_venir: { label: 'À venir',   cls: 'bg-emerald-100 text-emerald-800' },
-  en_cours: { label: 'En cours', cls: 'bg-blue-100 text-blue-800' },
-  termine:  { label: 'Terminé',  cls: 'bg-gray-100 text-gray-500' },
+  a_venir:  { label: 'À venir',  cls: 'bg-black text-white' },
+  en_cours: { label: 'En cours', cls: 'bg-gray-700 text-white' },
+  termine:  { label: 'Terminé',  cls: 'bg-[#F5F5F5] text-gray-500' },
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -46,16 +46,14 @@ export default async function ActivitesPage() {
     overrideAccess: true,
   })
 
-  // Séparer à venir / en cours vs. terminés
   const upcoming = activites.filter(a => a.statut !== 'termine')
   const past      = activites.filter(a => a.statut === 'termine')
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 
-      {/* En-tête */}
       <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-cap-800">Activités</h1>
+        <h1 className="text-3xl font-bold text-black">Activités</h1>
         <p className="mt-2 text-gray-500">
           Ateliers et séminaires organisés par le Cercle des Administrateurs Publics.
         </p>
@@ -66,36 +64,30 @@ export default async function ActivitesPage() {
       ) : (
         <div className="space-y-14">
 
-          {/* Prochaines activités */}
           {upcoming.length > 0 && (
             <section>
-              <h2 className="mb-6 text-lg font-semibold text-gray-800">
+              <h2 className="mb-6 text-lg font-semibold text-black flex items-center gap-2">
                 Prochaines activités
-                <span className="ml-2 rounded-full bg-cap-100 px-2.5 py-0.5 text-sm font-medium text-cap-700">
+                <span className="rounded-full bg-black text-white px-2.5 py-0.5 text-xs font-medium">
                   {upcoming.length}
                 </span>
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {upcoming.map(activite => (
-                  <ActiviteCard key={activite.id} activite={activite} />
-                ))}
+                {upcoming.map(a => <ActiviteCard key={a.id} activite={a} />)}
               </div>
             </section>
           )}
 
-          {/* Activités passées */}
           {past.length > 0 && (
             <section>
-              <h2 className="mb-6 text-lg font-semibold text-gray-500">
+              <h2 className="mb-6 text-lg font-semibold text-gray-400 flex items-center gap-2">
                 Activités passées
-                <span className="ml-2 rounded-full bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-400">
+                <span className="rounded-full bg-[#F5F5F5] text-gray-500 px-2.5 py-0.5 text-xs font-medium">
                   {past.length}
                 </span>
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {past.map(activite => (
-                  <ActiviteCard key={activite.id} activite={activite} past />
-                ))}
+                {past.map(a => <ActiviteCard key={a.id} activite={a} past />)}
               </div>
             </section>
           )}
@@ -110,16 +102,15 @@ export default async function ActivitesPage() {
 
 function ActiviteCard({ activite, past = false }: { activite: Activity; past?: boolean }) {
   const image        = typeof activite.image === 'object' && activite.image ? activite.image as Media : null
-  const typeConfig   = activite.type ? TYPE_CONFIG[activite.type]   : null
+  const typeConfig   = activite.type ? TYPE_CONFIG[activite.type] : null
   const statutConfig = STATUT_CONFIG[activite.statut]
 
   return (
     <article className={cn(
-      'flex flex-col rounded-xl border overflow-hidden shadow-sm transition-shadow hover:shadow-md',
-      past ? 'border-gray-200 opacity-80' : 'border-gray-200',
+      'flex flex-col rounded-xl border border-[#E5E5E5] bg-white overflow-hidden hover:shadow-md transition-shadow',
+      past && 'opacity-70',
     )}>
 
-      {/* Image ou bandeau coloré */}
       {image?.url ? (
         <div className="relative aspect-video bg-gray-100">
           <Image
@@ -131,16 +122,8 @@ function ActiviteCard({ activite, past = false }: { activite: Activity; past?: b
           />
         </div>
       ) : (
-        <div className={cn(
-          'aspect-video flex items-center justify-center',
-          past ? 'bg-gray-100' : 'bg-cap-800',
-        )}>
-          <span className={cn(
-            'text-2xl font-bold select-none',
-            past ? 'text-gray-300' : 'text-white/20',
-          )}>
-            CAP
-          </span>
+        <div className="aspect-video bg-gray-100 flex items-center justify-center">
+          <span className="text-2xl font-bold text-gray-300 select-none">CAP</span>
         </div>
       )}
 
@@ -148,7 +131,7 @@ function ActiviteCard({ activite, past = false }: { activite: Activity; past?: b
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
           {typeConfig && (
-            <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${typeConfig.cls}`}>
+            <span className="rounded-full bg-[#F5F5F5] px-2.5 py-0.5 text-xs font-medium text-gray-700">
               {typeConfig.label}
             </span>
           )}
@@ -158,14 +141,12 @@ function ActiviteCard({ activite, past = false }: { activite: Activity; past?: b
         </div>
 
         {/* Titre */}
-        <h3 className="font-semibold text-gray-900 leading-snug">
-          {activite.titre}
-        </h3>
+        <h3 className="font-semibold text-black leading-snug">{activite.titre}</h3>
 
         {/* Méta */}
         <ul className="space-y-1.5 text-sm text-gray-500 mt-auto">
           <li className="flex items-start gap-2">
-            <CalendarDays size={14} className="mt-0.5 shrink-0 text-cap-600" />
+            <CalendarDays size={14} className="mt-0.5 shrink-0 text-gray-400" />
             <div>
               <span>{formatDate(activite.date_debut)}</span>
               {activite.date_fin && activite.date_fin !== activite.date_debut && (
@@ -175,13 +156,13 @@ function ActiviteCard({ activite, past = false }: { activite: Activity; past?: b
           </li>
           {activite.lieu && (
             <li className="flex items-center gap-2">
-              <MapPin size={14} className="shrink-0 text-cap-600" />
+              <MapPin size={14} className="shrink-0 text-gray-400" />
               {activite.lieu}
             </li>
           )}
           {activite.places_disponibles != null && activite.statut === 'a_venir' && (
             <li className="flex items-center gap-2">
-              <Users size={14} className="shrink-0 text-cap-600" />
+              <Users size={14} className="shrink-0 text-gray-400" />
               {activite.places_disponibles} place{activite.places_disponibles > 1 ? 's' : ''} disponible{activite.places_disponibles > 1 ? 's' : ''}
             </li>
           )}

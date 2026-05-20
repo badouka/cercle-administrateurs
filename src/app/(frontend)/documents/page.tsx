@@ -20,8 +20,6 @@ const CATEGORIE_CONFIG: Record<PublicCategorie, { label: string; description: st
   },
 }
 
-// ─── Helper taille fichier ────────────────────────────────────────────────────
-
 function formatFilesize(bytes?: number | null): string {
   if (!bytes) return ''
   if (bytes < 1024)        return `${bytes} o`
@@ -50,12 +48,8 @@ export default async function DocumentsPage() {
     overrideAccess: true,
   })
 
-  // Grouper par catégorie dans l'ordre défini
   const grouped = Object.fromEntries(
-    PUBLIC_CATEGORIES.map(cat => [
-      cat,
-      docs.filter(d => d.categorie === cat),
-    ]),
+    PUBLIC_CATEGORIES.map(cat => [cat, docs.filter(d => d.categorie === cat)]),
   ) as Record<PublicCategorie, Document[]>
 
   const totalDocs = docs.length
@@ -63,9 +57,8 @@ export default async function DocumentsPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
 
-      {/* En-tête */}
       <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-cap-800">Documents</h1>
+        <h1 className="text-3xl font-bold text-black">Documents</h1>
         <p className="mt-2 text-gray-500">
           Textes de référence et documents officiels du Cercle des Administrateurs Publics.
           {totalDocs > 0 && (
@@ -85,35 +78,29 @@ export default async function DocumentsPage() {
 
             return (
               <section key={cat}>
-                {/* En-tête de section */}
-                <div className="mb-5 flex items-end justify-between border-b-2 border-cap-800 pb-3">
+                <div className="mb-5 flex items-end justify-between border-b-2 border-black pb-3">
                   <div>
-                    <h2 className="text-xl font-bold text-cap-800">{catConfig.label}</h2>
+                    <h2 className="text-xl font-bold text-black">{catConfig.label}</h2>
                     <p className="mt-0.5 text-sm text-gray-500">{catConfig.description}</p>
                   </div>
-                  <span className="shrink-0 rounded-full bg-cap-100 px-3 py-0.5 text-sm font-medium text-cap-700">
+                  <span className="shrink-0 rounded-full bg-[#F5F5F5] px-3 py-0.5 text-sm font-medium text-gray-700">
                     {catDocs.length}
                   </span>
                 </div>
 
-                {/* Liste de documents */}
                 <ul className="divide-y divide-gray-100">
                   {catDocs.map(doc => {
-                    const fichier = typeof doc.fichier === 'object' ? doc.fichier as Media : null
+                    const fichier  = typeof doc.fichier === 'object' ? doc.fichier as Media : null
                     const filesize = formatFilesize(fichier?.filesize)
 
                     return (
                       <li key={doc.id} className="flex items-start gap-4 py-4">
-                        {/* Icône */}
-                        <div className="mt-0.5 shrink-0 rounded-lg bg-cap-100 p-2.5">
-                          <FileText size={18} className="text-cap-700" />
+                        <div className="mt-0.5 shrink-0 rounded-lg bg-[#F5F5F5] p-2.5">
+                          <FileText size={18} className="text-gray-600" />
                         </div>
 
-                        {/* Infos */}
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 leading-snug">
-                            {doc.titre}
-                          </p>
+                          <p className="font-medium text-black leading-snug">{doc.titre}</p>
                           {doc.description && (
                             <p className="mt-0.5 text-sm text-gray-500 line-clamp-2">
                               {doc.description}
@@ -124,14 +111,13 @@ export default async function DocumentsPage() {
                           )}
                         </div>
 
-                        {/* Bouton téléchargement */}
                         {fichier?.url && (
                           <a
                             href={fichier.url}
                             download
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-cap-600 px-3 py-2 text-xs font-semibold text-cap-700 hover:bg-cap-800 hover:text-white hover:border-cap-800 transition-colors"
+                            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-black px-3 py-2 text-xs font-semibold text-black hover:bg-black hover:text-white transition-colors"
                             title={`Télécharger ${doc.titre}`}
                           >
                             <Download size={13} />
@@ -149,9 +135,9 @@ export default async function DocumentsPage() {
       )}
 
       {/* Note accès membres */}
-      <div className="mt-12 rounded-xl border border-gold-500/30 bg-gold-500/5 p-5">
+      <div className="mt-12 rounded-xl border border-gray-200 bg-[#F5F5F5] p-5">
         <p className="text-sm text-gray-600">
-          <span className="font-semibold text-cap-700">Membres du CAP :</span>{' '}
+          <span className="font-semibold text-black">Membres du CAP :</span>{' '}
           d'autres documents (PV de réunion, ressources, magazines) sont accessibles après connexion dans votre espace membre.
         </p>
       </div>

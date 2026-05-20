@@ -19,34 +19,34 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="bg-cap-800 text-white shadow-md">
+    <header className="bg-white border-b border-gray-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+            className="flex items-center gap-2.5 hover:opacity-75 transition-opacity"
           >
-            <span className="rounded bg-gold-500 px-2 py-0.5 text-cap-900 text-sm font-extrabold">
+            <span className="rounded bg-black px-2 py-0.5 text-sm font-extrabold text-white tracking-wide">
               CAP
             </span>
-            <span className="hidden sm:inline text-white/90 text-sm font-medium tracking-wide">
+            <span className="hidden sm:inline text-sm font-medium text-gray-700 tracking-wide">
               Cercle des Administrateurs Publics
             </span>
           </Link>
 
           {/* Liens desktop */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-0.5">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  'px-3 py-2 text-sm font-medium transition-colors border-b-2',
+                  'px-3 py-2 text-sm transition-colors border-b-2',
                   pathname === href
-                    ? 'text-white border-gold-500'
-                    : 'text-white/75 border-transparent hover:text-white hover:border-white/40',
+                    ? 'font-semibold text-black border-black'
+                    : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300',
                 )}
               >
                 {label}
@@ -58,15 +58,14 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Link
               href="/connexion"
-              className="hidden md:inline-flex items-center rounded-md bg-gold-500 px-4 py-2 text-sm font-semibold text-black hover:bg-gold-400 transition-colors"
+              className="hidden md:inline-flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
             >
               Connexion
             </Link>
 
-            {/* Hamburger (mobile) */}
             <button
               onClick={() => setOpen(prev => !prev)}
-              className="md:hidden rounded-md p-2 text-white/80 hover:bg-cap-700 hover:text-white transition-colors"
+              className="md:hidden rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-black transition-colors"
               aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
               {open ? <X size={22} /> : <Menu size={22} />}
@@ -77,18 +76,18 @@ export function Navbar() {
 
       {/* Menu mobile */}
       {open && (
-        <div className="md:hidden border-t border-cap-700">
-          <nav className="flex flex-col px-4 py-2 gap-1">
+        <div className="md:hidden border-t border-gray-200 bg-white">
+          <nav className="flex flex-col px-4 py-2 gap-0.5">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  'px-3 py-2 text-sm font-medium border-l-2 transition-colors',
+                  'px-3 py-2.5 text-sm border-l-2 transition-colors',
                   pathname === href
-                    ? 'text-white border-gold-500 bg-cap-700/50'
-                    : 'text-white/75 border-transparent hover:text-white hover:border-white/40',
+                    ? 'font-semibold text-black border-black bg-gray-50'
+                    : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
                 )}
               >
                 {label}
@@ -97,7 +96,7 @@ export function Navbar() {
             <Link
               href="/connexion"
               onClick={() => setOpen(false)}
-              className="mt-2 mb-1 inline-flex justify-center rounded-md bg-gold-500 px-4 py-2 text-sm font-semibold text-black hover:bg-gold-400 transition-colors"
+              className="mt-2 mb-1 inline-flex justify-center rounded-md bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
             >
               Connexion
             </Link>

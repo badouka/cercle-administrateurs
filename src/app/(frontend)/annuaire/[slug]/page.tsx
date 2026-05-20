@@ -60,12 +60,8 @@ export default async function MembreDetailPage({ params }: Props) {
   const { user }        = await payload.auth({ headers })
   const isAuthenticated = Boolean(user)
 
-  const photo = typeof membre.photo === 'object' && membre.photo
-    ? (membre.photo as Media)
-    : null
-
+  const photo    = typeof membre.photo === 'object' && membre.photo ? (membre.photo as Media) : null
   const initiales = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
-
   const hasPoste = membre.poste?.titre || membre.poste?.organisme || membre.poste?.direction
   const hasCoord = membre.coordonnees?.telephone || membre.coordonnees?.emailProfessionnel || membre.coordonnees?.linkedin
 
@@ -75,20 +71,20 @@ export default async function MembreDetailPage({ params }: Props) {
       {/* Retour */}
       <Link
         href="/annuaire"
-        className="inline-flex items-center gap-1.5 text-sm text-cap-700 hover:text-cap-800 mb-8 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-black mb-8 transition-colors"
       >
         <ArrowLeft size={16} />
         Retour à l'annuaire
       </Link>
 
-      <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+      <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden">
 
-        {/* Header */}
-        <div className="bg-cap-800 px-8 py-10">
+        {/* Header noir */}
+        <div className="bg-black px-8 py-10">
           <div className="flex flex-col sm:flex-row items-center gap-6 text-white">
 
             {/* Photo / initiales */}
-            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full ring-4 ring-gold-500/60 bg-cap-700">
+            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
               {photo?.url ? (
                 <Image
                   src={photo.url}
@@ -98,7 +94,7 @@ export default async function MembreDetailPage({ params }: Props) {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-cap-300">
+                <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-gray-500">
                   {initiales}
                 </div>
               )}
@@ -106,23 +102,19 @@ export default async function MembreDetailPage({ params }: Props) {
 
             {/* Identité */}
             <div className="text-center sm:text-left">
-              <h1 className="text-2xl font-bold">
-                {membre.prenom} {membre.nom}
-              </h1>
+              <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
               {membre.poste?.titre && (
-                <p className="mt-1 text-white/80">{membre.poste.titre}</p>
+                <p className="mt-1 text-gray-400">{membre.poste.titre}</p>
               )}
               {membre.poste?.organisme && (
-                <p className="mt-0.5 font-medium text-gold-400">
-                  {membre.poste.organisme}
-                </p>
+                <p className="mt-0.5 text-gray-300 font-medium">{membre.poste.organisme}</p>
               )}
             </div>
           </div>
         </div>
 
         {/* Corps */}
-        <div className="p-8 space-y-8">
+        <div className="bg-white p-8 space-y-8">
 
           {/* Biographie */}
           {membre.biographie && (
@@ -147,11 +139,11 @@ export default async function MembreDetailPage({ params }: Props) {
                 </h2>
                 <ul className="space-y-2 text-sm text-gray-700">
                   {membre.poste?.titre && (
-                    <li className="font-medium">{membre.poste.titre}</li>
+                    <li className="font-medium text-black">{membre.poste.titre}</li>
                   )}
                   {membre.poste?.organisme && (
-                    <li className="flex items-center gap-1.5 text-cap-700">
-                      <Building2 size={13} className="shrink-0" />
+                    <li className="flex items-center gap-1.5">
+                      <Building2 size={13} className="shrink-0 text-gray-400" />
                       {membre.poste.organisme}
                     </li>
                   )}
@@ -175,7 +167,7 @@ export default async function MembreDetailPage({ params }: Props) {
                       <li>
                         <a
                           href={`tel:${membre.coordonnees.telephone}`}
-                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-cap-700 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
                         >
                           <Phone size={13} className="shrink-0 text-gray-400" />
                           {membre.coordonnees.telephone}
@@ -186,7 +178,7 @@ export default async function MembreDetailPage({ params }: Props) {
                       <li>
                         <a
                           href={`mailto:${membre.coordonnees.emailProfessionnel}`}
-                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-cap-700 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
                         >
                           <Mail size={13} className="shrink-0 text-gray-400" />
                           {membre.coordonnees.emailProfessionnel}
@@ -199,9 +191,9 @@ export default async function MembreDetailPage({ params }: Props) {
                           href={membre.coordonnees.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-[#0A66C2] hover:underline"
+                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
                         >
-                          <ExternalLink size={13} className="shrink-0" />
+                          <ExternalLink size={13} className="shrink-0 text-gray-400" />
                           Profil LinkedIn
                         </a>
                       </li>
@@ -219,7 +211,7 @@ export default async function MembreDetailPage({ params }: Props) {
                     </p>
                     <Link
                       href="/connexion"
-                      className="mt-2 inline-block text-sm font-semibold text-cap-700 hover:text-cap-800 underline underline-offset-2"
+                      className="mt-2 inline-block text-sm font-semibold text-black underline underline-offset-2 hover:text-gray-700"
                     >
                       Se connecter →
                     </Link>

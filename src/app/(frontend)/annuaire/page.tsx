@@ -19,9 +19,8 @@ export default async function AnnuairePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 
-      {/* En-tête */}
       <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-cap-800">Annuaire des membres</h1>
+        <h1 className="text-3xl font-bold text-black">Annuaire des membres</h1>
         <p className="mt-2 text-gray-500">
           Retrouvez les membres du Cercle des Administrateurs Publics du Sénégal.
         </p>

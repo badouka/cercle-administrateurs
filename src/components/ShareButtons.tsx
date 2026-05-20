@@ -20,41 +20,27 @@ export function ShareButtons({ title, path }: ShareButtonsProps) {
   const encodedUrl   = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
 
+  const links = [
+    { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+    { label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+    { label: '𝕏',        href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}` },
+    { label: 'WhatsApp', href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
+  ]
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs text-gray-400">Partager :</span>
-      <a
-        href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs font-medium px-2.5 py-1 rounded bg-[#1877F2] text-white hover:bg-[#1565D8] transition-colors"
-      >
-        Facebook
-      </a>
-      <a
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs font-medium px-2.5 py-1 rounded bg-[#0A66C2] text-white hover:bg-[#0855A0] transition-colors"
-      >
-        LinkedIn
-      </a>
-      <a
-        href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs font-medium px-2.5 py-1 rounded bg-black text-white hover:bg-gray-800 transition-colors"
-      >
-        𝕏
-      </a>
-      <a
-        href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs font-medium px-2.5 py-1 rounded bg-[#25D366] text-white hover:bg-[#1DAE55] transition-colors"
-      >
-        WhatsApp
-      </a>
+      {links.map(({ label, href }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs font-medium px-2.5 py-1 rounded border border-black text-black hover:bg-black hover:text-white transition-colors"
+        >
+          {label}
+        </a>
+      ))}
     </div>
   )
 }

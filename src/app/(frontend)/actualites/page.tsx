@@ -35,11 +35,6 @@ const CATEGORIE_LABELS: Record<string, string> = {
   ateliers_seminaires: 'Ateliers & Séminaires',
 }
 
-const CATEGORIE_COLORS: Record<string, string> = {
-  actualites:          'bg-cap-100 text-cap-800',
-  ateliers_seminaires: 'bg-gold-500/15 text-amber-800',
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = { title: 'Actualités' }
@@ -61,7 +56,7 @@ export default async function ActualitesPage() {
 
       {/* En-tête */}
       <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-cap-800">Actualités</h1>
+        <h1 className="text-3xl font-bold text-black">Actualités</h1>
         <p className="mt-2 text-gray-500">
           Restez informé des dernières nouvelles du Cercle des Administrateurs Publics.
         </p>
@@ -79,7 +74,7 @@ export default async function ActualitesPage() {
               <article
                 key={post.id}
                 id={`article-${post.id}`}
-                className="flex flex-col rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="flex flex-col rounded-xl border border-[#E5E5E5] bg-white overflow-hidden hover:shadow-md transition-shadow"
               >
                 {/* Image */}
                 {image?.url ? (
@@ -93,15 +88,15 @@ export default async function ActualitesPage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-video bg-cap-100 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-cap-600/30 select-none">CAP</span>
+                  <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                    <span className="text-3xl font-bold text-gray-300 select-none">CAP</span>
                   </div>
                 )}
 
                 <div className="flex flex-col flex-1 p-5 gap-3">
                   {/* Catégorie + date */}
                   <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <span className={`rounded-full px-2.5 py-0.5 font-medium ${CATEGORIE_COLORS[post.categorie] ?? 'bg-gray-100 text-gray-600'}`}>
+                    <span className="rounded-full bg-[#F5F5F5] px-2.5 py-0.5 font-medium text-gray-700">
                       {CATEGORIE_LABELS[post.categorie] ?? post.categorie}
                     </span>
                     {post.publie_le && (
@@ -115,7 +110,7 @@ export default async function ActualitesPage() {
                   </div>
 
                   {/* Titre */}
-                  <h2 className="text-base font-semibold text-gray-900 leading-snug">
+                  <h2 className="text-base font-semibold text-black leading-snug">
                     {post.titre}
                   </h2>
 
