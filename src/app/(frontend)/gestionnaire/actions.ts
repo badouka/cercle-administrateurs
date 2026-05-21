@@ -152,7 +152,7 @@ export async function uploadMedia(
 
 // ── Lexical helper ────────────────────────────────────────────────────────────
 
-export function textToLexical(text: string) {
+function textToLexical(text: string) {
   const paras  = text.split(/\n{2,}/).filter(p => p.trim())
   const blocks = paras.length > 0 ? paras : ['']
   return {
