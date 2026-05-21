@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
+import { isAdmin } from '@/access'
 
 const toSlug = (value: string) =>
   value
@@ -25,9 +26,9 @@ export const Activities: CollectionConfig = {
       if (role === 'admin' || role === 'gestionnaire') return true
       return { statut: { in: ['a_venir', 'en_cours'] } }
     },
-    create: ({ req: { user } }) => (user as User)?.role === 'admin',
-    update: ({ req: { user } }) => (user as User)?.role === 'admin',
-    delete: ({ req: { user } }) => (user as User)?.role === 'admin',
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
   },
   hooks: {
     beforeChange: [

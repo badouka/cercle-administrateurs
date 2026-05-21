@@ -1,8 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
-
-const isAdmin = ({ req: { user } }: Parameters<NonNullable<CollectionConfig['access']>['read']>[0]) =>
-  (user as User)?.role === 'admin'
+import { isAdmin } from '@/access'
 
 export const Users: CollectionConfig = {
   slug: 'users',

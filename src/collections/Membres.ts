@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
+import { isAdmin } from '@/access'
 
 export const Membres: CollectionConfig = {
   slug: 'membres',
@@ -14,7 +15,7 @@ export const Membres: CollectionConfig = {
       if (role === 'admin' || role === 'gestionnaire') return true
       return { user: { equals: id } }
     },
-    create: ({ req: { user } }) => (user as User)?.role === 'admin',
+    create: isAdmin,
     update: ({ req: { user } }) => {
       if (!user) return false
       const { role, id } = user as User
@@ -22,7 +23,7 @@ export const Membres: CollectionConfig = {
       if (role === 'gestionnaire') return false
       return { user: { equals: id } }
     },
-    delete: ({ req: { user } }) => (user as User)?.role === 'admin',
+    delete: isAdmin,
   },
   fields: [
     {

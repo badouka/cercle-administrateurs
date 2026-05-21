@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
+import { isAdmin, isAdminOrGestionnaire } from '@/access'
 
 const toSlug = (value: string) =>
   value
@@ -30,11 +31,7 @@ export const Posts: CollectionConfig = {
       return { statut: { equals: 'publie' } }
     },
     // Admin et gestionnaire peuvent créer
-    create: ({ req: { user } }) => {
-      if (!user) return false
-      const { role } = user as User
-      return role === 'admin' || role === 'gestionnaire'
-    },
+    create: isAdminOrGestionnaire,
     // Admin : tout ; gestionnaire : seulement ses propres articles
     update: ({ req: { user } }) => {
       if (!user) return false
@@ -43,7 +40,7 @@ export const Posts: CollectionConfig = {
       if (role === 'gestionnaire') return { auteur: { equals: id } }
       return false
     },
-    delete: ({ req: { user } }) => (user as User)?.role === 'admin',
+    delete: isAdmin,
   },
   hooks: {
     // beforeValidate : s'exécute avant la validation des champs "required"

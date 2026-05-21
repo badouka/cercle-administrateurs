@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
+import { isAdmin } from '@/access'
 
 export const ActivityRegistrations: CollectionConfig = {
   slug: 'activity-registrations',
@@ -31,8 +32,8 @@ export const ActivityRegistrations: CollectionConfig = {
       const { role } = user as User
       return role === 'admin' || role === 'membre'
     },
-    update: ({ req: { user } }) => (user as User)?.role === 'admin',
-    delete: ({ req: { user } }) => (user as User)?.role === 'admin',
+    update: isAdmin,
+    delete: isAdmin,
   },
   hooks: {
     // beforeValidate : s'exécute avant la validation des champs required
