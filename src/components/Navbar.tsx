@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, LayoutDashboard, LogOut } from 'lucide-react'
+import { Menu, X, LayoutDashboard, LogOut, Settings2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { href: '/documents',  label: 'Documents' },
 ]
 
-interface AuthUser { email: string }
+interface AuthUser { email: string; role?: 'membre' | 'gestionnaire' | 'admin' }
 
 export function Navbar() {
   const pathname              = usePathname()
@@ -26,7 +26,7 @@ export function Navbar() {
   useEffect(() => {
     fetch('/api/users/me', { credentials: 'include' })
       .then(r => (r.ok ? r.json() : null))
-      .then((data: { user?: AuthUser } | null) => setUser(data?.user ?? null))
+      .then((data: { user?: AuthUser } | null) => setUser(data?.user ? { email: data.user.email, role: data.user.role } : null))
       .catch(() => setUser(null))
   }, [pathname])
 
@@ -85,6 +85,20 @@ export function Navbar() {
               <div className="h-8 w-24 rounded-md bg-gray-100 animate-pulse" />
             ) : isLoggedIn ? (
               <>
+                {(user?.role === 'gestionnaire' || user?.role === 'admin') && (
+                  <Link
+                    href="/gestionnaire"
+                    className={cn(
+                      'inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-colors border-b-2',
+                      pathname.startsWith('/gestionnaire')
+                        ? 'text-black font-semibold border-black'
+                        : 'text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                    )}
+                  >
+                    <Settings2 size={15} />
+                    Gestion
+                  </Link>
+                )}
                 <Link
                   href="/dashboard"
                   className={cn(
@@ -150,6 +164,16 @@ export function Navbar() {
             <div className="mt-2 mb-1 space-y-1.5">
               {isLoggedIn ? (
                 <>
+                  {(user?.role === 'gestionnaire' || user?.role === 'admin') && (
+                    <Link
+                      href="/gestionnaire"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-black hover:bg-gray-50 transition-colors"
+                    >
+                      <Settings2 size={15} />
+                      Gestion
+                    </Link>
+                  )}
                   <Link
                     href="/dashboard"
                     onClick={() => setOpen(false)}
