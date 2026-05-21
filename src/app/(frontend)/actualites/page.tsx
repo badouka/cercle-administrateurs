@@ -1,5 +1,6 @@
 import { getPayload } from 'payload'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 import type { Post, Media } from '@/payload-types'
 import config from '@payload-config'
@@ -11,6 +12,7 @@ function lexicalToExcerpt(content: Post['contenu'], maxChars = 200): string {
   try {
     let text = ''
     for (const node of content?.root?.children ?? []) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       for (const child of ((node as any).children ?? []) as any[]) {
         if (typeof child.text === 'string') text += child.text + ' '
       }
@@ -43,11 +45,11 @@ export default async function ActualitesPage() {
   const payload = await getPayload({ config })
 
   const { docs: posts } = await payload.find({
-    collection: 'posts',
-    where: { statut: { equals: 'publie' } },
-    sort: '-publie_le',
-    depth: 1,
-    limit: 50,
+    collection:     'posts',
+    where:          { statut: { equals: 'publie' } },
+    sort:           '-publie_le',
+    depth:          1,
+    limit:          50,
     overrideAccess: true,
   })
 
@@ -67,8 +69,9 @@ export default async function ActualitesPage() {
       ) : (
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map(post => {
-            const image   = typeof post.image === 'object' && post.image ? post.image as Media : null
-            const excerpt = lexicalToExcerpt(post.contenu)
+            const image    = typeof post.image === 'object' && post.image ? post.image as Media : null
+            const excerpt  = lexicalToExcerpt(post.contenu)
+            const href     = post.slug ? `/actualites/${post.slug}` : null
 
             return (
               <article
@@ -78,19 +81,37 @@ export default async function ActualitesPage() {
               >
                 {/* Image */}
                 {image?.url ? (
-                  <div className="relative aspect-video bg-gray-100">
-                    <Image
-                      src={image.url}
-                      alt={image.alt || post.titre}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                  </div>
+                  href ? (
+                    <Link href={href} className="block relative aspect-video bg-gray-100">
+                      <Image
+                        src={image.url}
+                        alt={image.alt || post.titre}
+                        fill
+                        className="object-cover hover:opacity-90 transition-opacity"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </Link>
+                  ) : (
+                    <div className="relative aspect-video bg-gray-100">
+                      <Image
+                        src={image.url}
+                        alt={image.alt || post.titre}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </div>
+                  )
                 ) : (
-                  <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-gray-300 select-none">CAP</span>
-                  </div>
+                  href ? (
+                    <Link href={href} className="block aspect-video bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+                      <span className="text-3xl font-bold text-gray-300 select-none">CAP</span>
+                    </Link>
+                  ) : (
+                    <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                      <span className="text-3xl font-bold text-gray-300 select-none">CAP</span>
+                    </div>
+                  )
                 )}
 
                 <div className="flex flex-col flex-1 p-5 gap-3">
@@ -110,9 +131,17 @@ export default async function ActualitesPage() {
                   </div>
 
                   {/* Titre */}
-                  <h2 className="text-base font-semibold text-black leading-snug">
-                    {post.titre}
-                  </h2>
+                  {href ? (
+                    <Link href={href}>
+                      <h2 className="text-base font-semibold text-black leading-snug hover:text-gray-700 transition-colors">
+                        {post.titre}
+                      </h2>
+                    </Link>
+                  ) : (
+                    <h2 className="text-base font-semibold text-black leading-snug">
+                      {post.titre}
+                    </h2>
+                  )}
 
                   {/* Extrait */}
                   {excerpt && (
@@ -121,11 +150,21 @@ export default async function ActualitesPage() {
                     </p>
                   )}
 
+                  {/* Lire la suite */}
+                  {href && (
+                    <Link
+                      href={href}
+                      className="text-xs font-semibold text-black underline underline-offset-2 hover:text-gray-600 transition-colors self-start"
+                    >
+                      Lire l'article →
+                    </Link>
+                  )}
+
                   {/* Boutons de partage */}
                   <div className="pt-3 border-t border-gray-100">
                     <ShareButtons
                       title={post.titre}
-                      path={`/actualites#article-${post.id}`}
+                      path={href ?? `/actualites#article-${post.id}`}
                     />
                   </div>
                 </div>
