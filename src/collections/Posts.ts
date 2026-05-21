@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Access } from 'payload'
 import type { User } from '@/payload-types'
 import { isAdmin, isAdminOrGestionnaire } from '@/access'
 
@@ -21,7 +21,7 @@ export const Posts: CollectionConfig = {
     // Public / membre : articles publiés uniquement
     // Gestionnaire   : ses propres articles (tout statut) + articles publiés des autres
     // Admin           : tout
-    read: ({ req: { user } }) => {
+    read: (({ req: { user } }) => {
       if (!user) return { statut: { equals: 'publie' } }
       const { role, id } = user as User
       if (role === 'admin') return true
@@ -29,7 +29,7 @@ export const Posts: CollectionConfig = {
         return { or: [{ statut: { equals: 'publie' } }, { auteur: { equals: id } }] }
       }
       return { statut: { equals: 'publie' } }
-    },
+    }) as Access,
     // Admin et gestionnaire peuvent créer
     create: isAdminOrGestionnaire,
     // Admin : tout ; gestionnaire : seulement ses propres articles
@@ -46,8 +46,8 @@ export const Posts: CollectionConfig = {
     // beforeValidate : s'exécute avant la validation des champs "required"
     beforeValidate: [
       ({ data, operation, req }) => {
-        if (operation === 'create') {
-          if (data?.titre && !data.slug) {
+        if (operation === 'create' && data) {
+          if (data.titre && !data.slug) {
             data.slug = toSlug(data.titre)
           }
           // Injecte l'auteur même si field-level access l'a retiré de la requête

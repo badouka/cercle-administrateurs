@@ -1,15 +1,13 @@
-import type { Access } from 'payload'
+import type { AccessArgs } from 'payload'
 import type { User } from '@/payload-types'
 
-/** Réservé à l'administrateur. */
-export const isAdmin: Access = ({ req: { user } }) =>
-  (user as User)?.role === 'admin'
+export const isAdmin = ({ req: { user } }: AccessArgs): boolean =>
+  (user as User | null)?.role === 'admin'
 
-/** Admin ou gestionnaire de contenu. */
-export const isAdminOrGestionnaire: Access = ({ req: { user } }) => {
-  const role = (user as User)?.role
+export const isAdminOrGestionnaire = ({ req: { user } }: AccessArgs): boolean => {
+  const role = (user as User | null)?.role
   return role === 'admin' || role === 'gestionnaire'
 }
 
-/** Tout utilisateur connecté. */
-export const isAuthenticated: Access = ({ req: { user } }) => Boolean(user)
+export const isAuthenticated = ({ req: { user } }: AccessArgs): boolean =>
+  Boolean(user)

@@ -39,7 +39,7 @@ export const ActivityRegistrations: CollectionConfig = {
     // beforeValidate : s'exécute avant la validation des champs required
     beforeValidate: [
       async ({ data, operation, req }) => {
-        if (operation !== 'create') return data
+        if (operation !== 'create' || !data) return data
 
         // Auto-remplir inscrit_le
         if (!data.inscrit_le) {
