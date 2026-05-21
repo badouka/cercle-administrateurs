@@ -33,11 +33,28 @@ export const Activities: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data, operation }) => {
-        // Génère le slug à la création ; l'admin peut l'écraser manuellement
         if (operation === 'create' && data.titre && !data.slug) {
           data.slug = toSlug(data.titre)
         }
         return data
+      },
+    ],
+    beforeDelete: [
+      async ({ id, req }) => {
+        const { docs } = await req.payload.find({
+          collection:     'activity-registrations',
+          where:          { activity: { equals: id } },
+          limit:          1000,
+          overrideAccess: true,
+        })
+        for (const doc of docs) {
+          await req.payload.delete({
+            collection:     'activity-registrations',
+            id:             doc.id,
+            overrideAccess: true,
+            req,
+          })
+        }
       },
     ],
   },

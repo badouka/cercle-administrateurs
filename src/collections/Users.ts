@@ -30,6 +30,42 @@ export const Users: CollectionConfig = {
     // Seul l'admin peut supprimer
     delete: isAdmin,
   },
+  hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        // Supprimer les articles rédigés par cet utilisateur
+        const { docs: posts } = await req.payload.find({
+          collection:     'posts',
+          where:          { auteur: { equals: id } },
+          limit:          1000,
+          overrideAccess: true,
+        })
+        for (const post of posts) {
+          await req.payload.delete({
+            collection:     'posts',
+            id:             post.id,
+            overrideAccess: true,
+            req,
+          })
+        }
+        // Supprimer le profil Membre associé (déclenche son propre beforeDelete → ActivityRegistrations)
+        const { docs: membres } = await req.payload.find({
+          collection:     'membres',
+          where:          { user: { equals: id } },
+          limit:          1,
+          overrideAccess: true,
+        })
+        if (membres[0]) {
+          await req.payload.delete({
+            collection:     'membres',
+            id:             membres[0].id,
+            overrideAccess: true,
+            req,
+          })
+        }
+      },
+    ],
+  },
   fields: [
     {
       name: 'role',

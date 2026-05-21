@@ -25,6 +25,26 @@ export const Membres: CollectionConfig = {
     },
     delete: isAdmin,
   },
+  hooks: {
+    beforeDelete: [
+      async ({ id, req }) => {
+        const { docs } = await req.payload.find({
+          collection:     'activity-registrations',
+          where:          { member: { equals: id } },
+          limit:          1000,
+          overrideAccess: true,
+        })
+        for (const doc of docs) {
+          await req.payload.delete({
+            collection:     'activity-registrations',
+            id:             doc.id,
+            overrideAccess: true,
+            req,
+          })
+        }
+      },
+    ],
+  },
   fields: [
     {
       name: 'user',
