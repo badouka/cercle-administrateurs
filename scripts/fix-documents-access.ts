@@ -29,7 +29,7 @@ const CATEGORY_ACCESS: Record<DocumentCategorie, 'public' | 'membres'> = {
   textes_reglementaires:     'public',
   pv_reunion:                'membres',
   ressources:                'membres',
-  magazines:                 'membres',
+  magazines:                 'public',
   docs_politique_economique: 'membres',
 }
 
