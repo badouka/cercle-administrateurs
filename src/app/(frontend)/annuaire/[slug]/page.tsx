@@ -109,9 +109,6 @@ export default async function MembreDetailPage({ params }: Props) {
                 {membre.poste?.posteCap && (
                   <p className="mt-1 text-gray-400 text-sm font-medium">{membre.poste.posteCap}</p>
                 )}
-                {membre.poste?.fonctionProfessionnelle && (
-                  <p className="mt-0.5 text-gray-400 text-sm">{membre.poste.fonctionProfessionnelle}</p>
-                )}
                 {membre.poste?.organisme && (
                   <p className="mt-1 text-gray-300 font-semibold">{membre.poste.organisme}</p>
                 )}

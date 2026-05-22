@@ -205,6 +205,9 @@ export interface Membre {
      */
     siteOrganisme?: string | null;
     direction?: string | null;
+    /**
+     * Logo affiché dans le profil public du membre
+     */
     logoOrganisme?: (number | null) | Media;
   };
   coordonnees?: {
