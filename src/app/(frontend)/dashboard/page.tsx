@@ -30,10 +30,9 @@ function formatFilesize(bytes?: number | null): string {
 }
 
 const MEMBRE_DOCS_CATEGORIES: Record<string, string> = {
-  pv_reunion:                'PV de réunion',
-  magazines:                 'Magazines & Revues',
-  ressources:                'Ressources',
-  docs_politique_economique: 'Docs politique économique',
+  pv_reunion: 'PV de réunion',
+  magazines:  'Magazines & Revues',
+  ressources: 'Ressources',
 }
 
 const STATUT_ACTIVITE: Record<string, { label: string; cls: string }> = {
