@@ -185,26 +185,29 @@ export interface Membre {
   prenom: string;
   nom: string;
   photo?: (number | null) | Media;
+  /**
+   * Logo affiché dans le profil public du membre
+   */
+  logoOrganisme?: (number | null) | Media;
+  /**
+   * Document fourni à l'inscription (arrêté de nomination, décision, carte professionnelle…)
+   */
+  justificatif?: (number | null) | Media;
   biographie?: string | null;
   poste?: {
-    titre?:
-      | (
-          | 'Président'
-          | 'Secrétaire général'
-          | 'Trésorier(e)'
-          | 'Présidente Commission Actions Sociales'
-          | 'Présidente Commission Communication'
-          | 'Président Commission Stratégie et Vulgarisation des Politiques Publiques'
-          | 'Président Commission Renforcement de Capacités'
-          | 'Membre'
-          | 'autre'
-        )
-      | null;
     /**
-     * Renseigner si "Autre" est sélectionné ci-dessus
+     * Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)
      */
-    titrePersonnalise?: string | null;
+    posteCap?: string | null;
+    /**
+     * Titre professionnel (ex. DG, Président de Conseil d'Administration…)
+     */
+    fonctionProfessionnelle?: string | null;
     organisme?: string | null;
+    /**
+     * URL du site officiel (ex. https://pad.sn)
+     */
+    siteOrganisme?: string | null;
     direction?: string | null;
   };
   coordonnees?: {
@@ -484,13 +487,16 @@ export interface MembresSelect<T extends boolean = true> {
   prenom?: T;
   nom?: T;
   photo?: T;
+  logoOrganisme?: T;
+  justificatif?: T;
   biographie?: T;
   poste?:
     | T
     | {
-        titre?: T;
-        titrePersonnalise?: T;
+        posteCap?: T;
+        fonctionProfessionnelle?: T;
         organisme?: T;
+        siteOrganisme?: T;
         direction?: T;
       };
   coordonnees?:

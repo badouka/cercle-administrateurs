@@ -71,6 +71,13 @@ export const Membres: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name:       'logoOrganisme',
+      type:       'upload',
+      label:      "Logo de l'organisme",
+      relationTo: 'media',
+      admin: { description: 'Logo affiché dans le profil public du membre' },
+    },
+    {
       name:       'justificatif',
       type:       'upload',
       label:      'Pièce justificative',
@@ -99,33 +106,20 @@ export const Membres: CollectionConfig = {
       label: 'Poste',
       fields: [
         {
-          name:  'titre',
-          type:  'select',
-          label: 'Fonction / Titre',
-          options: [
-            { label: 'Président',                                                                     value: 'Président' },
-            { label: 'Secrétaire général',                                                            value: 'Secrétaire général' },
-            { label: 'Trésorier(e)',                                                                  value: 'Trésorier(e)' },
-            { label: 'Présidente Commission Actions Sociales',                                        value: 'Présidente Commission Actions Sociales' },
-            { label: 'Présidente Commission Communication',                                           value: 'Présidente Commission Communication' },
-            { label: 'Prés. Commission Stratégie et Politiques Publiques',     value: 'Prés. Commission Stratégie et Politiques Publiques' },
-            { label: 'Président Commission Renforcement de Capacités',                               value: 'Président Commission Renforcement de Capacités' },
-            { label: 'Membre',                                                                        value: 'Membre' },
-            { label: 'Autre',                                                                         value: 'autre' },
-          ],
+          name:  'posteCap',
+          type:  'text',
+          label: 'Poste au CAP',
+          admin: { description: 'Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)' },
         },
         {
-          name:  'titrePersonnalise',
+          name:  'fonctionProfessionnelle',
           type:  'text',
-          label: 'Préciser la fonction',
-          admin: {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            condition: (_data: any, siblingData: any) => siblingData?.titre === 'autre',
-            description: 'Renseigner si "Autre" est sélectionné ci-dessus',
-          },
+          label: 'Fonction professionnelle',
+          admin: { description: "Titre professionnel (ex. DG, Président de Conseil d'Administration…)" },
         },
-        { name: 'organisme', type: 'text', label: 'Organisme / Administration' },
-        { name: 'direction', type: 'text', label: 'Direction / Département' },
+        { name: 'organisme',     type: 'text', label: 'Organisme / Administration' },
+        { name: 'siteOrganisme', type: 'text', label: "Site web de l'organisme", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
+        { name: 'direction',     type: 'text', label: 'Direction / Département' },
       ],
     },
 

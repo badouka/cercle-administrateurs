@@ -3,30 +3,21 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-const FONCTIONS_PREDEFINIES = [
-  'Président',
-  'Secrétaire général',
-  'Trésorier(e)',
-  'Présidente Commission Actions Sociales',
-  'Présidente Commission Communication',
-  'Prés. Commission Stratégie et Politiques Publiques',
-  'Président Commission Renforcement de Capacités',
-  'Membre',
-]
-
 const ALLOWED_MIME = ['application/pdf', 'image/jpeg', 'image/png']
 const MAX_SIZE     = 5 * 1024 * 1024 // 5 Mo
 
 export interface InscriptionData {
-  prenom:               string
-  nom:                  string
-  email:                string
-  motDePasse:           string
-  poste?:               string
-  organisme?:           string
-  telephone?:           string
-  telephoneSecondaire?: string
-  justificatifId:       number
+  prenom:                   string
+  nom:                      string
+  email:                    string
+  motDePasse:               string
+  posteCap?:                string
+  fonctionProfessionnelle?: string
+  organisme?:               string
+  siteOrganisme?:           string
+  telephone?:               string
+  telephoneSecondaire?:     string
+  justificatifId:           number
 }
 
 // ── Upload public du justificatif ─────────────────────────────────────────────
@@ -61,7 +52,7 @@ export async function inscrire(
 ): Promise<{ success: true } | { error: string }> {
   const {
     prenom, nom, email, motDePasse,
-    poste, organisme, telephone, telephoneSecondaire,
+    posteCap, fonctionProfessionnelle, organisme, siteOrganisme, telephone, telephoneSecondaire,
     justificatifId,
   } = data
 
@@ -91,14 +82,12 @@ export async function inscrire(
       overrideAccess: true,
     })
 
-    const posteClean    = poste?.trim() ?? ''
-    const isPredefined  = FONCTIONS_PREDEFINIES.includes(posteClean)
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const posteData: any = {
-      titre:             isPredefined ? posteClean : (posteClean ? 'autre' : undefined),
-      titrePersonnalise: isPredefined ? '' : posteClean,
-      organisme:         organisme?.trim() ?? '',
+      posteCap:                posteCap?.trim()                || undefined,
+      fonctionProfessionnelle: fonctionProfessionnelle?.trim() || undefined,
+      organisme:               organisme?.trim()               ?? '',
+      siteOrganisme:           siteOrganisme?.trim()           || undefined,
     }
 
     await payload.create({

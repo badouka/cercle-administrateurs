@@ -100,7 +100,7 @@ export default async function MembreManagementPage() {
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
                     {m.poste?.organisme && (
-                      <p className="text-xs text-gray-600 mt-0.5">{m.poste.titre ? `${m.poste.titre} — ` : ''}{m.poste.organisme}</p>
+                      <p className="text-xs text-gray-600 mt-0.5">{m.poste.posteCap ? `${m.poste.posteCap} — ` : ''}{m.poste.organisme}</p>
                     )}
                     {m.adhesion?.numeroAdhesion && (
                       <p className="text-xs text-gray-400 font-mono mt-0.5">N° {m.adhesion.numeroAdhesion}</p>
@@ -156,8 +156,8 @@ export default async function MembreManagementPage() {
                       <tr key={m.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-5 py-3.5">
                           <p className="font-medium text-black">{m.prenom} {m.nom}</p>
-                          {m.poste?.titre && (
-                            <p className="text-xs text-gray-400 mt-0.5">{m.poste.titre}</p>
+                          {m.poste?.posteCap && (
+                            <p className="text-xs text-gray-400 mt-0.5">{m.poste.posteCap}</p>
                           )}
                         </td>
                         <td className="px-5 py-3.5 text-gray-500 text-xs">

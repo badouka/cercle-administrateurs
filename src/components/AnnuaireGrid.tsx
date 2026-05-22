@@ -82,8 +82,10 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
                   <p className="font-semibold text-gray-900 text-sm leading-tight">
                     {membre.prenom} {membre.nom}
                   </p>
-                  {membre.poste?.titre && (
-                    <p className="mt-1 text-xs text-gray-500 line-clamp-1">{membre.poste.titre}</p>
+                  {(membre.poste?.posteCap || membre.poste?.fonctionProfessionnelle) && (
+                    <p className="mt-1 text-xs text-gray-500 line-clamp-1">
+                      {membre.poste.posteCap || membre.poste.fonctionProfessionnelle}
+                    </p>
                   )}
                   {membre.poste?.organisme && (
                     <p className="mt-0.5 text-xs font-medium text-gray-700 line-clamp-1">

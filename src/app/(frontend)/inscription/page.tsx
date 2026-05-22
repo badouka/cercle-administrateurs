@@ -51,7 +51,6 @@ export default function InscriptionPage() {
   const [error,            setError]            = useState<string | null>(null)
   const [success,          setSuccess]          = useState(false)
   const [showPwd,          setShowPwd]          = useState(false)
-  const [fonction,         setFonction]         = useState('')
   const [justificatifFile, setJustificatifFile] = useState<File | null>(null)
   const [fileError,        setFileError]        = useState<string | null>(null)
 
@@ -85,10 +84,7 @@ export default function InscriptionPage() {
     setError(null)
 
     // Read form values immediately before any async call
-    const fd             = new FormData(e.currentTarget)
-    const fonctionSelect = fd.get('fonctionSelect') as string
-    const fonctionAutre  = (fd.get('fonctionAutre') as string | null)?.trim() ?? ''
-    const poste          = fonctionSelect === 'Autre' ? fonctionAutre : fonctionSelect
+    const fd = new FormData(e.currentTarget)
 
     if (!justificatifFile) {
       setError('La pièce justificative est obligatoire.')
@@ -109,15 +105,17 @@ export default function InscriptionPage() {
 
     // 2. Create user + membre
     const result = await inscrire({
-      prenom:              fd.get('prenom')             as string,
-      nom:                 fd.get('nom')                as string,
-      email:               fd.get('email')              as string,
-      motDePasse:          fd.get('motDePasse')         as string,
-      poste,
-      organisme:           fd.get('organisme')          as string,
-      telephone:           fd.get('telephone')          as string,
-      telephoneSecondaire: fd.get('telephoneSecondaire') as string,
-      justificatifId:      uploadResult.id,
+      prenom:                   fd.get('prenom')                   as string,
+      nom:                      fd.get('nom')                      as string,
+      email:                    fd.get('email')                    as string,
+      motDePasse:               fd.get('motDePasse')               as string,
+      posteCap:                 fd.get('posteCap')                 as string,
+      fonctionProfessionnelle:  fd.get('fonctionProfessionnelle')  as string,
+      organisme:                fd.get('organisme')                as string,
+      siteOrganisme:            fd.get('siteOrganisme')            as string,
+      telephone:                fd.get('telephone')                as string,
+      telephoneSecondaire:      fd.get('telephoneSecondaire')      as string,
+      justificatifId:           uploadResult.id,
     })
 
     if ('error' in result) {
@@ -223,42 +221,36 @@ export default function InscriptionPage() {
           </legend>
 
           <div>
-            <label htmlFor="fonctionSelect" className="block text-sm font-medium text-gray-700 mb-1.5">
-              Fonction / Titre
+            <label htmlFor="posteCap" className="block text-sm font-medium text-gray-700 mb-1.5">
+              Poste au CAP
             </label>
             <select
-              id="fonctionSelect"
-              name="fonctionSelect"
-              value={fonction}
-              onChange={e => setFonction(e.target.value)}
+              id="posteCap"
+              name="posteCap"
+              defaultValue=""
               className={SELECT_CLS}
             >
-              <option value="">— Sélectionnez une fonction —</option>
+              <option value="">— Sélectionnez un poste —</option>
               {FONCTIONS.map(f => (
                 <option key={f} value={f}>{f}</option>
               ))}
-              <option value="Autre">Autre…</option>
             </select>
           </div>
 
-          {fonction === 'Autre' && (
-            <div>
-              <label htmlFor="fonctionAutre" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Précisez votre fonction
-              </label>
-              <input
-                id="fonctionAutre"
-                name="fonctionAutre"
-                type="text"
-                placeholder="Votre titre ou fonction"
-                className={INPUT_CLS}
-              />
-            </div>
-          )}
+          <Field
+            id="fonctionProfessionnelle"
+            name="fonctionProfessionnelle"
+            label="Fonction professionnelle"
+            placeholder="DG, Président de Conseil d'Administration…"
+          />
 
           <Field
             id="organisme" name="organisme" label="Organisme / Administration"
             placeholder="Ministère, Agence, Direction…"
+          />
+          <Field
+            id="siteOrganisme" name="siteOrganisme" label="Site web de l'organisme (optionnel)"
+            type="url" placeholder="https://…"
           />
         </fieldset>
 

@@ -60,9 +60,10 @@ export default async function MembreDetailPage({ params }: Props) {
   const { user }        = await payload.auth({ headers })
   const isAuthenticated = Boolean(user)
 
-  const photo    = typeof membre.photo === 'object' && membre.photo ? (membre.photo as Media) : null
-  const initiales = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
-  const hasPoste = membre.poste?.titre || membre.poste?.organisme || membre.poste?.direction
+  const photo         = typeof membre.photo         === 'object' && membre.photo         ? (membre.photo         as Media) : null
+  const logoOrganisme = typeof membre.logoOrganisme === 'object' && membre.logoOrganisme ? (membre.logoOrganisme as Media) : null
+  const initiales     = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
+  const hasPoste      = membre.poste?.posteCap || membre.poste?.fonctionProfessionnelle || membre.poste?.organisme || membre.poste?.direction
   const hasCoord = membre.coordonnees?.telephone || membre.coordonnees?.emailProfessionnel || membre.coordonnees?.linkedin
 
   return (
@@ -81,35 +82,72 @@ export default async function MembreDetailPage({ params }: Props) {
 
         {/* Header noir */}
         <div className="bg-black px-8 py-10">
-          <div className="flex flex-col sm:flex-row items-center gap-6 text-white">
+          <div className="flex items-center justify-between gap-6 text-white">
 
-            {/* Photo / initiales */}
-            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
-              {photo?.url ? (
-                <Image
-                  src={photo.url}
-                  alt={`${membre.prenom} ${membre.nom}`}
-                  width={112}
-                  height={112}
-                  className="h-full w-full object-cover"
-                />
+            {/* Gauche : photo + identité */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              {/* Photo / initiales */}
+              <div className="h-24 w-24 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
+                {photo?.url ? (
+                  <Image
+                    src={photo.url}
+                    alt={`${membre.prenom} ${membre.nom}`}
+                    width={96}
+                    height={96}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-gray-500">
+                    {initiales}
+                  </div>
+                )}
+              </div>
+
+              {/* Identité */}
+              <div className="text-center sm:text-left">
+                <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
+                {membre.poste?.posteCap && (
+                  <p className="mt-1 text-gray-400 text-sm font-medium">{membre.poste.posteCap}</p>
+                )}
+                {membre.poste?.fonctionProfessionnelle && (
+                  <p className="mt-0.5 text-gray-400 text-sm">{membre.poste.fonctionProfessionnelle}</p>
+                )}
+                {membre.poste?.organisme && (
+                  <p className="mt-1 text-gray-300 font-semibold">{membre.poste.organisme}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Droite : logo organisme */}
+            {logoOrganisme?.url && (
+              membre.poste?.siteOrganisme ? (
+                <a
+                  href={membre.poste.siteOrganisme}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 hover:opacity-80 transition-opacity"
+                  title={membre.poste.organisme ?? undefined}
+                >
+                  <div className="h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
+                    <Image
+                      src={logoOrganisme.url}
+                      alt={membre.poste.organisme ?? 'Logo organisme'}
+                      width={72} height={72}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                </a>
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-gray-500">
-                  {initiales}
+                <div className="shrink-0 h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
+                  <Image
+                    src={logoOrganisme.url}
+                    alt={membre.poste?.organisme ?? 'Logo organisme'}
+                    width={72} height={72}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
-              )}
-            </div>
-
-            {/* Identité */}
-            <div className="text-center sm:text-left">
-              <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
-              {membre.poste?.titre && (
-                <p className="mt-1 text-gray-400">{membre.poste.titre}</p>
-              )}
-              {membre.poste?.organisme && (
-                <p className="mt-0.5 text-gray-300 font-medium">{membre.poste.organisme}</p>
-              )}
-            </div>
+              )
+            )}
           </div>
         </div>
 
@@ -138,8 +176,11 @@ export default async function MembreDetailPage({ params }: Props) {
                   Poste
                 </h2>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  {membre.poste?.titre && (
-                    <li className="font-medium text-black">{membre.poste.titre}</li>
+                  {membre.poste?.posteCap && (
+                    <li className="font-medium text-black">{membre.poste.posteCap}</li>
+                  )}
+                  {membre.poste?.fonctionProfessionnelle && (
+                    <li className="text-gray-600">{membre.poste.fonctionProfessionnelle}</li>
                   )}
                   {membre.poste?.organisme && (
                     <li className="flex items-center gap-1.5">
