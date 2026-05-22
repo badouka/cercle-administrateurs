@@ -7,16 +7,9 @@ import type { User, Post, Media } from '@/payload-types'
 import config from '@payload-config'
 import { ArrowLeft, Pencil } from 'lucide-react'
 import { ArticleForm } from '../../ArticleForm'
+import { lexicalToHtml } from '@/lib/lexical-to-html'
 
 export const metadata: Metadata = { title: "Modifier l'article" }
-
-function lexicalToText(doc: Post['contenu']): string {
-  if (!doc?.root?.children) return ''
-  return (doc.root.children as { children?: { text?: string }[] }[])
-    .map(node => node.children?.map(c => c.text ?? '').join('') ?? '')
-    .filter(Boolean)
-    .join('\n\n')
-}
 
 export default async function ModifierArticlePage({
   params,
@@ -48,8 +41,8 @@ export default async function ModifierArticlePage({
     notFound()
   }
 
-  const image    = typeof post.image === 'object' && post.image ? (post.image as Media) : null
-  const plainText = lexicalToText(post.contenu)
+  const image       = typeof post.image === 'object' && post.image ? (post.image as Media) : null
+  const htmlContent = lexicalToHtml(post.contenu)
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -79,7 +72,7 @@ export default async function ModifierArticlePage({
           postId={postId}
           initialValues={{
             titre:     post.titre,
-            contenu:   plainText,
+            contenu:   htmlContent,
             categorie: post.categorie,
             statut:    post.statut,
             imageId:   image?.id,

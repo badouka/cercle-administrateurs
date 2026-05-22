@@ -1,14 +1,16 @@
 'use client'
 
-import { type FormEvent, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Upload, X, Save, Globe, AlertCircle } from 'lucide-react'
 import { createPostAction, updatePostAction, uploadMedia } from '../actions'
+import { ArticleEditor, type ArticleEditorRef } from '@/components/editor/ArticleEditor'
+import { tiptapToLexical } from '@/lib/tiptap-to-lexical'
 
 export interface ArticleFormInitial {
   titre:      string
-  contenu:    string
+  contenu:    string   // HTML (from lexicalToHtml on the edit page)
   categorie:  'actualites' | 'ateliers_seminaires'
   statut:     'brouillon' | 'publie'
   imageId?:   number
@@ -17,24 +19,24 @@ export interface ArticleFormInitial {
 }
 
 interface Props {
-  postId?:       number
+  postId?:        number
   initialValues?: Partial<ArticleFormInitial>
 }
 
 export function ArticleForm({ postId, initialValues }: Props) {
-  const router = useRouter()
+  const router     = useRouter()
+  const editorRef  = useRef<ArticleEditorRef>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [titre,     setTitre]     = useState(initialValues?.titre     ?? '')
-  const [contenu,   setContenu]   = useState(initialValues?.contenu   ?? '')
   const [categorie, setCategorie] = useState<'actualites' | 'ateliers_seminaires'>(
     initialValues?.categorie ?? 'actualites',
   )
-  const [imageFile,     setImageFile]     = useState<File | null>(null)
-  const [imagePreview,  setImagePreview]  = useState<string | null>(initialValues?.imageUrl ?? null)
+  const [imageFile,       setImageFile]       = useState<File | null>(null)
+  const [imagePreview,    setImagePreview]    = useState<string | null>(initialValues?.imageUrl ?? null)
   const [existingImageId, setExistingImageId] = useState<number | undefined>(initialValues?.imageId)
-  const [loading,  setLoading]  = useState(false)
-  const [error,    setError]    = useState<string | null>(null)
-  const fileInputRef            = useRef<HTMLInputElement>(null)
+  const [loading, setLoading] = useState(false)
+  const [error,   setError]   = useState<string | null>(null)
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null
@@ -53,8 +55,8 @@ export function ArticleForm({ postId, initialValues }: Props) {
   }
 
   async function handleSubmit(targetStatut: 'brouillon' | 'publie') {
-    if (!titre.trim())   { setError('Le titre est requis.');   return }
-    if (!contenu.trim()) { setError('Le contenu est requis.'); return }
+    if (!titre.trim()) { setError('Le titre est requis.'); return }
+    if (editorRef.current?.isEmpty()) { setError('Le contenu est requis.'); return }
 
     setError(null)
     setLoading(true)
@@ -75,11 +77,13 @@ export function ArticleForm({ postId, initialValues }: Props) {
         imageId = uploadResult.id
       }
 
+      const lexical = tiptapToLexical(editorRef.current!.getJSON())
+
       const fd = new FormData()
-      fd.append('titre',     titre.trim())
-      fd.append('contenu',   contenu.trim())
-      fd.append('categorie', categorie)
-      fd.append('statut',    targetStatut)
+      fd.append('titre',       titre.trim())
+      fd.append('contenuJson', JSON.stringify(lexical))
+      fd.append('categorie',   categorie)
+      fd.append('statut',      targetStatut)
       if (imageId) fd.append('imageId', String(imageId))
 
       const result = postId
@@ -182,17 +186,10 @@ export function ArticleForm({ postId, initialValues }: Props) {
         <label className="block text-sm font-semibold text-gray-900 mb-1.5">
           Contenu <span className="text-red-500">*</span>
         </label>
-        <p className="text-xs text-gray-400 mb-2">
-          Séparez les paragraphes par une ligne vide.
-        </p>
-        <textarea
-          value={contenu}
-          onChange={e => setContenu(e.target.value)}
-          rows={14}
-          placeholder="Rédigez votre article ici…"
-          className="block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black resize-y font-mono leading-relaxed"
+        <ArticleEditor
+          ref={editorRef}
+          initialContent={initialValues?.contenu}
         />
-        <p className="mt-1 text-xs text-gray-400">{contenu.length} caractère{contenu.length > 1 ? 's' : ''}</p>
       </div>
 
       {/* Actions */}

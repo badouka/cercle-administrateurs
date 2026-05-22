@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, useRef, type FormEvent } from 'react'
 import { Pencil, X, Check } from 'lucide-react'
 import type { Membre } from '@/payload-types'
 import { updateProfile, type ProfileData } from './actions'
+import { BiographyEditor, type BiographyEditorRef } from '@/components/editor/BiographyEditor'
 
 interface Props {
   membre: Membre
@@ -42,6 +43,7 @@ export function EditProfileForm({ membre }: Props) {
   const [error, setError]     = useState<string | null>(null)
   const [saved, setSaved]     = useState(false)
   const [fonction, setFonction] = useState(membre.poste?.titre ?? '')
+  const bioEditorRef = useRef<BiographyEditorRef>(null)
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -53,7 +55,7 @@ export function EditProfileForm({ membre }: Props) {
     const data: ProfileData = {
       prenom:                  fd.get('prenom')                 as string,
       nom:                     fd.get('nom')                    as string,
-      biographie:              fd.get('biographie')             as string,
+      biographie:              bioEditorRef.current?.getHTML()  ?? '',
       posteTitre:              fd.get('fonctionSelect')         as string,
       posteTitrePersonnalise:  fd.get('fonctionAutre')          as string,
       organisme:               fd.get('organisme')              as string,
@@ -110,9 +112,10 @@ export function EditProfileForm({ membre }: Props) {
           {membre.biographie && (
             <div>
               <dt className="text-xs text-gray-400">Biographie</dt>
-              <dd className="mt-0.5 text-sm text-gray-900 whitespace-pre-line leading-relaxed">
-                {membre.biographie}
-              </dd>
+              <dd
+                className="mt-0.5 text-sm text-gray-900 bio-prose"
+                dangerouslySetInnerHTML={{ __html: membre.biographie }}
+              />
             </div>
           )}
           <InfoRow label="Fonction"             value={fonctionDisplay} />
@@ -163,10 +166,12 @@ export function EditProfileForm({ membre }: Props) {
       </div>
 
       <div>
-        <label htmlFor="biographie" className="block text-xs font-medium text-gray-600 mb-1">Biographie</label>
-        <textarea id="biographie" name="biographie" rows={3}
-          defaultValue={membre.biographie ?? ''}
-          className={INPUT_CLS + ' resize-none'} />
+        <label className="block text-xs font-medium text-gray-600 mb-1">Biographie</label>
+        <BiographyEditor
+          ref={bioEditorRef}
+          initialContent={membre.biographie ?? ''}
+          placeholder="Parlez de vous…"
+        />
       </div>
 
       <div className="pt-1">

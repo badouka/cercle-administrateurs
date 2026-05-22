@@ -190,15 +190,19 @@ export async function createPostAction(
   const ctx = await requireRole()
   if ('error' in ctx) return ctx
 
-  const titre     = (formData.get('titre')    as string | null)?.trim()
-  const contenu   = (formData.get('contenu')  as string | null)?.trim()
-  const categorie = formData.get('categorie') as 'actualites' | 'ateliers_seminaires' | null
-  const statut    = (formData.get('statut')   as 'brouillon' | 'publie' | null) ?? 'brouillon'
-  const imageId   = formData.get('imageId')   ? Number(formData.get('imageId')) : undefined
+  const titre        = (formData.get('titre')       as string | null)?.trim()
+  const contenuJson  = (formData.get('contenuJson') as string | null)
+  const categorie    = formData.get('categorie') as 'actualites' | 'ateliers_seminaires' | null
+  const statut       = (formData.get('statut')   as 'brouillon' | 'publie' | null) ?? 'brouillon'
+  const imageId      = formData.get('imageId')   ? Number(formData.get('imageId')) : undefined
 
-  if (!titre)     return { error: 'Le titre est requis' }
-  if (!contenu)   return { error: 'Le contenu est requis' }
-  if (!categorie) return { error: 'La catégorie est requise' }
+  if (!titre)       return { error: 'Le titre est requis' }
+  if (!contenuJson) return { error: 'Le contenu est requis' }
+  if (!categorie)   return { error: 'La catégorie est requise' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let contenu: any
+  try { contenu = JSON.parse(contenuJson) } catch { return { error: 'Contenu invalide' } }
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -206,7 +210,7 @@ export async function createPostAction(
       collection:     'posts',
       data: {
         titre,
-        contenu:   textToLexical(contenu) as any,
+        contenu,
         categorie,
         statut,
         auteur:    ctx.user.id,
@@ -229,19 +233,19 @@ export async function updatePostAction(
   const ctx = await requireRole()
   if ('error' in ctx) return ctx
 
-  const titre     = (formData.get('titre')    as string | null)?.trim()
-  const contenu   = (formData.get('contenu')  as string | null)?.trim()
-  const categorie = formData.get('categorie') as 'actualites' | 'ateliers_seminaires' | null
-  const statut    = formData.get('statut')    as 'brouillon' | 'publie' | null
-  const imageId   = formData.get('imageId')   ? Number(formData.get('imageId')) : undefined
+  const titre       = (formData.get('titre')       as string | null)?.trim()
+  const contenuJson = (formData.get('contenuJson') as string | null)
+  const categorie   = formData.get('categorie') as 'actualites' | 'ateliers_seminaires' | null
+  const statut      = formData.get('statut')    as 'brouillon' | 'publie' | null
+  const imageId     = formData.get('imageId')   ? Number(formData.get('imageId')) : undefined
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: Record<string, any> = {}
-  if (titre)     data.titre     = titre
-  if (contenu)   data.contenu   = textToLexical(contenu)
-  if (categorie) data.categorie = categorie
-  if (statut)    data.statut    = statut
-  if (imageId)   data.image     = imageId
+  if (titre)       data.titre     = titre
+  if (contenuJson) { try { data.contenu = JSON.parse(contenuJson) } catch { /* ignore */ } }
+  if (categorie)   data.categorie = categorie
+  if (statut)      data.statut    = statut
+  if (imageId)     data.image     = imageId
 
   try {
     if (ctx.user.role === 'gestionnaire') {
