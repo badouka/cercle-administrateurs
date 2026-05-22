@@ -308,6 +308,10 @@ export interface Document {
   id: number;
   titre: string;
   /**
+   * Couverture affichée sur la page Magazines (optionnel)
+   */
+  couverture?: (number | null) | Media;
+  /**
    * Auto-généré depuis le titre à la création.
    */
   slug?: string | null;
@@ -557,6 +561,7 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface DocumentsSelect<T extends boolean = true> {
   titre?: T;
+  couverture?: T;
   slug?: T;
   fichier?: T;
   categorie?: T;

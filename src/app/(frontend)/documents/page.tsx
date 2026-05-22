@@ -138,7 +138,7 @@ export default async function DocumentsPage() {
       <div className="mt-12 rounded-xl border border-gray-200 bg-[#F5F5F5] p-5">
         <p className="text-sm text-gray-600">
           <span className="font-semibold text-black">Membres du CAP :</span>{' '}
-          d'autres documents (PV de réunion, ressources, magazines) sont accessibles après connexion dans votre espace membre.
+          d'autres documents (PV de réunion, ressources) sont accessibles après connexion dans votre espace membre.
         </p>
       </div>
     </div>

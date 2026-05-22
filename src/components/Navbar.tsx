@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/actualites', label: 'Actualités' },
   { href: '/activites',  label: 'Activités' },
   { href: '/documents',  label: 'Documents' },
+  { href: '/magazines',  label: 'Magazines' },
 ]
 
 interface AuthUser { email: string; role?: 'membre' | 'gestionnaire' | 'admin' }

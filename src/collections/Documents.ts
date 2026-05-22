@@ -41,6 +41,13 @@ export const Documents: CollectionConfig = {
   fields: [
     { name: 'titre', type: 'text', required: true },
     {
+      name:       'couverture',
+      type:       'upload',
+      label:      'Image de couverture',
+      relationTo: 'media',
+      admin:      { description: 'Couverture affichée sur la page Magazines (optionnel)' },
+    },
+    {
       name: 'slug',
       type: 'text',
       unique: true,
