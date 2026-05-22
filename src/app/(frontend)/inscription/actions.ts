@@ -9,7 +9,7 @@ const FONCTIONS_PREDEFINIES = [
   'Trésorier(e)',
   'Présidente Commission Actions Sociales',
   'Présidente Commission Communication',
-  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
+  'Prés. Commission Stratégie et Politiques Publiques',
   'Président Commission Renforcement de Capacités',
   'Membre',
 ]

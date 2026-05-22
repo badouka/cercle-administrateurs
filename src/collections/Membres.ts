@@ -108,7 +108,7 @@ export const Membres: CollectionConfig = {
             { label: 'Trésorier(e)',                                                                  value: 'Trésorier(e)' },
             { label: 'Présidente Commission Actions Sociales',                                        value: 'Présidente Commission Actions Sociales' },
             { label: 'Présidente Commission Communication',                                           value: 'Présidente Commission Communication' },
-            { label: 'Président Commission Stratégie et Vulgarisation des Politiques Publiques',     value: 'Président Commission Stratégie et Vulgarisation des Politiques Publiques' },
+            { label: 'Prés. Commission Stratégie et Politiques Publiques',     value: 'Prés. Commission Stratégie et Politiques Publiques' },
             { label: 'Président Commission Renforcement de Capacités',                               value: 'Président Commission Renforcement de Capacités' },
             { label: 'Membre',                                                                        value: 'Membre' },
             { label: 'Autre',                                                                         value: 'autre' },
