@@ -1,6 +1,18 @@
 import type { CollectionConfig, Access } from 'payload'
 import type { User } from '@/payload-types'
 import { isAdmin, isAdminOrGestionnaire } from '@/access'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  StrikethroughFeature,
+  HeadingFeature,
+  UnorderedListFeature,
+  OrderedListFeature,
+  BlockquoteFeature,
+  LinkFeature,
+} from '@payloadcms/richtext-lexical'
 
 const toSlug = (value: string) =>
   value
@@ -80,7 +92,22 @@ export const Posts: CollectionConfig = {
     {
       name: 'contenu',
       type: 'richText',
+      label: 'Contenu',
       required: true,
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
+          BoldFeature(),
+          ItalicFeature(),
+          UnderlineFeature(),
+          StrikethroughFeature(),
+          UnorderedListFeature(),
+          OrderedListFeature(),
+          BlockquoteFeature(),
+          LinkFeature(),
+        ],
+      }),
     },
     {
       name: 'image',
