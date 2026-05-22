@@ -187,7 +187,23 @@ export interface Membre {
   photo?: (number | null) | Media;
   biographie?: string | null;
   poste?: {
-    titre?: string | null;
+    titre?:
+      | (
+          | 'Président'
+          | 'Secrétaire général'
+          | 'Trésorier(e)'
+          | 'Présidente Commission Actions Sociales'
+          | 'Présidente Commission Communication'
+          | 'Président Commission Stratégie et Vulgarisation des Politiques Publiques'
+          | 'Président Commission Renforcement de Capacités'
+          | 'Membre'
+          | 'autre'
+        )
+      | null;
+    /**
+     * Renseigner si "Autre" est sélectionné ci-dessus
+     */
+    titrePersonnalise?: string | null;
     organisme?: string | null;
     direction?: string | null;
   };
@@ -473,6 +489,7 @@ export interface MembresSelect<T extends boolean = true> {
     | T
     | {
         titre?: T;
+        titrePersonnalise?: T;
         organisme?: T;
         direction?: T;
       };
