@@ -158,7 +158,7 @@ export default async function DashboardPage() {
                   Vos informations enregistrées
                 </p>
                 <dl className="space-y-2 text-sm">
-                  {membre.poste?.titre     && <div><dt className="text-xs text-gray-400">Fonction</dt><dd className="text-gray-900">{membre.poste.titre}</dd></div>}
+                  {membre.poste?.titre     && <div><dt className="text-xs text-gray-400">Fonction</dt><dd className="text-gray-900">{membre.poste.titre === 'autre' ? membre.poste.titrePersonnalise : membre.poste.titre}</dd></div>}
                   {membre.poste?.organisme && <div><dt className="text-xs text-gray-400">Organisme</dt><dd className="text-gray-900">{membre.poste.organisme}</dd></div>}
                 </dl>
               </div>
@@ -227,7 +227,7 @@ export default async function DashboardPage() {
             </div>
             <div className="text-center sm:text-left">
               <h1 className="text-xl font-bold">{membre.prenom} {membre.nom}</h1>
-              {membre.poste?.titre     && <p className="mt-0.5 text-gray-400 text-sm">{membre.poste.titre}</p>}
+              {membre.poste?.titre     && <p className="mt-0.5 text-gray-400 text-sm">{membre.poste.titre === 'autre' ? membre.poste.titrePersonnalise : membre.poste.titre}</p>}
               {membre.poste?.organisme && <p className="text-gray-300 text-sm font-medium">{membre.poste.organisme}</p>}
               <div className="mt-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-medium">

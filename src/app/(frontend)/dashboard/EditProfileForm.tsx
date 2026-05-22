@@ -12,6 +12,20 @@ interface Props {
 const INPUT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
+const SELECT_CLS =
+  'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
+
+const FONCTIONS = [
+  'Président',
+  'Secrétaire général',
+  'Trésorier(e)',
+  'Présidente Commission Actions Sociales',
+  'Présidente Commission Communication',
+  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
+  'Président Commission Renforcement de Capacités',
+  'Membre',
+]
+
 function InfoRow({ label, value }: { label: string; value?: string | null }) {
   if (!value) return null
   return (
@@ -27,6 +41,7 @@ export function EditProfileForm({ membre }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState<string | null>(null)
   const [saved, setSaved]     = useState(false)
+  const [fonction, setFonction] = useState(membre.poste?.titre ?? '')
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -34,17 +49,19 @@ export function EditProfileForm({ membre }: Props) {
     setLoading(true)
     setSaved(false)
 
-    const fd   = new FormData(e.currentTarget)
+    const fd = new FormData(e.currentTarget)
     const data: ProfileData = {
-      prenom:              fd.get('prenom')              as string,
-      nom:                 fd.get('nom')                 as string,
-      biographie:          fd.get('biographie')          as string,
-      posteTitre:          fd.get('posteTitre')          as string,
-      organisme:           fd.get('organisme')           as string,
-      direction:           fd.get('direction')           as string,
-      telephone:           fd.get('telephone')           as string,
-      emailProfessionnel:  fd.get('emailProfessionnel')  as string,
-      linkedin:            fd.get('linkedin')            as string,
+      prenom:                  fd.get('prenom')                 as string,
+      nom:                     fd.get('nom')                    as string,
+      biographie:              fd.get('biographie')             as string,
+      posteTitre:              fd.get('fonctionSelect')         as string,
+      posteTitrePersonnalise:  fd.get('fonctionAutre')          as string,
+      organisme:               fd.get('organisme')              as string,
+      direction:               fd.get('direction')              as string,
+      telephone:               fd.get('telephone')              as string,
+      telephoneSecondaire:     fd.get('telephoneSecondaire')    as string,
+      emailProfessionnel:      fd.get('emailProfessionnel')     as string,
+      linkedin:                fd.get('linkedin')               as string,
     }
 
     const result = await updateProfile(membre.id, data)
@@ -60,6 +77,11 @@ export function EditProfileForm({ membre }: Props) {
 
   const p = membre.poste ?? {}
   const c = membre.coordonnees ?? {}
+
+  // Show custom text when titre = 'autre', otherwise the predefined label
+  const fonctionDisplay = p.titre === 'autre'
+    ? (p.titrePersonnalise ?? '')
+    : (p.titre ?? '')
 
   if (!editing) {
     return (
@@ -93,12 +115,13 @@ export function EditProfileForm({ membre }: Props) {
               </dd>
             </div>
           )}
-          <InfoRow label="Fonction"       value={p.titre} />
-          <InfoRow label="Organisme"      value={p.organisme} />
-          <InfoRow label="Direction"      value={p.direction} />
-          <InfoRow label="Téléphone"      value={c.telephone} />
-          <InfoRow label="Email pro"      value={c.emailProfessionnel} />
-          <InfoRow label="LinkedIn"       value={c.linkedin} />
+          <InfoRow label="Fonction"             value={fonctionDisplay} />
+          <InfoRow label="Organisme"            value={p.organisme} />
+          <InfoRow label="Direction"            value={p.direction} />
+          <InfoRow label="Téléphone"            value={c.telephone} />
+          <InfoRow label="Téléphone secondaire" value={c.telephoneSecondaire} />
+          <InfoRow label="Email pro"            value={c.emailProfessionnel} />
+          <InfoRow label="LinkedIn"             value={c.linkedin} />
         </dl>
       </div>
     )
@@ -150,10 +173,40 @@ export function EditProfileForm({ membre }: Props) {
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Poste</p>
         <div className="space-y-3">
           <div>
-            <label htmlFor="posteTitre" className="block text-xs font-medium text-gray-600 mb-1">Fonction / Titre</label>
-            <input id="posteTitre" name="posteTitre" type="text"
-              defaultValue={p.titre ?? ''} className={INPUT_CLS} />
+            <label htmlFor="fonctionSelect" className="block text-xs font-medium text-gray-600 mb-1">
+              Fonction / Titre
+            </label>
+            <select
+              id="fonctionSelect"
+              name="fonctionSelect"
+              value={fonction}
+              onChange={e => setFonction(e.target.value)}
+              className={SELECT_CLS}
+            >
+              <option value="">— Sélectionnez une fonction —</option>
+              {FONCTIONS.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+              <option value="autre">Autre…</option>
+            </select>
           </div>
+
+          {fonction === 'autre' && (
+            <div>
+              <label htmlFor="fonctionAutre" className="block text-xs font-medium text-gray-600 mb-1">
+                Précisez votre fonction
+              </label>
+              <input
+                id="fonctionAutre"
+                name="fonctionAutre"
+                type="text"
+                defaultValue={p.titrePersonnalise ?? ''}
+                placeholder="Votre titre ou fonction"
+                className={INPUT_CLS}
+              />
+            </div>
+          )}
+
           <div>
             <label htmlFor="organisme" className="block text-xs font-medium text-gray-600 mb-1">Organisme</label>
             <input id="organisme" name="organisme" type="text"
@@ -171,9 +224,16 @@ export function EditProfileForm({ membre }: Props) {
         <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Coordonnées</p>
         <div className="space-y-3">
           <div>
-            <label htmlFor="telephone" className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
+            <label htmlFor="telephone" className="block text-xs font-medium text-gray-600 mb-1">Téléphone principal</label>
             <input id="telephone" name="telephone" type="tel"
+              placeholder="+221 77 000 00 00"
               defaultValue={c.telephone ?? ''} className={INPUT_CLS} />
+          </div>
+          <div>
+            <label htmlFor="telephoneSecondaire" className="block text-xs font-medium text-gray-600 mb-1">Téléphone secondaire (optionnel)</label>
+            <input id="telephoneSecondaire" name="telephoneSecondaire" type="tel"
+              placeholder="+221 78 000 00 00"
+              defaultValue={c.telephoneSecondaire ?? ''} className={INPUT_CLS} />
           </div>
           <div>
             <label htmlFor="emailProfessionnel" className="block text-xs font-medium text-gray-600 mb-1">Email professionnel</label>
