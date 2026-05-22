@@ -4,19 +4,20 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 export interface InscriptionData {
-  prenom:     string
-  nom:        string
-  email:      string
-  motDePasse: string
-  poste?:     string
-  organisme?: string
-  telephone?: string
+  prenom:                string
+  nom:                   string
+  email:                 string
+  motDePasse:            string
+  poste?:                string
+  organisme?:            string
+  telephone?:            string
+  telephoneSecondaire?:  string
 }
 
 export async function inscrire(
   data: InscriptionData,
 ): Promise<{ success: true } | { error: string }> {
-  const { prenom, nom, email, motDePasse, poste, organisme, telephone } = data
+  const { prenom, nom, email, motDePasse, poste, organisme, telephone, telephoneSecondaire } = data
 
   if (!prenom.trim() || !nom.trim() || !email.trim() || !motDePasse) {
     return { error: 'Veuillez remplir tous les champs obligatoires.' }
@@ -55,7 +56,8 @@ export async function inscrire(
           organisme: organisme?.trim() ?? '',
         },
         coordonnees: {
-          telephone: telephone?.trim() ?? '',
+          telephone:           telephone?.trim()           ?? '',
+          telephoneSecondaire: telephoneSecondaire?.trim() ?? '',
         },
         adhesion: { statut: 'inactif' },
       },

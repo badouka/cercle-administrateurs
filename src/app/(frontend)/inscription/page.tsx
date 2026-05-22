@@ -8,6 +8,20 @@ import { inscrire } from './actions'
 const INPUT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
+const SELECT_CLS =
+  'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
+
+const FONCTIONS = [
+  'Président',
+  'Secrétaire général',
+  'Trésorier(e)',
+  'Présidente Commission Actions Sociales',
+  'Présidente Commission Communication',
+  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
+  'Président Commission Renforcement de Capacités',
+  'Membre',
+]
+
 function Field({
   id, name, label, required, type = 'text', autoComplete, placeholder,
 }: {
@@ -30,10 +44,11 @@ function Field({
 }
 
 export default function InscriptionPage() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [showPwd, setShowPwd] = useState(false)
+  const [loading,  setLoading]  = useState(false)
+  const [error,    setError]    = useState<string | null>(null)
+  const [success,  setSuccess]  = useState(false)
+  const [showPwd,  setShowPwd]  = useState(false)
+  const [fonction, setFonction] = useState('')
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -41,14 +56,20 @@ export default function InscriptionPage() {
     setLoading(true)
 
     const fd = new FormData(e.currentTarget)
+
+    const fonctionSelect = fd.get('fonctionSelect') as string
+    const fonctionAutre  = (fd.get('fonctionAutre') as string | null)?.trim() ?? ''
+    const poste = fonctionSelect === 'Autre' ? fonctionAutre : fonctionSelect
+
     const result = await inscrire({
-      prenom:     fd.get('prenom')     as string,
-      nom:        fd.get('nom')        as string,
-      email:      fd.get('email')      as string,
-      motDePasse: fd.get('motDePasse') as string,
-      poste:      fd.get('poste')      as string,
-      organisme:  fd.get('organisme')  as string,
-      telephone:  fd.get('telephone')  as string,
+      prenom:               fd.get('prenom')               as string,
+      nom:                  fd.get('nom')                  as string,
+      email:                fd.get('email')                as string,
+      motDePasse:           fd.get('motDePasse')           as string,
+      poste,
+      organisme:            fd.get('organisme')            as string,
+      telephone:            fd.get('telephone')            as string,
+      telephoneSecondaire:  fd.get('telephoneSecondaire')  as string,
     })
 
     if ('error' in result) {
@@ -152,18 +173,61 @@ export default function InscriptionPage() {
           <legend className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
             Poste
           </legend>
-          <Field
-            id="poste" name="poste" label="Fonction / Titre"
-            placeholder="Directeur général, Conseiller technique…"
-          />
+
+          <div>
+            <label htmlFor="fonctionSelect" className="block text-sm font-medium text-gray-700 mb-1.5">
+              Fonction / Titre
+            </label>
+            <select
+              id="fonctionSelect"
+              name="fonctionSelect"
+              value={fonction}
+              onChange={e => setFonction(e.target.value)}
+              className={SELECT_CLS}
+            >
+              <option value="">— Sélectionnez une fonction —</option>
+              {FONCTIONS.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+              <option value="Autre">Autre…</option>
+            </select>
+          </div>
+
+          {fonction === 'Autre' && (
+            <div>
+              <label htmlFor="fonctionAutre" className="block text-sm font-medium text-gray-700 mb-1.5">
+                Précisez votre fonction
+              </label>
+              <input
+                id="fonctionAutre"
+                name="fonctionAutre"
+                type="text"
+                placeholder="Votre titre ou fonction"
+                className={INPUT_CLS}
+              />
+            </div>
+          )}
+
           <Field
             id="organisme" name="organisme" label="Organisme / Administration"
             placeholder="Ministère, Agence, Direction…"
           />
+        </fieldset>
+
+        {/* ── Contact ── */}
+        <fieldset className="space-y-3">
+          <legend className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            Contact
+          </legend>
           <Field
-            id="telephone" name="telephone" label="Téléphone"
+            id="telephone" name="telephone" label="Téléphone principal"
             type="tel" autoComplete="tel"
             placeholder="+221 77 000 00 00"
+          />
+          <Field
+            id="telephoneSecondaire" name="telephoneSecondaire" label="Téléphone secondaire (optionnel)"
+            type="tel" autoComplete="tel"
+            placeholder="+221 78 000 00 00"
           />
         </fieldset>
 

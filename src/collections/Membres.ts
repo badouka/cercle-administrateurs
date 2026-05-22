@@ -94,9 +94,10 @@ export const Membres: CollectionConfig = {
       name: 'coordonnees',
       label: 'Coordonnées',
       fields: [
-        { name: 'telephone',          type: 'text',  label: 'Téléphone' },
-        { name: 'emailProfessionnel', type: 'email', label: 'Email professionnel' },
-        { name: 'linkedin',           type: 'text',  label: 'Profil LinkedIn' },
+        { name: 'telephone',           type: 'text',  label: 'Téléphone principal' },
+        { name: 'telephoneSecondaire', type: 'text',  label: 'Téléphone secondaire' },
+        { name: 'emailProfessionnel',  type: 'email', label: 'Email professionnel' },
+        { name: 'linkedin',            type: 'text',  label: 'Profil LinkedIn' },
       ],
     },
 
