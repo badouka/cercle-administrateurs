@@ -3,6 +3,17 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
+const FONCTIONS_PREDEFINIES = [
+  'Président',
+  'Secrétaire général',
+  'Trésorier(e)',
+  'Présidente Commission Actions Sociales',
+  'Présidente Commission Communication',
+  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
+  'Président Commission Renforcement de Capacités',
+  'Membre',
+]
+
 export interface InscriptionData {
   prenom:                string
   nom:                   string
@@ -45,16 +56,23 @@ export async function inscrire(
       overrideAccess: true,
     })
 
+    const posteClean = poste?.trim() ?? ''
+    const isPredefined = FONCTIONS_PREDEFINIES.includes(posteClean)
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const posteData: any = {
+      titre:             isPredefined ? posteClean : (posteClean ? 'autre' : undefined),
+      titrePersonnalise: isPredefined ? '' : posteClean,
+      organisme:         organisme?.trim() ?? '',
+    }
+
     await payload.create({
       collection: 'membres',
       data: {
         user:    user.id,
         prenom:  prenom.trim(),
         nom:     nom.trim(),
-        poste: {
-          titre:     poste?.trim()     ?? '',
-          organisme: organisme?.trim() ?? '',
-        },
+        poste:   posteData,
         coordonnees: {
           telephone:           telephone?.trim()           ?? '',
           telephoneSecondaire: telephoneSecondaire?.trim() ?? '',

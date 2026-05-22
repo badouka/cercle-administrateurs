@@ -82,7 +82,32 @@ export const Membres: CollectionConfig = {
       name: 'poste',
       label: 'Poste',
       fields: [
-        { name: 'titre',     type: 'text', label: 'Titre / Fonction' },
+        {
+          name:  'titre',
+          type:  'select',
+          label: 'Fonction / Titre',
+          options: [
+            { label: 'Président',                                                                     value: 'Président' },
+            { label: 'Secrétaire général',                                                            value: 'Secrétaire général' },
+            { label: 'Trésorier(e)',                                                                  value: 'Trésorier(e)' },
+            { label: 'Présidente Commission Actions Sociales',                                        value: 'Présidente Commission Actions Sociales' },
+            { label: 'Présidente Commission Communication',                                           value: 'Présidente Commission Communication' },
+            { label: 'Président Commission Stratégie et Vulgarisation des Politiques Publiques',     value: 'Président Commission Stratégie et Vulgarisation des Politiques Publiques' },
+            { label: 'Président Commission Renforcement de Capacités',                               value: 'Président Commission Renforcement de Capacités' },
+            { label: 'Membre',                                                                        value: 'Membre' },
+            { label: 'Autre',                                                                         value: 'autre' },
+          ],
+        },
+        {
+          name:  'titrePersonnalise',
+          type:  'text',
+          label: 'Préciser la fonction',
+          admin: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            condition: (_data: any, siblingData: any) => siblingData?.titre === 'autre',
+            description: 'Renseigner si "Autre" est sélectionné ci-dessus',
+          },
+        },
         { name: 'organisme', type: 'text', label: 'Organisme / Administration' },
         { name: 'direction', type: 'text', label: 'Direction / Département' },
       ],

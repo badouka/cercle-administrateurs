@@ -35,10 +35,11 @@ export async function updateProfile(
         prenom:     data.prenom.trim(),
         nom:        data.nom.trim(),
         biographie: data.biographie?.trim() ?? '',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         poste: {
-          titre:     data.posteTitre?.trim()         ?? '',
-          organisme: data.organisme?.trim()           ?? '',
-          direction: data.direction?.trim()           ?? '',
+          titre:     data.posteTitre?.trim() ?? '' as any,
+          organisme: data.organisme?.trim()  ?? '',
+          direction: data.direction?.trim()  ?? '',
         },
         coordonnees: {
           telephone:          data.telephone?.trim()          ?? '',
