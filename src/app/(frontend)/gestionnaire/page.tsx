@@ -7,8 +7,9 @@ import type { User, Membre, Post } from '@/payload-types'
 import config from '@payload-config'
 import {
   Users, FileText, PlusCircle, Clock, CheckCircle2,
-  ChevronRight, Settings2, AlertCircle,
+  ChevronRight, Settings2, AlertCircle, ExternalLink,
 } from 'lucide-react'
+import type { Media } from '@/payload-types'
 import { MembreActionButtons } from './MembreActionButtons'
 import { PostListActions } from './articles/PostListActions'
 
@@ -138,18 +139,35 @@ export default async function GestionnairePage() {
           </div>
         ) : (
           <ul className="divide-y divide-gray-100 rounded-xl border border-[#E5E5E5] bg-white overflow-hidden">
-            {(membresEnAttente as Membre[]).map(m => (
-              <li key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
-                  {m.poste?.organisme && (
-                    <p className="text-xs text-gray-500 mt-0.5">{m.poste.organisme}</p>
-                  )}
-                  <p className="text-xs text-gray-400 mt-0.5">Inscrit le {formatDate(m.createdAt)}</p>
-                </div>
-                <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
-              </li>
-            ))}
+            {(membresEnAttente as Membre[]).map(m => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const j = (m as any).justificatif
+              const justifUrl: string | null = j && typeof j === 'object' && j.url ? (j as Media).url ?? null : null
+              return (
+                <li key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
+                    {m.poste?.organisme && (
+                      <p className="text-xs text-gray-500 mt-0.5">{m.poste.organisme}</p>
+                    )}
+                    <p className="text-xs text-gray-400 mt-0.5">Inscrit le {formatDate(m.createdAt)}</p>
+                    {justifUrl && (
+                      <a
+                        href={justifUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-black underline underline-offset-2 hover:text-gray-600 transition-colors"
+                      >
+                        <FileText size={11} />
+                        Voir le justificatif
+                        <ExternalLink size={10} />
+                      </a>
+                    )}
+                  </div>
+                  <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
+                </li>
+              )
+            })}
             {totalEnAttente > 5 && (
               <li className="px-5 py-3 bg-gray-50">
                 <Link href="/gestionnaire/membres" className="text-xs font-medium text-gray-500 hover:text-black">
