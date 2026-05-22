@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
 import { isAdmin } from '@/access'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const Membres: CollectionConfig = {
   slug: 'membres',
@@ -88,8 +89,13 @@ export const Membres: CollectionConfig = {
     },
     {
       name: 'biographie',
-      type: 'textarea',
+      type: 'richText',
       label: 'Biographie',
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+        ],
+      }),
     },
 
     // ── Poste ─────────────────────────────────────────────────────────────────
