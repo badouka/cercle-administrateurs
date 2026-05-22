@@ -5,13 +5,22 @@ import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { User, Membre } from '@/payload-types'
 import config from '@payload-config'
-import { Users, ArrowLeft } from 'lucide-react'
+import { Users, ArrowLeft, FileText, ExternalLink } from 'lucide-react'
+import type { Media } from '@/payload-types'
 import { MembreActionButtons } from '../MembreActionButtons'
 
 export const metadata: Metadata = { title: 'Gestion des membres' }
 
 function formatDate(d: string) {
   return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(d))
+}
+
+function getJustificatifUrl(m: Membre): string | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const j = (m as any).justificatif
+  if (!j) return null
+  if (typeof j === 'object' && j.url) return (j as Media).url ?? null
+  return null
 }
 
 const STATUT_CONFIG = {
@@ -84,21 +93,36 @@ export default async function MembreManagementPage() {
             En attente de validation ({pending.length})
           </h2>
           <ul className="divide-y divide-gray-100 rounded-xl border border-yellow-200 bg-yellow-50 overflow-hidden">
-            {(pending as Membre[]).map(m => (
-              <li key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4">
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
-                  {m.poste?.organisme && (
-                    <p className="text-xs text-gray-600 mt-0.5">{m.poste.titre ? `${m.poste.titre} — ` : ''}{m.poste.organisme}</p>
-                  )}
-                  {m.adhesion?.numeroAdhesion && (
-                    <p className="text-xs text-gray-400 font-mono mt-0.5">N° {m.adhesion.numeroAdhesion}</p>
-                  )}
-                  <p className="text-xs text-gray-400 mt-0.5">Inscrit le {formatDate(m.createdAt)}</p>
-                </div>
-                <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
-              </li>
-            ))}
+            {(pending as Membre[]).map(m => {
+              const justifUrl = getJustificatifUrl(m)
+              return (
+                <li key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
+                    {m.poste?.organisme && (
+                      <p className="text-xs text-gray-600 mt-0.5">{m.poste.titre ? `${m.poste.titre} — ` : ''}{m.poste.organisme}</p>
+                    )}
+                    {m.adhesion?.numeroAdhesion && (
+                      <p className="text-xs text-gray-400 font-mono mt-0.5">N° {m.adhesion.numeroAdhesion}</p>
+                    )}
+                    <p className="text-xs text-gray-400 mt-0.5">Inscrit le {formatDate(m.createdAt)}</p>
+                    {justifUrl && (
+                      <a
+                        href={justifUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-black underline underline-offset-2 hover:text-gray-600 transition-colors"
+                      >
+                        <FileText size={11} />
+                        Voir le justificatif
+                        <ExternalLink size={10} />
+                      </a>
+                    )}
+                  </div>
+                  <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
+                </li>
+              )
+            })}
           </ul>
         </section>
       )}
@@ -155,7 +179,24 @@ export default async function MembreManagementPage() {
                         </td>
                         <td className="px-5 py-3.5 text-right">
                           {m.adhesion?.statut === 'inactif' && (
-                            <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
+                            <div className="flex flex-col items-end gap-2">
+                              {(() => {
+                                const url = getJustificatifUrl(m)
+                                return url ? (
+                                  <a
+                                    href={url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-black underline underline-offset-2 transition-colors"
+                                  >
+                                    <FileText size={11} />
+                                    Justificatif
+                                    <ExternalLink size={10} />
+                                  </a>
+                                ) : null
+                              })()}
+                              <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
+                            </div>
                           )}
                         </td>
                       </tr>

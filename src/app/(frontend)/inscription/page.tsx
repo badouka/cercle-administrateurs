@@ -1,9 +1,9 @@
 'use client'
 
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, useState, useRef } from 'react'
 import Link from 'next/link'
-import { Eye, EyeOff, CheckCircle2 } from 'lucide-react'
-import { inscrire } from './actions'
+import { Eye, EyeOff, CheckCircle2, Upload, X, FileText } from 'lucide-react'
+import { inscrire, uploadJustificatif } from './actions'
 
 const INPUT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
@@ -21,6 +21,9 @@ const FONCTIONS = [
   'Président Commission Renforcement de Capacités',
   'Membre',
 ]
+
+const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
+const MAX_SIZE      = 5 * 1024 * 1024
 
 function Field({
   id, name, label, required, type = 'text', autoComplete, placeholder,
@@ -44,32 +47,77 @@ function Field({
 }
 
 export default function InscriptionPage() {
-  const [loading,  setLoading]  = useState(false)
-  const [error,    setError]    = useState<string | null>(null)
-  const [success,  setSuccess]  = useState(false)
-  const [showPwd,  setShowPwd]  = useState(false)
-  const [fonction, setFonction] = useState('')
+  const [loading,          setLoading]          = useState(false)
+  const [error,            setError]            = useState<string | null>(null)
+  const [success,          setSuccess]          = useState(false)
+  const [showPwd,          setShowPwd]          = useState(false)
+  const [fonction,         setFonction]         = useState('')
+  const [justificatifFile, setJustificatifFile] = useState<File | null>(null)
+  const [fileError,        setFileError]        = useState<string | null>(null)
+
+  const justificatifRef = useRef<HTMLInputElement>(null)
+
+  function handleJustificatifChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null
+    setFileError(null)
+    if (!file) { setJustificatifFile(null); return }
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setFileError('Format non supporté. Utilisez PDF, JPG ou PNG.')
+      e.target.value = ''
+      return
+    }
+    if (file.size > MAX_SIZE) {
+      setFileError('Le fichier ne doit pas dépasser 5 Mo.')
+      e.target.value = ''
+      return
+    }
+    setJustificatifFile(file)
+  }
+
+  function removeJustificatif() {
+    setJustificatifFile(null)
+    setFileError(null)
+    if (justificatifRef.current) justificatifRef.current.value = ''
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
-    setLoading(true)
 
-    const fd = new FormData(e.currentTarget)
-
+    // Read form values immediately before any async call
+    const fd             = new FormData(e.currentTarget)
     const fonctionSelect = fd.get('fonctionSelect') as string
     const fonctionAutre  = (fd.get('fonctionAutre') as string | null)?.trim() ?? ''
-    const poste = fonctionSelect === 'Autre' ? fonctionAutre : fonctionSelect
+    const poste          = fonctionSelect === 'Autre' ? fonctionAutre : fonctionSelect
 
+    if (!justificatifFile) {
+      setError('La pièce justificative est obligatoire.')
+      return
+    }
+
+    setLoading(true)
+
+    // 1. Upload justificatif
+    const uploadFd = new FormData()
+    uploadFd.append('file', justificatifFile)
+    const uploadResult = await uploadJustificatif(uploadFd)
+    if ('error' in uploadResult) {
+      setError(uploadResult.error)
+      setLoading(false)
+      return
+    }
+
+    // 2. Create user + membre
     const result = await inscrire({
-      prenom:               fd.get('prenom')               as string,
-      nom:                  fd.get('nom')                  as string,
-      email:                fd.get('email')                as string,
-      motDePasse:           fd.get('motDePasse')           as string,
+      prenom:              fd.get('prenom')             as string,
+      nom:                 fd.get('nom')                as string,
+      email:               fd.get('email')              as string,
+      motDePasse:          fd.get('motDePasse')         as string,
       poste,
-      organisme:            fd.get('organisme')            as string,
-      telephone:            fd.get('telephone')            as string,
-      telephoneSecondaire:  fd.get('telephoneSecondaire')  as string,
+      organisme:           fd.get('organisme')          as string,
+      telephone:           fd.get('telephone')          as string,
+      telephoneSecondaire: fd.get('telephoneSecondaire') as string,
+      justificatifId:      uploadResult.id,
     })
 
     if ('error' in result) {
@@ -229,6 +277,63 @@ export default function InscriptionPage() {
             type="tel" autoComplete="tel"
             placeholder="+221 78 000 00 00"
           />
+        </fieldset>
+
+        {/* ── Justificatif ── */}
+        <fieldset className="space-y-3">
+          <legend className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            Justificatif
+          </legend>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Pièce justificative<span className="ml-0.5 text-black">*</span>
+            </label>
+            <p className="text-xs text-gray-400 mb-2">
+              Joignez un document justifiant votre fonction (arrêté de nomination, décision, carte professionnelle…)
+            </p>
+
+            {justificatifFile ? (
+              <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                <FileText size={16} className="text-gray-400 shrink-0" />
+                <span className="text-sm text-gray-700 flex-1 truncate">{justificatifFile.name}</span>
+                <span className="text-xs text-gray-400 shrink-0">
+                  {(justificatifFile.size / 1024).toFixed(0)} Ko
+                </span>
+                <button
+                  type="button"
+                  onClick={removeJustificatif}
+                  className="shrink-0 text-gray-400 hover:text-red-600 transition-colors"
+                  title="Supprimer"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => justificatifRef.current?.click()}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 px-4 py-5 text-sm text-gray-500 hover:border-black hover:text-black transition-colors"
+              >
+                <Upload size={16} />
+                Sélectionner un fichier
+              </button>
+            )}
+
+            <input
+              ref={justificatifRef}
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+              onChange={handleJustificatifChange}
+              className="hidden"
+            />
+
+            {fileError && (
+              <p className="mt-1.5 text-xs text-red-600">{fileError}</p>
+            )}
+            {!fileError && (
+              <p className="mt-1 text-xs text-gray-400">PDF, JPG, PNG — 5 Mo maximum</p>
+            )}
+          </div>
         </fieldset>
 
         <button

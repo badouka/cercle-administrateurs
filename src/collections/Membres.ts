@@ -71,6 +71,22 @@ export const Membres: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name:       'justificatif',
+      type:       'upload',
+      label:      'Pièce justificative',
+      relationTo: 'media',
+      admin: {
+        description: "Document fourni à l'inscription (arrêté de nomination, décision, carte professionnelle…)",
+      },
+      // Lisible uniquement par admin et gestionnaire, jamais par le membre
+      access: {
+        read: ({ req: { user } }) => {
+          const role = (user as User | null)?.role
+          return role === 'admin' || role === 'gestionnaire'
+        },
+      },
+    },
+    {
       name: 'biographie',
       type: 'textarea',
       label: 'Biographie',
