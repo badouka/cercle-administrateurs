@@ -193,6 +193,7 @@ export interface Membre {
   };
   coordonnees?: {
     telephone?: string | null;
+    telephoneSecondaire?: string | null;
     emailProfessionnel?: string | null;
     linkedin?: string | null;
   };
@@ -479,6 +480,7 @@ export interface MembresSelect<T extends boolean = true> {
     | T
     | {
         telephone?: T;
+        telephoneSecondaire?: T;
         emailProfessionnel?: T;
         linkedin?: T;
       };
