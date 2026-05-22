@@ -53,8 +53,8 @@ export function EditProfileForm({ membre }: Props) {
   const bioEditorRef = useRef<BiographyEditorRef>(null)
   const logoRef      = useRef<HTMLInputElement>(null)
 
-  const currentLogo = typeof membre.logoOrganisme === 'object' && membre.logoOrganisme
-    ? (membre.logoOrganisme as Media)
+  const currentLogo = typeof membre.poste?.logoOrganisme === 'object' && membre.poste?.logoOrganisme
+    ? (membre.poste.logoOrganisme as Media)
     : null
 
   function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {

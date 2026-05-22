@@ -186,10 +186,6 @@ export interface Membre {
   nom: string;
   photo?: (number | null) | Media;
   /**
-   * Logo affiché dans le profil public du membre
-   */
-  logoOrganisme?: (number | null) | Media;
-  /**
    * Document fourni à l'inscription (arrêté de nomination, décision, carte professionnelle…)
    */
   justificatif?: (number | null) | Media;
@@ -209,6 +205,7 @@ export interface Membre {
      */
     siteOrganisme?: string | null;
     direction?: string | null;
+    logoOrganisme?: (number | null) | Media;
   };
   coordonnees?: {
     telephone?: string | null;
@@ -487,7 +484,6 @@ export interface MembresSelect<T extends boolean = true> {
   prenom?: T;
   nom?: T;
   photo?: T;
-  logoOrganisme?: T;
   justificatif?: T;
   biographie?: T;
   poste?:
@@ -498,6 +494,7 @@ export interface MembresSelect<T extends boolean = true> {
         organisme?: T;
         siteOrganisme?: T;
         direction?: T;
+        logoOrganisme?: T;
       };
   coordonnees?:
     | T

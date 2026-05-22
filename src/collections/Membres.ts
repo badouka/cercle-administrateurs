@@ -71,13 +71,6 @@ export const Membres: CollectionConfig = {
       relationTo: 'media',
     },
     {
-      name:       'logoOrganisme',
-      type:       'upload',
-      label:      "Logo de l'organisme",
-      relationTo: 'media',
-      admin: { description: 'Logo affiché dans le profil public du membre' },
-    },
-    {
       name:       'justificatif',
       type:       'upload',
       label:      'Pièce justificative',
@@ -106,20 +99,39 @@ export const Membres: CollectionConfig = {
       label: 'Poste',
       fields: [
         {
-          name:  'posteCap',
-          type:  'text',
-          label: 'Poste au CAP',
-          admin: { description: 'Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)' },
+          type:  'collapsible',
+          label: 'Bureau CAP',
+          fields: [
+            {
+              name:  'posteCap',
+              type:  'text',
+              label: 'Poste au CAP',
+              admin: { description: 'Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)' },
+            },
+          ],
         },
         {
-          name:  'fonctionProfessionnelle',
-          type:  'text',
-          label: 'Fonction professionnelle',
-          admin: { description: "Titre professionnel (ex. DG, Président de Conseil d'Administration…)" },
+          type:  'collapsible',
+          label: 'Informations professionnelles',
+          fields: [
+            {
+              name:  'fonctionProfessionnelle',
+              type:  'text',
+              label: 'Fonction professionnelle',
+              admin: { description: "Titre professionnel (ex. DG, Président de Conseil d'Administration…)" },
+            },
+            { name: 'organisme',     type: 'text',   label: 'Organisme / Administration' },
+            { name: 'siteOrganisme', type: 'text',   label: "Site web de l'organisme", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
+            { name: 'direction',     type: 'text',   label: 'Direction / Département' },
+            {
+              name:       'logoOrganisme',
+              type:       'upload',
+              label:      "Logo de l'organisme",
+              relationTo: 'media',
+              admin:      { description: 'Logo affiché dans le profil public du membre' },
+            },
+          ],
         },
-        { name: 'organisme',     type: 'text', label: 'Organisme / Administration' },
-        { name: 'siteOrganisme', type: 'text', label: "Site web de l'organisme", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
-        { name: 'direction',     type: 'text', label: 'Direction / Département' },
       ],
     },
 

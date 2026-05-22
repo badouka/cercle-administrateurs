@@ -67,6 +67,10 @@ export async function updateProfile(
       direction:               data.direction?.trim()               ?? '',
     }
 
+    if (data.logoOrganismeId !== undefined) {
+      poste.logoOrganisme = data.logoOrganismeId
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {
       prenom:     data.prenom.trim(),
@@ -79,10 +83,6 @@ export async function updateProfile(
         emailProfessionnel:  data.emailProfessionnel?.trim()  ?? '',
         linkedin:            data.linkedin?.trim()            ?? '',
       },
-    }
-
-    if (data.logoOrganismeId !== undefined) {
-      updateData.logoOrganisme = data.logoOrganismeId
     }
 
     await payload.update({

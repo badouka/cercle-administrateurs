@@ -61,7 +61,7 @@ export default async function MembreDetailPage({ params }: Props) {
   const isAuthenticated = Boolean(user)
 
   const photo         = typeof membre.photo         === 'object' && membre.photo         ? (membre.photo         as Media) : null
-  const logoOrganisme = typeof membre.logoOrganisme === 'object' && membre.logoOrganisme ? (membre.logoOrganisme as Media) : null
+  const logoOrganisme = typeof membre.poste?.logoOrganisme === 'object' && membre.poste?.logoOrganisme ? (membre.poste.logoOrganisme as Media) : null
   const initiales     = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
   const hasPoste      = membre.poste?.posteCap || membre.poste?.fonctionProfessionnelle || membre.poste?.organisme || membre.poste?.direction
   const hasCoord = membre.coordonnees?.telephone || membre.coordonnees?.emailProfessionnel || membre.coordonnees?.linkedin
