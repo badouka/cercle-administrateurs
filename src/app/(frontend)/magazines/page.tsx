@@ -14,16 +14,16 @@ export default async function MagazinesPage() {
   const payload = await getPayload({ config })
 
   const { docs } = await payload.find({
-    collection:     'documents',
+    collection: 'documents',
     where: {
       and: [
         { categorie: { equals: 'magazines' } },
-        { acces:     { equals: 'public'    } },
+        { acces: { equals: 'public' } },
       ],
     },
-    depth:          1,
-    sort:           '-createdAt',
-    limit:          100,
+    depth: 1,
+    sort: '-createdAt',
+    limit: 100,
     overrideAccess: true,
   })
 
@@ -46,12 +46,12 @@ export default async function MagazinesPage() {
       </div>
 
       {magazines.length === 0 ? (
-        <div className="rounded-xl border border-[#E5E5E5] bg-[#F9F9F9] px-6 py-12 text-center">
-          <FileText size={36} className="mx-auto text-gray-300 mb-3" strokeWidth={1.5} />
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-6 py-16 text-center">
+          <FileText size={40} className="mx-auto mb-3 text-gray-300" strokeWidth={1.5} />
           <p className="text-gray-500">Aucun magazine disponible pour le moment.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {magazines.map(doc => {
             const couverture = typeof doc.couverture === 'object' && doc.couverture
               ? (doc.couverture as Media)
@@ -63,39 +63,41 @@ export default async function MagazinesPage() {
             return (
               <article
                 key={doc.id}
-                className="group flex flex-col rounded-2xl border border-[#E5E5E5] overflow-hidden bg-white hover:shadow-lg transition-shadow duration-200"
+                className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
               >
                 {/* Couverture */}
                 {couverture?.url ? (
-                  <div className="relative aspect-[3/4] bg-gray-100 overflow-hidden">
+                  <div className="relative aspect-[3/4] overflow-hidden bg-gray-100">
                     <Image
                       src={couverture.url}
                       alt={doc.titre}
                       fill
-                      className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                      className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
                 ) : (
-                  <div className="flex aspect-[3/4] flex-col items-center justify-center border-b-4 border-green-600 bg-green-50">
-                    <FileText
-                      size={52}
-                      className="text-green-600 mb-4"
-                      strokeWidth={1.5}
-                    />
-                    <span className="text-xs font-extrabold tracking-widest text-green-700 uppercase">
-                      CAP
-                    </span>
-                    <span className="mt-1 text-xs text-green-600">Magazine</span>
+                  <div className="relative aspect-[3/4] flex flex-col items-center justify-center border-b border-gray-200 bg-gray-50">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="rounded-full border border-gray-300 p-4">
+                        <FileText size={36} className="text-gray-400" strokeWidth={1.5} />
+                      </div>
+                      <div className="text-center">
+                        <span className="block text-xs font-extrabold tracking-widest text-black uppercase">
+                          CAP
+                        </span>
+                        <span className="block mt-0.5 text-xs text-gray-400">Magazine</span>
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 {/* Contenu */}
                 <div className="flex flex-1 flex-col p-5">
-                  <h2 className="font-bold text-black leading-snug">{doc.titre}</h2>
+                  <h2 className="font-bold leading-snug text-black">{doc.titre}</h2>
 
                   {doc.description && (
-                    <p className="mt-2 text-sm text-gray-500 line-clamp-3 flex-1">
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500 line-clamp-3">
                       {doc.description}
                     </p>
                   )}
@@ -105,7 +107,7 @@ export default async function MagazinesPage() {
                       href={fichier.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center justify-center rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+                      className="mt-4 inline-flex items-center justify-center rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
                     >
                       Lire la revue →
                     </a>
