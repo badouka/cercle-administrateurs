@@ -104,17 +104,16 @@ export default async function GaleriePage(
           return (
             <figure
               key={media.id ?? index}
-              className="group overflow-hidden rounded-xl border border-[#E5E5E5] bg-white hover:shadow-md transition-shadow"
+              className="overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 hover:shadow-md transition-shadow"
             >
-              <div className="relative aspect-video bg-gray-100">
-                <Image
-                  src={media.url}
-                  alt={media.alt || galerie.titre}
-                  fill
-                  className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              </div>
+              <Image
+                src={media.url}
+                alt={media.alt || galerie.titre}
+                width={media.width ?? 800}
+                height={media.height ?? 600}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
             </figure>
           )
         })}
