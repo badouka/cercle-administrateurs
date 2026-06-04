@@ -69,17 +69,29 @@ export const Mediatheque: CollectionConfig = {
       type: 'array',
       required: true,
       minRows: 1,
+      labels: {
+        singular: 'Photo',
+        plural:   'Photos',
+      },
+      admin: {
+        description: [
+          'Cliquez sur "+ Ajouter une Photo" pour ajouter chaque image.',
+          'Astuce : uploadez d\'abord toutes vos images dans Médias, puis revenez ici pour les sélectionner rapidement.',
+        ].join(' '),
+        initCollapsed: false,
+      },
       fields: [
         {
           name: 'photo',
           type: 'upload',
           relationTo: 'media',
           required: true,
+          admin: { description: 'Sélectionnez une image depuis la médiathèque.' },
         },
         {
           name: 'legende',
           type: 'text',
-          label: 'Légende',
+          label: 'Légende (optionnelle)',
         },
       ],
     },
