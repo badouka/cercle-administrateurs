@@ -12,7 +12,8 @@ const NAV_LINKS = [
   { href: '/actualites', label: 'Actualités' },
   { href: '/activites',  label: 'Activités' },
   { href: '/documents',  label: 'Documents' },
-  { href: '/magazines',  label: 'Magazines' },
+  { href: '/magazines',    label: 'Magazines' },
+  { href: '/mediatheque', label: 'Médiathèque' },
 ]
 
 interface AuthUser { email: string; role?: 'membre' | 'gestionnaire' | 'admin' }
