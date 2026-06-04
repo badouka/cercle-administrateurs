@@ -4,7 +4,6 @@ import type { Metadata } from 'next'
 import type { Activity, Media } from '@/payload-types'
 import config from '@payload-config'
 import { CalendarDays, MapPin, Users } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -39,15 +38,12 @@ export default async function ActivitesPage() {
   const payload = await getPayload({ config })
 
   const { docs: activites } = await payload.find({
-    collection: 'activities',
-    sort: 'date_debut',
-    depth: 1,
-    limit: 100,
+    collection:     'activities',
+    sort:           '-date_debut',
+    depth:          1,
+    limit:          100,
     overrideAccess: true,
   })
-
-  const upcoming = activites.filter(a => a.statut !== 'termine')
-  const past      = activites.filter(a => a.statut === 'termine')
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -62,36 +58,8 @@ export default async function ActivitesPage() {
       {activites.length === 0 ? (
         <p className="text-gray-500">Aucune activité disponible pour le moment.</p>
       ) : (
-        <div className="space-y-14">
-
-          {upcoming.length > 0 && (
-            <section>
-              <h2 className="mb-6 text-lg font-semibold text-black flex items-center gap-2">
-                Prochaines activités
-                <span className="rounded-full bg-black text-white px-2.5 py-0.5 text-xs font-medium">
-                  {upcoming.length}
-                </span>
-              </h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {upcoming.map(a => <ActiviteCard key={a.id} activite={a} />)}
-              </div>
-            </section>
-          )}
-
-          {past.length > 0 && (
-            <section>
-              <h2 className="mb-6 text-lg font-semibold text-gray-400 flex items-center gap-2">
-                Activités passées
-                <span className="rounded-full bg-[#F5F5F5] text-gray-500 px-2.5 py-0.5 text-xs font-medium">
-                  {past.length}
-                </span>
-              </h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {past.map(a => <ActiviteCard key={a.id} activite={a} past />)}
-              </div>
-            </section>
-          )}
-
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {activites.map(a => <ActiviteCard key={a.id} activite={a} />)}
         </div>
       )}
     </div>
@@ -100,16 +68,13 @@ export default async function ActivitesPage() {
 
 // ─── Composant carte ──────────────────────────────────────────────────────────
 
-function ActiviteCard({ activite, past = false }: { activite: Activity; past?: boolean }) {
+function ActiviteCard({ activite }: { activite: Activity }) {
   const image        = typeof activite.image === 'object' && activite.image ? activite.image as Media : null
   const typeConfig   = activite.type ? TYPE_CONFIG[activite.type] : null
   const statutConfig = STATUT_CONFIG[activite.statut]
 
   return (
-    <article className={cn(
-      'flex flex-col rounded-xl border border-[#E5E5E5] bg-white overflow-hidden hover:shadow-md transition-shadow',
-      past && 'opacity-70',
-    )}>
+    <article className="flex flex-col rounded-xl border border-[#E5E5E5] bg-white overflow-hidden hover:shadow-md transition-shadow">
 
       {image?.url ? (
         <div className="relative aspect-video bg-gray-100">
@@ -117,7 +82,7 @@ function ActiviteCard({ activite, past = false }: { activite: Activity; past?: b
             src={image.url}
             alt={activite.titre}
             fill
-            className={cn('object-cover', past && 'grayscale')}
+            className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
