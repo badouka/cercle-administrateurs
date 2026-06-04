@@ -42,7 +42,7 @@ export async function generateMetadata(
     where:          { slug: { equals: slug } },
     depth:          0,
     limit:          1,
-    overrideAccess: true,
+    overrideAccess: true,  // status filtré manuellement ci-dessous
   })
 
   const galerie = docs[0] as Galerie | undefined
@@ -56,16 +56,19 @@ export default async function GaleriePage(
   const payload  = await getPayload({ config })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { docs } = await (payload.find as any)({
+  const { docs: allDocs } = await (payload.find as any)({
     collection:     'mediatheque',
-    where:          { slug: { equals: slug }, statut: { equals: 'publie' } },
+    where:          { slug: { equals: slug } },
     depth:          1,
     limit:          1,
     overrideAccess: true,
   })
 
-  const galerie = docs[0] as Galerie | undefined
-  if (!galerie) notFound()
+  const raw = allDocs[0] as Galerie | undefined
+  console.log('[mediatheque/slug] slug cherché:', slug, '| trouvé:', raw?.slug ?? 'RIEN', '| statut:', raw?.statut ?? '-')
+
+  if (!raw || raw.statut !== 'publie') notFound()
+  const galerie = raw
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
