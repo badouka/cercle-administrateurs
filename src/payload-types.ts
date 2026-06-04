@@ -74,6 +74,7 @@ export interface Config {
     posts: Post;
     documents: Document;
     'activity-registrations': ActivityRegistration;
+    mediatheque: Mediatheque;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +89,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     'activity-registrations': ActivityRegistrationsSelect<false> | ActivityRegistrationsSelect<true>;
+    mediatheque: MediathequeSelect<false> | MediathequeSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -363,6 +365,28 @@ export interface ActivityRegistration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mediatheque".
+ */
+export interface Mediatheque {
+  id: number;
+  titre: string;
+  /**
+   * Auto-généré depuis le titre à la création.
+   */
+  slug?: string | null;
+  date?: string | null;
+  description?: string | null;
+  photos: {
+    photo: number | Media;
+    legende?: string | null;
+    id?: string | null;
+  }[];
+  statut: 'publie' | 'brouillon';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -412,6 +436,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'activity-registrations';
         value: number | ActivityRegistration;
+      } | null)
+    | ({
+        relationTo: 'mediatheque';
+        value: number | Mediatheque;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -593,6 +621,26 @@ export interface ActivityRegistrationsSelect<T extends boolean = true> {
   activity?: T;
   statut?: T;
   inscrit_le?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mediatheque_select".
+ */
+export interface MediathequeSelect<T extends boolean = true> {
+  titre?: T;
+  slug?: T;
+  date?: T;
+  description?: T;
+  photos?:
+    | T
+    | {
+        photo?: T;
+        legende?: T;
+        id?: T;
+      };
+  statut?: T;
   updatedAt?: T;
   createdAt?: T;
 }
