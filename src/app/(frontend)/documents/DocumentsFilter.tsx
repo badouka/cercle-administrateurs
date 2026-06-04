@@ -1,11 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { FileText, Download } from 'lucide-react'
+import { FileText, Download, Lock } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type DocumentCategorie = 'textes_statutaires' | 'textes_reglementaires' | 'docs_politique_economique'
+type DocumentCategorie =
+  | 'textes_statutaires'
+  | 'textes_reglementaires'
+  | 'docs_politique_economique'
+  | 'pv_reunion'
+  | 'ressources'
 
 interface DocMedia {
   url?: string | null
@@ -17,16 +22,23 @@ interface Doc {
   titre: string
   description?: string | null
   categorie: string
+  acces: string
   fichier?: DocMedia | null
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const CATEGORIES: { value: DocumentCategorie | 'all'; label: string }[] = [
+const CATEGORIES_PUBLIC: { value: DocumentCategorie | 'all'; label: string }[] = [
   { value: 'all',                        label: 'Tous' },
   { value: 'textes_statutaires',         label: 'Textes statutaires' },
   { value: 'textes_reglementaires',      label: 'Textes réglementaires' },
   { value: 'docs_politique_economique',  label: 'Docs politique éco.' },
+]
+
+const CATEGORIES_MEMBRE: { value: DocumentCategorie | 'all'; label: string }[] = [
+  ...CATEGORIES_PUBLIC,
+  { value: 'pv_reunion',   label: 'PV de réunion' },
+  { value: 'ressources',   label: 'Ressources' },
 ]
 
 const CATEGORIE_CONFIG: Record<DocumentCategorie, {
@@ -53,12 +65,30 @@ const CATEGORIE_CONFIG: Record<DocumentCategorie, {
     badge:       'Politique éco.',
     badgeClass:  'bg-gray-400 text-white',
   },
+  pv_reunion: {
+    label:       'PV de réunion',
+    description: 'Procès-verbaux des réunions et assemblées du CAP.',
+    badge:       'PV',
+    badgeClass:  'bg-gray-800 text-white',
+  },
+  ressources: {
+    label:       'Ressources',
+    description: 'Ressources documentaires et supports de formation.',
+    badge:       'Ressource',
+    badgeClass:  'bg-gray-600 text-white',
+  },
 }
 
-const ORDERED_CATEGORIES: DocumentCategorie[] = [
+const ORDERED_CATEGORIES_PUBLIC: DocumentCategorie[] = [
   'textes_statutaires',
   'textes_reglementaires',
   'docs_politique_economique',
+]
+
+const ORDERED_CATEGORIES_MEMBRE: DocumentCategorie[] = [
+  ...ORDERED_CATEGORIES_PUBLIC,
+  'pv_reunion',
+  'ressources',
 ]
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -72,21 +102,21 @@ function formatFilesize(bytes?: number | null): string {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function DocumentsFilter({ docs }: { docs: Doc[] }) {
+export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn: boolean }) {
   const [active, setActive] = useState<DocumentCategorie | 'all'>('all')
+
+  const categories    = isLoggedIn ? CATEGORIES_MEMBRE        : CATEGORIES_PUBLIC
+  const orderedCats   = isLoggedIn ? ORDERED_CATEGORIES_MEMBRE : ORDERED_CATEGORIES_PUBLIC
 
   const filtered = active === 'all' ? docs : docs.filter(d => d.categorie === active)
 
   const grouped = Object.fromEntries(
-    ORDERED_CATEGORIES.map(cat => [
-      cat,
-      filtered.filter(d => d.categorie === cat),
-    ]),
+    orderedCats.map(cat => [cat, filtered.filter(d => d.categorie === cat)]),
   ) as Record<DocumentCategorie, Doc[]>
 
   const visibleCategories = active === 'all'
-    ? ORDERED_CATEGORIES.filter(cat => grouped[cat].length > 0)
-    : (ORDERED_CATEGORIES.includes(active as DocumentCategorie) && grouped[active as DocumentCategorie].length > 0
+    ? orderedCats.filter(cat => grouped[cat].length > 0)
+    : (orderedCats.includes(active as DocumentCategorie) && grouped[active as DocumentCategorie]?.length > 0
         ? [active as DocumentCategorie]
         : [])
 
@@ -94,7 +124,7 @@ export function DocumentsFilter({ docs }: { docs: Doc[] }) {
     <>
       {/* Filter buttons */}
       <div className="mb-8 flex flex-wrap gap-2">
-        {CATEGORIES.map(({ value, label }) => (
+        {categories.map(({ value, label }) => (
           <button
             key={value}
             onClick={() => setActive(value)}
@@ -120,7 +150,7 @@ export function DocumentsFilter({ docs }: { docs: Doc[] }) {
       ) : (
         <div className="space-y-12">
           {visibleCategories.map(cat => {
-            const catDocs = grouped[cat]
+            const catDocs   = grouped[cat]
             const catConfig = CATEGORIE_CONFIG[cat]
 
             return (
@@ -137,7 +167,8 @@ export function DocumentsFilter({ docs }: { docs: Doc[] }) {
 
                 <ul className="divide-y divide-gray-100">
                   {catDocs.map(doc => {
-                    const filesize = formatFilesize(doc.fichier?.filesize)
+                    const filesize  = formatFilesize(doc.fichier?.filesize)
+                    const isMembre  = doc.acces === 'membres'
 
                     return (
                       <li key={doc.id} className="flex items-start gap-4 py-4">
@@ -151,6 +182,12 @@ export function DocumentsFilter({ docs }: { docs: Doc[] }) {
                             <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${catConfig.badgeClass}`}>
                               {catConfig.badge}
                             </span>
+                            {isMembre && (
+                              <span className="inline-flex items-center gap-1 shrink-0 rounded-full border border-gray-300 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
+                                <Lock size={9} />
+                                Membres
+                              </span>
+                            )}
                           </div>
                           {doc.description && (
                             <p className="mt-0.5 text-sm text-gray-500 line-clamp-2">
