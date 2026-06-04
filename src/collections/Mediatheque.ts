@@ -37,6 +37,15 @@ export const Mediatheque: CollectionConfig = {
         return data
       },
     ],
+    beforeChange: [
+      ({ data, operation }) => {
+        // Sécurité : génère le slug si toujours absent après beforeValidate
+        if (operation === 'create' && data?.titre && !data.slug) {
+          data.slug = toSlug(data.titre)
+        }
+        return data
+      },
+    ],
   },
   fields: [
     { name: 'titre', type: 'text', required: true },
