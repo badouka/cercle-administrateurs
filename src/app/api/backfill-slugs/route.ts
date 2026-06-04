@@ -1,17 +1,16 @@
-import configPromise from '@payload-config'
+﻿import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
-// Route de backfill — à appeler une seule fois : GET /api/backfill-slugs
-// Génère les slugs manquants pour toutes les galeries Médiathèque
+// Route de backfill — GET /api/backfill-slugs
+// Régénère les slugs de toutes les galeries (corrige les slugs malformés)
 
-const toSlug = (value: string) =>
-  value
+const toSlug = (titre: string) =>
+  titre
     .toLowerCase()
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 
 export const GET = async () => {
   const payload = await getPayload({ config: configPromise })
@@ -24,12 +23,13 @@ export const GET = async () => {
     overrideAccess: true,
   })
 
-  const results: { id: number; titre: string; ancien: string | null; nouveau: string | null }[] = []
+  const results: { id: number; titre: string; ancien: string | null; nouveau: string; updated: boolean }[] = []
 
   for (const doc of docs as { id: number; titre: string; slug?: string | null }[]) {
-    if (!doc.slug) {
-      const newSlug = toSlug(doc.titre)
+    const newSlug = toSlug(doc.titre)
+    const needsUpdate = doc.slug !== newSlug
 
+    if (needsUpdate) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (payload.update as any)({
         collection:     'mediatheque',
@@ -37,17 +37,15 @@ export const GET = async () => {
         data:           { slug: newSlug },
         overrideAccess: true,
       })
-
-      results.push({ id: doc.id, titre: doc.titre, ancien: null, nouveau: newSlug })
-    } else {
-      results.push({ id: doc.id, titre: doc.titre, ancien: doc.slug, nouveau: null })
     }
+
+    results.push({ id: doc.id, titre: doc.titre, ancien: doc.slug ?? null, nouveau: newSlug, updated: needsUpdate })
   }
 
-  const updated = results.filter(r => r.nouveau !== null).length
+  const updated = results.filter(r => r.updated).length
 
   return Response.json({
-    message: `${updated} slug(s) généré(s)`,
+    message: `${updated} slug(s) corrigé(s) sur ${docs.length}`,
     results,
   })
 }
