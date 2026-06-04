@@ -95,8 +95,8 @@ export default async function GaleriePage(
         )}
       </div>
 
-      {/* Grille photos */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Grille masonry */}
+      <div style={{ columns: '3 300px', gap: '8px' }}>
         {galerie.photos.map((photo, index) => {
           const media = typeof photo === 'object' && photo ? photo as Media : null
           if (!media?.url) return null
@@ -104,6 +104,7 @@ export default async function GaleriePage(
           return (
             <figure
               key={media.id ?? index}
+              style={{ breakInside: 'avoid', marginBottom: '8px' }}
               className="overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 hover:shadow-md transition-shadow"
             >
               <Image
