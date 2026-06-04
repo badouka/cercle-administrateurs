@@ -8,19 +8,13 @@ import config from '@payload-config'
 import { CalendarDays, ArrowLeft } from 'lucide-react'
 
 // Types locaux (avant génération payload-types)
-interface GaleriePhoto {
-  id: string
-  photo: number | Media
-  legende?: string | null
-}
-
 interface Galerie {
   id: number
   titre: string
   slug?: string | null
   date?: string | null
   description?: string | null
-  photos: GaleriePhoto[]
+  photos: (number | Media)[]
   statut: 'publie' | 'brouillon'
 }
 
@@ -65,8 +59,6 @@ export default async function GaleriePage(
   })
 
   const raw = allDocs[0] as Galerie | undefined
-  console.log('[mediatheque/slug] slug cherché:', slug, '| trouvé:', raw?.slug ?? 'RIEN', '| statut:', raw?.statut ?? '-')
-
   if (!raw || raw.statut !== 'publie') notFound()
   const galerie = raw
 
@@ -105,29 +97,24 @@ export default async function GaleriePage(
 
       {/* Grille photos */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {galerie.photos.map((item, index) => {
-          const media = typeof item.photo === 'object' && item.photo ? item.photo as Media : null
+        {galerie.photos.map((photo, index) => {
+          const media = typeof photo === 'object' && photo ? photo as Media : null
           if (!media?.url) return null
 
           return (
             <figure
-              key={item.id ?? index}
+              key={media.id ?? index}
               className="group overflow-hidden rounded-xl border border-[#E5E5E5] bg-white hover:shadow-md transition-shadow"
             >
               <div className="relative aspect-video bg-gray-100">
                 <Image
                   src={media.url}
-                  alt={media.alt || item.legende || galerie.titre}
+                  alt={media.alt || galerie.titre}
                   fill
                   className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
-              {item.legende && (
-                <figcaption className="px-4 py-2.5 text-xs text-gray-500 truncate border-t border-gray-100">
-                  {item.legende}
-                </figcaption>
-              )}
             </figure>
           )
         })}

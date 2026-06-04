@@ -9,19 +9,13 @@ import { CalendarDays, Images } from 'lucide-react'
 export const metadata: Metadata = { title: 'Médiathèque' }
 
 // Types locaux (avant génération payload-types)
-interface GaleriePhoto {
-  id: string
-  photo: number | Media
-  legende?: string | null
-}
-
 interface Galerie {
   id: number
   titre: string
   slug?: string | null
   date?: string | null
   description?: string | null
-  photos: GaleriePhoto[]
+  photos: (number | Media)[]
   statut: 'publie' | 'brouillon'
 }
 
@@ -61,7 +55,7 @@ export default async function MediathequePage() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {galeries.map(galerie => {
-            const cover   = galerie.photos?.[0]?.photo
+            const cover      = galerie.photos?.[0]
             const coverMedia = typeof cover === 'object' && cover ? cover as Media : null
             const href    = galerie.slug ? `/mediatheque/${galerie.slug}` : null
             const nbPhotos = galerie.photos?.length ?? 0

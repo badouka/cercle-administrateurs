@@ -66,34 +66,14 @@ export const Mediatheque: CollectionConfig = {
     },
     {
       name: 'photos',
-      type: 'array',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
       required: true,
-      minRows: 1,
-      labels: {
-        singular: 'Photo',
-        plural:   'Photos',
-      },
+      label: 'Photos',
       admin: {
-        description: [
-          'Cliquez sur "+ Ajouter une Photo" pour ajouter chaque image.',
-          'Astuce : uploadez d\'abord toutes vos images dans Médias, puis revenez ici pour les sélectionner rapidement.',
-        ].join(' '),
-        initCollapsed: false,
+        description: 'Sélectionnez plusieurs photos en une seule fois depuis la médiathèque.',
       },
-      fields: [
-        {
-          name: 'photo',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-          admin: { description: 'Sélectionnez une image depuis la médiathèque.' },
-        },
-        {
-          name: 'legende',
-          type: 'text',
-          label: 'Légende (optionnelle)',
-        },
-      ],
     },
     {
       name: 'statut',
