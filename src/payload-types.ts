@@ -75,6 +75,7 @@ export interface Config {
     documents: Document;
     'activity-registrations': ActivityRegistration;
     mediatheque: Mediatheque;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     documents: DocumentsSelect<false> | DocumentsSelect<true>;
     'activity-registrations': ActivityRegistrationsSelect<false> | ActivityRegistrationsSelect<true>;
     mediatheque: MediathequeSelect<false> | MediathequeSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -386,6 +388,36 @@ export interface Mediatheque {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  titre: string;
+  /**
+   * Identifiant unique : 'a-propos', 'mot-du-president', 'partenaires'
+   */
+  slug: string;
+  contenu?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  statut: 'brouillon' | 'publie';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -439,6 +471,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'mediatheque';
         value: number | Mediatheque;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -633,6 +669,18 @@ export interface MediathequeSelect<T extends boolean = true> {
   date?: T;
   description?: T;
   photos?: T;
+  statut?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  titre?: T;
+  slug?: T;
+  contenu?: T;
   statut?: T;
   updatedAt?: T;
   createdAt?: T;
