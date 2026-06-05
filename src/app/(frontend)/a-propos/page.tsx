@@ -8,19 +8,19 @@ const VALEURS = [
     icon: Users,
     titre: 'Solidarité',
     texte:
-      'Nous favorisons les échanges entre membres, le partage d'expériences et l'entraide au sein du réseau des administrateurs publics.',
+      "Nous favorisons les échanges entre membres, le partage d'expériences et l'entraide au sein du réseau des administrateurs publics.",
   },
   {
     icon: Target,
     titre: 'Excellence',
     texte:
-      'Nous promouvons les bonnes pratiques de gouvernance et accompagnons le développement des compétences des cadres de l'administration publique.',
+      "Nous promouvons les bonnes pratiques de gouvernance et accompagnons le développement des compétences des cadres de l'administration publique.",
   },
   {
     icon: BookOpen,
     titre: 'Transparence',
     texte:
-      'Nous agissons dans un esprit d'ouverture et de responsabilité, en rendant compte de nos activités à nos membres et partenaires.',
+      "Nous agissons dans un esprit d'ouverture et de responsabilité, en rendant compte de nos activités à nos membres et partenaires.",
   },
 ]
 

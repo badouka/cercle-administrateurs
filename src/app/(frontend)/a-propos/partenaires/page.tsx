@@ -9,8 +9,8 @@ const PARTENAIRES = [
     categorie: 'Institutions publiques',
     items: [
       { nom: 'Ministère de la Fonction Publique',      description: 'Partenaire institutionnel pour la formation et la mobilité des agents.' },
-      { nom: 'École Nationale d\'Administration',      description: 'Partenaire académique pour les programmes de développement des compétences.' },
-      { nom: 'Direction Générale de l\'Administration', description: 'Collaboration sur les projets de modernisation administrative.' },
+      { nom: "École Nationale d'Administration",      description: 'Partenaire académique pour les programmes de développement des compétences.' },
+      { nom: "Direction Générale de l'Administration", description: 'Collaboration sur les projets de modernisation administrative.' },
     ],
   },
   {
@@ -25,7 +25,7 @@ const PARTENAIRES = [
     categorie: 'Partenaires académiques',
     items: [
       { nom: 'Université Paris-Dauphine',              description: 'Partenariat de recherche sur la gouvernance publique.' },
-      { nom: 'Sciences Po',                            description: 'Collaboration pour les programmes d\'études et de recherche.' },
+      { nom: 'Sciences Po',                            description: "Collaboration pour les programmes d'études et de recherche." },
     ],
   },
 ]
