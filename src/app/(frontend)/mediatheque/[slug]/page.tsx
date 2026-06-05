@@ -1,11 +1,11 @@
 import { getPayload } from 'payload'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Media } from '@/payload-types'
 import config from '@payload-config'
 import { CalendarDays, ArrowLeft } from 'lucide-react'
+import GalerieGrid from '@/components/GalerieGrid'
 
 // Types locaux (avant génération payload-types)
 interface Galerie {
@@ -95,30 +95,13 @@ export default async function GaleriePage(
         )}
       </div>
 
-      {/* Grille masonry */}
-      <div style={{ columns: '3 300px', gap: '8px' }}>
-        {galerie.photos.map((photo, index) => {
-          const media = typeof photo === 'object' && photo ? photo as Media : null
-          if (!media?.url) return null
-
-          return (
-            <figure
-              key={media.id ?? index}
-              style={{ breakInside: 'avoid', marginBottom: '8px' }}
-              className="overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 hover:shadow-md transition-shadow"
-            >
-              <Image
-                src={media.url}
-                alt={media.alt || galerie.titre}
-                width={media.width ?? 800}
-                height={media.height ?? 600}
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              />
-            </figure>
-          )
-        })}
-      </div>
+      {/* Grille masonry avec lightbox */}
+      <GalerieGrid
+        photos={galerie.photos.filter(
+          (p): p is Media => typeof p === 'object' && p !== null && !!(p as Media).url
+        )}
+        titre={galerie.titre}
+      />
     </div>
   )
 }
