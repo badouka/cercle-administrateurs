@@ -13,6 +13,15 @@ type NavItem  =
 
 const NAV_LINKS: NavItem[] = [
   { href: '/',           label: 'Accueil' },
+  {
+    href: '/a-propos',
+    label: 'À propos',
+    children: [
+      { href: '/a-propos',                  label: 'Qui sommes-nous ?' },
+      { href: '/a-propos/mot-du-president', label: 'Mot du Président' },
+      { href: '/a-propos/partenaires',      label: 'Nos partenaires' },
+    ],
+  },
   { href: '/annuaire',   label: 'Annuaire' },
   { href: '/actualites', label: 'Actualités' },
   { href: '/activites',  label: 'Activités' },
@@ -104,7 +113,7 @@ export function Navbar() {
                           href={child.href}
                           className={cn(
                             'block px-4 py-2 text-sm transition-colors',
-                            pathname === child.href || pathname.startsWith(child.href + '/')
+                            pathname === child.href
                               ? 'font-semibold text-black bg-gray-50'
                               : 'font-medium text-gray-600 hover:text-black hover:bg-gray-50',
                           )}
@@ -219,7 +228,7 @@ export function Navbar() {
                       onClick={() => setOpen(false)}
                       className={cn(
                         'block pl-7 pr-3 py-2 text-sm border-l-2 transition-colors',
-                        pathname === child.href || pathname.startsWith(child.href + '/')
+                        pathname === child.href
                           ? 'font-semibold text-black border-black bg-gray-50'
                           : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
                       )}
