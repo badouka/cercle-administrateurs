@@ -2,18 +2,29 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, LayoutDashboard, LogOut, Settings2 } from 'lucide-react'
+import { Menu, X, LayoutDashboard, LogOut, Settings2, ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
-const NAV_LINKS = [
+type NavChild = { href: string; label: string }
+type NavItem  =
+  | { href: string; label: string; children?: undefined }
+  | { href: string; label: string; children: NavChild[] }
+
+const NAV_LINKS: NavItem[] = [
   { href: '/',           label: 'Accueil' },
   { href: '/annuaire',   label: 'Annuaire' },
   { href: '/actualites', label: 'Actualités' },
   { href: '/activites',  label: 'Activités' },
   { href: '/documents',  label: 'Documents' },
-  { href: '/magazines',    label: 'Magazines' },
-  { href: '/mediatheque', label: 'Médiathèque' },
+  {
+    href: '/magazines',
+    label: 'Magazines',
+    children: [
+      { href: '/magazines',   label: 'Magazines' },
+      { href: '/mediatheque', label: 'Médiathèque' },
+    ],
+  },
 ]
 
 interface AuthUser { email: string; role?: 'membre' | 'gestionnaire' | 'admin' }
@@ -42,6 +53,11 @@ export function Navbar() {
     setLoggingOut(false)
   }
 
+  function isParentActive(item: NavItem) {
+    if (pathname === item.href) return true
+    return item.children?.some(c => pathname.startsWith(c.href)) ?? false
+  }
+
   const isLoggedIn = Boolean(user)
 
   return (
@@ -64,26 +80,61 @@ export function Navbar() {
 
           {/* Liens desktop */}
           <nav className="hidden md:flex items-center gap-0.5">
-            {NAV_LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  'px-3 py-2 text-sm transition-colors border-b-2',
-                  pathname === href
-                    ? 'font-semibold text-black border-black'
-                    : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300',
-                )}
-              >
-                {label}
-              </Link>
-            ))}
+            {NAV_LINKS.map(item =>
+              item.children ? (
+                /* Dropdown desktop */
+                <div key={item.href} className="relative group">
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      'inline-flex items-center gap-1 px-3 py-2 text-sm transition-colors border-b-2',
+                      isParentActive(item)
+                        ? 'font-semibold text-black border-black'
+                        : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                    )}
+                  >
+                    {item.label}
+                    <ChevronDown size={13} className="mt-0.5 transition-transform group-hover:rotate-180" />
+                  </Link>
+                  <div className="absolute top-full left-0 hidden group-hover:block pt-1">
+                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[160px]">
+                      {item.children.map(child => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className={cn(
+                            'block px-4 py-2 text-sm transition-colors',
+                            pathname === child.href || pathname.startsWith(child.href + '/')
+                              ? 'font-semibold text-black bg-gray-50'
+                              : 'font-medium text-gray-600 hover:text-black hover:bg-gray-50',
+                          )}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'px-3 py-2 text-sm transition-colors border-b-2',
+                    pathname === item.href
+                      ? 'font-semibold text-black border-black'
+                      : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* Actions desktop */}
           <div className="hidden md:flex items-center gap-2">
             {user === undefined ? (
-              // Loading skeleton
               <div className="h-8 w-24 rounded-md bg-gray-100 animate-pulse" />
             ) : isLoggedIn ? (
               <>
@@ -147,21 +198,52 @@ export function Navbar() {
       {open && (
         <div className="md:hidden border-t border-gray-200 bg-white">
           <nav className="flex flex-col px-4 py-2 gap-0.5">
-            {NAV_LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  'px-3 py-2.5 text-sm border-l-2 transition-colors',
-                  pathname === href
-                    ? 'font-semibold text-black border-black bg-gray-50'
-                    : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
-                )}
-              >
-                {label}
-              </Link>
-            ))}
+            {NAV_LINKS.map(item =>
+              item.children ? (
+                /* Parent + sous-liens indentés mobile */
+                <div key={item.href}>
+                  <span
+                    className={cn(
+                      'block px-3 py-2.5 text-sm font-semibold border-l-2',
+                      isParentActive(item)
+                        ? 'text-black border-black'
+                        : 'text-gray-700 border-transparent',
+                    )}
+                  >
+                    {item.label}
+                  </span>
+                  {item.children.map(child => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        'block pl-7 pr-3 py-2 text-sm border-l-2 transition-colors',
+                        pathname === child.href || pathname.startsWith(child.href + '/')
+                          ? 'font-semibold text-black border-black bg-gray-50'
+                          : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
+                      )}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    'px-3 py-2.5 text-sm border-l-2 transition-colors',
+                    pathname === item.href
+                      ? 'font-semibold text-black border-black bg-gray-50'
+                      : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
 
             <div className="mt-2 mb-1 space-y-1.5">
               {isLoggedIn ? (
