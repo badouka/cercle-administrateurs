@@ -12,6 +12,15 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
+type HeaderVariant = 'president' | 'bureau' | 'membre'
+
+function getHeaderVariant(posteCap?: string | null): HeaderVariant {
+  const p = posteCap?.trim() ?? ''
+  if (!p || p.toLowerCase() === 'membre') return 'membre'
+  if (p.toLowerCase() === 'président' || p.toLowerCase() === 'présidente') return 'president'
+  return 'bureau'
+}
+
 // ─── Metadata dynamique ───────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -60,6 +69,7 @@ export default async function MembreDetailPage({ params }: Props) {
   const { user }        = await payload.auth({ headers })
   const isAuthenticated = Boolean(user)
 
+  const variant       = getHeaderVariant(membre.poste?.posteCap)
   const photo         = typeof membre.photo         === 'object' && membre.photo         ? (membre.photo         as Media) : null
   const logoOrganisme = typeof membre.poste?.logoOrganisme === 'object' && membre.poste?.logoOrganisme ? (membre.poste.logoOrganisme as Media) : null
   const initiales     = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
@@ -80,8 +90,12 @@ export default async function MembreDetailPage({ params }: Props) {
 
       <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden">
 
-        {/* Header noir */}
-        <div className="bg-black px-8 py-10">
+        {/* Header */}
+        <div className={`px-8 py-10 ${
+          variant === 'president' ? 'bg-black border-t-4 border-yellow-500' :
+          variant === 'bureau'    ? 'bg-blue-950' :
+                                    'bg-black'
+        }`}>
           <div className="flex items-center justify-between gap-6 text-white">
 
             {/* Gauche : photo + identité */}
@@ -106,8 +120,14 @@ export default async function MembreDetailPage({ params }: Props) {
               {/* Identité */}
               <div className="text-center sm:text-left">
                 <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
-                {membre.poste?.posteCap && (
-                  <p className="mt-1 text-gray-400 text-sm font-medium">{membre.poste.posteCap}</p>
+                {variant !== 'membre' && membre.poste?.posteCap && (
+                  <span className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+                    variant === 'president'
+                      ? 'bg-yellow-500 text-black'
+                      : 'bg-blue-800 text-white'
+                  }`}>
+                    {membre.poste.posteCap}
+                  </span>
                 )}
                 {membre.poste?.organisme && (
                   <p className="mt-1 text-gray-300 font-semibold">{membre.poste.organisme}</p>
