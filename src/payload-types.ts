@@ -376,11 +376,10 @@ export interface Mediatheque {
   slug?: string | null;
   date?: string | null;
   description?: string | null;
-  photos: {
-    photo: number | Media;
-    legende?: string | null;
-    id?: string | null;
-  }[];
+  /**
+   * Sélectionnez plusieurs photos en une seule fois depuis la médiathèque.
+   */
+  photos: (number | Media)[];
   statut: 'publie' | 'brouillon';
   updatedAt: string;
   createdAt: string;
@@ -633,13 +632,7 @@ export interface MediathequeSelect<T extends boolean = true> {
   slug?: T;
   date?: T;
   description?: T;
-  photos?:
-    | T
-    | {
-        photo?: T;
-        legende?: T;
-        id?: T;
-      };
+  photos?: T;
   statut?: T;
   updatedAt?: T;
   createdAt?: T;
