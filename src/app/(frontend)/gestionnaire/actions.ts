@@ -150,6 +150,58 @@ export async function uploadMedia(
   }
 }
 
+// ── Pages statiques ──────────────────────────────────────────────────────────
+
+export async function updatePageAction(
+  slug:     string,
+  formData: FormData,
+): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  const contenuJson = formData.get('contenuJson') as string | null
+  const statut      = formData.get('statut') as 'brouillon' | 'publie' | null
+  const titre       = (formData.get('titre') as string | null)?.trim()
+
+  if (!contenuJson) return { error: 'Le contenu est requis' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let contenu: any
+  try { contenu = JSON.parse(contenuJson) } catch { return { error: 'Contenu invalide' } }
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { docs } = await (ctx.payload.find as any)({
+      collection:     'pages',
+      where:          { slug: { equals: slug } },
+      limit:          1,
+      overrideAccess: true,
+    })
+    if (!docs[0]) return { error: 'Page introuvable' }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: Record<string, any> = { contenu }
+    if (statut) data.statut = statut
+    if (titre)  data.titre  = titre
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (ctx.payload.update as any)({
+      collection:     'pages',
+      id:             docs[0].id,
+      data,
+      overrideAccess: true,
+    })
+
+    revalidatePath('/a-propos')
+    revalidatePath('/a-propos/mot-du-president')
+    revalidatePath('/a-propos/partenaires')
+    revalidatePath(`/gestionnaire/pages/${slug}`)
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la mise à jour' }
+  }
+}
+
 // ── Lexical helper ────────────────────────────────────────────────────────────
 
 function textToLexical(text: string) {

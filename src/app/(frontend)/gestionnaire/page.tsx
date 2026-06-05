@@ -7,7 +7,7 @@ import type { User, Membre, Post } from '@/payload-types'
 import config from '@payload-config'
 import {
   Users, FileText, PlusCircle, Clock, CheckCircle2,
-  ChevronRight, Settings2, AlertCircle, ExternalLink,
+  ChevronRight, Settings2, AlertCircle, ExternalLink, BookOpen,
 } from 'lucide-react'
 import type { Media } from '@/payload-types'
 import { MembreActionButtons } from './MembreActionButtons'
@@ -237,6 +237,38 @@ export default async function GestionnairePage() {
             </table>
           </div>
         )}
+      </section>
+
+      {/* ── Pages du site ── */}
+      <section>
+        <div className="flex items-center justify-between border-b-2 border-black pb-3 mb-5">
+          <div className="flex items-center gap-2">
+            <BookOpen size={17} className="text-black" />
+            <h2 className="text-lg font-bold text-black">Pages du site</h2>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-3">
+          {[
+            { href: '/gestionnaire/pages/a-propos',         label: 'Qui sommes-nous ?', desc: 'Histoire, mission et valeurs du CAP' },
+            { href: '/gestionnaire/pages/mot-du-president', label: 'Mot du Président',  desc: 'Message du Président de l\'association' },
+            { href: '/gestionnaire/pages/partenaires',      label: 'Nos partenaires',   desc: 'Liste des partenaires institutionnels' },
+          ].map(({ href, label, desc }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-start gap-3 rounded-xl border border-[#E5E5E5] bg-white px-4 py-4 hover:shadow-sm hover:border-black transition-all"
+            >
+              <div className="rounded-lg bg-[#F5F5F5] p-2 shrink-0 mt-0.5">
+                <FileText size={16} className="text-gray-600" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-black leading-snug">{label}</p>
+                <p className="text-xs text-gray-500 mt-0.5 leading-snug">{desc}</p>
+              </div>
+              <ChevronRight size={14} className="ml-auto text-gray-400 shrink-0 mt-1" />
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* ── Liens rapides ── */}
