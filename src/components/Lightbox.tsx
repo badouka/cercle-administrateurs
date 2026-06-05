@@ -61,16 +61,15 @@ export default function Lightbox({ photos, currentIndex, onClose, onPrev, onNext
       )}
 
       <div
-        className="relative"
-        style={{ maxHeight: '90vh', maxWidth: '90vw' }}
+        className="relative w-[90vw] h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <Image
           src={photo.url}
           alt={photo.alt || ''}
-          width={photo.width ?? 1200}
-          height={photo.height ?? 900}
-          style={{ maxHeight: '90vh', maxWidth: '90vw', width: 'auto', height: 'auto' }}
+          fill
+          className="object-contain"
+          sizes="90vw"
           priority
         />
       </div>
