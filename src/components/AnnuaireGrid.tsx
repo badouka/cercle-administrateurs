@@ -28,13 +28,7 @@ function isAuBureau(m: Membre): boolean {
 }
 
 function getBadge(m: Membre): { label: string; cls: string } | null {
-  const posteCap = (m.poste?.posteCap ?? '').trim()
-  if (posteCap === 'Président' || posteCap === 'Présidente') {
-    return { label: 'Président(e)', cls: 'bg-amber-400 text-black' }
-  }
-  if (posteCap !== '' && posteCap !== 'Membre') {
-    return { label: 'Bureau', cls: 'bg-black text-white' }
-  }
+  if (isAuBureau(m)) return { label: 'Bureau', cls: 'bg-black text-white' }
   return null
 }
 
