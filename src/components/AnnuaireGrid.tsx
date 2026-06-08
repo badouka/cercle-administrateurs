@@ -149,7 +149,7 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
                     </p>
                   )}
                   {membre.poste?.fonctionProfessionnelle && (
-                    <p className="mt-0.5 text-[11px] text-gray-400 line-clamp-1">
+                    <p className="mt-0.5 text-[11px] text-gray-400">
                       {membre.poste.fonctionProfessionnelle}
                     </p>
                   )}
