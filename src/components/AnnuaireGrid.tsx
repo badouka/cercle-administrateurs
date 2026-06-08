@@ -11,18 +11,11 @@ interface AnnuaireGridProps {
 }
 
 type PosteFilter = 'tous' | 'bureau' | 'membres'
-type SortOption  = 'nom-asc' | 'nom-desc' | 'organisme-asc'
 
 const POSTE_FILTERS: { value: PosteFilter; label: string }[] = [
   { value: 'tous',    label: 'Tous' },
   { value: 'bureau',  label: 'Bureau' },
   { value: 'membres', label: 'Membres' },
-]
-
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'nom-asc',       label: 'Nom A-Z' },
-  { value: 'nom-desc',      label: 'Nom Z-A' },
-  { value: 'organisme-asc', label: 'Organisme A-Z' },
 ]
 
 function normalizeStr(s: string): string {
@@ -37,7 +30,6 @@ function isAuBureau(m: Membre): boolean {
 export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
   const [query,       setQuery]       = useState('')
   const [posteFilter, setPosteFilter] = useState<PosteFilter>('tous')
-  const [sort,        setSort]        = useState<SortOption>('nom-asc')
 
   const filtered = useMemo(() => {
     const q = normalizeStr(query.trim())
@@ -56,18 +48,8 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
       })
     }
 
-    return [...result].sort((a, b) => {
-      switch (sort) {
-        case 'nom-desc':
-          return `${b.prenom} ${b.nom}`.localeCompare(`${a.prenom} ${a.nom}`, 'fr', { sensitivity: 'base' })
-        case 'organisme-asc':
-          return (a.poste?.organisme ?? '').localeCompare(b.poste?.organisme ?? '', 'fr', { sensitivity: 'base' })
-        case 'nom-asc':
-        default:
-          return `${a.prenom} ${a.nom}`.localeCompare(`${b.prenom} ${b.nom}`, 'fr', { sensitivity: 'base' })
-      }
-    })
-  }, [membres, query, posteFilter, sort])
+    return result
+  }, [membres, query, posteFilter])
 
   const hasActiveFilters = query.trim() !== '' || posteFilter !== 'tous'
 
@@ -86,36 +68,23 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
-            {POSTE_FILTERS.map((f, i) => (
-              <button
-                key={f.value}
-                type="button"
-                onClick={() => setPosteFilter(f.value)}
-                className={`px-3.5 py-2 text-xs font-medium transition-colors ${
-                  i > 0 ? 'border-l border-gray-200' : ''
-                } ${
-                  posteFilter === f.value
-                    ? 'bg-black text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
-          <select
-            value={sort}
-            onChange={e => setSort(e.target.value as SortOption)}
-            aria-label="Trier les membres"
-            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-700 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10"
-          >
-            {SORT_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
+        <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+          {POSTE_FILTERS.map((f, i) => (
+            <button
+              key={f.value}
+              type="button"
+              onClick={() => setPosteFilter(f.value)}
+              className={`px-3.5 py-2 text-xs font-medium transition-colors ${
+                i > 0 ? 'border-l border-gray-200' : ''
+              } ${
+                posteFilter === f.value
+                  ? 'bg-black text-white'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
         </div>
       </div>
 
