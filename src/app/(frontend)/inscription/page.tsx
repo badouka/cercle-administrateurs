@@ -3,7 +3,7 @@
 import { type FormEvent, useState, useRef } from 'react'
 import Link from 'next/link'
 import { Eye, EyeOff, CheckCircle2, Upload, X, FileText } from 'lucide-react'
-import { inscrire, uploadJustificatif } from './actions'
+import { inscrire, uploadJustificatif, uploadPhoto } from './actions'
 
 const INPUT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
@@ -11,19 +11,17 @@ const INPUT_CLS =
 const SELECT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
-const FONCTIONS = [
-  'Président',
-  'Secrétaire général',
-  'Trésorier(e)',
-  'Présidente Commission Actions Sociales',
-  'Présidente Commission Communication',
-  'Prés. Commission Stratégie et Politiques Publiques',
-  'Président Commission Renforcement de Capacités',
-  'Membre',
+const FONCTIONS_PROFESSIONNELLES = [
+  "Président du Conseil d'Administration",
+  'Président du Conseil de Surveillance',
+  "Président du Conseil d'Orientation",
 ]
 
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
 const MAX_SIZE      = 5 * 1024 * 1024
+
+const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/png']
+const MAX_PHOTO_SIZE      = 2 * 1024 * 1024
 
 function Field({
   id, name, label, required, type = 'text', autoComplete, placeholder,
@@ -54,7 +52,12 @@ export default function InscriptionPage() {
   const [justificatifFile, setJustificatifFile] = useState<File | null>(null)
   const [fileError,        setFileError]        = useState<string | null>(null)
 
+  const [photoFile,    setPhotoFile]    = useState<File | null>(null)
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [photoError,   setPhotoError]   = useState<string | null>(null)
+
   const justificatifRef = useRef<HTMLInputElement>(null)
+  const photoRef        = useRef<HTMLInputElement>(null)
 
   function handleJustificatifChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null
@@ -77,6 +80,32 @@ export default function InscriptionPage() {
     setJustificatifFile(null)
     setFileError(null)
     if (justificatifRef.current) justificatifRef.current.value = ''
+  }
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null
+    setPhotoError(null)
+    if (!file) { setPhotoFile(null); setPhotoPreview(null); return }
+    if (!ALLOWED_PHOTO_TYPES.includes(file.type)) {
+      setPhotoError('Format non supporté. Utilisez JPG ou PNG.')
+      e.target.value = ''
+      return
+    }
+    if (file.size > MAX_PHOTO_SIZE) {
+      setPhotoError('La photo ne doit pas dépasser 2 Mo.')
+      e.target.value = ''
+      return
+    }
+    setPhotoFile(file)
+    setPhotoPreview(URL.createObjectURL(file))
+  }
+
+  function removePhoto() {
+    if (photoPreview) URL.revokeObjectURL(photoPreview)
+    setPhotoFile(null)
+    setPhotoPreview(null)
+    setPhotoError(null)
+    if (photoRef.current) photoRef.current.value = ''
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -103,19 +132,33 @@ export default function InscriptionPage() {
       return
     }
 
-    // 2. Create user + membre
+    // 2. Upload photo (optionnelle)
+    let photoId: number | undefined
+    if (photoFile) {
+      const photoFd = new FormData()
+      photoFd.append('file', photoFile)
+      const photoResult = await uploadPhoto(photoFd)
+      if ('error' in photoResult) {
+        setError(photoResult.error)
+        setLoading(false)
+        return
+      }
+      photoId = photoResult.id
+    }
+
+    // 3. Create user + membre
     const result = await inscrire({
       prenom:                   fd.get('prenom')                   as string,
       nom:                      fd.get('nom')                      as string,
       email:                    fd.get('email')                    as string,
       motDePasse:               fd.get('motDePasse')               as string,
-      posteCap:                 fd.get('posteCap')                 as string,
       fonctionProfessionnelle:  fd.get('fonctionProfessionnelle')  as string,
       organisme:                fd.get('organisme')                as string,
       siteOrganisme:            fd.get('siteOrganisme')            as string,
       telephone:                fd.get('telephone')                as string,
       telephoneSecondaire:      fd.get('telephoneSecondaire')      as string,
       justificatifId:           uploadResult.id,
+      photoId,
     })
 
     if ('error' in result) {
@@ -221,28 +264,21 @@ export default function InscriptionPage() {
           </legend>
 
           <div>
-            <label htmlFor="posteCap" className="block text-sm font-medium text-gray-700 mb-1.5">
-              Poste au CAP
+            <label htmlFor="fonctionProfessionnelle" className="block text-sm font-medium text-gray-700 mb-1.5">
+              Fonction professionnelle
             </label>
             <select
-              id="posteCap"
-              name="posteCap"
+              id="fonctionProfessionnelle"
+              name="fonctionProfessionnelle"
               defaultValue=""
               className={SELECT_CLS}
             >
-              <option value="">— Sélectionnez un poste —</option>
-              {FONCTIONS.map(f => (
+              <option value="">— Sélectionnez une fonction —</option>
+              {FONCTIONS_PROFESSIONNELLES.map(f => (
                 <option key={f} value={f}>{f}</option>
               ))}
             </select>
           </div>
-
-          <Field
-            id="fonctionProfessionnelle"
-            name="fonctionProfessionnelle"
-            label="Fonction professionnelle"
-            placeholder="DG, Président de Conseil d'Administration…"
-          />
 
           <Field
             id="organisme" name="organisme" label="Organisme / Administration"
@@ -269,6 +305,65 @@ export default function InscriptionPage() {
             type="tel" autoComplete="tel"
             placeholder="+221 78 000 00 00"
           />
+        </fieldset>
+
+        {/* ── Photo ── */}
+        <fieldset className="space-y-3">
+          <legend className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+            Photo
+          </legend>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              Photo de profil
+            </label>
+
+            {photoPreview ? (
+              <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photoPreview}
+                  alt="Aperçu de la photo de profil"
+                  className="h-14 w-14 shrink-0 rounded-full object-cover border border-gray-200"
+                />
+                <span className="text-sm text-gray-700 flex-1 truncate">{photoFile?.name}</span>
+                <span className="text-xs text-gray-400 shrink-0">
+                  {((photoFile?.size ?? 0) / 1024).toFixed(0)} Ko
+                </span>
+                <button
+                  type="button"
+                  onClick={removePhoto}
+                  className="shrink-0 text-gray-400 hover:text-red-600 transition-colors"
+                  title="Supprimer"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => photoRef.current?.click()}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 px-4 py-5 text-sm text-gray-500 hover:border-black hover:text-black transition-colors"
+              >
+                <Upload size={16} />
+                Sélectionner une photo
+              </button>
+            )}
+
+            <input
+              ref={photoRef}
+              type="file"
+              accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+              onChange={handlePhotoChange}
+              className="hidden"
+            />
+
+            {photoError && (
+              <p className="mt-1.5 text-xs text-red-600">{photoError}</p>
+            )}
+            {!photoError && (
+              <p className="mt-1 text-xs text-gray-400">JPG, PNG — 2 Mo maximum, optionnel</p>
+            )}
+          </div>
         </fieldset>
 
         {/* ── Justificatif ── */}

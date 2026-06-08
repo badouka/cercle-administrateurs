@@ -6,18 +6,21 @@ import config from '@payload-config'
 const ALLOWED_MIME = ['application/pdf', 'image/jpeg', 'image/png']
 const MAX_SIZE     = 5 * 1024 * 1024 // 5 Mo
 
+const ALLOWED_PHOTO_MIME = ['image/jpeg', 'image/png']
+const MAX_PHOTO_SIZE     = 2 * 1024 * 1024 // 2 Mo
+
 export interface InscriptionData {
   prenom:                   string
   nom:                      string
   email:                    string
   motDePasse:               string
-  posteCap?:                string
   fonctionProfessionnelle?: string
   organisme?:               string
   siteOrganisme?:           string
   telephone?:               string
   telephoneSecondaire?:     string
   justificatifId:           number
+  photoId?:                 number
 }
 
 // ── Upload public du justificatif ─────────────────────────────────────────────
@@ -45,6 +48,31 @@ export async function uploadJustificatif(
   }
 }
 
+// ── Upload public de la photo de profil ───────────────────────────────────────
+
+export async function uploadPhoto(
+  formData: FormData,
+): Promise<{ id: number; url: string } | { error: string }> {
+  const file = formData.get('file') as File | null
+  if (!file || file.size === 0) return { error: 'Aucun fichier sélectionné.' }
+  if (file.size > MAX_PHOTO_SIZE) return { error: 'La photo ne doit pas dépasser 2 Mo.' }
+  if (!ALLOWED_PHOTO_MIME.includes(file.type)) return { error: 'Format non supporté. Utilisez JPG ou PNG.' }
+
+  try {
+    const payload = await getPayload({ config })
+    const buffer  = Buffer.from(await file.arrayBuffer())
+    const media   = await payload.create({
+      collection:     'media',
+      data:           { alt: `Photo de profil — ${file.name}` },
+      file:           { data: buffer, mimetype: file.type, name: file.name, size: file.size },
+      overrideAccess: true,
+    })
+    return { id: media.id, url: media.url ?? '' }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Erreur lors de l'upload." }
+  }
+}
+
 // ── Inscription ───────────────────────────────────────────────────────────────
 
 export async function inscrire(
@@ -52,8 +80,8 @@ export async function inscrire(
 ): Promise<{ success: true } | { error: string }> {
   const {
     prenom, nom, email, motDePasse,
-    posteCap, fonctionProfessionnelle, organisme, siteOrganisme, telephone, telephoneSecondaire,
-    justificatifId,
+    fonctionProfessionnelle, organisme, siteOrganisme, telephone, telephoneSecondaire,
+    justificatifId, photoId,
   } = data
 
   if (!prenom.trim() || !nom.trim() || !email.trim() || !motDePasse) {
@@ -84,7 +112,6 @@ export async function inscrire(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const posteData: any = {
-      posteCap:                posteCap?.trim()                || undefined,
       fonctionProfessionnelle: fonctionProfessionnelle?.trim() || undefined,
       organisme:               organisme?.trim()               ?? '',
       siteOrganisme:           siteOrganisme?.trim()           || undefined,
@@ -97,6 +124,7 @@ export async function inscrire(
         user:         user.id,
         prenom:       prenom.trim(),
         nom:          nom.trim(),
+        photo:        photoId || undefined,
         justificatif: justificatifId,
         poste:        posteData,
         coordonnees: {
