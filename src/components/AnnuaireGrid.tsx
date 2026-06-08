@@ -11,11 +11,17 @@ interface AnnuaireGridProps {
 }
 
 type PosteFilter = 'tous' | 'bureau' | 'membres'
+type SortOrder   = 'asc' | 'desc'
 
 const POSTE_FILTERS: { value: PosteFilter; label: string }[] = [
   { value: 'tous',    label: 'Tous' },
   { value: 'bureau',  label: 'Bureau' },
   { value: 'membres', label: 'Membres' },
+]
+
+const SORT_ORDERS: { value: SortOrder; label: string }[] = [
+  { value: 'asc',  label: 'A → Z' },
+  { value: 'desc', label: 'Z → A' },
 ]
 
 function normalizeStr(s: string): string {
@@ -35,6 +41,7 @@ function getBadge(m: Membre): { label: string; cls: string } | null {
 export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
   const [query,       setQuery]       = useState('')
   const [posteFilter, setPosteFilter] = useState<PosteFilter>('tous')
+  const [sortOrder,   setSortOrder]   = useState<SortOrder>('asc')
 
   const filtered = useMemo(() => {
     const q = normalizeStr(query.trim())
@@ -53,8 +60,11 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
       })
     }
 
-    return result
-  }, [membres, query, posteFilter])
+    return [...result].sort((a, b) => {
+      const cmp = `${a.nom} ${a.prenom}`.localeCompare(`${b.nom} ${b.prenom}`, 'fr', { sensitivity: 'base' })
+      return sortOrder === 'asc' ? cmp : -cmp
+    })
+  }, [membres, query, posteFilter, sortOrder])
 
   const hasActiveFilters = query.trim() !== '' || posteFilter !== 'tous'
 
@@ -73,23 +83,44 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
           />
         </div>
 
-        <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
-          {POSTE_FILTERS.map((f, i) => (
-            <button
-              key={f.value}
-              type="button"
-              onClick={() => setPosteFilter(f.value)}
-              className={`px-3.5 py-2 text-xs font-medium transition-colors ${
-                i > 0 ? 'border-l border-gray-200' : ''
-              } ${
-                posteFilter === f.value
-                  ? 'bg-black text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+            {POSTE_FILTERS.map((f, i) => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setPosteFilter(f.value)}
+                className={`px-3.5 py-2 text-xs font-medium transition-colors ${
+                  i > 0 ? 'border-l border-gray-200' : ''
+                } ${
+                  posteFilter === f.value
+                    ? 'bg-black text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+            {SORT_ORDERS.map((s, i) => (
+              <button
+                key={s.value}
+                type="button"
+                onClick={() => setSortOrder(s.value)}
+                className={`px-3.5 py-2 text-xs font-medium transition-colors ${
+                  i > 0 ? 'border-l border-gray-200' : ''
+                } ${
+                  sortOrder === s.value
+                    ? 'bg-black text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
