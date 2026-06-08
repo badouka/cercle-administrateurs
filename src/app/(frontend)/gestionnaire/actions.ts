@@ -32,7 +32,7 @@ async function requireRole(minRole: 'gestionnaire' | 'admin' = 'gestionnaire'): 
 
 // ── Membres ───────────────────────────────────────────────────────────────────
 
-export async function approveMembre(membreId: number): Promise<ActionResult> {
+export async function approveMembre(membreId: number, posteCap?: string): Promise<ActionResult> {
   const ctx = await requireRole()
   if ('error' in ctx) return ctx
 
@@ -45,7 +45,12 @@ export async function approveMembre(membreId: number): Promise<ActionResult> {
     await ctx.payload.update({
       collection:     'membres',
       id:             membreId,
-      data:           { adhesion: { ...(membre.adhesion ?? {}), statut: 'actif' } },
+      data: {
+        adhesion: { ...(membre.adhesion ?? {}), statut: 'actif' },
+        ...(posteCap?.trim()
+          ? { poste: { ...(membre.poste ?? {}), posteCap: posteCap.trim() } }
+          : {}),
+      },
       overrideAccess: true,
     })
     revalidatePath('/gestionnaire')
