@@ -14,6 +14,7 @@
  */
 
 import 'dotenv/config'
+import { fileURLToPath } from 'node:url'
 import { getPayload } from 'payload'
 import config from '../src/payload.config'
 
@@ -23,12 +24,14 @@ const args    = process.argv.slice(2)
 const DRY_RUN = args.includes('--dry-run')
 
 // Caractères dont la présence trahit un titre corrompu
-const CORRUPTION_REGEX = /[├┬╠╣╗¨ª░]/
+// (exporté : réutilisé par scripts/fix-media-filenames.ts)
+export const CORRUPTION_REGEX = /[├┬╠╣╗¨ª░]/
 
 // Séquences corrompues → caractère français correct.
 // L'ordre compte : les séquences les plus longues doivent être testées en premier
 // pour éviter qu'un remplacement partiel ne casse une séquence plus longue.
-const MOJIBAKE_MAP: Array<[string, string]> = [
+// (exporté : réutilisé par scripts/fix-media-filenames.ts)
+export const MOJIBAKE_MAP: Array<[string, string]> = [
   // Lettre de base + accent combinant décomposé (U+0301, mojibaké en "╠ü") :
   // "e╠ü" représente un "e" suivi d'un accent aigu combinant → "é"
   // (les deux caractères doivent être consommés ensemble, sinon on obtient "eé")
@@ -45,7 +48,8 @@ const MOJIBAKE_MAP: Array<[string, string]> = [
 
 // ─── Nettoyage ────────────────────────────────────────────────────────────────
 
-function cleanTitle(titre: string): string {
+// (exporté : réutilisé par scripts/fix-media-filenames.ts)
+export function cleanTitle(titre: string): string {
   let result = titre
   for (const [corrompu, correct] of MOJIBAKE_MAP) {
     result = result.split(corrompu).join(correct)
@@ -155,7 +159,11 @@ async function main(): Promise<void> {
   process.exit(0)
 }
 
-main().catch(err => {
-  console.error('\nErreur fatale :', err)
-  process.exit(1)
-})
+// N'exécute main() que lorsque ce fichier est lancé directement
+// (et non lorsqu'il est importé, ex. par scripts/fix-media-filenames.ts)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch(err => {
+    console.error('\nErreur fatale :', err)
+    process.exit(1)
+  })
+}
