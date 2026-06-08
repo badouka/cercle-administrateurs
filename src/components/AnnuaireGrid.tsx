@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Search, User } from 'lucide-react'
+import { Search, User, Building2 } from 'lucide-react'
 import type { Membre, Media } from '@/payload-types'
 
 interface AnnuaireGridProps {
@@ -143,13 +143,19 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
                   <p className="font-semibold text-gray-900 text-sm leading-tight">
                     {membre.prenom} {membre.nom}
                   </p>
-                  {(membre.poste?.posteCap || membre.poste?.fonctionProfessionnelle) && (
+                  {membre.poste?.posteCap && (
                     <p className="mt-1 text-xs text-gray-500 line-clamp-1">
-                      {membre.poste.posteCap || membre.poste.fonctionProfessionnelle}
+                      {membre.poste.posteCap}
+                    </p>
+                  )}
+                  {membre.poste?.fonctionProfessionnelle && (
+                    <p className="mt-0.5 text-[11px] text-gray-400 line-clamp-1">
+                      {membre.poste.fonctionProfessionnelle}
                     </p>
                   )}
                   {membre.poste?.organisme && (
-                    <p className="mt-0.5 text-xs font-medium text-gray-700 line-clamp-1">
+                    <p className="mt-1.5 inline-flex items-center gap-1 text-xs text-gray-500 line-clamp-1">
+                      <Building2 size={11} className="shrink-0 text-gray-400" />
                       {membre.poste.organisme}
                     </p>
                   )}
