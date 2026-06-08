@@ -10,39 +10,119 @@ interface AnnuaireGridProps {
   membres: Membre[]
 }
 
+type PosteFilter = 'tous' | 'bureau' | 'membres'
+type SortOption  = 'nom-asc' | 'nom-desc' | 'organisme-asc'
+
+const POSTE_FILTERS: { value: PosteFilter; label: string }[] = [
+  { value: 'tous',    label: 'Tous' },
+  { value: 'bureau',  label: 'Bureau' },
+  { value: 'membres', label: 'Membres' },
+]
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'nom-asc',       label: 'Nom A-Z' },
+  { value: 'nom-desc',      label: 'Nom Z-A' },
+  { value: 'organisme-asc', label: 'Organisme A-Z' },
+]
+
 function normalizeStr(s: string): string {
   return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 }
 
+function isAuBureau(m: Membre): boolean {
+  const posteCap = (m.poste?.posteCap ?? '').trim()
+  return posteCap !== '' && posteCap !== 'Membre'
+}
+
 export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
-  const [query, setQuery] = useState('')
+  const [query,       setQuery]       = useState('')
+  const [posteFilter, setPosteFilter] = useState<PosteFilter>('tous')
+  const [sort,        setSort]        = useState<SortOption>('nom-asc')
 
   const filtered = useMemo(() => {
     const q = normalizeStr(query.trim())
-    if (!q) return membres
-    return membres.filter(m => {
-      const nom       = normalizeStr(`${m.prenom} ${m.nom}`)
-      const organisme = normalizeStr(m.poste?.organisme ?? '')
-      return nom.includes(q) || organisme.includes(q)
+
+    let result = membres.filter(m => {
+      if (posteFilter === 'bureau')  return isAuBureau(m)
+      if (posteFilter === 'membres') return !isAuBureau(m)
+      return true
     })
-  }, [membres, query])
+
+    if (q) {
+      result = result.filter(m => {
+        const nom       = normalizeStr(`${m.prenom} ${m.nom}`)
+        const organisme = normalizeStr(m.poste?.organisme ?? '')
+        return nom.includes(q) || organisme.includes(q)
+      })
+    }
+
+    return [...result].sort((a, b) => {
+      switch (sort) {
+        case 'nom-desc':
+          return `${b.prenom} ${b.nom}`.localeCompare(`${a.prenom} ${a.nom}`, 'fr', { sensitivity: 'base' })
+        case 'organisme-asc':
+          return (a.poste?.organisme ?? '').localeCompare(b.poste?.organisme ?? '', 'fr', { sensitivity: 'base' })
+        case 'nom-asc':
+        default:
+          return `${a.prenom} ${a.nom}`.localeCompare(`${b.prenom} ${b.nom}`, 'fr', { sensitivity: 'base' })
+      }
+    })
+  }, [membres, query, posteFilter, sort])
+
+  const hasActiveFilters = query.trim() !== '' || posteFilter !== 'tous'
 
   return (
     <div>
-      {/* Barre de recherche */}
-      <div className="relative mb-8 max-w-md">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-        <input
-          type="search"
-          placeholder="Rechercher par nom ou organisme…"
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10"
-        />
+      {/* Barre de recherche + filtres */}
+      <div className="mb-8 space-y-4">
+        <div className="relative max-w-md">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <input
+            type="search"
+            placeholder="Rechercher par nom ou organisme…"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10"
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+            {POSTE_FILTERS.map((f, i) => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setPosteFilter(f.value)}
+                className={`px-3.5 py-2 text-xs font-medium transition-colors ${
+                  i > 0 ? 'border-l border-gray-200' : ''
+                } ${
+                  posteFilter === f.value
+                    ? 'bg-black text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          <select
+            value={sort}
+            onChange={e => setSort(e.target.value as SortOption)}
+            aria-label="Trier les membres"
+            className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs text-gray-700 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10"
+          >
+            {SORT_OPTIONS.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-gray-500 text-sm">Aucun membre ne correspond à votre recherche.</p>
+        <p className="text-gray-500 text-sm">
+          {hasActiveFilters ? 'Aucun membre ne correspond à votre recherche.' : 'Aucun membre à afficher.'}
+        </p>
       ) : (
         <>
           <p className="text-sm text-gray-400 mb-6">
