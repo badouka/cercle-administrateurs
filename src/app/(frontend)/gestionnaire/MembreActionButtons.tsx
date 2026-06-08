@@ -65,7 +65,7 @@ export function MembreActionButtons({ membreId, nom }: Props) {
   function handleConfirmApprove() {
     setError(null)
     startTransition(async () => {
-      const result = await approveMembre(membreId, posteCap || undefined)
+      const result = await approveMembre(membreId, posteCap || undefined, genre || undefined)
       if ('error' in result) setError(result.error)
       else {
         setDone('approved')
