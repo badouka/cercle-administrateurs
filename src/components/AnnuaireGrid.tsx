@@ -27,6 +27,17 @@ function isAuBureau(m: Membre): boolean {
   return posteCap !== '' && posteCap !== 'Membre'
 }
 
+function getBadge(m: Membre): { label: string; cls: string } | null {
+  const posteCap = (m.poste?.posteCap ?? '').trim()
+  if (posteCap === 'Président' || posteCap === 'Présidente') {
+    return { label: 'Président(e)', cls: 'bg-amber-400 text-black' }
+  }
+  if (posteCap !== '' && posteCap !== 'Membre') {
+    return { label: 'Bureau', cls: 'bg-black text-white' }
+  }
+  return null
+}
+
 export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
   const [query,       setQuery]       = useState('')
   const [posteFilter, setPosteFilter] = useState<PosteFilter>('tous')
@@ -104,13 +115,20 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
               const photo = typeof membre.photo === 'object' && membre.photo
                 ? (membre.photo as Media)
                 : null
+              const badge = getBadge(membre)
 
               return (
                 <Link
                   key={membre.id}
                   href={`/annuaire/${membre.id}`}
-                  className="group flex flex-col items-center rounded-xl border border-[#E5E5E5] bg-white p-5 text-center hover:border-black hover:shadow-md transition-all"
+                  className="group relative flex flex-col items-center rounded-xl border border-[#E5E5E5] bg-white p-5 text-center hover:border-black hover:shadow-md transition-all"
                 >
+                  {badge && (
+                    <span className={`absolute top-2.5 right-2.5 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide ${badge.cls}`}>
+                      {badge.label}
+                    </span>
+                  )}
+
                   {/* Avatar */}
                   <div className="mb-3 h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gray-100 ring-2 ring-gray-200 group-hover:ring-black transition-all">
                     {photo?.url ? (
