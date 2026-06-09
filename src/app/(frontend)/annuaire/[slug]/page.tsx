@@ -110,7 +110,7 @@ export default async function MembreDetailPage({ params }: Props) {
             {/* Gauche : photo + identité */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               {/* Photo / initiales */}
-              <div className="h-40 w-40 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
+              <div className="mt-4 h-40 w-40 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
                 {photo?.url ? (
                   <Image
                     src={photo.url}
