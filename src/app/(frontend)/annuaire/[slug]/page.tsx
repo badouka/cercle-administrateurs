@@ -13,7 +13,7 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-type HeaderVariant = 'president' | 'bureau' | 'membre'
+type HeaderVariant = 'bureau' | 'membre'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function detectBioType(bio: any): 'html' | 'lexical' | null {
@@ -25,8 +25,7 @@ function detectBioType(bio: any): 'html' | 'lexical' | null {
 
 function getHeaderVariant(posteCap?: string | null): HeaderVariant {
   const p = posteCap?.trim() ?? ''
-  if (!p || p.toLowerCase() === 'membre') return 'membre'
-  if (p.toLowerCase() === 'président' || p.toLowerCase() === 'présidente') return 'president'
+  if (!p || p === 'Membre') return 'membre'
   return 'bureau'
 }
 
@@ -103,11 +102,7 @@ export default async function MembreDetailPage({ params }: Props) {
       <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden">
 
         {/* Header */}
-        <div className={`px-8 py-8 ${
-          variant === 'president' ? 'bg-black border-t-4 border-yellow-500' :
-          variant === 'bureau'    ? 'bg-blue-950' :
-                                    'bg-black'
-        }`}>
+        <div className={`px-8 py-8 ${variant === 'bureau' ? 'bg-blue-950' : 'bg-black'}`}>
           <div className="flex items-center gap-6 text-white">
 
             {/* Photo */}
@@ -130,12 +125,8 @@ export default async function MembreDetailPage({ params }: Props) {
             {/* Identité */}
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
-              {variant !== 'membre' && membre.poste?.posteCap && (
-                <span className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
-                  variant === 'president'
-                    ? 'bg-yellow-500 text-black'
-                    : 'bg-blue-800 text-white'
-                }`}>
+              {variant === 'bureau' && membre.poste?.posteCap && (
+                <span className="mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-blue-800 text-white">
                   {membre.poste.posteCap}
                 </span>
               )}
