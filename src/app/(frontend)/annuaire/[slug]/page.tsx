@@ -105,7 +105,7 @@ export default async function MembreDetailPage({ params }: Props) {
           variant === 'bureau'    ? 'bg-blue-950' :
                                     'bg-black'
         }`}>
-          <div className="flex items-center justify-between gap-6 text-white">
+          <div className="flex items-end justify-between gap-6 text-white">
 
             {/* Gauche : photo + identité */}
             <div className="flex flex-col sm:flex-row items-center gap-6">
