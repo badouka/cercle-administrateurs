@@ -105,7 +105,7 @@ export default async function MembreDetailPage({ params }: Props) {
           variant === 'bureau'    ? 'bg-blue-950' :
                                     'bg-black'
         }`}>
-          <div className="flex items-end justify-between gap-6 text-white">
+          <div className="flex items-center justify-between gap-6 text-white">
 
             {/* Gauche : photo + identité */}
             <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -151,7 +151,7 @@ export default async function MembreDetailPage({ params }: Props) {
                   href={membre.poste.siteOrganisme}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 hover:opacity-80 transition-opacity"
+                  className="shrink-0 self-start hover:opacity-80 transition-opacity"
                   title={membre.poste.organisme ?? undefined}
                 >
                   <div className="h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
@@ -164,7 +164,7 @@ export default async function MembreDetailPage({ params }: Props) {
                   </div>
                 </a>
               ) : (
-                <div className="shrink-0 h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
+                <div className="shrink-0 self-start h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
                   <Image
                     src={logoOrganisme.url}
                     alt={membre.poste?.organisme ?? 'Logo organisme'}
