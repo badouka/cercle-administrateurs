@@ -10,7 +10,7 @@ import { ArrowLeft, Briefcase, Building2, Lock, ExternalLink, Phone, Mail } from
 import RichTextContent from '@/components/RichTextContent'
 
 interface Props {
-  params: Promise<{ id: string }>
+  params: Promise<{ slug: string }>
 }
 
 type HeaderVariant = 'president' | 'bureau' | 'membre'
@@ -30,21 +30,35 @@ function getHeaderVariant(posteCap?: string | null): HeaderVariant {
   return 'bureau'
 }
 
+async function findMembre(payload: Awaited<ReturnType<typeof getPayload>>, slugOrId: string, depth: number) {
+  // Cherche d'abord par slug
+  const bySlug = await payload.find({
+    collection:     'membres',
+    where:          { slug: { equals: slugOrId } },
+    depth,
+    overrideAccess: true,
+    limit:          1,
+  })
+  if (bySlug.docs.length > 0) return bySlug.docs[0]
+
+  // Fallback : ID numérique
+  const numId = parseInt(slugOrId, 10)
+  if (isNaN(numId)) return null
+  try {
+    return await payload.findByID({ collection: 'membres', id: numId, depth, overrideAccess: true })
+  } catch {
+    return null
+  }
+}
+
 // ─── Metadata dynamique ───────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id: idStr } = await params
-  const id = parseInt(idStr, 10)
-  if (isNaN(id)) return {}
-
+  const { slug } = await params
   try {
     const payload = await getPayload({ config })
-    const membre  = await payload.findByID({
-      collection: 'membres',
-      id,
-      depth: 0,
-      overrideAccess: true,
-    })
+    const membre  = await findMembre(payload, slug, 0)
+    if (!membre) return {}
     return { title: `${membre.prenom} ${membre.nom}` }
   } catch {
     return {}
@@ -54,26 +68,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function MembreDetailPage({ params }: Props) {
-  const { id: idStr } = await params
-  const id = parseInt(idStr, 10)
-  if (isNaN(id)) notFound()
+  const { slug } = await params
 
   const [payload, headers] = await Promise.all([
     getPayload({ config }),
     getHeaders(),
   ])
 
-  let membre
-  try {
-    membre = await payload.findByID({
-      collection: 'membres',
-      id,
-      depth: 2,
-      overrideAccess: true,
-    })
-  } catch {
-    notFound()
-  }
+  const membre = await findMembre(payload, slug, 2)
+  if (!membre) notFound()
 
   const { user }        = await payload.auth({ headers })
   const isAuthenticated = Boolean(user)
@@ -83,7 +86,7 @@ export default async function MembreDetailPage({ params }: Props) {
   const logoOrganisme = typeof membre.poste?.logoOrganisme === 'object' && membre.poste?.logoOrganisme ? (membre.poste.logoOrganisme as Media) : null
   const initiales     = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
   const hasPoste      = membre.poste?.posteCap || membre.poste?.fonctionProfessionnelle || membre.poste?.organisme || membre.poste?.direction
-  const hasCoord = membre.coordonnees?.telephone || membre.coordonnees?.emailProfessionnel || membre.coordonnees?.linkedin
+  const hasCoord      = membre.coordonnees?.telephone || membre.coordonnees?.emailProfessionnel || membre.coordonnees?.linkedin
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">

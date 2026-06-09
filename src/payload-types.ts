@@ -188,6 +188,10 @@ export interface Membre {
   user: number | User;
   prenom: string;
   nom: string;
+  /**
+   * Généré automatiquement depuis prénom + nom
+   */
+  slug?: string | null;
   photo?: (number | null) | Media;
   /**
    * Document fourni à l'inscription (arrêté de nomination, décision, carte professionnelle…)
@@ -567,6 +571,7 @@ export interface MembresSelect<T extends boolean = true> {
   user?: T;
   prenom?: T;
   nom?: T;
+  slug?: T;
   photo?: T;
   justificatif?: T;
   biographie?: T;

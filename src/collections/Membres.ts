@@ -3,6 +3,14 @@ import type { User } from '@/payload-types'
 import { isAdmin } from '@/access'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
+function toSlug(str: string): string {
+  return str
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+}
+
 export const Membres: CollectionConfig = {
   slug: 'membres',
   admin: {
@@ -27,6 +35,16 @@ export const Membres: CollectionConfig = {
     delete: isAdmin,
   },
   hooks: {
+    beforeValidate: [
+      ({ data, originalDoc }) => {
+        const prenom = (data?.prenom ?? (originalDoc as Record<string, unknown> | undefined)?.prenom ?? '') as string
+        const nom    = (data?.nom    ?? (originalDoc as Record<string, unknown> | undefined)?.nom    ?? '') as string
+        if (data && (prenom || nom)) {
+          data.slug = toSlug(`${prenom}${nom}`)
+        }
+        return data
+      },
+    ],
     beforeDelete: [
       async ({ id, req }) => {
         const { docs } = await req.payload.find({
@@ -64,6 +82,14 @@ export const Membres: CollectionConfig = {
         { name: 'prenom', type: 'text', label: 'Prénom', required: true },
         { name: 'nom',    type: 'text', label: 'Nom',    required: true },
       ],
+    },
+    {
+      name:   'slug',
+      type:   'text',
+      label:  'Slug',
+      unique: true,
+      index:  true,
+      admin:  { readOnly: true, description: 'Généré automatiquement depuis prénom + nom' },
     },
     {
       name: 'photo',

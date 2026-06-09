@@ -117,7 +117,7 @@ export function AnnuaireGrid({ membres, hideFilter = false }: AnnuaireGridProps)
               return (
                 <Link
                   key={membre.id}
-                  href={`/annuaire/${membre.id}`}
+                  href={`/annuaire/${membre.slug || membre.id}`}
                   className="group relative flex flex-col items-center rounded-xl border border-[#E5E5E5] bg-white p-5 text-center hover:border-black hover:shadow-md transition-all"
                 >
                   {badge && (
