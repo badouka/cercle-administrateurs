@@ -18,12 +18,16 @@ const SELECT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
 const FONCTIONS = [
+  "Président d'honneur",
   'Président',
+  'Vice-Président',
   'Secrétaire général',
-  'Trésorier(e)',
+  'Secrétaire général adjoint',
+  'Trésorier',
+  'Trésorier Adjoint',
   'Présidente Commission Actions Sociales',
   'Présidente Commission Communication',
-  'Prés. Commission Stratégie et Politiques Publiques',
+  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
   'Président Commission Renforcement de Capacités',
   'Membre',
 ]

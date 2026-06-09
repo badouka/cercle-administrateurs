@@ -13,23 +13,31 @@ const SELECT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
 const POSTES_HOMME = [
+  "Président d'honneur",
   'Président',
+  'Vice-Président',
   'Secrétaire général',
+  'Secrétaire général adjoint',
   'Trésorier',
-  'Président Commission Actions Sociales',
-  'Président Commission Communication',
-  'Président Commission Stratégie et Politiques Publiques',
+  'Trésorier Adjoint',
+  'Présidente Commission Actions Sociales',
+  'Présidente Commission Communication',
+  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
   'Président Commission Renforcement de Capacités',
   'Membre',
 ]
 
 const POSTES_FEMME = [
+  "Présidente d'honneur",
   'Présidente',
+  'Vice-Présidente',
   'Secrétaire générale',
+  'Secrétaire générale adjointe',
   'Trésorière',
+  'Trésorière Adjointe',
   'Présidente Commission Actions Sociales',
   'Présidente Commission Communication',
-  'Présidente Commission Stratégie et Politiques Publiques',
+  'Présidente Commission Stratégie et Vulgarisation des Politiques Publiques',
   'Présidente Commission Renforcement de Capacités',
   'Membre',
 ]

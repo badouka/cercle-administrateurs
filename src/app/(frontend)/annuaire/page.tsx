@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Annuaire des membres' }
 
 function rankPoste(posteCap: string | null | undefined): number {
   const p = (posteCap ?? '').trim()
-  if (p === 'Président' || p === 'Présidente') return 0
+  if (p === "Président d'honneur" || p === "Présidente d'honneur" || p === 'Président' || p === 'Présidente') return 0
   if (p !== '' && p !== 'Membre') return 1
   return 2
 }
