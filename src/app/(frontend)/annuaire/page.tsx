@@ -5,6 +5,13 @@ import { AnnuaireGrid } from '@/components/AnnuaireGrid'
 
 export const metadata: Metadata = { title: 'Annuaire des membres' }
 
+function rankPoste(posteCap: string | null | undefined): number {
+  const p = (posteCap ?? '').trim()
+  if (p === 'Président' || p === 'Présidente') return 0
+  if (p !== '' && p !== 'Membre') return 1
+  return 2
+}
+
 type PageProps = { searchParams: Promise<{ filtre?: string }> }
 
 export default async function AnnuairePage({ searchParams }: PageProps) {
@@ -42,7 +49,14 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
         <p className="mt-2 text-gray-500">{sousTitre}</p>
       </div>
 
-      <AnnuaireGrid membres={membres} hideFilter={!!filtre} />
+      <AnnuaireGrid
+        membres={[...membres].sort((a, b) => {
+          const diff = rankPoste(a.poste?.posteCap) - rankPoste(b.poste?.posteCap)
+          if (diff !== 0) return diff
+          return `${a.nom} ${a.prenom}`.localeCompare(`${b.nom} ${b.prenom}`, 'fr')
+        })}
+        hideFilter={!!filtre}
+      />
     </div>
   )
 }
