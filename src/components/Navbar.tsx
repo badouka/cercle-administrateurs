@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Menu, X, LayoutDashboard, LogOut, Settings2, ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
@@ -22,7 +22,15 @@ const NAV_LINKS: NavItem[] = [
       { href: '/a-propos/partenaires',      label: 'Nos partenaires' },
     ],
   },
-  { href: '/annuaire',   label: 'Annuaire' },
+  {
+    href: '/annuaire',
+    label: 'Annuaire',
+    children: [
+      { href: '/annuaire',                  label: 'Tous les membres' },
+      { href: '/annuaire?filtre=bureau',    label: 'Bureau exécutif' },
+      { href: '/annuaire?filtre=membres',   label: 'Membres' },
+    ],
+  },
   { href: '/actualites', label: 'Actualités' },
   { href: '/activites',  label: 'Activités' },
   { href: '/documents',  label: 'Documents' },
@@ -41,9 +49,17 @@ interface AuthUser { email: string; role?: 'membre' | 'gestionnaire' | 'admin' }
 export function Navbar() {
   const pathname              = usePathname()
   const router                = useRouter()
+  const rawSearchParams       = useSearchParams()
   const [open, setOpen]       = useState(false)
   const [user, setUser]       = useState<AuthUser | null | undefined>(undefined)
   const [loggingOut, setLoggingOut] = useState(false)
+
+  const currentFullPath = pathname + (rawSearchParams.toString() ? `?${rawSearchParams.toString()}` : '')
+
+  function isChildActive(href: string) {
+    if (href.includes('?')) return currentFullPath === href
+    return pathname === href && !rawSearchParams.toString()
+  }
 
   useEffect(() => {
     fetch('/api/users/me', { credentials: 'include' })
@@ -64,7 +80,7 @@ export function Navbar() {
 
   function isParentActive(item: NavItem) {
     if (pathname === item.href) return true
-    return item.children?.some(c => pathname.startsWith(c.href)) ?? false
+    return item.children?.some(c => pathname.startsWith(c.href.split('?')[0])) ?? false
   }
 
   const isLoggedIn = Boolean(user)
@@ -113,7 +129,7 @@ export function Navbar() {
                           href={child.href}
                           className={cn(
                             'block px-4 py-2 text-sm transition-colors',
-                            pathname === child.href
+                            isChildActive(child.href)
                               ? 'font-semibold text-black bg-gray-50'
                               : 'font-medium text-gray-600 hover:text-black hover:bg-gray-50',
                           )}
@@ -228,7 +244,7 @@ export function Navbar() {
                       onClick={() => setOpen(false)}
                       className={cn(
                         'block pl-7 pr-3 py-2 text-sm border-l-2 transition-colors',
-                        pathname === child.href
+                        isChildActive(child.href)
                           ? 'font-semibold text-black border-black bg-gray-50'
                           : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
                       )}
