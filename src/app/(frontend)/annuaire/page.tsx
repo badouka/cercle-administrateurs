@@ -5,10 +5,33 @@ import { AnnuaireGrid } from '@/components/AnnuaireGrid'
 
 export const metadata: Metadata = { title: 'Annuaire des membres' }
 
+const RANG0 = new Set([
+  "Président d'honneur",
+  'Président',
+  'Présidente',
+])
+
+const RANG1 = new Set([
+  'Vice-Président',
+  'Vice-Présidente',
+  'Secrétaire général',
+  'Secrétaire générale',
+  'Secrétaire général adjoint',
+  'Secrétaire générale adjointe',
+  'Trésorier',
+  'Trésorière',
+  'Trésorier Adjoint',
+  'Trésorière Adjointe',
+  'Présidente Commission Actions Sociales',
+  'Présidente Commission Communication',
+  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
+  'Président Commission Renforcement de Capacités',
+])
+
 function rankPoste(posteCap: string | null | undefined): number {
   const p = (posteCap ?? '').trim()
-  if (p === "Président d'honneur" || p === "Présidente d'honneur" || p === 'Président' || p === 'Présidente') return 0
-  if (p !== '' && p !== 'Membre') return 1
+  if (RANG0.has(p)) return 0
+  if (RANG1.has(p)) return 1
   return 2
 }
 
