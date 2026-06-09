@@ -5,13 +5,11 @@ import { AnnuaireGrid } from '@/components/AnnuaireGrid'
 
 export const metadata: Metadata = { title: 'Annuaire des membres' }
 
-const RANG0 = new Set([
+const ORDRE_POSTES = [
   "Président d'honneur",
+  "Présidente d'honneur",
   'Président',
   'Présidente',
-])
-
-const RANG1 = new Set([
   'Vice-Président',
   'Vice-Présidente',
   'Secrétaire général',
@@ -26,13 +24,12 @@ const RANG1 = new Set([
   'Présidente Commission Communication',
   'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
   'Président Commission Renforcement de Capacités',
-])
+]
 
 function rankPoste(posteCap: string | null | undefined): number {
   const p = (posteCap ?? '').trim()
-  if (RANG0.has(p)) return 0
-  if (RANG1.has(p)) return 1
-  return 2
+  const idx = ORDRE_POSTES.indexOf(p)
+  return idx === -1 ? 999 : idx
 }
 
 type PageProps = { searchParams: Promise<{ filtre?: string }> }
