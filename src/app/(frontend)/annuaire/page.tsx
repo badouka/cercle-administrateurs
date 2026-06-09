@@ -42,7 +42,7 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
         <p className="mt-2 text-gray-500">{sousTitre}</p>
       </div>
 
-      <AnnuaireGrid membres={membres} />
+      <AnnuaireGrid membres={membres} hideFilter={!!filtre} />
     </div>
   )
 }

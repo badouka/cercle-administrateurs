@@ -8,6 +8,7 @@ import type { Membre, Media } from '@/payload-types'
 
 interface AnnuaireGridProps {
   membres: Membre[]
+  hideFilter?: boolean
 }
 
 type PosteFilter = 'tous' | 'bureau' | 'membres'
@@ -32,7 +33,7 @@ function getBadge(m: Membre): { label: string; cls: string } | null {
   return null
 }
 
-export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
+export function AnnuaireGrid({ membres, hideFilter = false }: AnnuaireGridProps) {
   const [query,       setQuery]       = useState('')
   const [posteFilter, setPosteFilter] = useState<PosteFilter>('tous')
 
@@ -73,24 +74,26 @@ export function AnnuaireGrid({ membres }: AnnuaireGridProps) {
           />
         </div>
 
-        <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
-          {POSTE_FILTERS.map((f, i) => (
-            <button
-              key={f.value}
-              type="button"
-              onClick={() => setPosteFilter(f.value)}
-              className={`px-3.5 py-2 text-xs font-medium transition-colors ${
-                i > 0 ? 'border-l border-gray-200' : ''
-              } ${
-                posteFilter === f.value
-                  ? 'bg-black text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
+        {!hideFilter && (
+          <div className="inline-flex rounded-lg border border-gray-200 overflow-hidden">
+            {POSTE_FILTERS.map((f, i) => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setPosteFilter(f.value)}
+                className={`px-3.5 py-2 text-xs font-medium transition-colors ${
+                  i > 0 ? 'border-l border-gray-200' : ''
+                } ${
+                  posteFilter === f.value
+                    ? 'bg-black text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {filtered.length === 0 ? (
