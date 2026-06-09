@@ -100,7 +100,7 @@ export default async function MembreDetailPage({ params }: Props) {
       <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden">
 
         {/* Header */}
-        <div className={`px-8 py-10 ${
+        <div className={`px-8 py-8 ${
           variant === 'president' ? 'bg-black border-t-4 border-yellow-500' :
           variant === 'bureau'    ? 'bg-blue-950' :
                                     'bg-black'
@@ -108,7 +108,7 @@ export default async function MembreDetailPage({ params }: Props) {
           <div className="flex items-center justify-between gap-6 text-white">
 
             {/* Gauche : photo + identité */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
               {/* Photo / initiales */}
               <div className="mt-4 h-40 w-40 shrink-0 overflow-hidden rounded-lg ring-2 ring-white/20 bg-gray-800">
                 {photo?.url ? (
