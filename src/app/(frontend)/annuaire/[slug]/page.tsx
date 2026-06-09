@@ -110,17 +110,17 @@ export default async function MembreDetailPage({ params }: Props) {
             {/* Gauche : photo + identité */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               {/* Photo / initiales */}
-              <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
+              <div className="h-40 w-40 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
                 {photo?.url ? (
                   <Image
                     src={photo.url}
                     alt={`${membre.prenom} ${membre.nom}`}
-                    width={128}
-                    height={128}
+                    width={160}
+                    height={160}
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-3xl font-bold text-gray-500">
+                  <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-gray-500">
                     {initiales}
                   </div>
                 )}
