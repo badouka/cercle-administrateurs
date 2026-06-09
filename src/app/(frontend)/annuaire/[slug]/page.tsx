@@ -7,12 +7,21 @@ import type { Metadata } from 'next'
 import type { Media } from '@/payload-types'
 import config from '@payload-config'
 import { ArrowLeft, Briefcase, Building2, Lock, ExternalLink, Phone, Mail } from 'lucide-react'
+import RichTextContent from '@/components/RichTextContent'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 type HeaderVariant = 'president' | 'bureau' | 'membre'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function detectBioType(bio: any): 'html' | 'lexical' | null {
+  if (!bio) return null
+  if (typeof bio === 'string') return 'html'
+  if (typeof bio === 'object' && bio.root) return 'lexical'
+  return null
+}
 
 function getHeaderVariant(posteCap?: string | null): HeaderVariant {
   const p = posteCap?.trim() ?? ''
@@ -172,16 +181,25 @@ export default async function MembreDetailPage({ params }: Props) {
         <div className="bg-white p-8 space-y-8">
 
           {/* Biographie */}
-          {membre.biographie && (
-            <section>
-              <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
-                Biographie
-              </h2>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                {membre.biographie}
-              </p>
-            </section>
-          )}
+          {(() => {
+            const bioType = detectBioType(membre.biographie)
+            if (!bioType) return null
+            return (
+              <section>
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
+                  Biographie
+                </h2>
+                {bioType === 'html' ? (
+                  <div
+                    className="text-gray-700 leading-relaxed bio-prose"
+                    dangerouslySetInnerHTML={{ __html: membre.biographie as unknown as string }}
+                  />
+                ) : (
+                  <RichTextContent data={membre.biographie} />
+                )}
+              </section>
+            )
+          })()}
 
           <div className="grid gap-8 sm:grid-cols-2">
 
