@@ -10,7 +10,7 @@ import { ArrowLeft, Briefcase, Building2, Lock, ExternalLink, Phone, Mail } from
 import RichTextContent from '@/components/RichTextContent'
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ id: string }>
 }
 
 type HeaderVariant = 'president' | 'bureau' | 'membre'
@@ -33,8 +33,8 @@ function getHeaderVariant(posteCap?: string | null): HeaderVariant {
 // ─── Metadata dynamique ───────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const id = parseInt(slug, 10)
+  const { id: idStr } = await params
+  const id = parseInt(idStr, 10)
   if (isNaN(id)) return {}
 
   try {
@@ -54,8 +54,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function MembreDetailPage({ params }: Props) {
-  const { slug } = await params
-  const id = parseInt(slug, 10)
+  const { id: idStr } = await params
+  const id = parseInt(idStr, 10)
   if (isNaN(id)) notFound()
 
   const [payload, headers] = await Promise.all([
@@ -105,53 +105,50 @@ export default async function MembreDetailPage({ params }: Props) {
           variant === 'bureau'    ? 'bg-blue-950' :
                                     'bg-black'
         }`}>
-          <div className="flex items-center justify-between gap-6 text-white">
+          <div className="flex items-center gap-6 text-white">
 
-            {/* Gauche : photo + identité */}
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              {/* Photo / initiales */}
-              <div className="mt-4 h-40 w-40 shrink-0 overflow-hidden rounded-lg ring-2 ring-white/20 bg-gray-800">
-                {photo?.url ? (
-                  <Image
-                    src={photo.url}
-                    alt={`${membre.prenom} ${membre.nom}`}
-                    width={160}
-                    height={160}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-gray-500">
-                    {initiales}
-                  </div>
-                )}
-              </div>
-
-              {/* Identité */}
-              <div className="text-center sm:text-left">
-                <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
-                {variant !== 'membre' && membre.poste?.posteCap && (
-                  <span className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
-                    variant === 'president'
-                      ? 'bg-yellow-500 text-black'
-                      : 'bg-blue-800 text-white'
-                  }`}>
-                    {membre.poste.posteCap}
-                  </span>
-                )}
-                {membre.poste?.organisme && (
-                  <p className="mt-1 text-gray-300 font-semibold">{membre.poste.organisme}</p>
-                )}
-              </div>
+            {/* Photo */}
+            <div className="shrink-0 h-40 w-40 overflow-hidden rounded-lg ring-2 ring-white/20 bg-gray-800">
+              {photo?.url ? (
+                <Image
+                  src={photo.url}
+                  alt={`${membre.prenom} ${membre.nom}`}
+                  width={160}
+                  height={160}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-gray-500">
+                  {initiales}
+                </div>
+              )}
             </div>
 
-            {/* Droite : logo organisme */}
+            {/* Identité */}
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
+              {variant !== 'membre' && membre.poste?.posteCap && (
+                <span className={`mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+                  variant === 'president'
+                    ? 'bg-yellow-500 text-black'
+                    : 'bg-blue-800 text-white'
+                }`}>
+                  {membre.poste.posteCap}
+                </span>
+              )}
+              {membre.poste?.organisme && (
+                <p className="mt-1 text-gray-300 font-semibold">{membre.poste.organisme}</p>
+              )}
+            </div>
+
+            {/* Logo organisme */}
             {logoOrganisme?.url && (
               membre.poste?.siteOrganisme ? (
                 <a
                   href={membre.poste.siteOrganisme}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 self-start hover:opacity-80 transition-opacity"
+                  className="shrink-0 hover:opacity-80 transition-opacity"
                   title={membre.poste.organisme ?? undefined}
                 >
                   <div className="h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
@@ -164,7 +161,7 @@ export default async function MembreDetailPage({ params }: Props) {
                   </div>
                 </a>
               ) : (
-                <div className="shrink-0 self-start h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
+                <div className="shrink-0 h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
                   <Image
                     src={logoOrganisme.url}
                     alt={membre.poste?.organisme ?? 'Logo organisme'}
