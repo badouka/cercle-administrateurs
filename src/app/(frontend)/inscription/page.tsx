@@ -225,14 +225,14 @@ export default function InscriptionPage() {
             <span className="block text-sm font-medium text-gray-700 mb-1.5">
               Genre<span className="ml-0.5 text-black">*</span>
             </span>
-            <div className="grid grid-cols-2 gap-3">
-              <label className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 cursor-pointer transition-colors has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
-                <input type="radio" name="genre" value="homme" required className="sr-only" />
-                Homme
+            <div className="flex gap-6">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="genre" value="homme" required className="w-4 h-4 accent-black" />
+                <span className="text-sm text-gray-700">Homme</span>
               </label>
-              <label className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 cursor-pointer transition-colors has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
-                <input type="radio" name="genre" value="femme" required className="sr-only" />
-                Femme
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="genre" value="femme" required className="w-4 h-4 accent-black" />
+                <span className="text-sm text-gray-700">Femme</span>
               </label>
             </div>
           </div>
