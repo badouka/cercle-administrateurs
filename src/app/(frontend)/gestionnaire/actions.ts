@@ -84,6 +84,79 @@ export async function rejectMembre(membreId: number): Promise<ActionResult> {
   }
 }
 
+export async function updatePosteMembre(membreId: number, posteCap: string): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  try {
+    const membre = await ctx.payload.findByID({
+      collection:     'membres',
+      id:             membreId,
+      overrideAccess: true,
+    })
+    const poste = { ...(membre.poste ?? {}), posteCap: posteCap || null }
+    await ctx.payload.update({
+      collection:     'membres',
+      id:             membreId,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data:           { poste } as any,
+      overrideAccess: true,
+    })
+    revalidatePath('/gestionnaire/membres')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la mise à jour du poste' }
+  }
+}
+
+export async function suspendMembre(membreId: number): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  try {
+    const membre = await ctx.payload.findByID({
+      collection:     'membres',
+      id:             membreId,
+      overrideAccess: true,
+    })
+    await ctx.payload.update({
+      collection:     'membres',
+      id:             membreId,
+      data:           { adhesion: { ...(membre.adhesion ?? {}), statut: 'suspendu' } },
+      overrideAccess: true,
+    })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/gestionnaire/membres')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la désactivation' }
+  }
+}
+
+export async function reactivateMembre(membreId: number): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  try {
+    const membre = await ctx.payload.findByID({
+      collection:     'membres',
+      id:             membreId,
+      overrideAccess: true,
+    })
+    await ctx.payload.update({
+      collection:     'membres',
+      id:             membreId,
+      data:           { adhesion: { ...(membre.adhesion ?? {}), statut: 'actif' } },
+      overrideAccess: true,
+    })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/gestionnaire/membres')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la réactivation' }
+  }
+}
+
 // ── Posts ─────────────────────────────────────────────────────────────────────
 
 export async function togglePostStatut(

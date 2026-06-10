@@ -7,7 +7,7 @@ import type { User, Membre } from '@/payload-types'
 import config from '@payload-config'
 import { Users, ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import type { Media } from '@/payload-types'
-import { MembreActionButtons, MembreInfoLink, type MembreInfo } from '../MembreActionButtons'
+import { MembreActionButtons, MembreInfoLink, PosteEditButton, StatutActions, type MembreInfo } from '../MembreActionButtons'
 
 export const metadata: Metadata = { title: 'Gestion des membres' }
 
@@ -38,12 +38,6 @@ function buildMembreInfo(m: Membre): MembreInfo {
     photoUrl:                photo?.url ?? null,
   }
 }
-
-const STATUT_CONFIG = {
-  actif:     { label: 'Actif',      cls: 'bg-black text-white' },
-  inactif:   { label: 'En attente', cls: 'bg-yellow-100 text-yellow-800' },
-  suspendu:  { label: 'Suspendu',   cls: 'bg-red-100 text-red-700' },
-} as const
 
 export default async function MembreManagementPage() {
   const [payload, headers] = await Promise.all([getPayload({ config }), getHeaders()])
@@ -165,19 +159,15 @@ export default async function MembreManagementPage() {
                     <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">N° Adhésion</th>
                     <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
                     <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
-                    <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Poste</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {(membres as Membre[]).map(m => {
-                    const statut = STATUT_CONFIG[m.adhesion?.statut ?? 'inactif']
                     return (
                       <tr key={m.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-5 py-3.5">
                           <p className="font-medium text-black">{m.prenom} {m.nom}</p>
-                          {m.poste?.posteCap && (
-                            <p className="text-xs text-gray-400 mt-0.5">{m.poste.posteCap}</p>
-                          )}
                         </td>
                         <td className="px-5 py-3.5 text-gray-500 text-xs">
                           {m.poste?.organisme ?? <span className="text-gray-300">—</span>}
@@ -192,31 +182,15 @@ export default async function MembreManagementPage() {
                           }
                         </td>
                         <td className="px-5 py-3.5">
-                          <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${statut.cls}`}>
-                            {statut.label}
-                          </span>
+                          <StatutActions membreId={m.id} statut={m.adhesion?.statut ?? 'inactif'} />
                         </td>
-                        <td className="px-5 py-3.5 text-right">
-                          {m.adhesion?.statut === 'inactif' && (
-                            <div className="flex flex-col items-end gap-2">
-                              {(() => {
-                                const url = getJustificatifUrl(m)
-                                return url ? (
-                                  <a
-                                    href={url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-black underline underline-offset-2 transition-colors"
-                                  >
-                                    <FileText size={11} />
-                                    Justificatif
-                                    <ExternalLink size={10} />
-                                  </a>
-                                ) : null
-                              })()}
-                              <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
-                            </div>
-                          )}
+                        <td className="px-5 py-3.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-700">
+                              {m.poste?.posteCap ?? <span className="text-gray-300">—</span>}
+                            </span>
+                            <PosteEditButton membreId={m.id} nom={`${m.prenom} ${m.nom}`} currentPoste={m.poste?.posteCap} />
+                          </div>
                         </td>
                       </tr>
                     )
