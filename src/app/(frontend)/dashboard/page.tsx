@@ -175,7 +175,60 @@ export default async function DashboardPage() {
     )
   }
 
-  // ── Vue 3 : Membre actif — dashboard complet ──────────────────────────────
+  // ── Vue 3 : Membre suspendu ────────────────────────────────────────────────
+  if (membre.adhesion?.statut === 'suspendu') {
+    const photo     = typeof membre.photo === 'object' && membre.photo ? (membre.photo as Media) : null
+    const initiales = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
+
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
+        <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden mb-6">
+          <div className="bg-black px-6 py-8">
+            <div className="flex flex-col sm:flex-row items-center gap-5 text-white">
+              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
+                {photo?.url ? (
+                  <Image
+                    src={photo.url} alt={`${membre.prenom} ${membre.nom}`}
+                    width={80} height={80} className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-xl font-bold text-gray-500">
+                    {initiales}
+                  </div>
+                )}
+              </div>
+              <div className="text-center sm:text-left">
+                <h1 className="text-xl font-bold">{membre.prenom} {membre.nom}</h1>
+                <div className="mt-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-red-400/30 bg-red-400/10 px-3 py-0.5 text-xs font-medium text-red-300">
+                    <AlertCircle size={11} />
+                    Compte suspendu
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 sm:p-8">
+            <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4">
+              <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-600" />
+              <p className="text-sm text-red-800 leading-relaxed">
+                Votre compte a été suspendu. Veuillez contacter l'administrateur pour plus d'informations.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <Link href="/" className="text-sm text-gray-500 hover:text-black transition-colors">
+            ← Retour à l'accueil
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Vue 4 : Membre actif — dashboard complet ──────────────────────────────
 
   const [{ docs: memberDocs }, { docs: activities }] = await Promise.all([
     payload.find({
