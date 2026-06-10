@@ -11,10 +11,16 @@ const INPUT_CLS =
 const SELECT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
-const FONCTIONS_PROFESSIONNELLES = [
+const FONCTIONS_HOMME = [
   "Président du Conseil d'Administration",
   'Président du Conseil de Surveillance',
   "Président du Conseil d'Orientation",
+]
+
+const FONCTIONS_FEMME = [
+  "Présidente du Conseil d'Administration",
+  'Présidente du Conseil de Surveillance',
+  "Présidente du Conseil d'Orientation",
 ]
 
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png']
@@ -49,6 +55,8 @@ export default function InscriptionPage() {
   const [error,            setError]            = useState<string | null>(null)
   const [success,          setSuccess]          = useState(false)
   const [showPwd,          setShowPwd]          = useState(false)
+  const [genre,            setGenre]            = useState('')
+  const [fonction,         setFonction]         = useState('')
   const [justificatifFile, setJustificatifFile] = useState<File | null>(null)
   const [fileError,        setFileError]        = useState<string | null>(null)
 
@@ -227,11 +235,21 @@ export default function InscriptionPage() {
             </span>
             <div className="flex gap-6">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="genre" value="homme" required className="w-4 h-4 accent-black" />
+                <input
+                  type="radio" name="genre" value="homme" required
+                  checked={genre === 'homme'}
+                  onChange={() => { setGenre('homme'); setFonction('') }}
+                  className="w-4 h-4 accent-black"
+                />
                 <span className="text-sm text-gray-700">Homme</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="genre" value="femme" required className="w-4 h-4 accent-black" />
+                <input
+                  type="radio" name="genre" value="femme" required
+                  checked={genre === 'femme'}
+                  onChange={() => { setGenre('femme'); setFonction('') }}
+                  className="w-4 h-4 accent-black"
+                />
                 <span className="text-sm text-gray-700">Femme</span>
               </label>
             </div>
@@ -286,11 +304,15 @@ export default function InscriptionPage() {
             <select
               id="fonctionProfessionnelle"
               name="fonctionProfessionnelle"
-              defaultValue=""
-              className={SELECT_CLS}
+              value={fonction}
+              onChange={e => setFonction(e.target.value)}
+              disabled={!genre}
+              className={SELECT_CLS + ' disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed'}
             >
-              <option value="">— Sélectionnez une fonction —</option>
-              {FONCTIONS_PROFESSIONNELLES.map(f => (
+              <option value="">
+                {genre ? '— Sélectionnez une fonction —' : 'Sélectionnez d\'abord votre genre'}
+              </option>
+              {(genre === 'femme' ? FONCTIONS_FEMME : genre === 'homme' ? FONCTIONS_HOMME : []).map(f => (
                 <option key={f} value={f}>{f}</option>
               ))}
             </select>
