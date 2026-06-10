@@ -217,11 +217,42 @@ export interface Membre {
     /**
      * Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)
      */
-    posteCap?: string | null;
+    posteCap?:
+      | (
+          | "Président d'honneur"
+          | "Présidente d'honneur"
+          | 'Président'
+          | 'Présidente'
+          | 'Vice-Président'
+          | 'Vice-Présidente'
+          | 'Secrétaire général'
+          | 'Secrétaire générale'
+          | 'Secrétaire général adjoint'
+          | 'Secrétaire générale adjointe'
+          | 'Trésorier'
+          | 'Trésorière'
+          | 'Trésorier Adjoint'
+          | 'Trésorière Adjointe'
+          | 'Présidente Commission Actions Sociales'
+          | 'Présidente Commission Communication'
+          | 'Président Commission Stratégie et Vulgarisation des Politiques Publiques'
+          | 'Président Commission Renforcement de Capacités'
+          | 'Membre'
+        )
+      | null;
     /**
      * Titre professionnel (ex. DG, Président de Conseil d'Administration…)
      */
-    fonctionProfessionnelle?: string | null;
+    fonctionProfessionnelle?:
+      | (
+          | "Président du Conseil d'Administration"
+          | "Présidente du Conseil d'Administration"
+          | 'Président du Conseil de Surveillance'
+          | 'Présidente du Conseil de Surveillance'
+          | "Président du Conseil d'Orientation"
+          | "Présidente du Conseil d'Orientation"
+        )
+      | null;
     organisme?: string | null;
     /**
      * URL du site officiel (ex. https://pad.sn)
