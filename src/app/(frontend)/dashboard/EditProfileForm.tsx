@@ -164,12 +164,12 @@ export function EditProfileForm({ membre }: Props) {
               />
             </div>
           )}
-          <InfoRow label="Poste au CAP"            value={p.posteCap} />
-          <InfoRow label="Fonction professionnelle" value={p.fonctionProfessionnelle} />
-          <InfoRow label="Organisme"               value={p.organisme} />
+          <InfoRow label="Poste au CAP" value={p.posteCap} />
+          <InfoRow label="Fonction"     value={p.fonctionProfessionnelle} />
+          <InfoRow label="Organisation" value={p.organisme} />
           {p.siteOrganisme && (
             <div>
-              <dt className="text-xs text-gray-400">Site organisme</dt>
+              <dt className="text-xs text-gray-400">Site organisation</dt>
               <dd className="mt-0.5">
                 <a
                   href={p.siteOrganisme}
@@ -186,11 +186,11 @@ export function EditProfileForm({ membre }: Props) {
           <InfoRow label="Direction"               value={p.direction} />
           {currentLogo?.url && (
             <div>
-              <dt className="text-xs text-gray-400">Logo organisme</dt>
+              <dt className="text-xs text-gray-400">Logo organisation</dt>
               <dd className="mt-1">
                 <Image
                   src={currentLogo.url}
-                  alt="Logo organisme"
+                  alt="Logo organisation"
                   width={80}
                   height={40}
                   className="object-contain rounded border border-gray-100 p-1"
@@ -274,7 +274,7 @@ export function EditProfileForm({ membre }: Props) {
 
           <div>
             <label htmlFor="fonctionProfessionnelle" className="block text-xs font-medium text-gray-600 mb-1">
-              Fonction professionnelle
+              Fonction
             </label>
             <input
               id="fonctionProfessionnelle"
@@ -287,14 +287,14 @@ export function EditProfileForm({ membre }: Props) {
           </div>
 
           <div>
-            <label htmlFor="organisme" className="block text-xs font-medium text-gray-600 mb-1">Organisme</label>
+            <label htmlFor="organisme" className="block text-xs font-medium text-gray-600 mb-1">Organisation</label>
             <input id="organisme" name="organisme" type="text"
               defaultValue={p.organisme ?? ''} className={INPUT_CLS} />
           </div>
 
           <div>
             <label htmlFor="siteOrganisme" className="block text-xs font-medium text-gray-600 mb-1">
-              Site web de l&apos;organisme (optionnel)
+              Site web de l&apos;organisation (optionnel)
             </label>
             <input
               id="siteOrganisme"
@@ -308,7 +308,7 @@ export function EditProfileForm({ membre }: Props) {
 
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Logo de l&apos;organisme (optionnel)
+              Logo de l&apos;organisation (optionnel)
             </label>
             {currentLogo?.url && !logoFile && (
               <div className="mb-2 flex items-center gap-3">

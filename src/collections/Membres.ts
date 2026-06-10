@@ -149,11 +149,11 @@ export const Membres: CollectionConfig = {
             {
               name:  'fonctionProfessionnelle',
               type:  'text',
-              label: 'Fonction professionnelle',
+              label: 'Fonction',
               admin: { description: "Titre professionnel (ex. DG, Président de Conseil d'Administration…)" },
             },
-            { name: 'organisme',     type: 'text',   label: 'Organisme / Administration' },
-            { name: 'siteOrganisme', type: 'text',   label: "Site web de l'organisme", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
+            { name: 'organisme',     type: 'text',   label: 'Organisation' },
+            { name: 'siteOrganisme', type: 'text',   label: "Site web de l'organisation", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
             { name: 'direction',     type: 'text',   label: 'Direction / Département' },
             {
               name:       'logoOrganisme',

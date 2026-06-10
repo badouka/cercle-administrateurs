@@ -200,7 +200,7 @@ export default function InscriptionPage() {
         <h1 className="text-2xl font-bold text-black">Demande d'adhésion</h1>
         <p className="mt-1.5 text-sm text-gray-500">
           Complétez ce formulaire pour rejoindre le Cercle des Administrateurs Publics.
-          Votre demande sera examinée par l'administrateur.
+          Votre demande sera examinée par le gestionnaire.
         </p>
       </div>
 
@@ -265,7 +265,7 @@ export default function InscriptionPage() {
 
           <div>
             <label htmlFor="fonctionProfessionnelle" className="block text-sm font-medium text-gray-700 mb-1.5">
-              Fonction professionnelle
+              Fonction
             </label>
             <select
               id="fonctionProfessionnelle"
@@ -281,11 +281,11 @@ export default function InscriptionPage() {
           </div>
 
           <Field
-            id="organisme" name="organisme" label="Organisme / Administration"
-            placeholder="Ministère, Agence, Direction…"
+            id="organisme" name="organisme" label="Organisation"
+            placeholder="Agence, Entreprise…"
           />
           <Field
-            id="siteOrganisme" name="siteOrganisme" label="Site web de l'organisme (optionnel)"
+            id="siteOrganisme" name="siteOrganisme" label="Site web de l'organisation (optionnel)"
             type="url" placeholder="https://…"
           />
         </fieldset>

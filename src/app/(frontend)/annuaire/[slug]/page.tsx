@@ -135,7 +135,7 @@ export default async function MembreDetailPage({ params }: Props) {
               )}
             </div>
 
-            {/* Logo organisme */}
+            {/* Logo organisation */}
             {logoOrganisme?.url && (
               membre.poste?.siteOrganisme ? (
                 <a
@@ -148,7 +148,7 @@ export default async function MembreDetailPage({ params }: Props) {
                   <div className="h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
                     <Image
                       src={logoOrganisme.url}
-                      alt={membre.poste.organisme ?? 'Logo organisme'}
+                      alt={membre.poste.organisme ?? 'Logo organisation'}
                       width={72} height={72}
                       className="h-full w-full object-contain"
                     />
@@ -158,7 +158,7 @@ export default async function MembreDetailPage({ params }: Props) {
                 <div className="shrink-0 h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
                   <Image
                     src={logoOrganisme.url}
-                    alt={membre.poste?.organisme ?? 'Logo organisme'}
+                    alt={membre.poste?.organisme ?? 'Logo organisation'}
                     width={72} height={72}
                     className="h-full w-full object-contain"
                   />
