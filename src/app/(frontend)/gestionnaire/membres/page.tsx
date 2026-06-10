@@ -7,7 +7,7 @@ import type { User, Membre } from '@/payload-types'
 import config from '@payload-config'
 import { Users, ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import type { Media } from '@/payload-types'
-import { MembreActionButtons } from '../MembreActionButtons'
+import { MembreActionButtons, MembreInfoLink, type MembreInfo } from '../MembreActionButtons'
 
 export const metadata: Metadata = { title: 'Gestion des membres' }
 
@@ -21,6 +21,22 @@ function getJustificatifUrl(m: Membre): string | null {
   if (!j) return null
   if (typeof j === 'object' && j.url) return (j as Media).url ?? null
   return null
+}
+
+function buildMembreInfo(m: Membre): MembreInfo {
+  const photo = typeof m.photo === 'object' && m.photo ? (m.photo as Media) : null
+  return {
+    prenom:                  m.prenom,
+    nom:                     m.nom,
+    genre:                   m.genre,
+    email:                   typeof m.user === 'object' && m.user ? m.user.email : null,
+    fonctionProfessionnelle: m.poste?.fonctionProfessionnelle,
+    organisme:               m.poste?.organisme,
+    siteOrganisme:           m.poste?.siteOrganisme,
+    telephone:               m.coordonnees?.telephone,
+    telephoneSecondaire:     m.coordonnees?.telephoneSecondaire,
+    photoUrl:                photo?.url ?? null,
+  }
 }
 
 const STATUT_CONFIG = {
@@ -106,18 +122,21 @@ export default async function MembreManagementPage() {
                       <p className="text-xs text-gray-400 font-mono mt-0.5">N° {m.adhesion.numeroAdhesion}</p>
                     )}
                     <p className="text-xs text-gray-400 mt-0.5">Inscrit le {formatDate(m.createdAt)}</p>
-                    {justifUrl && (
-                      <a
-                        href={justifUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 mt-1.5 text-xs font-medium text-black underline underline-offset-2 hover:text-gray-600 transition-colors"
-                      >
-                        <FileText size={11} />
-                        Voir le justificatif
-                        <ExternalLink size={10} />
-                      </a>
-                    )}
+                    <div className="mt-1.5 flex flex-wrap items-center gap-3">
+                      {justifUrl && (
+                        <a
+                          href={justifUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs font-medium text-black underline underline-offset-2 hover:text-gray-600 transition-colors"
+                        >
+                          <FileText size={11} />
+                          Voir le justificatif
+                          <ExternalLink size={10} />
+                        </a>
+                      )}
+                      <MembreInfoLink nom={`${m.prenom} ${m.nom}`} info={buildMembreInfo(m)} />
+                    </div>
                   </div>
                   <MembreActionButtons membreId={m.id} nom={`${m.prenom} ${m.nom}`} />
                 </li>

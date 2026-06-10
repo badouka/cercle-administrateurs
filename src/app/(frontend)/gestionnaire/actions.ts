@@ -32,17 +32,7 @@ async function requireRole(minRole: 'gestionnaire' | 'admin' = 'gestionnaire'): 
 
 // ── Membres ───────────────────────────────────────────────────────────────────
 
-const FEMINISATION_FONCTION: Record<string, string> = {
-  "Président du Conseil d'Administration": "Présidente du Conseil d'Administration",
-  'Président du Conseil de Surveillance':  'Présidente du Conseil de Surveillance',
-  "Président du Conseil d'Orientation":    "Présidente du Conseil d'Orientation",
-}
-
-export async function approveMembre(
-  membreId: number,
-  posteCap?: string,
-  genre?: 'homme' | 'femme',
-): Promise<ActionResult> {
+export async function approveMembre(membreId: number): Promise<ActionResult> {
   const ctx = await requireRole()
   if ('error' in ctx) return ctx
 
@@ -53,25 +43,12 @@ export async function approveMembre(
       overrideAccess: true,
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const posteUpdates: Record<string, any> = {}
-    if (posteCap?.trim()) posteUpdates.posteCap = posteCap.trim()
-
-    if (genre === 'femme') {
-      const fonctionActuelle = membre.poste?.fonctionProfessionnelle
-      if (fonctionActuelle && FEMINISATION_FONCTION[fonctionActuelle]) {
-        posteUpdates.fonctionProfessionnelle = FEMINISATION_FONCTION[fonctionActuelle]
-      }
-    }
-
     await ctx.payload.update({
       collection:     'membres',
       id:             membreId,
       data: {
         adhesion: { ...(membre.adhesion ?? {}), statut: 'actif' },
-        ...(Object.keys(posteUpdates).length > 0
-          ? { poste: { ...(membre.poste ?? {}), ...posteUpdates } }
-          : {}),
+        poste:    { ...(membre.poste ?? {}), posteCap: 'Membre' },
       },
       overrideAccess: true,
     })
