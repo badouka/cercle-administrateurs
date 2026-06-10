@@ -273,6 +273,16 @@ export interface Activity {
     };
     [k: string]: unknown;
   } | null;
+  documents?:
+    | {
+        /**
+         * Ex. "Synthèse des communications"
+         */
+        titre: string;
+        fichier: number | Media;
+        id?: string | null;
+      }[]
+    | null;
   lieu?: string | null;
   date_debut: string;
   date_fin?: string | null;
@@ -612,6 +622,13 @@ export interface ActivitiesSelect<T extends boolean = true> {
   slug?: T;
   type?: T;
   description?: T;
+  documents?:
+    | T
+    | {
+        titre?: T;
+        fichier?: T;
+        id?: T;
+      };
   lieu?: T;
   date_debut?: T;
   date_fin?: T;

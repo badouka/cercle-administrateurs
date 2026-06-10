@@ -1,9 +1,10 @@
 import { getPayload } from 'payload'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 import type { Activity, Media } from '@/payload-types'
 import config from '@payload-config'
-import { CalendarDays, MapPin, Users } from 'lucide-react'
+import { CalendarDays, MapPin, Users, Download } from 'lucide-react'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -72,6 +73,9 @@ function ActiviteCard({ activite }: { activite: Activity }) {
   const image        = typeof activite.image === 'object' && activite.image ? activite.image as Media : null
   const typeConfig   = activite.type ? TYPE_CONFIG[activite.type] : null
   const statutConfig = STATUT_CONFIG[activite.statut]
+  const documents    = (activite.documents ?? []).filter(
+    (d): d is typeof d & { fichier: Media } => typeof d.fichier === 'object' && d.fichier !== null,
+  )
 
   return (
     <article className="flex flex-col rounded-xl border border-[#E5E5E5] bg-white overflow-hidden hover:shadow-md transition-shadow">
@@ -106,7 +110,15 @@ function ActiviteCard({ activite }: { activite: Activity }) {
         </div>
 
         {/* Titre */}
-        <h3 className="font-semibold text-black leading-snug">{activite.titre}</h3>
+        <h3 className="font-semibold text-black leading-snug">
+          {activite.slug ? (
+            <Link href={`/activites/${activite.slug}`} className="hover:underline">
+              {activite.titre}
+            </Link>
+          ) : (
+            activite.titre
+          )}
+        </h3>
 
         {/* Méta */}
         <ul className="space-y-1.5 text-sm text-gray-500 mt-auto">
@@ -132,6 +144,26 @@ function ActiviteCard({ activite }: { activite: Activity }) {
             </li>
           )}
         </ul>
+
+        {/* Documents associés */}
+        {documents.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-1">
+            {documents.map((doc, i) => (
+              <a
+                key={doc.id ?? i}
+                href={doc.fichier.url ?? '#'}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-black px-3 py-1.5 text-xs font-semibold text-white hover:bg-gray-800 transition-colors"
+                title={`Télécharger ${doc.titre}`}
+              >
+                <Download size={12} />
+                {doc.titre}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   )

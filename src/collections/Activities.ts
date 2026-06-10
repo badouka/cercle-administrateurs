@@ -86,6 +86,27 @@ export const Activities: CollectionConfig = {
       type: 'richText',
     },
     {
+      name: 'documents',
+      type: 'array',
+      label: 'Documents associés',
+      fields: [
+        {
+          name: 'titre',
+          type: 'text',
+          label: 'Titre',
+          required: true,
+          admin: { description: 'Ex. "Synthèse des communications"' },
+        },
+        {
+          name: 'fichier',
+          type: 'upload',
+          label: 'Fichier (PDF)',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
+    },
+    {
       name: 'lieu',
       type: 'text',
     },
