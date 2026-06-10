@@ -12,6 +12,7 @@ const MAX_PHOTO_SIZE     = 2 * 1024 * 1024 // 2 Mo
 export interface InscriptionData {
   prenom:                   string
   nom:                      string
+  genre?:                   string
   email:                    string
   motDePasse:               string
   fonctionProfessionnelle?: string
@@ -79,7 +80,7 @@ export async function inscrire(
   data: InscriptionData,
 ): Promise<{ success: true } | { error: string }> {
   const {
-    prenom, nom, email, motDePasse,
+    prenom, nom, genre, email, motDePasse,
     fonctionProfessionnelle, organisme, siteOrganisme, telephone, telephoneSecondaire,
     justificatifId, photoId,
   } = data
@@ -124,6 +125,7 @@ export async function inscrire(
         user:         user.id,
         prenom:       prenom.trim(),
         nom:          nom.trim(),
+        genre:        genre || undefined,
         photo:        photoId || undefined,
         justificatif: justificatifId,
         poste:        posteData,

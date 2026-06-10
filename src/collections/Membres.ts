@@ -84,6 +84,15 @@ export const Membres: CollectionConfig = {
       ],
     },
     {
+      name: 'genre',
+      type: 'select',
+      label: 'Genre',
+      options: [
+        { label: 'Homme', value: 'homme' },
+        { label: 'Femme', value: 'femme' },
+      ],
+    },
+    {
       name:   'slug',
       type:   'text',
       label:  'Slug',

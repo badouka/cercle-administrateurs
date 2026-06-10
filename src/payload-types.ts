@@ -188,6 +188,7 @@ export interface Membre {
   user: number | User;
   prenom: string;
   nom: string;
+  genre?: ('homme' | 'femme') | null;
   /**
    * Généré automatiquement depuis prénom + nom
    */
@@ -581,6 +582,7 @@ export interface MembresSelect<T extends boolean = true> {
   user?: T;
   prenom?: T;
   nom?: T;
+  genre?: T;
   slug?: T;
   photo?: T;
   justificatif?: T;

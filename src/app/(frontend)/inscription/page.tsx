@@ -150,6 +150,7 @@ export default function InscriptionPage() {
     const result = await inscrire({
       prenom:                   fd.get('prenom')                   as string,
       nom:                      fd.get('nom')                      as string,
+      genre:                    fd.get('genre')                    as string,
       email:                    fd.get('email')                    as string,
       motDePasse:               fd.get('motDePasse')               as string,
       fonctionProfessionnelle:  fd.get('fonctionProfessionnelle')  as string,
@@ -219,6 +220,21 @@ export default function InscriptionPage() {
           <div className="grid grid-cols-2 gap-3">
             <Field id="prenom" name="prenom" label="Prénom" required autoComplete="given-name" />
             <Field id="nom"    name="nom"    label="Nom"    required autoComplete="family-name" />
+          </div>
+          <div>
+            <span className="block text-sm font-medium text-gray-700 mb-1.5">
+              Genre<span className="ml-0.5 text-black">*</span>
+            </span>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 cursor-pointer transition-colors has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                <input type="radio" name="genre" value="homme" required className="sr-only" />
+                Homme
+              </label>
+              <label className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-700 cursor-pointer transition-colors has-[:checked]:border-black has-[:checked]:bg-black has-[:checked]:text-white">
+                <input type="radio" name="genre" value="femme" required className="sr-only" />
+                Femme
+              </label>
+            </div>
           </div>
         </fieldset>
 
