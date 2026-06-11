@@ -2,12 +2,12 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export const GESTIONNAIRE_EMAIL = 'alla.faye@digissol.com'
+export const GESTIONNAIRE_EMAIL = 'allafaye2901@gmail.com'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://cap-senegal.org'
 
 // Domaine d'expédition par défaut de Resend, fonctionne sans vérification de domaine
-const FROM_EMAIL = 'Cercle des Administrateurs Publics <onboarding@resend.dev>'
+const FROM_EMAIL = 'onboarding@resend.dev'
 
 function emailTemplate(title: string, contentHtml: string): string {
   return `
