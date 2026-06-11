@@ -1,13 +1,20 @@
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const transporter = nodemailer.createTransport({
+  host:   'smtp.gmail.com',
+  port:   587,
+  secure: false,
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+})
 
-export const GESTIONNAIRE_EMAIL = 'allafaye2901@gmail.com'
+export const GESTIONNAIRE_EMAIL = 'alla.faye@digissol.com'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://cap-senegal.org'
 
-// Domaine d'expédition par défaut de Resend, fonctionne sans vérification de domaine
-const FROM_EMAIL = 'onboarding@resend.dev'
+const FROM_EMAIL = process.env.GMAIL_USER || 'allafaye2901@gmail.com'
 
 function emailTemplate(title: string, contentHtml: string): string {
   return `
@@ -44,9 +51,8 @@ function emailTemplate(title: string, contentHtml: string): string {
 }
 
 async function send(to: string, subject: string, html: string) {
-  const result = await resend.emails.send({ from: FROM_EMAIL, to, subject, html })
-  console.log('[email] Envoi vers', to, '— réponse Resend :', JSON.stringify(result))
-  if (result.error) throw new Error(result.error.message)
+  const result = await transporter.sendMail({ from: FROM_EMAIL, to, subject, html })
+  console.log('[email] Envoi vers', to, '— réponse Nodemailer :', JSON.stringify(result))
 }
 
 // ── Membre : email de bienvenue après inscription ──────────────────────────────
