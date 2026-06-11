@@ -44,8 +44,9 @@ function emailTemplate(title: string, contentHtml: string): string {
 }
 
 async function send(to: string, subject: string, html: string) {
-  const { error } = await resend.emails.send({ from: FROM_EMAIL, to, subject, html })
-  if (error) throw new Error(error.message)
+  const result = await resend.emails.send({ from: FROM_EMAIL, to, subject, html })
+  console.log('[email] Envoi vers', to, '— réponse Resend :', JSON.stringify(result))
+  if (result.error) throw new Error(result.error.message)
 }
 
 // ── Membre : email de bienvenue après inscription ──────────────────────────────
@@ -77,6 +78,7 @@ export async function sendNewMemberNotification(
   organisation?: string | null,
   fonction?: string | null,
 ) {
+  console.log('[sendNewMemberNotification] Appelée pour', email, '— notification destinée à', GESTIONNAIRE_EMAIL)
   const html = emailTemplate('Nouvelle demande d\'adhésion', `
     <p>Une nouvelle demande d'adhésion vient d'être soumise sur le site du CAP :</p>
     <ul style="padding-left:20px;">

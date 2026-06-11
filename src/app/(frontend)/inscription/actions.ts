@@ -141,6 +141,11 @@ export async function inscrire(
 
     try {
       await sendWelcomeEmail(prenom.trim(), nom.trim(), email.toLowerCase().trim())
+    } catch (err) {
+      console.error('[inscrire] Erreur envoi email de bienvenue', err)
+    }
+
+    try {
       await sendNewMemberNotification(
         prenom.trim(),
         nom.trim(),
@@ -149,7 +154,7 @@ export async function inscrire(
         fonctionProfessionnelle?.trim(),
       )
     } catch (err) {
-      console.error('[inscrire] Erreur envoi email', err)
+      console.error('[inscrire] Erreur envoi notification gestionnaire', err)
     }
 
     return { success: true }
