@@ -2,6 +2,7 @@
 
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { sendWelcomeEmail, sendNewMemberNotification } from '@/lib/email'
 
 const ALLOWED_MIME = ['application/pdf', 'image/jpeg', 'image/png']
 const MAX_SIZE     = 5 * 1024 * 1024 // 5 Mo
@@ -137,6 +138,19 @@ export async function inscrire(
       } as any,
       overrideAccess: true,
     })
+
+    try {
+      await sendWelcomeEmail(prenom.trim(), nom.trim(), email.toLowerCase().trim())
+      await sendNewMemberNotification(
+        prenom.trim(),
+        nom.trim(),
+        email.toLowerCase().trim(),
+        organisme?.trim(),
+        fonctionProfessionnelle?.trim(),
+      )
+    } catch (err) {
+      console.error('[inscrire] Erreur envoi email', err)
+    }
 
     return { success: true }
   } catch (err) {

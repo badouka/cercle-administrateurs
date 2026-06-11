@@ -5,6 +5,7 @@ import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import config from '@payload-config'
 import type { User } from '@/payload-types'
+import { sendApprovalEmail, sendRejectionEmail } from '@/lib/email'
 
 type ActionResult = { success: true } | { error: string }
 type AuthOK       = { payload: BasePayload; user: User }
@@ -40,6 +41,7 @@ export async function approveMembre(membreId: number): Promise<ActionResult> {
     const membre = await ctx.payload.findByID({
       collection:     'membres',
       id:             membreId,
+      depth:          1,
       overrideAccess: true,
     })
 
@@ -52,6 +54,14 @@ export async function approveMembre(membreId: number): Promise<ActionResult> {
       },
       overrideAccess: true,
     })
+
+    try {
+      const email = typeof membre.user === 'object' && membre.user ? membre.user.email : null
+      if (email) await sendApprovalEmail(membre.prenom, membre.nom, email)
+    } catch (err) {
+      console.error('[approveMembre] Erreur envoi email', err)
+    }
+
     revalidatePath('/gestionnaire')
     revalidatePath('/gestionnaire/membres')
     return { success: true }
@@ -68,6 +78,7 @@ export async function rejectMembre(membreId: number): Promise<ActionResult> {
     const membre = await ctx.payload.findByID({
       collection:     'membres',
       id:             membreId,
+      depth:          1,
       overrideAccess: true,
     })
     await ctx.payload.update({
@@ -76,6 +87,14 @@ export async function rejectMembre(membreId: number): Promise<ActionResult> {
       data:           { adhesion: { ...(membre.adhesion ?? {}), statut: 'suspendu' } },
       overrideAccess: true,
     })
+
+    try {
+      const email = typeof membre.user === 'object' && membre.user ? membre.user.email : null
+      if (email) await sendRejectionEmail(membre.prenom, membre.nom, email)
+    } catch (err) {
+      console.error('[rejectMembre] Erreur envoi email', err)
+    }
+
     revalidatePath('/gestionnaire')
     revalidatePath('/gestionnaire/membres')
     return { success: true }
