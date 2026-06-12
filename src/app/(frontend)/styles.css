@@ -1,5 +1,41 @@
 @import "tailwindcss";
 
+/* ── Design tokens — palette & typographie ───────────────────────────── */
+@theme {
+  --color-cream:    #FBF9F2;
+  --color-ink:      #1B1A17;
+  --color-bordeaux: #A8392B;
+  --color-forest:   #1a3d2b;
+
+  --font-sans:  var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono:  var(--font-ibm-plex-mono), ui-monospace, monospace;
+}
+
+/* ── Carousel sans barre de défilement visible ───────────────────────── */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Texture grain — sections sombres (hero, magazine, contact) ──────── */
+.bg-grain {
+  position: relative;
+  isolation: isolate;
+}
+.bg-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 /* ── TipTap editor — article (full) ─────────────────────────────────── */
 .tiptap-article                    { min-height: 280px; font-size: 0.875rem; line-height: 1.75; }
 .tiptap-article p                  { margin-bottom: 0.875rem; color: #111; }

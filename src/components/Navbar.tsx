@@ -86,7 +86,7 @@ export function Navbar() {
   const isLoggedIn = Boolean(user)
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur border-b border-ink/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
 
@@ -95,10 +95,10 @@ export function Navbar() {
             href="/"
             className="flex items-center gap-2.5 hover:opacity-75 transition-opacity"
           >
-            <span className="rounded bg-black px-2 py-0.5 text-sm font-extrabold text-white tracking-wide">
+            <span className="rounded bg-bordeaux px-2 py-0.5 text-sm font-extrabold text-cream tracking-wide">
               CAP
             </span>
-            <span className="hidden sm:inline text-sm font-medium text-gray-700 tracking-wide">
+            <span className="hidden sm:inline font-serif text-sm font-medium text-ink/80 tracking-wide">
               Cercle des Administrateurs Publics
             </span>
           </Link>
@@ -112,26 +112,26 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className={cn(
-                      'inline-flex items-center gap-1 px-3 py-2 text-sm transition-colors border-b-2',
+                      'inline-flex items-center gap-1 px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                       isParentActive(item)
-                        ? 'font-semibold text-black border-black'
-                        : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                        ? 'font-semibold text-ink border-bordeaux'
+                        : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                     )}
                   >
                     {item.label}
                     <ChevronDown size={13} className="mt-0.5 transition-transform group-hover:rotate-180" />
                   </Link>
                   <div className="absolute top-full left-0 hidden group-hover:block pt-1">
-                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[160px]">
+                    <div className="bg-cream border border-ink/10 rounded-lg shadow-lg py-1 min-w-[160px]">
                       {item.children.map(child => (
                         <Link
                           key={child.href}
                           href={child.href}
                           className={cn(
-                            'block px-4 py-2 text-sm transition-colors',
+                            'block px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors',
                             isChildActive(child.href)
-                              ? 'font-semibold text-black bg-gray-50'
-                              : 'font-medium text-gray-600 hover:text-black hover:bg-gray-50',
+                              ? 'font-semibold text-ink bg-ink/5'
+                              : 'font-medium text-ink/50 hover:text-ink hover:bg-ink/5',
                           )}
                         >
                           {child.label}
@@ -145,10 +145,10 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'px-3 py-2 text-sm transition-colors border-b-2',
+                    'px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                     pathname === item.href
-                      ? 'font-semibold text-black border-black'
-                      : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                      ? 'font-semibold text-ink border-bordeaux'
+                      : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                   )}
                 >
                   {item.label}
@@ -160,17 +160,17 @@ export function Navbar() {
           {/* Actions desktop */}
           <div className="hidden md:flex items-center gap-2">
             {user === undefined ? (
-              <div className="h-8 w-24 rounded-md bg-gray-100 animate-pulse" />
+              <div className="h-8 w-24 rounded-md bg-ink/5 animate-pulse" />
             ) : isLoggedIn ? (
               <>
                 {(user?.role === 'gestionnaire' || user?.role === 'admin') && (
                   <Link
                     href="/gestionnaire"
                     className={cn(
-                      'inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-colors border-b-2',
+                      'inline-flex items-center gap-1.5 rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                       pathname.startsWith('/gestionnaire')
-                        ? 'text-black font-semibold border-black'
-                        : 'text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                        ? 'text-ink font-semibold border-bordeaux'
+                        : 'text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                     )}
                   >
                     <Settings2 size={15} />
@@ -180,10 +180,10 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   className={cn(
-                    'inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-colors border-b-2',
+                    'inline-flex items-center gap-1.5 rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                     pathname.startsWith('/dashboard')
-                      ? 'text-black font-semibold border-black'
-                      : 'text-gray-500 border-transparent hover:text-black hover:border-gray-300',
+                      ? 'text-ink font-semibold border-bordeaux'
+                      : 'text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                   )}
                 >
                   <LayoutDashboard size={15} />
@@ -192,7 +192,7 @@ export function Navbar() {
                 <button
                   onClick={handleLogout}
                   disabled={loggingOut}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 hover:border-black hover:text-black transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-ink/15 px-3 py-2 font-mono text-xs uppercase tracking-wider text-ink/60 hover:border-bordeaux hover:text-bordeaux transition-colors disabled:opacity-50"
                 >
                   <LogOut size={15} />
                   {loggingOut ? '…' : 'Déconnexion'}
@@ -201,7 +201,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/connexion"
-                className="inline-flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+                className="inline-flex items-center rounded-md bg-bordeaux px-4 py-2 font-mono text-xs uppercase tracking-wider font-semibold text-cream hover:bg-ink transition-colors"
               >
                 Connexion
               </Link>
@@ -211,7 +211,7 @@ export function Navbar() {
           {/* Hamburger */}
           <button
             onClick={() => setOpen(prev => !prev)}
-            className="md:hidden rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-black transition-colors"
+            className="md:hidden rounded-md p-2 text-ink/60 hover:bg-ink/5 hover:text-ink transition-colors"
             aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
@@ -221,7 +221,7 @@ export function Navbar() {
 
       {/* Menu mobile */}
       {open && (
-        <div className="md:hidden border-t border-gray-200 bg-white">
+        <div className="md:hidden border-t border-ink/10 bg-cream">
           <nav className="flex flex-col px-4 py-2 gap-0.5">
             {NAV_LINKS.map(item =>
               item.children ? (
@@ -229,10 +229,10 @@ export function Navbar() {
                 <div key={item.href}>
                   <span
                     className={cn(
-                      'block px-3 py-2.5 text-sm font-semibold border-l-2',
+                      'block px-3 py-2.5 font-mono text-xs uppercase tracking-wider font-semibold border-l-2',
                       isParentActive(item)
-                        ? 'text-black border-black'
-                        : 'text-gray-700 border-transparent',
+                        ? 'text-ink border-bordeaux'
+                        : 'text-ink/70 border-transparent',
                     )}
                   >
                     {item.label}
@@ -243,10 +243,10 @@ export function Navbar() {
                       href={child.href}
                       onClick={() => setOpen(false)}
                       className={cn(
-                        'block pl-7 pr-3 py-2 text-sm border-l-2 transition-colors',
+                        'block pl-7 pr-3 py-2 font-mono text-xs uppercase tracking-wider border-l-2 transition-colors',
                         isChildActive(child.href)
-                          ? 'font-semibold text-black border-black bg-gray-50'
-                          : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
+                          ? 'font-semibold text-ink border-bordeaux bg-ink/5'
+                          : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20 hover:bg-ink/5',
                       )}
                     >
                       {child.label}
@@ -259,10 +259,10 @@ export function Navbar() {
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    'px-3 py-2.5 text-sm border-l-2 transition-colors',
+                    'px-3 py-2.5 font-mono text-xs uppercase tracking-wider border-l-2 transition-colors',
                     pathname === item.href
-                      ? 'font-semibold text-black border-black bg-gray-50'
-                      : 'font-medium text-gray-500 border-transparent hover:text-black hover:border-gray-300 hover:bg-gray-50',
+                      ? 'font-semibold text-ink border-bordeaux bg-ink/5'
+                      : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20 hover:bg-ink/5',
                   )}
                 >
                   {item.label}
@@ -277,7 +277,7 @@ export function Navbar() {
                     <Link
                       href="/gestionnaire"
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-black hover:bg-gray-50 transition-colors"
+                      className="flex items-center gap-2 rounded-md border border-ink/15 px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-ink hover:bg-ink/5 transition-colors"
                     >
                       <Settings2 size={15} />
                       Gestion
@@ -286,7 +286,7 @@ export function Navbar() {
                   <Link
                     href="/dashboard"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2 rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-black hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-2 rounded-md border border-ink/15 px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-ink hover:bg-ink/5 transition-colors"
                   >
                     <LayoutDashboard size={15} />
                     Mon espace
@@ -294,7 +294,7 @@ export function Navbar() {
                   <button
                     onClick={handleLogout}
                     disabled={loggingOut}
-                    className="flex w-full items-center gap-2 rounded-md border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                    className="flex w-full items-center gap-2 rounded-md border border-ink/15 px-4 py-2.5 font-mono text-xs uppercase tracking-wider text-ink/60 hover:bg-ink/5 transition-colors disabled:opacity-50"
                   >
                     <LogOut size={15} />
                     {loggingOut ? 'Déconnexion…' : 'Se déconnecter'}
@@ -304,7 +304,7 @@ export function Navbar() {
                 <Link
                   href="/connexion"
                   onClick={() => setOpen(false)}
-                  className="flex justify-center rounded-md bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+                  className="flex justify-center rounded-md bg-bordeaux px-4 py-2.5 font-mono text-xs uppercase tracking-wider font-semibold text-cream hover:bg-ink transition-colors"
                 >
                   Connexion
                 </Link>

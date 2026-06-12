@@ -50,8 +50,8 @@ function emailTemplate(title: string, contentHtml: string): string {
   `
 }
 
-async function send(to: string, subject: string, html: string) {
-  const result = await transporter.sendMail({ from: FROM_EMAIL, to, subject, html })
+async function send(to: string, subject: string, html: string, replyTo?: string) {
+  const result = await transporter.sendMail({ from: FROM_EMAIL, to, subject, html, replyTo })
   console.log('[email] Envoi vers', to, '— réponse Nodemailer :', JSON.stringify(result))
 }
 
@@ -140,4 +140,18 @@ export async function sendRejectionEmail(prenom: string, nom: string, email: str
     </p>
   `)
   return send(email, 'Votre demande d\'adhésion au CAP', html)
+}
+
+// ── Gestionnaire : message du formulaire de contact ─────────────────────────────
+
+export async function sendContactMessage(nom: string, email: string, message: string) {
+  const html = emailTemplate('Nouveau message de contact', `
+    <p>Un nouveau message a été envoyé depuis le formulaire de contact du site du CAP :</p>
+    <ul style="padding-left:20px;">
+      <li><strong>Nom :</strong> ${nom}</li>
+      <li><strong>Email :</strong> ${email}</li>
+    </ul>
+    <p style="white-space:pre-wrap;">${message}</p>
+  `)
+  return send(GESTIONNAIRE_EMAIL, `Message de contact — ${nom}`, html, email)
 }
