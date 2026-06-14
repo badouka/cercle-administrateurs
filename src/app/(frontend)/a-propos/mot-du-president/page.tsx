@@ -68,7 +68,7 @@ export default async function MotDuPresidentPage() {
     payload.find({
       collection:     'membres',
       where:          { 'poste.posteCap': { in: ['Président', 'Présidente'] } },
-      depth:          1,
+      depth:          2,
       limit:          1,
       overrideAccess: true,
     }),
@@ -82,9 +82,7 @@ export default async function MotDuPresidentPage() {
   ])
 
   const president = (presidentRes.docs[0] as Membre | undefined) ?? null
-  const presidentPhoto = president && typeof president.photo === 'object' && president.photo
-    ? (president.photo as Media)
-    : null
+  console.log('[MotDuPresidentPage] président récupéré :', JSON.stringify(president, null, 2))
 
   const bureau = (membresRes.docs as Membre[])
     .filter(isAuBureau)
@@ -136,12 +134,11 @@ export default async function MotDuPresidentPage() {
               {president ? (
                 <div className="rounded-2xl border border-ink/10 bg-[#F5F5F5] p-8 text-center">
                   <div className="mx-auto mb-5 h-32 w-32 shrink-0 overflow-hidden rounded-full bg-ink/5 ring-4 ring-[#14B53A]/15">
-                    {presidentPhoto?.url ? (
-                      <Image
-                        src={presidentPhoto.url}
+                    {president?.photo && typeof president.photo === 'object' && president.photo.filename ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`/api/media/file/${president.photo.filename}`}
                         alt={`${president.prenom} ${president.nom}`}
-                        width={128}
-                        height={128}
                         className="h-full w-full object-cover"
                       />
                     ) : (
