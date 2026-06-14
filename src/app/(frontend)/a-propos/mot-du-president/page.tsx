@@ -63,13 +63,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MotDuPresidentPage() {
   const payload = await getPayload({ config })
 
-  const [page, presidentRes, membresRes] = await Promise.all([
+  const [page, optionPoint, membresRes] = await Promise.all([
     fetchPage(),
+    // Option 1 — notation pointée sur le groupe "poste"
     payload.find({
       collection:     'membres',
-      where:          { 'poste.posteCap': { in: ['Président', 'Présidente'] } },
-      depth:          2,
-      limit:          1,
+      where:          { 'poste.posteCap': { equals: 'Président' } },
+      depth:          0,
       overrideAccess: true,
     }),
     payload.find({
@@ -81,8 +81,39 @@ export default async function MotDuPresidentPage() {
     }),
   ])
 
-  const president = (presidentRes.docs[0] as Membre | undefined) ?? null
-  console.log('[MotDuPresidentPage] président récupéré :', JSON.stringify(president, null, 2))
+  console.log('[MotDuPresidentPage] Option 1 "poste.posteCap" → ', optionPoint.totalDocs, 'membre(s) trouvé(s)')
+
+  // Option 2 — champ "posteCap" à la racine (au cas où il ne serait pas dans le groupe "poste").
+  // Payload valide le chemin du `where` au runtime et lève une QueryError si le champ
+  // n'existe pas à cet endroit du schéma : on capture donc l'erreur au lieu de planter la page.
+  try {
+    const optionRacine = await payload.find({
+      collection:     'membres',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      where:          { posteCap: { equals: 'Président' } } as any,
+      depth:          0,
+      overrideAccess: true,
+    })
+    console.log('[MotDuPresidentPage] Option 2 "posteCap"       → ', optionRacine.totalDocs, 'membre(s) trouvé(s)')
+  } catch (err) {
+    console.log(
+      '[MotDuPresidentPage] Option 2 "posteCap"       → erreur :',
+      err instanceof Error ? err.message : err,
+    )
+  }
+
+  // Les valeurs poste.posteCap importées de WordPress contiennent parfois des espaces
+  // parasites (ex. " Président" avec une espace de tête) qui font échouer un `equals`
+  // strict côté base de données : on retrouve donc le président côté JS avec un `.trim()`,
+  // comme le fait déjà isAuBureau()/rankPoste() pour le tri du bureau.
+  const president = (membresRes.docs as Membre[]).find(m => {
+    const p = (m.poste?.posteCap ?? '').trim()
+    return p === 'Président' || p === 'Présidente'
+  }) ?? null
+  console.log(
+    '[MotDuPresidentPage] président trouvé via .trim() →',
+    president ? `${president.prenom} ${president.nom} (${president.poste?.posteCap})` : 'aucun',
+  )
 
   const bureau = (membresRes.docs as Membre[])
     .filter(isAuBureau)
@@ -150,9 +181,9 @@ export default async function MotDuPresidentPage() {
                   <p className="font-serif text-xl font-medium text-ink">
                     {president.prenom} {president.nom}
                   </p>
-                  {president.poste?.posteCap && (
+                  {president.poste?.posteCap?.trim() && (
                     <p className="mt-1 text-sm font-semibold text-[#14B53A]">
-                      {president.poste.posteCap}
+                      {president.poste.posteCap.trim()}
                     </p>
                   )}
                   {president.poste?.organisme && (
