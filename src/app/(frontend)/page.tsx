@@ -1,16 +1,12 @@
 import { getPayload } from 'payload'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Fragment } from 'react'
 import config from '@payload-config'
 import type { Membre, Media, Activity, Document, Page } from '@/payload-types'
+import { BureauCarousel } from '@/components/BureauCarousel'
 import {
   ArrowRight,
-  GraduationCap,
-  Award,
-  MessageSquare,
-  Lightbulb,
-  Target,
+  ArrowUpRight,
   User,
   FileText,
 } from 'lucide-react'
@@ -34,8 +30,8 @@ const ORDRE_POSTES = [
   'Trésorière Adjointe',
   'Présidente Commission Actions Sociales',
   'Présidente Commission Communication',
-  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
-  'Président Commission Renforcement de Capacités',
+  'Président Commission Stratégie',
+  'Président Commission Renforcement',
 ]
 
 function rankPoste(posteCap: string | null | undefined): number {
@@ -74,36 +70,31 @@ function formatDate(dateStr?: string | null): string {
   }).format(new Date(dateStr))
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  atelier:   'Atelier',
-  seminaire: 'Séminaire',
-}
-
 const ENGAGEMENTS = [
   {
-    icon:  GraduationCap,
-    titre: 'Renforcer les capacités',
-    texte: "Des programmes de formation continue sur la gouvernance, la gestion des risques et la performance des organes dirigeants.",
+    numero: '01',
+    titre:  'Renforcer les capacités',
+    texte:  'Des programmes de formation continue sur la gouvernance et la gestion des risques.',
   },
   {
-    icon:  Award,
-    titre: 'Promouvoir les meilleures pratiques',
-    texte: "Diffusion de référentiels et d'outils de gouvernance issus des meilleures pratiques africaines et internationales.",
+    numero: '02',
+    titre:  'Promouvoir les meilleures pratiques',
+    texte:  'Diffusion de référentiels issus des meilleures pratiques africaines.',
   },
   {
-    icon:  MessageSquare,
-    titre: 'Structurer le dialogue institutionnel',
-    texte: "Un dialogue permanent avec les ministères de tutelle et les corps de contrôle de l'État.",
+    numero: '03',
+    titre:  'Structurer le dialogue',
+    texte:  'Un dialogue permanent avec les ministères de tutelle et les corps de contrôle.',
   },
   {
-    icon:  Lightbulb,
-    titre: 'Être une force de proposition',
-    texte: "La promotion d'une culture de la performance et du contrat de performance au sein du secteur parapublic.",
+    numero: '04',
+    titre:  'Être une force de proposition',
+    texte:  "Promotion d'une culture de la performance au sein du secteur parapublic.",
   },
   {
-    icon:  Target,
-    titre: "Incarner l'exigence de résultats",
-    texte: "Un suivi rigoureux des objectifs à travers des tableaux de bord et des organes délibérants engagés.",
+    numero: '05',
+    titre:  "Incarner l'exigence de résultats",
+    texte:  'Un suivi rigoureux des objectifs à travers des tableaux de bord.',
   },
 ]
 
@@ -137,7 +128,7 @@ export default async function HomePage() {
       collection:     'activities',
       sort:           '-date_debut',
       depth:          1,
-      limit:          4,
+      limit:          3,
       overrideAccess: true,
     }),
     payload.find({
@@ -182,72 +173,80 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── 1. Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-gray-900 bg-grain bg-[url('/api/media/file/cercle-administrateurs.jpg')] bg-cover bg-center">
-        <div className="absolute inset-0 z-[1] bg-black/60" />
-        <div className="relative z-10 mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">
-            République du Sénégal · Secteur parapublic
-          </p>
-          <h1 className="mx-auto mt-6 font-serif text-5xl font-medium leading-tight text-white sm:text-6xl lg:text-7xl">
-            Cercle des Administrateurs Publics
-          </h1>
-          <p className="mt-6 font-mono text-sm uppercase tracking-[0.3em] text-white/70">
-            Gouvernance · Performance · Intégrité
-          </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/inscription"
-              className="inline-flex items-center justify-center rounded-lg bg-[#14B53A] px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
-            >
-              Adhérer
-            </Link>
-            <Link
-              href="/a-propos"
-              className="inline-flex items-center justify-center rounded-lg border border-white/40 px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              Découvrir le Cercle
-            </Link>
-          </div>
+      <section className="relative w-full -mt-20">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/api/media/file/cap-banner.png"
+          alt="Cercle des Administrateurs Publics"
+          className="w-full h-auto block"
+        />
+        <div className="absolute bottom-[23%] left-[6%]">
+          <Link
+            href="/a-propos"
+            className="inline-flex items-center gap-2 bg-[#14B53A] text-white rounded-full px-7 py-3 font-semibold text-sm hover:bg-[#14B53A]/90 transition-colors"
+          >
+            En savoir plus <ArrowRight size={16} />
+          </Link>
         </div>
       </section>
 
       {/* ── 2. Nos cinq engagements ─────────────────────────────────────────── */}
-      <section className="bg-[#FBF9F2] py-16 sm:py-24">
+      <section className="bg-white py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">
-              01 / Notre raison d&apos;être
-            </p>
-            <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">
-              Nos Cinq Engagements
-            </h2>
-            <p className="mt-6 text-lg leading-relaxed text-ink/70">
-              Né de la volonté de fédérer les dirigeants des organes délibérants, le Cercle
-              accompagne l&apos;État dans sa stratégie de modernisation et de rationalisation
-              du secteur parapublic.
-            </p>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">
+            01 / Notre raison d&apos;être
+          </p>
+          <h2 className="mt-2 font-serif text-4xl font-bold text-ink">Nos Cinq Engagements</h2>
+          <p className="mt-4 max-w-2xl text-ink/60">
+            Né de la volonté de fédérer les dirigeants des organes délibérants, le Cercle
+            accompagne l&apos;État dans sa stratégie de modernisation et de rationalisation
+            du secteur parapublic.
+          </p>
+
+          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+            {ENGAGEMENTS.map(({ numero, titre, texte }, index) => {
+              const isGreen = index % 2 === 0
+              return (
+                <div key={numero} className="flex flex-col items-center text-center">
+                  <div
+                    className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full font-mono text-lg font-bold ${
+                      isGreen ? 'bg-[#14B53A] text-white' : 'bg-[#FCD116] text-[#1B1A17]'
+                    }`}
+                  >
+                    {numero}
+                  </div>
+                  <div className={`mx-auto mt-3 h-0.5 w-10 rounded-full ${isGreen ? 'bg-[#14B53A]' : 'bg-[#FCD116]'}`} />
+                  <h3 className="mt-3 font-serif text-sm font-bold text-ink">{titre}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-ink/60">{texte}</p>
+                </div>
+              )
+            })}
           </div>
 
-          <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-ink/10 bg-ink/10 sm:grid-cols-2 lg:grid-cols-5">
-            {ENGAGEMENTS.map(({ icon: Icon, titre, texte }) => (
-              <div key={titre} className="flex flex-col gap-4 bg-white p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#14B53A]/10 text-[#14B53A]">
-                  <Icon size={22} strokeWidth={1.75} />
-                </div>
-                <h3 className="font-serif text-lg font-medium text-ink">{titre}</h3>
-                <p className="text-sm leading-relaxed text-ink/60">{texte}</p>
-              </div>
-            ))}
+          <div className="mt-12 flex justify-center">
+            <Link
+              href="/a-propos"
+              className="inline-flex items-center gap-2 bg-[#14B53A] text-white px-8 py-3 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors"
+            >
+              En savoir plus <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ── 3. Mot du Président ─────────────────────────────────────────────── */}
-      <section className="bg-[#1B1A17] py-16 sm:py-24">
+      <section className="bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#FCD116]">
-            02 / Mots du président
-          </p>
+          <div className="flex items-center gap-2.5">
+            <span className="h-9 w-3 -skew-x-12 bg-[#14B53A]" />
+            <span className="h-9 w-3 -skew-x-12 bg-[#FCD116]" />
+            <span className="ml-1 font-mono text-xs font-semibold uppercase tracking-[0.3em] text-ink">
+              CAP
+            </span>
+          </div>
+                   <h2 className="mt-4 font-serif text-3xl font-bold text-ink sm:text-4xl">
+                Mot du président
+              </h2>
 
           <div className="mt-10 grid gap-12 lg:grid-cols-5 lg:gap-16">
             <div className="lg:col-span-1">
@@ -269,17 +268,17 @@ export default async function HomePage() {
 
             <div className="flex flex-col justify-center lg:col-span-4">
               {citation ? (
-                <p className="font-serif text-2xl italic leading-relaxed text-white sm:text-3xl">
+                <p className="font-serif text-2xl italic leading-relaxed text-ink sm:text-3xl">
                   « {citation} »
                 </p>
               ) : (
-                <p className="font-serif text-2xl italic leading-relaxed text-white/50 sm:text-3xl">
+                <p className="font-serif text-2xl italic leading-relaxed text-ink/50 sm:text-3xl">
                   Le mot du président n&apos;est pas encore disponible.
                 </p>
               )}
 
               <div className="mt-8">
-                <p className="font-serif text-lg font-medium text-white">
+                <p className="font-serif text-lg font-medium text-ink">
                   {president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'}
                 </p>
                 <p className="mt-1 text-sm text-[#14B53A]">
@@ -289,7 +288,7 @@ export default async function HomePage() {
 
               <Link
                 href="/a-propos/mot-du-president"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#FCD116] transition-colors hover:text-white"
+                className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#14B53A] transition-colors hover:text-ink"
               >
                 Lire le mot du président
                 <ArrowRight size={16} />
@@ -299,211 +298,199 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 4. Bureau exécutif ──────────────────────────────────────────────── */}
-      <section className="bg-[#FBF9F2] py-16 sm:py-24">
+      {/* ── 4. Bureau exécutif ──────────────────────────────────────── */}
+      <BureauCarousel membres={bureau.map(m => ({
+        id: String(m.id),
+        prenom: m.prenom,
+        nom: m.nom,
+        slug: m.slug,
+        photo: m.photo && typeof m.photo === 'object' && 'filename' in m.photo
+          ? { filename: (m.photo as { filename?: string | null }).filename ?? null }
+          : null,
+        poste: m.poste
+          ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
+          : null,
+      }))} />
+
+      {/* ── 5. Nos dernières activités ───────────────────────────────── */}
+      <section className="bg-[#F5F4EF] py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">
-            03 / Gouvernance interne
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">
-            Le Bureau Exécutif
-          </h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink/70">
-            Des présidents de conseils d&apos;administration, de surveillance et d&apos;orientation
-          </p>
-
-          <div className="mt-10 border-t border-ink/10 pt-8">
-            {bureau.length === 0 ? (
-              <p className="text-ink/50">
-                Aucun membre du bureau renseigné pour le moment.
-              </p>
-            ) : (
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-4 text-base">
-                {bureau.map((membre, i) => {
-                  const posteCap   = (membre.poste?.posteCap ?? '').trim()
-                  const organisme  = membre.poste?.organisme
-
-                  return (
-                    <Fragment key={membre.id}>
-                      <Link
-                        href={`/annuaire/${membre.slug || membre.id}`}
-                        className="group inline-flex flex-wrap items-baseline gap-1.5"
-                      >
-                        {posteCap && (
-                          <span className="font-mono text-xs uppercase tracking-wider text-[#14B53A]">
-                            {posteCap}
-                          </span>
-                        )}
-                        <span className="font-medium text-ink transition-colors group-hover:text-[#14B53A]">
-                          {membre.prenom} {membre.nom}
-                        </span>
-                        {organisme && (
-                          <span className="text-ink/40">({organisme})</span>
-                        )}
-                      </Link>
-                      {i < bureau.length - 1 && (
-                        <span className="text-ink/25">·</span>
-                      )}
-                    </Fragment>
-                  )
-                })}
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <span className="h-9 w-3 -skew-x-12 bg-[#14B53A]" />
+                <span className="h-9 w-3 -skew-x-12 bg-[#FCD116]" />
+                <span className="ml-1 font-mono text-xs font-semibold uppercase tracking-[0.3em] text-ink">
+                  CAP
+                </span>
               </div>
-            )}
-          </div>
+              <h2 className="mt-4 font-serif text-3xl font-bold text-ink sm:text-4xl">
+                Nos dernières activités
+              </h2>
+              <p className="mt-2 text-base text-ink/60">
+                Les articles récents qui vous tiennent informés de nos activités
+              </p>
+            </div>
 
-          <div className="mt-10">
             <Link
-              href="/annuaire"
-              className="inline-flex items-center gap-2 rounded-lg border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
+              href="/actualites"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#14B53A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
             >
-              Voir l&apos;annuaire complet
-              <ArrowRight size={16} />
+              Voir plus
+              <ArrowUpRight size={16} />
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* ── 5. Ateliers & séminaires ────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">
-            04 / Activités récentes
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">
-            Ateliers &amp; séminaires
-          </h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink/70">
-            Rencontres dédiées à la formation des présidents d&apos;organes
-          </p>
-
-          <div className="mt-10 flex flex-col divide-y divide-ink/10 border-t border-ink/10">
-            {activites.length === 0 ? (
-              <p className="py-8 text-ink/50">
-                Aucune activité disponible pour le moment.
-              </p>
-            ) : (
-              activites.map(activite => {
-                const href    = activite.slug ? `/activites/${activite.slug}` : '/activites'
-                const excerpt = lexicalToExcerpt(activite.description, 160)
+          {activites.length === 0 ? (
+            <p className="mt-12 text-ink/50">
+              Aucune activité disponible pour le moment.
+            </p>
+          ) : (
+            <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+              {activites.map(activite => {
+                const image = typeof activite.image === 'object' && activite.image
+                  ? (activite.image as Media)
+                  : null
+                const categorie = activite.type === 'atelier' || activite.type === 'seminaire'
+                  ? 'Ateliers et Séminaires'
+                  : 'Actualités'
+                const href = activite.slug ? `/activites/${activite.slug}` : '/activites'
 
                 return (
                   <Link
                     key={activite.id}
                     href={href}
-                    className="group flex flex-col gap-2 py-6 sm:flex-row sm:items-baseline sm:gap-8"
+                    className="group flex flex-col gap-4"
                   >
-                    <div className="flex shrink-0 items-center gap-3 sm:w-56">
-                      {activite.type && (
-                        <span className="rounded-full bg-[#14B53A]/10 px-2.5 py-0.5 font-mono text-xs uppercase tracking-wider text-[#14B53A]">
-                          {TYPE_LABELS[activite.type] ?? activite.type}
-                        </span>
+                    <div className="aspect-[16/10] w-full overflow-hidden rounded-lg bg-ink/10">
+                      {image?.filename && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`/api/media/file/${image.filename}`}
+                          alt={activite.titre}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
                       )}
-                      <span className="font-mono text-xs text-ink/50">
-                        {formatDate(activite.date_debut)}
-                      </span>
                     </div>
 
-                    <div className="flex-1">
-                      <h3 className="font-serif text-lg font-medium text-ink transition-colors group-hover:text-[#14B53A]">
-                        {activite.titre}
-                      </h3>
-                      {excerpt && (
-                        <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink/60">{excerpt}</p>
-                      )}
+                    <div className="flex items-center gap-3">
+                      <span className="rounded-full border border-ink/15 px-3 py-1 text-sm text-ink/70">
+                        {categorie}
+                      </span>
+                      <span className="text-sm text-ink/50">{formatDate(activite.date_debut)}</span>
                     </div>
+
+                    <h3 className="line-clamp-2 font-serif text-xl font-bold text-ink transition-colors group-hover:text-[#14B53A]">
+                      {activite.titre}
+                    </h3>
                   </Link>
                 )
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
 
-          <div className="mt-10">
-            <Link
-              href="/activites"
-              className="inline-flex items-center gap-2 rounded-lg border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
-            >
-              Toutes les activités
-              <ArrowRight size={16} />
-            </Link>
+          <div className="mt-12 flex justify-center">
+            <p className="font-mono text-sm font-semibold text-bordeaux">
+              1 ── {activites.length}
+            </p>
           </div>
         </div>
       </section>
 
       {/* ── 6. CAP Revue ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#1B1A17] py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <section className="bg-[#F5F4EF] py-20">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">PUBLICATION</p>
+          <h2 className="font-serif text-4xl font-bold text-ink mt-2">CAP Revue</h2>
+        </div>
 
-            <div className={magazine ? 'order-2 lg:order-1' : 'text-center lg:col-span-2'}>
-              <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#FCD116]">Publication</p>
-              <h2 className="mt-3 font-serif text-3xl font-medium text-white sm:text-4xl">CAP Revue</h2>
-
-              {magazine ? (
-                <>
-                  <h3 className="mt-6 text-xl font-medium text-white">{magazine.titre}</h3>
-                  {magazine.description && (
-                    <p className="mt-3 leading-relaxed text-white/60">{magazine.description}</p>
-                  )}
-                  <Link
-                    href="/magazines"
-                    className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg bg-[#14B53A] px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
-                  >
-                    Lire le magazine
-                    <ArrowRight size={16} />
-                  </Link>
-                </>
-              ) : (
-                <p className="mx-auto mt-4 max-w-md text-white/60">
-                  Aucun magazine disponible pour le moment. Retrouvez bientôt ici la dernière revue du CAP.
-                </p>
-              )}
+        {magazine ? (
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center max-w-3xl mx-auto mt-12 px-4 text-left">
+            <div>
+              <h3 className="font-serif text-xl font-bold text-ink">{magazine.titre}</h3>
+              <p className="text-ink/60 text-sm leading-relaxed mt-3">
+                {magazine.description ?? "La revue du Cercle des Administrateurs Publics rassemble les analyses, témoignages et réflexions des présidents d'organes délibérants du secteur parapublic sénégalais."}
+              </p>
+              <div className="mt-6 flex gap-4 flex-wrap">
+                <a
+                  href={magazine.fichier && typeof magazine.fichier === 'object' && magazine.fichier.filename
+                    ? `/api/media/file/${magazine.fichier.filename}`
+                    : '/magazines'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#14B53A] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors"
+                >
+                  Lire la revue →
+                </a>
+              </div>
             </div>
 
-            {magazine && (
-              <div className="order-1 lg:order-2">
-                <div className="relative mx-auto aspect-[3/4] w-56 overflow-hidden rounded-xl bg-white/5 shadow-2xl ring-1 ring-white/10">
-                  {couverture?.url ? (
-                    <Image
-                      src={couverture.url}
-                      alt={couverture.alt || magazine.titre}
-                      fill
-                      className="object-cover"
-                      sizes="224px"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-2">
-                      <FileText size={36} className="text-white/20" strokeWidth={1.5} />
-                      <span className="font-mono text-xs uppercase tracking-widest text-white/20">CAP</span>
-                    </div>
-                  )}
-                </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative w-32 aspect-[3/4] rounded-xl overflow-hidden shadow-xl">
+                {couverture?.filename ? (
+                  <Image
+                    src={`/api/media/file/${couverture.filename}`}
+                    alt={couverture.alt || magazine.titre}
+                    fill
+                    className="object-cover"
+                    sizes="128px"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-ink/10">
+                    <FileText size={28} className="text-ink/30" strokeWidth={1.5} />
+                  </div>
+                )}
               </div>
-            )}
-
+              <Link
+                href="/magazines"
+                className="text-[#14B53A] text-sm font-semibold hover:underline"
+              >
+                Voir tous les magazines →
+              </Link>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="max-w-3xl mx-auto mt-12 px-4 text-center">
+            <p className="text-ink/60">Retrouvez bientôt ici la dernière revue du CAP.</p>
+            <Link href="/magazines" className="mt-4 inline-block text-[#14B53A] text-sm font-semibold hover:underline">
+              Voir les magazines →
+            </Link>
+          </div>
+        )}
       </section>
 
       {/* ── 7. Rejoindre le Cercle ───────────────────────────────────────────── */}
-      <section className="bg-[#14B53A] py-16 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/80">
-            Rejoindre le Cercle
-          </p>
-          <h2 className="mt-3 font-serif text-3xl font-medium text-white sm:text-4xl">
-            Vous présidez un organe délibérant du secteur parapublic ?
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/85">
-            Rejoignez un cadre d&apos;échange, de réflexion et de mobilisation au service de la
-            modernisation de l&apos;administration publique sénégalaise.
-          </p>
-          <Link
-            href="/inscription"
-            className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg bg-[#1B1A17] px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-black"
-          >
-            Demander une adhésion
-            <ArrowRight size={16} />
-          </Link>
+      <section className="bg-white py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-2 items-center">
+            <div className="border-l-4 border-[#14B53A] pl-8">
+              <p className="font-mono text-xs uppercase tracking-[0.3em] text-ink/50">
+                Rejoindre le Cercle
+              </p>
+              <h2 className="mt-4 font-serif text-4xl font-bold text-ink sm:text-5xl">
+                Vous présidez un organe délibérant du secteur parapublic ?
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-ink/70">
+                Rejoignez un cadre d&apos;échange, de réflexion et de mobilisation au service de la
+                modernisation de l&apos;administration publique sénégalaise.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-start gap-4">
+              <Link
+                href="/inscription"
+                className="rounded-lg bg-[#14B53A] px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
+              >
+                Demander une adhésion
+              </Link>
+              <Link
+                href="/contact"
+                className="text-base font-semibold text-ink transition-colors hover:text-[#14B53A]"
+              >
+                Nous contacter →
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>
