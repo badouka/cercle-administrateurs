@@ -444,7 +444,7 @@ export default async function HomePage() {
               </div>
 
               {/* Colonne droite */}
-              <div className="bg-[#1B1A17] overflow-hidden flex items-center justify-center p-6">
+              <div className="bg-[#F5F4EF] overflow-hidden flex items-center justify-center p-6">
                 <div className="relative w-full h-full min-h-[300px] rounded-none overflow-hidden">
                   {couverture?.filename ? (
                     <Image
