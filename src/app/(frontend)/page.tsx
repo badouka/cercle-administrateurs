@@ -405,8 +405,8 @@ export default async function HomePage() {
         </div>
 
         {magazine ? (
-          <div className="max-w-3xl mx-auto px-4">
-            <div className="rounded-2xl overflow-hidden shadow-xl grid grid-cols-[1fr_220px]">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="rounded-2xl overflow-hidden shadow-xl grid grid-cols-[1fr_1fr]">
 
               {/* Colonne gauche */}
               <div className="bg-white p-10 flex flex-col justify-center">
@@ -421,7 +421,7 @@ export default async function HomePage() {
                   {magazine.titre}
                 </p>
                 <p className="text-ink/60 text-sm leading-relaxed mt-4">
-                  {magazine.description ?? "La revue du Cercle rassemble les analyses, témoignages et réflexions des présidents d'organes délibérants du secteur parapublic sénégalais."}
+                  {magazine.description ?? "Le Sénégal se trouve aujourd’hui à un moment charnière de son histoire institutionnelle et économique. Alors que l’Agenda National de Transformation exige un appareil public performant, un secteur financier robuste et des mécanismes de financement innovants, une réalité s’impose : les outils existent, mais leur mise en œuvre demeure incomplète. C’est cette tension entre ambition et exécution que révèlent les contributions réunies dans ce numéro du CAP..."}
                 </p>
                 <div className="mt-6 flex flex-col gap-3">
                   <a
