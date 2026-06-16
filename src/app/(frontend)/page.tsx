@@ -399,58 +399,73 @@ export default async function HomePage() {
 
       {/* ── 6. CAP Revue ─────────────────────────────────────────────────────── */}
       <section className="bg-[#F5F4EF] py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+        <div className="max-w-4xl mx-auto px-4 text-center mb-12">
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">PUBLICATION</p>
           <h2 className="font-serif text-4xl font-bold text-ink mt-2">CAP Revue</h2>
         </div>
 
         {magazine ? (
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center max-w-3xl mx-auto mt-12 px-4 text-left">
-            <div>
-              <h3 className="font-serif text-xl font-bold text-ink">{magazine.titre}</h3>
-              <p className="text-ink/60 text-sm leading-relaxed mt-3">
-                {magazine.description ?? "La revue du Cercle des Administrateurs Publics rassemble les analyses, témoignages et réflexions des présidents d'organes délibérants du secteur parapublic sénégalais."}
-              </p>
-              <div className="mt-6 flex gap-4 flex-wrap">
-                <a
-                  href={magazine.fichier && typeof magazine.fichier === 'object' && magazine.fichier.filename
-                    ? `/api/media/file/${magazine.fichier.filename}`
-                    : '/magazines'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#14B53A] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors"
-                >
-                  Lire la revue →
-                </a>
-              </div>
-            </div>
+          <div className="max-w-3xl mx-auto px-4">
+            <div className="rounded-2xl overflow-hidden shadow-xl grid grid-cols-[1fr_220px]">
 
-            <div className="flex flex-col items-center gap-4">
-              <div className="relative w-32 aspect-[3/4] rounded-xl overflow-hidden shadow-xl">
-                {couverture?.filename ? (
-                  <Image
-                    src={`/api/media/file/${couverture.filename}`}
-                    alt={couverture.alt || magazine.titre}
-                    fill
-                    className="object-cover"
-                    sizes="128px"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-ink/10">
-                    <FileText size={28} className="text-ink/30" strokeWidth={1.5} />
-                  </div>
-                )}
+              {/* Colonne gauche */}
+              <div className="bg-white p-10 flex flex-col justify-center">
+                <div className="inline-flex items-center gap-2">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="0" y="0" width="8" height="20" fill="#14B53A" />
+                    <rect x="10" y="0" width="10" height="20" fill="#FCD116" />
+                  </svg>
+                  <span className="font-serif text-xl font-bold text-ink">CAP Revue</span>
+                </div>
+                <p className="font-mono text-xs text-[#14B53A] tracking-widest mt-2">
+                  {magazine.titre}
+                </p>
+                <p className="text-ink/60 text-sm leading-relaxed mt-4">
+                  {magazine.description ?? "La revue du Cercle rassemble les analyses, témoignages et réflexions des présidents d’organes délibérants du secteur parapublic sénégalais."}
+                </p>
+                <div className="mt-6 flex flex-col gap-3">
+                  <a
+                    href={magazine.fichier && typeof magazine.fichier === ‘object’ && magazine.fichier.filename
+                      ? `/api/media/file/${magazine.fichier.filename}`
+                      : ‘/magazines’}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#14B53A] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors text-center"
+                  >
+                    Lire la revue →
+                  </a>
+                  <Link
+                    href="/magazines"
+                    className="border border-ink/20 text-ink/60 px-5 py-2.5 rounded-lg text-sm font-semibold hover:border-[#14B53A] hover:text-[#14B53A] transition-colors text-center"
+                  >
+                    Voir tous les magazines
+                  </Link>
+                </div>
               </div>
-              <Link
-                href="/magazines"
-                className="text-[#14B53A] text-sm font-semibold hover:underline"
-              >
-                Voir tous les magazines →
-              </Link>
+
+              {/* Colonne droite */}
+              <div className="bg-[#1B1A17] flex items-center justify-center p-6">
+                <div className="relative w-36 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl border border-white/10">
+                  {couverture?.filename ? (
+                    <Image
+                      src={`/api/media/file/${couverture.filename}`}
+                      alt={couverture.alt || magazine.titre}
+                      fill
+                      className="object-cover"
+                      sizes="144px"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-white/10">
+                      <FileText size={28} className="text-white/20" strokeWidth={1.5} />
+                    </div>
+                  )}
+                </div>
+              </div>
+
             </div>
           </div>
         ) : (
-          <div className="max-w-3xl mx-auto mt-12 px-4 text-center">
+          <div className="max-w-3xl mx-auto px-4 text-center">
             <p className="text-ink/60">Retrouvez bientôt ici la dernière revue du CAP.</p>
             <Link href="/magazines" className="mt-4 inline-block text-[#14B53A] text-sm font-semibold hover:underline">
               Voir les magazines →
