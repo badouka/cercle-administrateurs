@@ -27,7 +27,6 @@ const CATEGORIE_FILTERS = [
   { value: 'textes_reglementaires', label: 'Textes réglementaires' },
   { value: 'pv_reunion',            label: 'PV de réunion' },
   { value: 'ressources',            label: 'Ressources' },
-  { value: 'magazines',             label: 'Magazines' },
 ]
 
 const ACCES_FILTERS = [
