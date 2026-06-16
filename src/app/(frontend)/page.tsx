@@ -421,13 +421,13 @@ export default async function HomePage() {
                   {magazine.titre}
                 </p>
                 <p className="text-ink/60 text-sm leading-relaxed mt-4">
-                  {magazine.description ?? "La revue du Cercle rassemble les analyses, témoignages et réflexions des présidents d’organes délibérants du secteur parapublic sénégalais."}
+                  {magazine.description ?? "La revue du Cercle rassemble les analyses, témoignages et réflexions des présidents d'organes délibérants du secteur parapublic sénégalais."}
                 </p>
                 <div className="mt-6 flex flex-col gap-3">
                   <a
-                    href={magazine.fichier && typeof magazine.fichier === ‘object’ && magazine.fichier.filename
+                    href={magazine.fichier && typeof magazine.fichier === 'object' && magazine.fichier.filename
                       ? `/api/media/file/${magazine.fichier.filename}`
-                      : ‘/magazines’}
+                      : '/magazines'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-[#14B53A] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors text-center"
