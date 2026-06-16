@@ -13,7 +13,7 @@ export function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
     <section
       className="relative min-h-[200px] pt-24"
       style={{
-        backgroundImage: "url('/api/media/file/banner-1.png')",
+        backgroundImage: "url('/api/media/file/banner.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
