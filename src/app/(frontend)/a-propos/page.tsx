@@ -53,27 +53,27 @@ const MISSIONS = [
   {
     icon:  GraduationCap,
     titre: 'Renforcer les capacités',
-    texte: "Le CAP organise des programmes de formation continue centrés sur les enjeux concrets du mandat d’administrateur : lecture et analyse des états financiers, évaluation des contrats de performance, gestion des risques, commande publique, gouvernance des ressources humaines. La compétence technique est la première condition de l’indépendance de jugement.",
+    texte: "Offrir aux administrateurs publics les formations, outils et retours d'expérience nécessaires pour exercer leurs fonctions avec compétence et rigueur.",
   },
   {
     icon:  Award,
     titre: 'Promouvoir les meilleures pratiques',
-    texte: "Le CAP documente, diffuse et promeut les pratiques de gouvernance les plus efficaces au sein du secteur parapublic sénégalais et à travers les expériences africaines les plus probantes. Il produit des référentiels, des guides et des outils opérationnels à disposition de ses membres.",
+    texte: "Diffuser les standards de bonne gouvernance, d'éthique et de performance au sein des conseils d'administration et de surveillance.",
   },
   {
     icon:  MessageSquare,
     titre: 'Structurer le dialogue institutionnel',
-    texte: "Le CAP entretient un dialogue permanent avec les ministères de tutelle, la Direction Générale du Secteur Parapublic, le Comité de Suivi du Secteur Parapublic et les corps de contrôle de l’État. Il contribue à la cohérence entre les orientations stratégiques de l’État actionnaire et leur mise en œuvre au sein des entités parapubliques.",
+    texte: "Créer un cadre d'échange permanent entre administrateurs, autorités de tutelle et partenaires autour des enjeux du secteur parapublic.",
   },
   {
     icon:  Lightbulb,
     titre: 'Être une force de proposition',
-    texte: "Le CAP promeut auprès de ses membres une culture de la performance qui place l’atteinte des objectifs au même niveau que la conformité réglementaire. Il œuvre à ce que chaque entité du secteur parapublic dispose d’un contrat de performance réel, d’un tableau de bord opérationnel et d’un organe délibérant qui en assure le suivi effectif.",
+    texte: "Formuler des recommandations concrètes pour l'amélioration des politiques et des cadres de gouvernance publique.",
   },
   {
     icon:  Target,
     titre: "Incarner l'exigence de résultats",
-    texte: "Le CAP promeut auprès de ses membres une culture de la performance qui place l’atteinte des objectifs au même niveau que la conformité réglementaire. Il œuvre à ce que chaque entité du secteur parapublic dispose d’un contrat de performance réel, d’un tableau de bord opérationnel et d’un organe délibérant qui en assure le suivi effectif.",
+    texte: "Ancrer une culture de la performance, de la redevabilité et de l'impact au service du développement durable.",
   },
 ]
 
