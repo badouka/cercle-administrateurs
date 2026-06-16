@@ -1,97 +1,67 @@
 'use client'
 
-import { useState } from 'react'
-import { FileText, Download, Lock } from 'lucide-react'
+import { useMemo, useState } from 'react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type DocumentCategorie =
-  | 'textes_statutaires'
-  | 'textes_reglementaires'
-  | 'docs_politique_economique'
-  | 'pv_reunion'
-  | 'ressources'
-
 interface DocMedia {
   url?: string | null
+  filename?: string | null
   filesize?: number | null
 }
 
 interface Doc {
   id: number | string
   titre: string
-  description?: string | null
   categorie: string
   acces: string
+  createdAt: string
   fichier?: DocMedia | null
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const CATEGORIES_PUBLIC: { value: DocumentCategorie | 'all'; label: string }[] = [
-  { value: 'all',                        label: 'Tous' },
-  { value: 'textes_statutaires',         label: 'Textes statutaires' },
-  { value: 'textes_reglementaires',      label: 'Textes réglementaires' },
-  { value: 'docs_politique_economique',  label: 'Docs politique éco.' },
+const CATEGORIE_FILTERS = [
+  { value: 'all',                   label: 'Tous' },
+  { value: 'textes_statutaires',    label: 'Textes statutaires' },
+  { value: 'textes_reglementaires', label: 'Textes réglementaires' },
+  { value: 'pv_reunion',            label: 'PV de réunion' },
+  { value: 'ressources',            label: 'Ressources' },
+  { value: 'magazines',             label: 'Magazines' },
 ]
 
-const CATEGORIES_MEMBRE: { value: DocumentCategorie | 'all'; label: string }[] = [
-  ...CATEGORIES_PUBLIC,
-  { value: 'pv_reunion',   label: 'PV de réunion' },
-  { value: 'ressources',   label: 'Ressources' },
+const ACCES_FILTERS = [
+  { value: 'public',  label: '🌐 Public' },
+  { value: 'membres', label: '🔒 Membres' },
 ]
 
-const CATEGORIE_CONFIG: Record<DocumentCategorie, {
-  label:       string
-  description: string
-  badge:       string
-  badgeClass:  string
-}> = {
-  textes_statutaires: {
-    label:       'Textes statutaires',
-    description: 'Statuts, règlements intérieurs et textes constitutifs du CAP.',
-    badge:       'Statutaire',
-    badgeClass:  'bg-black text-white',
-  },
-  textes_reglementaires: {
-    label:       'Textes réglementaires',
-    description: 'Décrets, lois, circulaires et textes officiels de référence.',
-    badge:       'Réglementaire',
-    badgeClass:  'bg-gray-700 text-white',
-  },
-  docs_politique_economique: {
-    label:       'Politique économique',
-    description: 'Documents de politique économique et stratégies de développement.',
-    badge:       'Politique éco.',
-    badgeClass:  'bg-gray-400 text-white',
-  },
-  pv_reunion: {
-    label:       'PV de réunion',
-    description: 'Procès-verbaux des réunions et assemblées du CAP.',
-    badge:       'PV',
-    badgeClass:  'bg-gray-800 text-white',
-  },
-  ressources: {
-    label:       'Ressources',
-    description: 'Ressources documentaires et supports de formation.',
-    badge:       'Ressource',
-    badgeClass:  'bg-gray-600 text-white',
-  },
+const CATEGORIE_BADGE: Record<string, { label: string; className: string }> = {
+  textes_statutaires:        { label: 'Statutaire',     className: 'bg-[#14B53A]/15 text-[#14B53A]' },
+  textes_reglementaires:     { label: 'Réglementaire',  className: 'bg-[#FCD116]/20 text-[#b8870a]' },
+  pv_reunion:                { label: 'PV Réunion',     className: 'bg-ink/10 text-ink/60' },
+  ressources:                { label: 'Ressource',      className: 'bg-blue-50 text-blue-700' },
+  magazines:                 { label: 'Magazine',       className: 'bg-purple-50 text-purple-700' },
+  docs_politique_economique: { label: 'Politique éco.', className: 'bg-ink/10 text-ink/60' },
 }
 
-const ORDERED_CATEGORIES_PUBLIC: DocumentCategorie[] = [
-  'textes_statutaires',
-  'textes_reglementaires',
-  'docs_politique_economique',
-]
+const FILE_TYPE_BADGE: Record<string, { label: string; className: string }> = {
+  pdf:  { label: 'PDF',  className: 'bg-red-50 text-red-600' },
+  doc:  { label: 'DOC',  className: 'bg-indigo-50 text-indigo-600' },
+  docx: { label: 'DOC',  className: 'bg-indigo-50 text-indigo-600' },
+  xls:  { label: 'XLSX', className: 'bg-blue-50 text-blue-700' },
+  xlsx: { label: 'XLSX', className: 'bg-blue-50 text-blue-700' },
+  ppt:  { label: 'PPT',  className: 'bg-orange-50 text-orange-600' },
+  pptx: { label: 'PPT',  className: 'bg-orange-50 text-orange-600' },
+}
 
-const ORDERED_CATEGORIES_MEMBRE: DocumentCategorie[] = [
-  ...ORDERED_CATEGORIES_PUBLIC,
-  'pv_reunion',
-  'ressources',
-]
+const MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  return `${d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}`
+}
 
 function formatFilesize(bytes?: number | null): string {
   if (!bytes) return ''
@@ -100,127 +70,165 @@ function formatFilesize(bytes?: number | null): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+function getCategorieBadge(categorie: string) {
+  return CATEGORIE_BADGE[categorie] ?? { label: categorie, className: 'bg-ink/10 text-ink/60' }
+}
 
-export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn: boolean }) {
-  const [active, setActive] = useState<DocumentCategorie | 'all'>('all')
+function getFileTypeBadge(filename?: string | null) {
+  const ext = (filename?.split('.').pop() ?? '').toLowerCase()
+  return FILE_TYPE_BADGE[ext] ?? { label: ext ? ext.toUpperCase() : 'FILE', className: 'bg-ink/10 text-ink/40' }
+}
 
-  const categories    = isLoggedIn ? CATEGORIES_MEMBRE        : CATEGORIES_PUBLIC
-  const orderedCats   = isLoggedIn ? ORDERED_CATEGORIES_MEMBRE : ORDERED_CATEGORIES_PUBLIC
+// ─── Sous-composants ──────────────────────────────────────────────────────────
 
-  const filtered = active === 'all' ? docs : docs.filter(d => d.categorie === active)
+function DocCard({ doc, isLoggedIn }: { doc: Doc; isLoggedIn: boolean }) {
+  const categorieBadge = getCategorieBadge(doc.categorie)
+  const fileBadge      = getFileTypeBadge(doc.fichier?.filename)
+  const filesize       = formatFilesize(doc.fichier?.filesize)
+  const isLocked       = doc.acces === 'membres' && !isLoggedIn
 
-  const grouped = Object.fromEntries(
-    orderedCats.map(cat => [cat, filtered.filter(d => d.categorie === cat)]),
-  ) as Record<DocumentCategorie, Doc[]>
-
-  const visibleCategories = active === 'all'
-    ? orderedCats.filter(cat => grouped[cat].length > 0)
-    : (orderedCats.includes(active as DocumentCategorie) && grouped[active as DocumentCategorie]?.length > 0
-        ? [active as DocumentCategorie]
-        : [])
-
-  return (
+  const content = (
     <>
-      {/* Filter buttons */}
-      <div className="mb-8 flex flex-wrap gap-2">
-        {categories.map(({ value, label }) => (
-          <button
-            key={value}
-            onClick={() => setActive(value)}
-            className={
-              active === value
-                ? 'rounded-lg bg-black px-4 py-2 text-sm font-semibold text-white transition-colors'
-                : 'rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-black hover:border-black transition-colors'
-            }
-          >
-            {label}
-            {value !== 'all' && (
-              <span className="ml-1.5 text-xs opacity-60">
-                ({docs.filter(d => d.categorie === value).length})
-              </span>
-            )}
-          </button>
-        ))}
+      <div className={`flex h-14 w-12 flex-shrink-0 items-center justify-center rounded-lg text-xs font-bold ${fileBadge.className}`}>
+        {fileBadge.label}
+      </div>
+      <div className="min-w-0">
+        <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${categorieBadge.className}`}>
+          {categorieBadge.label}
+        </span>
+        <p className="mt-1 line-clamp-2 text-sm font-semibold text-ink">{doc.titre}</p>
+        <p className="mt-1 text-xs text-ink/40">
+          {formatDate(doc.createdAt)}{filesize && ` · ${filesize}`}
+        </p>
       </div>
 
-      {/* Document list */}
-      {filtered.length === 0 ? (
-        <p className="text-gray-500">Aucun document dans cette catégorie.</p>
-      ) : (
-        <div className="space-y-12">
-          {visibleCategories.map(cat => {
-            const catDocs   = grouped[cat]
-            const catConfig = CATEGORIE_CONFIG[cat]
-
-            return (
-              <section key={cat}>
-                <div className="mb-5 flex items-end justify-between border-b-2 border-black pb-3">
-                  <div>
-                    <h2 className="text-xl font-bold text-black">{catConfig.label}</h2>
-                    <p className="mt-0.5 text-sm text-gray-500">{catConfig.description}</p>
-                  </div>
-                  <span className="shrink-0 rounded-full bg-[#F5F5F5] px-3 py-0.5 text-sm font-medium text-gray-700">
-                    {catDocs.length}
-                  </span>
-                </div>
-
-                <ul className="divide-y divide-gray-100">
-                  {catDocs.map(doc => {
-                    const filesize  = formatFilesize(doc.fichier?.filesize)
-                    const isMembre  = doc.acces === 'membres'
-
-                    return (
-                      <li key={doc.id} className="flex items-start gap-4 py-4">
-                        <div className="mt-0.5 shrink-0 rounded-lg bg-[#F5F5F5] p-2.5">
-                          <FileText size={18} className="text-gray-600" />
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-medium text-black leading-snug">{doc.titre}</p>
-                            <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${catConfig.badgeClass}`}>
-                              {catConfig.badge}
-                            </span>
-                            {isMembre && (
-                              <span className="inline-flex items-center gap-1 shrink-0 rounded-full border border-gray-300 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
-                                <Lock size={9} />
-                                Membres
-                              </span>
-                            )}
-                          </div>
-                          {doc.description && (
-                            <p className="mt-0.5 text-sm text-gray-500 line-clamp-2">
-                              {doc.description}
-                            </p>
-                          )}
-                          {filesize && (
-                            <p className="mt-0.5 text-xs text-gray-400">PDF · {filesize}</p>
-                          )}
-                        </div>
-
-                        {doc.fichier?.url && (
-                          <a
-                            href={doc.fichier.url}
-                            download
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-black px-3 py-2 text-xs font-semibold text-black hover:bg-black hover:text-white transition-colors"
-                            title={`Télécharger ${doc.titre}`}
-                          >
-                            <Download size={13} />
-                            PDF
-                          </a>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </section>
-            )
-          })}
+      {isLocked && (
+        <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/70 text-xl">
+          🔒
         </div>
       )}
     </>
+  )
+
+  if (isLocked) {
+    return (
+      <div className="relative flex cursor-not-allowed items-start gap-3 rounded-xl border border-ink/10 bg-white p-4">
+        {content}
+      </div>
+    )
+  }
+
+  return (
+    <a
+      href={`/api/media/file/${doc.fichier?.filename ?? ''}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="relative flex cursor-pointer items-start gap-3 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-[#14B53A]/30"
+    >
+      {content}
+    </a>
+  )
+}
+
+// ─── Composant principal ──────────────────────────────────────────────────────
+
+export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn: boolean }) {
+  const [selectedFilter, setSelectedFilter] = useState('all')
+  const [searchQuery, setSearchQuery]        = useState('')
+
+  const categorieCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const doc of docs) counts[doc.categorie] = (counts[doc.categorie] ?? 0) + 1
+    return counts
+  }, [docs])
+
+  const filtered = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    return docs.filter(doc => {
+      if (selectedFilter === 'public' || selectedFilter === 'membres') {
+        if (doc.acces !== selectedFilter) return false
+      } else if (selectedFilter !== 'all') {
+        if (doc.categorie !== selectedFilter) return false
+      }
+      if (query && !doc.titre.toLowerCase().includes(query)) return false
+      return true
+    })
+  }, [docs, selectedFilter, searchQuery])
+
+  return (
+    <div className="mx-auto grid max-w-7xl grid-cols-[220px_1fr] gap-6 px-4 py-8">
+
+      {/* COLONNE GAUCHE — Filtres */}
+      <aside className="h-fit rounded-xl border border-ink/10 bg-white p-5">
+        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#14B53A]">Filtres</p>
+
+        <p className="mb-2 text-xs font-semibold uppercase text-ink/50">Catégorie</p>
+        <ul className="flex flex-col gap-1">
+          {CATEGORIE_FILTERS.map(({ value, label }) => {
+            const active = selectedFilter === value
+            const count  = value === 'all' ? docs.length : (categorieCounts[value] ?? 0)
+            return (
+              <li key={value}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFilter(value)}
+                  className={`flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors ${
+                    active ? 'bg-[#14B53A] font-semibold text-white' : 'text-ink/70 hover:bg-ink/5'
+                  }`}
+                >
+                  <span>{label}</span>
+                  <span className={active ? 'rounded-full bg-white px-2 py-0.5 text-xs text-[#14B53A]' : 'text-xs text-ink/40'}>
+                    {count}
+                  </span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+
+        <div className="my-4 border-t border-ink/10" />
+
+        <p className="mb-2 text-xs font-semibold uppercase text-ink/50">Accès</p>
+        <ul className="flex flex-col gap-1">
+          {ACCES_FILTERS.map(({ value, label }) => {
+            const active = selectedFilter === value
+            return (
+              <li key={value}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFilter(active ? 'all' : value)}
+                  className={`flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors ${
+                    active ? 'bg-[#14B53A] font-semibold text-white' : 'text-ink/70 hover:bg-ink/5'
+                  }`}
+                >
+                  <span>{label}</span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </aside>
+
+      {/* COLONNE DROITE — Recherche + grille */}
+      <div>
+        <input
+          type="search"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="Rechercher un document…"
+          className="mb-6 w-full rounded-xl border border-ink/10 bg-white px-5 py-3 text-sm focus:border-[#14B53A] focus:outline-none"
+        />
+
+        {filtered.length === 0 ? (
+          <p className="text-ink/50">Aucun document trouvé.</p>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {filtered.map(doc => (
+              <DocCard key={doc.id} doc={doc} isLoggedIn={isLoggedIn} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
