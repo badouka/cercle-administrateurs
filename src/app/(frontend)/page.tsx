@@ -444,8 +444,8 @@ export default async function HomePage() {
               </div>
 
               {/* Colonne droite */}
-              <div className="bg-[#1B1A17] flex items-center justify-center p-6">
-                <div className="relative w-36 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl border border-white/10">
+              <div className="bg-[#1B1A17] flex items-center justify-center overflow-hidden">
+                <div className="relative w-full h-full min-h-[300px] rounded-none overflow-hidden">
                   {couverture?.filename ? (
                     <Image
                       src={`/api/media/file/${couverture.filename}`}
