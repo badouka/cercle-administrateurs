@@ -1,19 +1,9 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { Membre, Media } from '@/payload-types'
-import {
-  ChevronRight,
-  GraduationCap,
-  Award,
-  MessageSquare,
-  Lightbulb,
-  Target,
-  User,
-  ArrowRight,
-} from 'lucide-react'
+import type { Membre } from '@/payload-types'
+import { BureauAutoCarousel } from '@/components/BureauAutoCarousel'
+import { PageHero } from '@/components/PageHero'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -49,33 +39,42 @@ function isAuBureau(m: Membre): boolean {
   return posteCap !== '' && posteCap !== 'Membre'
 }
 
-const MISSIONS = [
+const ENGAGEMENTS = [
   {
-    icon:  GraduationCap,
-    titre: 'Renforcer les capacités',
-    texte: "Offrir aux administrateurs publics les formations, outils et retours d'expérience nécessaires pour exercer leurs fonctions avec compétence et rigueur.",
+    numero: '01',
+    titre:  'Renforcer les capacités',
+    texte:  "Le CAP organise des programmes de formation continue centrés sur les enjeux concrets du mandat d'administrateur : lecture et analyse des états financiers, évaluation des contrats de performance, gestion des risques.",
   },
   {
-    icon:  Award,
-    titre: 'Promouvoir les meilleures pratiques',
-    texte: "Diffuser les standards de bonne gouvernance, d'éthique et de performance au sein des conseils d'administration et de surveillance.",
+    numero: '02',
+    titre:  'Promouvoir les meilleures pratiques',
+    texte:  "Le CAP documente, diffuse et promeut les pratiques de gouvernance les plus efficaces au sein du secteur parapublic sénégalais et à travers les expériences africaines les plus probantes.",
   },
   {
-    icon:  MessageSquare,
-    titre: 'Structurer le dialogue institutionnel',
-    texte: "Créer un cadre d'échange permanent entre administrateurs, autorités de tutelle et partenaires autour des enjeux du secteur parapublic.",
+    numero: '03',
+    titre:  'Structurer le dialogue institutionnel',
+    texte:  "Le CAP entretient un dialogue permanent avec les ministères de tutelle, la Direction Générale du Secteur Parapublic et les corps de contrôle de l'État.",
   },
   {
-    icon:  Lightbulb,
-    titre: 'Être une force de proposition',
-    texte: "Formuler des recommandations concrètes pour l'amélioration des politiques et des cadres de gouvernance publique.",
+    numero: '04',
+    titre:  'Être une force de proposition',
+    texte:  "Le CAP soumet aux pouvoirs publics des recommandations fondées sur l'expérience de terrain de ses membres pour améliorer le cadre législatif et réglementaire.",
   },
   {
-    icon:  Target,
-    titre: "Incarner l'exigence de résultats",
-    texte: "Ancrer une culture de la performance, de la redevabilité et de l'impact au service du développement durable.",
+    numero: '05',
+    titre:  "Incarner l'exigence de résultats",
+    texte:  "Le CAP promeut une culture de la performance qui place l'atteinte des objectifs au même niveau que la conformité réglementaire.",
   },
 ]
+
+function LogoMark() {
+  return (
+    <div className="flex items-center gap-1">
+      <span className="h-8 w-2.5 -skew-x-12 bg-[#14B53A]" />
+      <span className="h-8 w-2.5 -skew-x-12 bg-[#FCD116]" />
+    </div>
+  )
+}
 
 export const metadata: Metadata = {
   title: 'Qui sommes-nous ? — CAP',
@@ -104,190 +103,166 @@ export default async function AProposPage() {
 
   return (
     <div>
-      {/* ── 1. Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-ink bg-grain">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#14B53A]/25 via-ink to-ink" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <nav aria-label="Fil d'Ariane" className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-white/50">
-            <Link href="/" className="transition-colors hover:text-[#FCD116]">
-              Accueil
-            </Link>
-            <ChevronRight size={14} className="text-white/30" />
-            <span className="text-white/80">Qui sommes-nous ?</span>
-          </nav>
-          <h1 className="mt-6 font-serif text-4xl font-medium text-white sm:text-5xl lg:text-6xl">
-            Qui sommes-nous ?
-          </h1>
-          <div className="mt-6 h-1 w-16 rounded-full bg-[#FCD116]" />
-        </div>
-      </section>
+      <PageHero
+        title="Qui sommes-nous?"
+        breadcrumb={[{ label: 'Accueil', href: '/' }, { label: 'À propos', href: '/a-propos' }]}
+      />
 
-      {/* ── 2. Vision ───────────────────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">Notre raison d&apos;être</p>
-              <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">Notre Vision</h2>
-              <p className="mt-6 text-lg leading-relaxed text-ink/70">
-                Être le pilier de référence de la gouvernance du secteur parapublic sénégalais — un cercle
-                d&apos;excellence où chaque administrateur public est un acteur conscient, compétent et engagé
-                de la transformation nationale, au service du développement durable et de l&apos;intérêt général.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-6">
-              {MISSIONS.map(({ icon: Icon, titre, texte }) => (
-                <div key={titre} className="flex gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#14B53A]/10 text-[#14B53A]">
-                    <Icon size={22} strokeWidth={1.75} />
-                  </div>
-                  <div>
-                    <h3 className="font-serif text-lg font-medium text-ink">{titre}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-ink/60">{texte}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. Contexte ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#F5F5F5] py-16 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">Contexte</p>
-            <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">
-              Le secteur parapublic sénégalais
+      {/* ── 1. Diagnostic ───────────────────────────────────────────────────── */}
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="mb-4 flex items-center gap-3">
+            <LogoMark />
+            <h2 className="font-serif text-2xl font-bold text-ink">
+              Un secteur parapublic au cœur de la transformation nationale
             </h2>
           </div>
+          <p className="text-base leading-relaxed text-ink/70">
+            Le secteur parapublic sénégalais occupe une place stratégique dans l&apos;architecture
+            de l&apos;État. Entreprises nationales, établissements publics, agences
+            d&apos;exécution, offices et fonds : ces entités sont le bras opérationnel des
+            politiques publiques, les instruments par lesquels l&apos;État traduit ses ambitions
+            en actes concrets au bénéfice des citoyens. Leur performance n&apos;est pas une
+            question de gestion interne — c&apos;est une question de souveraineté économique et
+            de développement national.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-ink/70">
+            Or ce secteur traverse une période charnière. La loi d&apos;orientation n°2022-08 a
+            posé les fondations d&apos;une gouvernance modernisée. Les décrets d&apos;application
+            de 2025 ont précisé les règles de fonctionnement des organes délibérants, institué le
+            Comité de Suivi du Secteur Parapublic et fixé les statuts-types des sociétés
+            nationales. Le Plan de Transformation Sénégal 2050 du Président Bassirou Diomaye Faye
+            a élevé la performance de l&apos;administration publique au rang de priorité
+            nationale. Le cadre existe. L&apos;ambition est affirmée.
+          </p>
+          <p className="mt-4 text-base font-bold leading-relaxed text-ink">
+            Il reste à accomplir l&apos;essentiel : opérationnaliser ces réformes dans la réalité
+            quotidienne des entités parapubliques.
+          </p>
 
-          <div className="flex flex-col gap-6 text-base leading-relaxed text-ink/70">
-            <p>
-              Le secteur parapublic sénégalais regroupe les sociétés nationales, les sociétés à
-              participation publique, les agences et les établissements publics qui concourent,
-              chacun dans son domaine, à la mise en œuvre des politiques de l&apos;État. La loi
-              n° 2022-08 portant réforme du cadre de gouvernance du secteur parapublic a profondément
-              renouvelé les règles applicables aux organes dirigeants de ces entités, en renforçant
-              les exigences de compétence, d&apos;intégrité et de redevabilité attendues des
-              administrateurs publics.
-            </p>
-            <p>
-              Cette réforme s&apos;est poursuivie en 2025 avec l&apos;adoption de plusieurs décrets
-              d&apos;application précisant les modalités de désignation, de formation et
-              d&apos;évaluation des administrateurs siégeant dans les conseils d&apos;administration
-              et de surveillance. Ces textes consacrent la professionnalisation de la fonction
-              d&apos;administrateur public et instaurent de nouvelles obligations en matière de
-              reddition de comptes et de pilotage stratégique des entreprises et organismes publics.
-            </p>
-            <p>
-              Cette dynamique s&apos;inscrit pleinement dans la Vision Sénégal 2050, qui fait de la
-              bonne gouvernance et de l&apos;efficacité de l&apos;action publique des leviers
-              essentiels de la transformation économique et sociale du pays. Les administrateurs
-              publics se trouvent ainsi placés au cœur de cette ambition, en tant que relais de la
-              performance et de la transparence au sein des entités du secteur parapublic.
-            </p>
+          <div className="my-12 border-t border-ink/10" />
+
+          <div className="mb-4 flex items-center gap-3">
+            <LogoMark />
+            <h2 className="font-serif text-2xl font-bold text-ink">Un diagnostic lucide</h2>
+          </div>
+          <p className="text-base leading-relaxed text-ink/70">
+            L&apos;expérience accumulée au sein du secteur révèle un écart persistant entre la
+            qualité du cadre normatif et la réalité des pratiques. Les contrats de performance
+            existent rarement à l&apos;état de véritables engagements évalués. Les comités
+            d&apos;audit fonctionnent trop souvent comme des organes de validation formelle plutôt
+            que comme des outils de pilotage des risques. Les plans stratégiques pluriannuels sont
+            adoptés en conseil mais rarement revisités en cours d&apos;exercice. La culture de la
+            reddition des comptes et de la mesure des résultats peine à s&apos;imposer face à une
+            logique procédurale qui privilégie la conformité sur la performance.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-ink/70">
+            Cette situation ne reflète pas un manque de textes. Elle révèle un déficit de doctrine
+            opérationnelle, de formation adaptée et de dialogue institutionnel structuré entre les
+            organes délibérants, les directions générales et les autorités de tutelle. C&apos;est
+            précisément ce vide que le CAP a vocation à combler.
+          </p>
+
+          <div className="my-12 border-t border-ink/10" />
+
+          <div className="mb-4 flex items-center gap-3">
+            <LogoMark />
+            <h2 className="font-serif text-2xl font-bold text-ink">La raison d&apos;être du CAP</h2>
+          </div>
+          <p className="text-base leading-relaxed text-ink/70">
+            C&apos;est pour répondre à ce défi que le Cercle des Administrateurs Publics a été
+            créé le 12 octobre 2024. Le CAP rassemble les présidents des conseils
+            d&apos;administration, de surveillance et d&apos;orientation des entités du secteur
+            parapublic autour d&apos;une conviction fondatrice : la qualité de la gouvernance se
+            construit d&apos;abord dans les organes délibérants, et la performance d&apos;une
+            entité publique dépend avant tout de la compétence, de la posture et de
+            l&apos;exigence collective de ceux qui la dirigent.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-ink/70">
+            Le CAP n&apos;est pas une chambre de représentation. Il est un espace de
+            transformation — un lieu où les administrateurs publics se forment, échangent, se
+            challengent mutuellement et construisent ensemble les standards d&apos;une gouvernance
+            publique à la hauteur des ambitions du Sénégal 2050.
+          </p>
+        </div>
+      </section>
+
+      {/* ── 2. Nos engagements ──────────────────────────────────────────────── */}
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">Nos engagements</p>
+          <h2 className="mt-2 font-serif text-4xl font-bold text-ink">Nos cinq engagements</h2>
+
+          <div className="mt-12 flex flex-col gap-px overflow-hidden rounded-xl border border-ink/10 bg-ink/10">
+            {ENGAGEMENTS.map(({ numero, titre, texte }, index) => (
+              <div
+                key={numero}
+                className={`grid grid-cols-[80px_1fr_1fr] items-center gap-6 px-8 py-6 ${
+                  index % 2 === 0 ? 'bg-white' : 'bg-[#F5F4EF]'
+                }`}
+              >
+                <span className="font-mono text-5xl font-bold text-[#14B53A] opacity-40">{numero}</span>
+                <h3 className="font-serif text-lg font-bold text-ink">{titre}</h3>
+                <p className="text-sm text-ink/60">{texte}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── 4. Pourquoi le CAP ? ────────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">Notre histoire</p>
-            <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">Pourquoi le CAP ?</h2>
-          </div>
+      {/* ── 3. Notre Vision ─────────────────────────────────────────────────── */}
+      <section className="bg-[#F5F4EF] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <div className="flex items-center gap-3">
+                <LogoMark />
+                <p className="font-mono text-xs uppercase tracking-widest text-[#14B53A]">Notre Vision</p>
+              </div>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-ink">Notre Vision</h2>
+              <div className="mt-6 border-l-4 border-[#14B53A] pl-6">
+                <p className="font-serif text-lg italic text-ink/80">
+                  Être le pilier de référence de la gouvernance du secteur parapublic sénégalais —
+                  un cercle d&apos;excellence où chaque administrateur public est un acteur
+                  conscient, compétent et engagé de la transformation nationale, au service du
+                  développement durable et de l&apos;intérêt général.
+                </p>
+              </div>
+            </div>
 
-          <div className="flex flex-col gap-6 text-base leading-relaxed text-ink/70">
-            <p>
-              Face à ces mutations profondes du cadre de gouvernance, les administrateurs publics ont
-              ressenti le besoin de disposer d&apos;un espace commun de réflexion, d&apos;échange et de
-              montée en compétences, à la hauteur des nouvelles responsabilités qui leur sont confiées.
-              C&apos;est pour répondre à cette attente que le Cercle des Administrateurs Publics (CAP)
-              a été créé le 12 octobre 2024.
-            </p>
-            <p>
-              Le CAP réunit des présidents et membres de conseils d&apos;administration et de
-              surveillance, des administrateurs représentant l&apos;État ainsi que des cadres dirigeants
-              d&apos;entreprises et d&apos;organismes du secteur parapublic. Il se positionne comme un
-              véritable espace de transformation, où se construisent collectivement les repères, les
-              outils et les pratiques d&apos;une gouvernance publique exemplaire.
-            </p>
-            <p>
-              Au-delà du partage d&apos;expériences, le CAP ambitionne d&apos;accompagner durablement la
-              mise en œuvre de la réforme du secteur parapublic, en consolidant les liens entre
-              administrateurs et en portant une voix commune auprès des pouvoirs publics et des
-              partenaires du Sénégal.
-            </p>
+            <div className="flex flex-col gap-4">
+              <div className="rounded-xl border border-ink/10 bg-white p-5 shadow-sm">
+                <p className="font-serif text-2xl font-bold text-ink">12 oct. 2024</p>
+                <p className="mt-1 text-sm text-ink/60">Date de création du CAP</p>
+              </div>
+              <div className="rounded-xl border border-ink/10 bg-white p-5 shadow-sm">
+                <p className="font-serif text-2xl font-bold text-ink">{bureau.length}</p>
+                <p className="mt-1 text-sm text-ink/60">Membres du bureau exécutif</p>
+              </div>
+              <div className="rounded-xl border border-ink/10 bg-white p-5 shadow-sm">
+                <p className="font-serif text-2xl font-bold text-ink">Sénégal 2050</p>
+                <p className="mt-1 text-sm text-ink/60">Horizon de transformation</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── 5. Bureau exécutif ──────────────────────────────────────────────── */}
-      <section className="bg-[#F5F5F5] py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#FCD116]">Gouvernance</p>
-            <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">Le Bureau Exécutif</h2>
-          </div>
-
-          {bureau.length === 0 ? (
-            <p className="text-center text-ink/50">
-              Aucun membre du bureau renseigné pour le moment.
-            </p>
-          ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {bureau.map(membre => {
-                const photo = typeof membre.photo === 'object' && membre.photo
-                  ? (membre.photo as Media)
-                  : null
-
-                return (
-                  <Link
-                    key={membre.id}
-                    href={`/annuaire/${membre.slug || membre.id}`}
-                    className="group flex flex-col items-center rounded-xl border border-ink/10 bg-white p-6 text-center transition-shadow hover:shadow-lg"
-                  >
-                    <div className="mb-4 h-24 w-24 shrink-0 overflow-hidden rounded-full bg-ink/5 ring-2 ring-transparent transition-all group-hover:ring-[#14B53A]">
-                      {photo?.url ? (
-                        <Image
-                          src={photo.url}
-                          alt={`${membre.prenom} ${membre.nom}`}
-                          width={96}
-                          height={96}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center">
-                          <User size={32} className="text-ink/30" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="font-serif text-base font-medium text-ink">
-                      {membre.prenom} {membre.nom}
-                    </p>
-                    {membre.poste?.posteCap && (
-                      <p className="mt-1 text-sm text-[#14B53A]">{membre.poste.posteCap}</p>
-                    )}
-                  </Link>
-                )
-              })}
-            </div>
-          )}
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/annuaire?filtre=bureau"
-              className="inline-flex items-center gap-2 rounded-lg border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
-            >
-              Voir l&apos;annuaire
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <BureauAutoCarousel
+        membres={bureau.map(membre => ({
+          id:     String(membre.id),
+          prenom: membre.prenom,
+          nom:    membre.nom,
+          slug:   membre.slug,
+          photo:  typeof membre.photo === 'object' && membre.photo
+            ? { filename: membre.photo.filename }
+            : null,
+          poste: membre.poste
+            ? { posteCap: membre.poste.posteCap, organisme: membre.poste.organisme }
+            : null,
+        }))}
+      />
     </div>
   )
 }

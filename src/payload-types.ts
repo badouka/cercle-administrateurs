@@ -76,6 +76,7 @@ export interface Config {
     'activity-registrations': ActivityRegistration;
     mediatheque: Mediatheque;
     pages: Page;
+    partenaires: Partenaire;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     'activity-registrations': ActivityRegistrationsSelect<false> | ActivityRegistrationsSelect<true>;
     mediatheque: MediathequeSelect<false> | MediathequeSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    partenaires: PartenairesSelect<false> | PartenairesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -217,42 +219,11 @@ export interface Membre {
     /**
      * Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)
      */
-    posteCap?:
-      | (
-          | "Président d'honneur"
-          | "Présidente d'honneur"
-          | 'Président'
-          | 'Présidente'
-          | 'Vice-Président'
-          | 'Vice-Présidente'
-          | 'Secrétaire général'
-          | 'Secrétaire générale'
-          | 'Secrétaire général adjoint'
-          | 'Secrétaire générale adjointe'
-          | 'Trésorier'
-          | 'Trésorière'
-          | 'Trésorier Adjoint'
-          | 'Trésorière Adjointe'
-          | 'Présidente Commission Actions Sociales'
-          | 'Présidente Commission Communication'
-          | 'Président Commission Stratégie et Vulgarisation des Politiques Publiques'
-          | 'Président Commission Renforcement de Capacités'
-          | 'Membre'
-        )
-      | null;
+    posteCap?: string | null;
     /**
      * Titre professionnel (ex. DG, Président de Conseil d'Administration…)
      */
-    fonctionProfessionnelle?:
-      | (
-          | "Président du Conseil d'Administration"
-          | "Présidente du Conseil d'Administration"
-          | 'Président du Conseil de Surveillance'
-          | 'Présidente du Conseil de Surveillance'
-          | "Président du Conseil d'Orientation"
-          | "Présidente du Conseil d'Orientation"
-        )
-      | null;
+    fonctionProfessionnelle?: string | null;
     organisme?: string | null;
     /**
      * URL du site officiel (ex. https://pad.sn)
@@ -464,6 +435,19 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partenaires".
+ */
+export interface Partenaire {
+  id: number;
+  nom: string;
+  logo: number | Media;
+  site_web?: string | null;
+  ordre?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -521,6 +505,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'partenaires';
+        value: number | Partenaire;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -737,6 +725,18 @@ export interface PagesSelect<T extends boolean = true> {
   slug?: T;
   contenu?: T;
   statut?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partenaires_select".
+ */
+export interface PartenairesSelect<T extends boolean = true> {
+  nom?: T;
+  logo?: T;
+  site_web?: T;
+  ordre?: T;
   updatedAt?: T;
   createdAt?: T;
 }

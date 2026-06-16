@@ -4,8 +4,9 @@ import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Membre, Media, Page } from '@/payload-types'
-import { ChevronRight, ArrowRight, User } from 'lucide-react'
+import { ArrowRight, User } from 'lucide-react'
 import RichTextContent from '@/components/RichTextContent'
+import { PageHero } from '@/components/PageHero'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -125,27 +126,14 @@ export default async function MotDuPresidentPage() {
 
   return (
     <div>
-      {/* ── 1. Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-gray-900 bg-grain">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#14B53A]/25 via-gray-900 to-gray-900" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <nav aria-label="Fil d'Ariane" className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-white/50">
-            <Link href="/" className="transition-colors hover:text-[#FCD116]">
-              Accueil
-            </Link>
-            <ChevronRight size={14} className="text-white/30" />
-            <Link href="/a-propos" className="transition-colors hover:text-[#FCD116]">
-              À propos
-            </Link>
-            <ChevronRight size={14} className="text-white/30" />
-            <span className="text-white/80">Mot du Président</span>
-          </nav>
-          <h1 className="mt-6 font-serif text-4xl font-medium text-white sm:text-5xl lg:text-6xl">
-            Mot du Président
-          </h1>
-          <div className="mt-6 h-1 w-16 rounded-full bg-[#FCD116]" />
-        </div>
-      </section>
+      <PageHero
+        title="Mot du Président"
+        breadcrumb={[
+          { label: 'Accueil', href: '/' },
+          { label: 'À propos', href: '/a-propos' },
+          { label: 'Mot du Président', href: '/a-propos/mot-du-president' },
+        ]}
+      />
 
       {/* ── 2. Contenu ──────────────────────────────────────────────────────── */}
       <section className="bg-white py-16 sm:py-24">

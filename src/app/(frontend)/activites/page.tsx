@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import type { Activity, Media } from '@/payload-types'
 import config from '@payload-config'
 import { CalendarDays, MapPin, Users, Download } from 'lucide-react'
+import { PageHero } from '@/components/PageHero'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -47,22 +48,26 @@ export default async function ActivitesPage() {
   })
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div>
+      <PageHero title="Activités" />
 
-      <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-black">Activités</h1>
-        <p className="mt-2 text-gray-500">
-          Ateliers et séminaires organisés par le Cercle des Administrateurs Publics.
-        </p>
-      </div>
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 
-      {activites.length === 0 ? (
-        <p className="text-gray-500">Aucune activité disponible pour le moment.</p>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {activites.map(a => <ActiviteCard key={a.id} activite={a} />)}
+        <div className="mb-10 border-b border-gray-200 pb-8">
+          <h1 className="text-3xl font-bold text-black">Activités</h1>
+          <p className="mt-2 text-gray-500">
+            Ateliers et séminaires organisés par le Cercle des Administrateurs Publics.
+          </p>
         </div>
-      )}
+
+        {activites.length === 0 ? (
+          <p className="text-gray-500">Aucune activité disponible pour le moment.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {activites.map(a => <ActiviteCard key={a.id} activite={a} />)}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

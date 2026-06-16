@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import type { Metadata } from 'next'
 import config from '@payload-config'
 import { AnnuaireGrid } from '@/components/AnnuaireGrid'
+import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = { title: 'Annuaire des membres' }
 
@@ -62,7 +63,10 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div>
+      <PageHero title="Annuaire" subtitle="Les membres du Cercle" />
+
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 
       <div className="mb-10 border-b border-gray-200 pb-8">
         <h1 className="text-3xl font-bold text-black">{titre}</h1>
@@ -77,6 +81,7 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
         })}
         hideFilter={!!filtre}
       />
+      </div>
     </div>
   )
 }

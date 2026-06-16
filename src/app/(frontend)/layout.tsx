@@ -46,11 +46,19 @@ const NAV_LINKS = [
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={`${newsreader.variable} ${ibmPlexMono.variable} ${archivo.variable}`}>
-      <body className="min-h-screen bg-cream font-sans text-ink antialiased">
+      <body className="min-h-screen bg-white font-sans text-ink antialiased">
         <Navbar />
         <main>{children}</main>
 
-        <footer className="mt-16 bg-ink text-cream">
+        <div className="w-full h-1.5 flex items-center">
+          <div className="flex-1 h-full bg-[#14B53A]"></div>
+          <div className="flex-1 h-full bg-[#FCD116] relative flex items-center justify-center">
+            <span className="absolute text-[#14B53A] text-[10px] leading-none">★</span>
+          </div>
+          <div className="flex-1 h-full bg-[#C0392B]"></div>
+        </div>
+
+        <footer className="mt-16 bg-white text-ink">
           {/* Section principale */}
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -58,14 +66,14 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
               {/* Colonne 1 — Identité */}
               <div className="flex flex-col gap-5">
                 <div className="flex items-center gap-2.5">
-                  <span className="rounded bg-bordeaux px-2 py-0.5 text-sm font-extrabold tracking-wide text-cream">
+                  <span className="rounded bg-[#14B53A] px-2 py-0.5 text-sm font-extrabold tracking-wide text-cream">
                     CAP
                   </span>
-                  <span className="font-serif text-sm font-medium tracking-wide text-cream/80">
+                  <span className="font-serif text-sm font-medium tracking-wide text-ink/80">
                     Cercle des Administrateurs Publics
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed text-cream/50">
+                <p className="text-sm leading-relaxed text-ink/60">
                   Le Cercle des Administrateurs Publics accompagne les pouvoirs publics dans
                   la modernisation de l'administration sénégalaise.
                 </p>
@@ -76,7 +84,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook"
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/15 text-cream/50 transition-colors hover:border-bordeaux hover:text-bordeaux"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/20 text-ink transition-colors hover:border-bordeaux hover:text-bordeaux"
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                       <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -87,7 +95,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn"
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/15 text-cream/50 transition-colors hover:border-bordeaux hover:text-bordeaux"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/20 text-ink transition-colors hover:border-bordeaux hover:text-bordeaux"
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                       <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -100,7 +108,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="X (Twitter)"
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/15 text-cream/50 transition-colors hover:border-bordeaux hover:text-bordeaux"
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-ink/20 text-ink transition-colors hover:border-bordeaux hover:text-bordeaux"
                   >
                     <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -111,7 +119,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
 
               {/* Colonne 2 — Navigation */}
               <div className="flex flex-col gap-4">
-                <h3 className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-cream/35">
+                <h3 className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-ink/60">
                   Navigation
                 </h3>
                 <ul className="flex flex-col gap-2">
@@ -119,7 +127,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
                     <li key={href}>
                       <Link
                         href={href}
-                        className="text-sm text-cream/60 transition-colors hover:text-bordeaux"
+                        className="text-sm text-ink/70 transition-colors hover:text-[#14B53A]"
                       >
                         {label}
                       </Link>
@@ -130,10 +138,10 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
 
               {/* Colonne 3 — Contact */}
               <div className="flex flex-col gap-4">
-                <h3 className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-cream/35">
+                <h3 className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-ink/60">
                   Contact
                 </h3>
-                <ul className="flex flex-col gap-3 text-sm text-cream/60">
+                <ul className="flex flex-col gap-3 text-sm text-ink/60">
                   <li className="flex items-start gap-2.5">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4 mt-0.5 shrink-0 text-bordeaux">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
@@ -164,15 +172,15 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
           </div>
 
           {/* Barre du bas */}
-          <div className="border-t border-cream/10">
-            <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/35">
+          <div className="border-t border-cream/10 bg-[#F5F4EF]">
+            <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink/50">
               <p>© 2026 Cercle des Administrateurs Publics du Sénégal. Tous droits réservés.</p>
               <div className="flex items-center gap-4">
-                <Link href="/confidentialite" className="transition-colors hover:text-cream">
+                <Link href="/confidentialite" className="transition-colors hover:text-ink">
                   Politique de confidentialité
                 </Link>
                 <span className="text-cream/15">|</span>
-                <Link href="/mentions-legales" className="transition-colors hover:text-cream">
+                <Link href="/mentions-legales" className="transition-colors hover:text-ink">
                   Mentions légales
                 </Link>
               </div>

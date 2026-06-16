@@ -19,7 +19,7 @@ const NAV_LINKS: NavItem[] = [
     children: [
       { href: '/a-propos',                  label: 'Qui sommes-nous ?' },
       { href: '/a-propos/mot-du-president', label: 'Mot du Président' },
-      { href: '/a-propos/partenaires',      label: 'Nos partenaires' },
+      { href: '/a-propos/nos-partenaires',  label: 'Nos partenaires' },
     ],
   },
   {
@@ -86,8 +86,8 @@ export function Navbar() {
   const isLoggedIn = Boolean(user)
 
   return (
-    <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur border-b border-ink/10">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+      <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
@@ -95,7 +95,7 @@ export function Navbar() {
             href="/"
             className="flex items-center gap-2.5 hover:opacity-75 transition-opacity"
           >
-            <span className="rounded bg-bordeaux px-2 py-0.5 text-sm font-extrabold text-cream tracking-wide">
+            <span className="rounded bg-[#14B53A] px-2 py-0.5 text-sm font-extrabold text-cream tracking-wide">
               CAP
             </span>
             <span className="hidden sm:inline font-serif text-sm font-medium text-ink/80 tracking-wide">
@@ -114,7 +114,7 @@ export function Navbar() {
                     className={cn(
                       'inline-flex items-center gap-1 px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                       isParentActive(item)
-                        ? 'font-semibold text-ink border-bordeaux'
+                        ? 'font-semibold text-ink border-[#14B53A]'
                         : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                     )}
                   >
@@ -147,7 +147,7 @@ export function Navbar() {
                   className={cn(
                     'px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                     pathname === item.href
-                      ? 'font-semibold text-ink border-bordeaux'
+                      ? 'font-semibold text-ink border-[#14B53A]'
                       : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                   )}
                 >
@@ -169,7 +169,7 @@ export function Navbar() {
                     className={cn(
                       'inline-flex items-center gap-1.5 rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                       pathname.startsWith('/gestionnaire')
-                        ? 'text-ink font-semibold border-bordeaux'
+                        ? 'text-ink font-semibold border-[#14B53A]'
                         : 'text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                     )}
                   >
@@ -182,7 +182,7 @@ export function Navbar() {
                   className={cn(
                     'inline-flex items-center gap-1.5 rounded-md px-3 py-2 font-mono text-xs uppercase tracking-wider transition-colors border-b-2',
                     pathname.startsWith('/dashboard')
-                      ? 'text-ink font-semibold border-bordeaux'
+                      ? 'text-ink font-semibold border-[#14B53A]'
                       : 'text-ink/50 border-transparent hover:text-ink hover:border-ink/20',
                   )}
                 >
@@ -201,7 +201,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/connexion"
-                className="inline-flex items-center rounded-md bg-bordeaux px-4 py-2 font-mono text-xs uppercase tracking-wider font-semibold text-cream hover:bg-ink transition-colors"
+                className="inline-flex items-center rounded-md bg-[#14B53A] px-4 py-2 font-mono text-xs uppercase tracking-wider font-semibold text-cream hover:bg-ink transition-colors"
               >
                 Connexion
               </Link>
@@ -231,7 +231,7 @@ export function Navbar() {
                     className={cn(
                       'block px-3 py-2.5 font-mono text-xs uppercase tracking-wider font-semibold border-l-2',
                       isParentActive(item)
-                        ? 'text-ink border-bordeaux'
+                        ? 'text-ink border-[#14B53A]'
                         : 'text-ink/70 border-transparent',
                     )}
                   >
@@ -245,7 +245,7 @@ export function Navbar() {
                       className={cn(
                         'block pl-7 pr-3 py-2 font-mono text-xs uppercase tracking-wider border-l-2 transition-colors',
                         isChildActive(child.href)
-                          ? 'font-semibold text-ink border-bordeaux bg-ink/5'
+                          ? 'font-semibold text-ink border-[#14B53A] bg-ink/5'
                           : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20 hover:bg-ink/5',
                       )}
                     >
@@ -261,7 +261,7 @@ export function Navbar() {
                   className={cn(
                     'px-3 py-2.5 font-mono text-xs uppercase tracking-wider border-l-2 transition-colors',
                     pathname === item.href
-                      ? 'font-semibold text-ink border-bordeaux bg-ink/5'
+                      ? 'font-semibold text-ink border-[#14B53A] bg-ink/5'
                       : 'font-medium text-ink/50 border-transparent hover:text-ink hover:border-ink/20 hover:bg-ink/5',
                   )}
                 >
@@ -304,7 +304,7 @@ export function Navbar() {
                 <Link
                   href="/connexion"
                   onClick={() => setOpen(false)}
-                  className="flex justify-center rounded-md bg-bordeaux px-4 py-2.5 font-mono text-xs uppercase tracking-wider font-semibold text-cream hover:bg-ink transition-colors"
+                  className="flex justify-center rounded-md bg-[#14B53A] px-4 py-2.5 font-mono text-xs uppercase tracking-wider font-semibold text-cream hover:bg-ink transition-colors"
                 >
                   Connexion
                 </Link>

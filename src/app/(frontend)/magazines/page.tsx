@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import type { Document, Media } from '@/payload-types'
 import config from '@payload-config'
 import { FileText } from 'lucide-react'
+import { PageHero } from '@/components/PageHero'
 
 export const metadata: Metadata = {
   title: 'Magazines | CAP',
@@ -30,7 +31,10 @@ export default async function MagazinesPage() {
   const magazines = docs as Document[]
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <div>
+      <PageHero title="Magazines" />
+
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
 
       {/* En-tête */}
       <div className="mb-10 border-b border-gray-200 pb-8">
@@ -118,6 +122,7 @@ export default async function MagazinesPage() {
           })}
         </div>
       )}
+      </div>
     </div>
   )
 }
