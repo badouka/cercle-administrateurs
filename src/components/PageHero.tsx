@@ -10,7 +10,14 @@ interface PageHeroProps {
 
 export function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
   return (
-    <section className="relative min-h-[200px] pt-24 bg-[url('/api/media/file/banner-1.png')] bg-cover bg-center">
+    <section
+      className="relative min-h-[200px] pt-24"
+      style={{
+        backgroundImage: "url('/api/media/file/banner-1.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="absolute inset-0 bg-black/50" />
       <div
         className="absolute left-0 top-0 bottom-0 w-[5px]"
