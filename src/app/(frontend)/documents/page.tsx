@@ -31,7 +31,7 @@ export default async function DocumentsPage() {
       description: doc.description ?? null,
       categorie:   doc.categorie,
       acces:       doc.acces,
-      fichier:     fichier ? { url: fichier.url ?? null, filesize: fichier.filesize ?? null } : null,
+      fichier:     fichier ? { url: fichier.url ?? null, filename: fichier.filename ?? null, filesize: fichier.filesize ?? null } : null,
     }
   })
 

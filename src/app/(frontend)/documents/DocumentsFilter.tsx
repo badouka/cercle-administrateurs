@@ -120,7 +120,7 @@ function DocCard({ doc, isLoggedIn }: { doc: Doc; isLoggedIn: boolean }) {
 
   return (
     <a
-      href={`/api/media/file/${doc.fichier?.filename ?? ''}`}
+      href={doc.fichier?.filename ? `/api/media/file/${doc.fichier.filename}` : (doc.fichier?.url ?? '#')}
       target="_blank"
       rel="noopener noreferrer"
       className="relative flex cursor-pointer items-start gap-3 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-[#14B53A]/30"
