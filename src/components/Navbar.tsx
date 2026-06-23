@@ -85,6 +85,11 @@ export function Navbar() {
 
   const isLoggedIn = Boolean(user)
 
+  // "Blog" n'apparaît que pour les membres connectés
+  const navLinks: NavItem[] = isLoggedIn
+    ? [...NAV_LINKS, { href: '/blog', label: 'Blog' }]
+    : NAV_LINKS
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4">
@@ -105,7 +110,7 @@ export function Navbar() {
 
           {/* Liens desktop */}
           <nav className="hidden md:flex items-center gap-0.5">
-            {NAV_LINKS.map(item =>
+            {navLinks.map(item =>
               item.children ? (
                 /* Dropdown desktop */
                 <div key={item.href} className="relative group">
@@ -223,7 +228,7 @@ export function Navbar() {
       {open && (
         <div className="md:hidden border-t border-ink/10 bg-cream">
           <nav className="flex flex-col px-4 py-2 gap-0.5">
-            {NAV_LINKS.map(item =>
+            {navLinks.map(item =>
               item.children ? (
                 /* Parent + sous-liens indentés mobile */
                 <div key={item.href}>

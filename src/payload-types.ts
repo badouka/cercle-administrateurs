@@ -77,6 +77,7 @@ export interface Config {
     mediatheque: Mediatheque;
     pages: Page;
     partenaires: Partenaire;
+    'blog-posts': BlogPost;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     mediatheque: MediathequeSelect<false> | MediathequeSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     partenaires: PartenairesSelect<false> | PartenairesSelect<true>;
+    'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -219,9 +221,31 @@ export interface Membre {
     /**
      * Rôle dans le bureau du CAP (ex. Président, Trésorier(e)…)
      */
-    posteCap?: string | null;
+    posteCap?:
+      | (
+          | "Président d'honneur"
+          | "Présidente d'honneur"
+          | 'Président'
+          | 'Présidente'
+          | 'Vice-Président'
+          | 'Vice-Présidente'
+          | 'Secrétaire général'
+          | 'Secrétaire générale'
+          | 'Secrétaire général adjoint'
+          | 'Secrétaire générale adjointe'
+          | 'Trésorier'
+          | 'Trésorière'
+          | 'Trésorier Adjoint'
+          | 'Trésorière Adjointe'
+          | 'Présidente Commission Actions Sociales'
+          | 'Présidente Commission Communication'
+          | 'President Commission Strategie Vulgarisation'
+          | 'Président Commission Renforcement de Capacités'
+          | 'Membre'
+        )
+      | null;
     /**
-     * Titre professionnel (ex. DG, Président de Conseil d'Administration…)
+     * Titre professionnel (ex. DG, Président du Conseil d'Administration…)
      */
     fonctionProfessionnelle?: string | null;
     organisme?: string | null;
@@ -448,6 +472,49 @@ export interface Partenaire {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts".
+ */
+export interface BlogPost {
+  id: number;
+  titre: string;
+  /**
+   * Auto-généré depuis le titre à la création.
+   */
+  slug?: string | null;
+  contenu: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  image?: (number | null) | Media;
+  /**
+   * Court résumé affiché dans la liste des articles.
+   */
+  extrait?: string | null;
+  statut: 'draft' | 'published';
+  /**
+   * Renseigné automatiquement à la première publication.
+   */
+  publie_le?: string | null;
+  /**
+   * Défini automatiquement à la création.
+   */
+  auteur: number | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -509,6 +576,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'partenaires';
         value: number | Partenaire;
+      } | null)
+    | ({
+        relationTo: 'blog-posts';
+        value: number | BlogPost;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -737,6 +808,22 @@ export interface PartenairesSelect<T extends boolean = true> {
   logo?: T;
   site_web?: T;
   ordre?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts_select".
+ */
+export interface BlogPostsSelect<T extends boolean = true> {
+  titre?: T;
+  slug?: T;
+  contenu?: T;
+  image?: T;
+  extrait?: T;
+  statut?: T;
+  publie_le?: T;
+  auteur?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -7,7 +7,7 @@ import type { User, Membre, Post } from '@/payload-types'
 import config from '@payload-config'
 import {
   Users, FileText, PlusCircle, Clock, CheckCircle2,
-  ChevronRight, Settings2, AlertCircle, ExternalLink, BookOpen,
+  ChevronRight, Settings2, AlertCircle, ExternalLink, BookOpen, Newspaper,
 } from 'lucide-react'
 import type { Media } from '@/payload-types'
 import { MembreActionButtons } from './MembreActionButtons'
@@ -300,6 +300,19 @@ export default async function GestionnairePage() {
             <div>
               <p className="text-sm font-semibold text-black">Gestion des articles</p>
               <p className="text-xs text-gray-500">Créer, modifier, publier des articles</p>
+            </div>
+            <ChevronRight size={16} className="ml-auto text-gray-400" />
+          </Link>
+          <Link
+            href="/gestionnaire/blog"
+            className="flex items-center gap-3 rounded-xl border border-[#E5E5E5] bg-white px-5 py-4 hover:shadow-sm hover:border-black transition-all"
+          >
+            <div className="rounded-lg bg-[#F5F5F5] p-2.5">
+              <Newspaper size={18} className="text-gray-600" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-black">Blog</p>
+              <p className="text-xs text-gray-500">Rédiger et publier des articles de blog</p>
             </div>
             <ChevronRight size={16} className="ml-auto text-gray-400" />
           </Link>
