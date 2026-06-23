@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Post, Media } from '@/payload-types'
 import config from '@payload-config'
-import { ArrowLeft, Calendar, Tag } from 'lucide-react'
+import { ArrowLeft, Calendar, Tag, Download } from 'lucide-react'
 import { ShareButtons } from '@/components/ShareButtons'
 
 import { lexicalToHtml } from '@/lib/lexical-to-html'
@@ -123,6 +123,13 @@ export default async function ArticleDetailPage({
   const htmlBody = lexicalToHtml(post.contenu)
   const catLabel = CATEGORIE_LABELS[post.categorie] ?? post.categorie
 
+  const documents = (post.documents ?? [])
+    .map(doc => {
+      const fichier = typeof doc.fichier === 'object' && doc.fichier ? (doc.fichier as Media) : null
+      return fichier?.url ? { id: doc.id, titre: doc.titre, url: fichier.url } : null
+    })
+    .filter((d): d is { id: string | null | undefined; titre: string; url: string } => d !== null)
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
 
@@ -182,6 +189,30 @@ export default async function ArticleDetailPage({
           className="article-prose"
           dangerouslySetInnerHTML={{ __html: htmlBody }}
         />
+
+        {/* ── Documents associés ── */}
+        {documents.length > 0 && (
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-500">
+              Documents associés
+            </h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              {documents.map(doc => (
+                <a
+                  key={doc.id ?? doc.url}
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="inline-flex items-center gap-2.5 rounded-lg bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+                >
+                  <Download size={16} className="shrink-0" />
+                  {doc.titre}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── Separator + share ── */}
         <div className="mt-12 pt-8 border-t border-gray-200 space-y-4">

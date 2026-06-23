@@ -115,6 +115,27 @@ export const Posts: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'documents',
+      type: 'array',
+      label: 'Documents associés',
+      fields: [
+        {
+          name: 'titre',
+          type: 'text',
+          label: 'Titre',
+          required: true,
+          admin: { description: 'Ex. "Rapport de réunion"' },
+        },
+        {
+          name: 'fichier',
+          type: 'upload',
+          label: 'Fichier (PDF)',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
+    },
+    {
       name: 'categorie',
       type: 'select',
       required: true,

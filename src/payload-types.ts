@@ -346,6 +346,16 @@ export interface Post {
     [k: string]: unknown;
   };
   image?: (number | null) | Media;
+  documents?:
+    | {
+        /**
+         * Ex. "Rapport de réunion"
+         */
+        titre: string;
+        fichier: number | Media;
+        id?: string | null;
+      }[]
+    | null;
   categorie: 'actualites' | 'ateliers_seminaires';
   statut: 'brouillon' | 'publie';
   /**
@@ -739,6 +749,13 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   contenu?: T;
   image?: T;
+  documents?:
+    | T
+    | {
+        titre?: T;
+        fichier?: T;
+        id?: T;
+      };
   categorie?: T;
   statut?: T;
   publie_le?: T;
