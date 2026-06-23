@@ -32,7 +32,8 @@ const NAV_LINKS: NavItem[] = [
     ],
   },
   { href: '/actualites', label: 'Actualités' },
-  { href: '/activites',  label: 'Activités' },
+  // Lien "Activités" temporairement désactivé (page /activites désactivée)
+  // { href: '/activites',  label: 'Activités' },
   { href: '/documents',  label: 'Documents' },
   {
     href: '/magazines',
