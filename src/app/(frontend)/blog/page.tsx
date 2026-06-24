@@ -1,6 +1,4 @@
 import { getPayload } from 'payload'
-import { headers as getHeaders } from 'next/headers'
-import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -35,11 +33,7 @@ function formatDate(dateStr?: string | null): string {
 }
 
 export default async function BlogPage() {
-  const [payload, headers] = await Promise.all([getPayload({ config }), getHeaders()])
-  const { user } = await payload.auth({ headers })
-
-  // Réservé aux membres connectés
-  if (!user) redirect('/connexion')
+  const payload = await getPayload({ config })
 
   const { docs: posts } = await payload.find({
     collection:     'blog-posts',

@@ -32,6 +32,7 @@ const NAV_LINKS: NavItem[] = [
     ],
   },
   { href: '/actualites', label: 'Actualités' },
+  { href: '/blog',       label: 'Blog' },
   // Lien "Activités" temporairement désactivé (page /activites désactivée)
   // { href: '/activites',  label: 'Activités' },
   { href: '/documents',  label: 'Documents' },
@@ -85,14 +86,7 @@ export function Navbar() {
 
   const isLoggedIn = Boolean(user)
 
-  // "Blog" n'apparaît que pour les membres connectés, juste après "Actualités"
-  const navLinks: NavItem[] = isLoggedIn
-    ? NAV_LINKS.flatMap(item =>
-        item.href === '/actualites'
-          ? [item, { href: '/blog', label: 'Blog' }]
-          : [item],
-      )
-    : NAV_LINKS
+  const navLinks: NavItem[] = NAV_LINKS
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
