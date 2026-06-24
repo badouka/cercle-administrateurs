@@ -85,9 +85,13 @@ export function Navbar() {
 
   const isLoggedIn = Boolean(user)
 
-  // "Blog" n'apparaît que pour les membres connectés
+  // "Blog" n'apparaît que pour les membres connectés, juste après "Actualités"
   const navLinks: NavItem[] = isLoggedIn
-    ? [...NAV_LINKS, { href: '/blog', label: 'Blog' }]
+    ? NAV_LINKS.flatMap(item =>
+        item.href === '/actualites'
+          ? [item, { href: '/blog', label: 'Blog' }]
+          : [item],
+      )
     : NAV_LINKS
 
   return (
