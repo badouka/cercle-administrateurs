@@ -40,7 +40,6 @@ const NAV_LINKS: NavItem[] = [
     label: 'Magazines',
     children: [
       { href: '/magazines',   label: 'Magazines' },
-      { href: '/mediatheque', label: 'Médiathèque' },
     ],
   },
 ]
