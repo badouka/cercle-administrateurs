@@ -181,17 +181,9 @@ export const Membres: CollectionConfig = {
           fields: [
             {
               name:  'fonctionProfessionnelle',
-              type:  'select',
+              type:  'text',
               label: 'Fonction',
-              admin: { description: "Titre professionnel (ex. DG, Président de Conseil d'Administration…)" },
-              options: [
-                "Président du Conseil d'Administration",
-                "Présidente du Conseil d'Administration",
-                'Président du Conseil de Surveillance',
-                'Présidente du Conseil de Surveillance',
-                "Président du Conseil d'Orientation",
-                "Présidente du Conseil d'Orientation",
-              ],
+              admin: { description: "Titre professionnel (ex. DG, Président du Conseil d'Administration…)" },
             },
             { name: 'organisme',     type: 'text',   label: 'Organisation' },
             { name: 'siteOrganisme', type: 'text',   label: "Site web de l'organisation", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },

@@ -438,7 +438,7 @@ export default async function HomePage() {
                     href="/magazines"
                     className="border border-ink/20 text-ink/60 px-5 py-2.5 rounded-lg text-sm font-semibold hover:border-[#14B53A] hover:text-[#14B53A] transition-colors text-center"
                   >
-                    Voir tous les magazines
+                    Voir les magazines
                   </Link>
                 </div>
               </div>
