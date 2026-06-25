@@ -59,8 +59,11 @@ function ToolBtn({
 
 export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
   function ArticleEditor({ initialContent, placeholder = 'Rédigez votre article ici…', enableTables = false }, ref) {
-    const [showLinkInput, setShowLinkInput] = useState(false)
-    const [linkUrl,       setLinkUrl]       = useState('')
+    const [showLinkInput,  setShowLinkInput]  = useState(false)
+    const [linkUrl,        setLinkUrl]        = useState('')
+    const [showTableInput, setShowTableInput] = useState(false)
+    const [tableRows,      setTableRows]      = useState(3)
+    const [tableCols,      setTableCols]      = useState(3)
 
     const editor = useEditor({
       extensions: [
@@ -90,6 +93,15 @@ export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
       if (href) editor!.chain().focus().extendMarkRange('link').setLink({ href }).run()
       setShowLinkInput(false)
       setLinkUrl('')
+    }
+
+    function applyTable() {
+      const rows = Math.min(Math.max(1, tableRows || 1), 50)
+      const cols = Math.min(Math.max(1, tableCols || 1), 20)
+      editor!.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run()
+      setShowTableInput(false)
+      setTableRows(3)
+      setTableCols(3)
     }
 
     return (
@@ -157,8 +169,9 @@ export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
 
               {/* ── Tableaux ── */}
               <ToolBtn
-                onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
-                title="Insérer un tableau (3×3)"
+                onClick={() => { setShowTableInput(s => !s); setShowLinkInput(false) }}
+                active={showTableInput}
+                title="Insérer un tableau"
               >
                 <TableIcon size={14} />
               </ToolBtn>
@@ -210,6 +223,45 @@ export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
             </button>
             <button type="button" onClick={() => setShowLinkInput(false)}
               className="text-xs text-gray-500 hover:text-black px-1">
+              Annuler
+            </button>
+          </div>
+        )}
+
+        {/* ── Table dimensions input ── */}
+        {enableTables && showTableInput && (
+          <div className="flex flex-wrap items-end gap-3 px-3 py-2.5 border-b border-gray-200 bg-gray-50">
+            <label className="flex flex-col gap-1 text-xs font-medium text-gray-600">
+              Nombre de lignes
+              <input
+                type="number"
+                min={1}
+                max={50}
+                value={tableRows}
+                onChange={e => setTableRows(Number(e.target.value))}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); applyTable() } if (e.key === 'Escape') setShowTableInput(false) }}
+                autoFocus
+                className="w-20 text-sm border border-gray-300 rounded px-2 py-1 focus:border-black focus:outline-none"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-xs font-medium text-gray-600">
+              Nombre de colonnes
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={tableCols}
+                onChange={e => setTableCols(Number(e.target.value))}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); applyTable() } if (e.key === 'Escape') setShowTableInput(false) }}
+                className="w-20 text-sm border border-gray-300 rounded px-2 py-1 focus:border-black focus:outline-none"
+              />
+            </label>
+            <button type="button" onClick={applyTable}
+              className="text-xs font-semibold px-2.5 py-1.5 rounded bg-black text-white hover:bg-gray-800">
+              Insérer
+            </button>
+            <button type="button" onClick={() => setShowTableInput(false)}
+              className="text-xs text-gray-500 hover:text-black px-1 py-1.5">
               Annuler
             </button>
           </div>
