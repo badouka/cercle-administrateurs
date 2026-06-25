@@ -19,6 +19,16 @@ export default async function NouvelArticleBlogPage() {
   const role = (user as User).role
   if (role !== 'gestionnaire' && role !== 'admin') redirect('/dashboard')
 
+  const { docs } = await payload.find({
+    collection:     'blog-posts',
+    limit:          0,
+    depth:          0,
+    overrideAccess: true,
+  })
+  const existingCategories = [
+    ...new Set(docs.map(d => d.categorie?.trim()).filter((c): c is string => !!c)),
+  ].sort((a, b) => a.localeCompare(b, 'fr'))
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
 
@@ -43,7 +53,7 @@ export default async function NouvelArticleBlogPage() {
 
       {/* ── Form card ── */}
       <div className="rounded-2xl border border-[#E5E5E5] bg-white p-6 sm:p-8">
-        <BlogForm />
+        <BlogForm existingCategories={existingCategories} />
       </div>
     </div>
   )

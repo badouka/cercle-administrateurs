@@ -511,6 +511,10 @@ export interface BlogPost {
    * Court résumé affiché dans la liste des articles.
    */
   extrait?: string | null;
+  /**
+   * Catégorie libre (ex. "Gouvernance", "Témoignages").
+   */
+  categorie?: string | null;
   statut: 'draft' | 'published';
   /**
    * Renseigné automatiquement à la première publication.
@@ -838,6 +842,7 @@ export interface BlogPostsSelect<T extends boolean = true> {
   contenu?: T;
   image?: T;
   extrait?: T;
+  categorie?: T;
   statut?: T;
   publie_le?: T;
   auteur?: T;

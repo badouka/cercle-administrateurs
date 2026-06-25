@@ -63,6 +63,7 @@ export async function createBlogPostAction(
   const titre       = (formData.get('titre')       as string | null)?.trim()
   const contenuJson = (formData.get('contenuJson') as string | null)
   const extrait     = (formData.get('extrait')     as string | null)?.trim()
+  const categorie   = (formData.get('categorie')   as string | null)?.trim()
   const statut      = (formData.get('statut')      as 'draft' | 'published' | null) ?? 'draft'
   const imageId     = formData.get('imageId') ? Number(formData.get('imageId')) : undefined
 
@@ -82,6 +83,7 @@ export async function createBlogPostAction(
         statut,
         auteur:  ctx.user.id,
         ...(extrait ? { extrait } : {}),
+        ...(categorie ? { categorie } : {}),
         ...(imageId ? { image: imageId } : {}),
       },
       overrideAccess: true,
@@ -103,17 +105,19 @@ export async function updateBlogPostAction(
 
   const titre       = (formData.get('titre')       as string | null)?.trim()
   const contenuJson = (formData.get('contenuJson') as string | null)
-  const extrait     = formData.get('extrait') as string | null
-  const statut      = formData.get('statut')  as 'draft' | 'published' | null
+  const extrait     = formData.get('extrait')   as string | null
+  const categorie   = formData.get('categorie') as string | null
+  const statut      = formData.get('statut')    as 'draft' | 'published' | null
   const imageId     = formData.get('imageId') ? Number(formData.get('imageId')) : undefined
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: Record<string, any> = {}
-  if (titre)            data.titre   = titre
-  if (contenuJson)      { try { data.contenu = JSON.parse(contenuJson) } catch { /* ignore */ } }
-  if (extrait !== null) data.extrait = extrait.trim()
-  if (statut)           data.statut  = statut
-  if (imageId)          data.image   = imageId
+  if (titre)              data.titre     = titre
+  if (contenuJson)        { try { data.contenu = JSON.parse(contenuJson) } catch { /* ignore */ } }
+  if (extrait !== null)   data.extrait   = extrait.trim()
+  if (categorie !== null) data.categorie = categorie.trim()
+  if (statut)             data.statut    = statut
+  if (imageId)            data.image     = imageId
 
   try {
     await ctx.payload.update({

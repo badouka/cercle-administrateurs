@@ -12,23 +12,26 @@ export interface BlogFormInitial {
   titre:     string
   contenu:   string   // HTML (depuis lexicalToHtml sur la page de modification)
   extrait:   string
+  categorie: string
   statut:    'draft' | 'published'
   imageId?:  number
   imageUrl?: string
 }
 
 interface Props {
-  postId?:        number
-  initialValues?: Partial<BlogFormInitial>
+  postId?:             number
+  initialValues?:      Partial<BlogFormInitial>
+  existingCategories?: string[]
 }
 
-export function BlogForm({ postId, initialValues }: Props) {
+export function BlogForm({ postId, initialValues, existingCategories = [] }: Props) {
   const router       = useRouter()
   const editorRef    = useRef<ArticleEditorRef>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [titre,   setTitre]   = useState(initialValues?.titre   ?? '')
-  const [extrait, setExtrait] = useState(initialValues?.extrait ?? '')
+  const [titre,     setTitre]     = useState(initialValues?.titre     ?? '')
+  const [extrait,   setExtrait]   = useState(initialValues?.extrait   ?? '')
+  const [categorie, setCategorie] = useState(initialValues?.categorie ?? '')
   const [imageFile,       setImageFile]       = useState<File | null>(null)
   const [imagePreview,    setImagePreview]    = useState<string | null>(initialValues?.imageUrl ?? null)
   const [existingImageId, setExistingImageId] = useState<number | undefined>(initialValues?.imageId)
@@ -80,6 +83,7 @@ export function BlogForm({ postId, initialValues }: Props) {
       fd.append('titre',       titre.trim())
       fd.append('contenuJson', JSON.stringify(lexical))
       fd.append('extrait',     extrait.trim())
+      fd.append('categorie',   categorie.trim())
       fd.append('statut',      targetStatut)
       if (imageId) fd.append('imageId', String(imageId))
 
@@ -136,6 +140,31 @@ export function BlogForm({ postId, initialValues }: Props) {
           placeholder="Court résumé affiché dans la liste des articles…"
           className="block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black resize-y"
         />
+      </div>
+
+      {/* Catégorie */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-900 mb-1.5">
+          Catégorie
+        </label>
+        <input
+          type="text"
+          value={categorie}
+          onChange={e => setCategorie(e.target.value)}
+          list="blog-categories"
+          placeholder="Ex. Gouvernance, Témoignages…"
+          className="block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+        />
+        {existingCategories.length > 0 && (
+          <datalist id="blog-categories">
+            {existingCategories.map(c => (
+              <option key={c} value={c} />
+            ))}
+          </datalist>
+        )}
+        <p className="mt-1 text-xs text-gray-400">
+          Saisie libre. Choisissez une catégorie existante ou créez-en une nouvelle.
+        </p>
       </div>
 
       {/* Image */}

@@ -44,6 +44,16 @@ export default async function ModifierArticleBlogPage({
   const image       = typeof post.image === 'object' && post.image ? (post.image as Media) : null
   const htmlContent = lexicalToHtml(post.contenu)
 
+  const { docs: allPosts } = await payload.find({
+    collection:     'blog-posts',
+    limit:          0,
+    depth:          0,
+    overrideAccess: true,
+  })
+  const existingCategories = [
+    ...new Set(allPosts.map(d => d.categorie?.trim()).filter((c): c is string => !!c)),
+  ].sort((a, b) => a.localeCompare(b, 'fr'))
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
 
@@ -70,13 +80,15 @@ export default async function ModifierArticleBlogPage({
       <div className="rounded-2xl border border-[#E5E5E5] bg-white p-6 sm:p-8">
         <BlogForm
           postId={postId}
+          existingCategories={existingCategories}
           initialValues={{
-            titre:    post.titre,
-            contenu:  htmlContent,
-            extrait:  post.extrait ?? '',
-            statut:   post.statut,
-            imageId:  image?.id,
-            imageUrl: image?.url ?? undefined,
+            titre:     post.titre,
+            contenu:   htmlContent,
+            extrait:   post.extrait ?? '',
+            categorie: post.categorie ?? '',
+            statut:    post.statut,
+            imageId:   image?.id,
+            imageUrl:  image?.url ?? undefined,
           }}
         />
       </div>

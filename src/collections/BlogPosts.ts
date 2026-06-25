@@ -116,6 +116,12 @@ export const BlogPosts: CollectionConfig = {
       admin: { description: "Court résumé affiché dans la liste des articles." },
     },
     {
+      name: 'categorie',
+      type: 'text',
+      label: 'Catégorie',
+      admin: { description: 'Catégorie libre (ex. "Gouvernance", "Témoignages").' },
+    },
+    {
       name: 'statut',
       type: 'select',
       label: 'Statut',
