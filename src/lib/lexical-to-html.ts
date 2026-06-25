@@ -70,6 +70,19 @@ export function renderNode(node: any): string {
       return `<pre><code${lang}>${renderChildren(node.children)}</code></pre>`
     }
 
+    case 'table':
+      return `<table>${renderChildren(node.children)}</table>`
+
+    case 'tablerow':
+      return `<tr>${renderChildren(node.children)}</tr>`
+
+    case 'tablecell': {
+      const tag     = node.headerState ? 'th' : 'td'
+      const colSpan = node.colSpan > 1 ? ` colspan="${node.colSpan}"` : ''
+      const rowSpan = node.rowSpan > 1 ? ` rowspan="${node.rowSpan}"` : ''
+      return `<${tag}${colSpan}${rowSpan}>${renderChildren(node.children)}</${tag}>`
+    }
+
     case 'upload': {
       const media = node.value
       if (!media || typeof media !== 'object' || !media.url) return ''

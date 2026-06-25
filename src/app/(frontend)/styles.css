@@ -48,6 +48,13 @@
 .tiptap-article blockquote         { border-left: 3px solid #000; padding-left: 1rem; color: #4B5563; font-style: italic; margin-bottom: 0.875rem; }
 .tiptap-article a                  { color: #000; text-decoration: underline; text-underline-offset: 3px; }
 .tiptap-article p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: #9CA3AF; pointer-events: none; float: left; height: 0; }
+.tiptap-article table               { border-collapse: collapse; width: 100%; margin: 1rem 0; table-layout: fixed; overflow: hidden; }
+.tiptap-article table td,
+.tiptap-article table th            { border: 1px solid #D1D5DB; padding: 0.5rem 0.625rem; vertical-align: top; position: relative; min-width: 3rem; }
+.tiptap-article table th            { background: #F3F4F6; font-weight: 600; text-align: left; }
+.tiptap-article table p             { margin-bottom: 0; }
+.tiptap-article table .selectedCell:after { content: ''; position: absolute; inset: 0; background: rgba(20,181,58,0.12); pointer-events: none; }
+.tiptap-article table .column-resize-handle { position: absolute; right: -2px; top: 0; bottom: 0; width: 4px; background: #14B53A; cursor: col-resize; }
 
 /* ── TipTap editor — biography (simple) ─────────────────────────────── */
 .tiptap-bio                        { min-height: 80px; font-size: 0.875rem; line-height: 1.6; }
@@ -85,3 +92,8 @@
 .article-prose img         { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem 0; }
 .article-prose figure      { margin: 1.5rem 0; }
 .article-prose figcaption  { text-align: center; font-size: 0.875rem; color: #6B7280; margin-top: 0.5rem; }
+.article-prose table       { border-collapse: collapse; width: 100%; margin: 1.5rem 0; font-size: 0.95em; }
+.article-prose th,
+.article-prose td          { border: 1px solid #D1D5DB; padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; color: #374151; }
+.article-prose th          { background: #F3F4F6; font-weight: 600; color: #111; }
+.article-prose table p     { margin-bottom: 0; }

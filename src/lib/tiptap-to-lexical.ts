@@ -73,8 +73,46 @@ function convertListItem(n: Node): Node {
   }
 }
 
+function convertTableCell(n: Node): Node {
+  const isHeader = n.type === 'tableHeader'
+  const children = (n.content ?? []).map(convertNode).filter(Boolean)
+  return {
+    type:        'tablecell',
+    version:     1,
+    direction:   null,
+    format:      '',
+    indent:      0,
+    children:    children.length > 0 ? children : [block('paragraph', [text('')])],
+    headerState: isHeader ? 1 : 0,
+    colSpan:     n.attrs?.colspan ?? 1,
+    rowSpan:     n.attrs?.rowspan ?? 1,
+    backgroundColor: null,
+  }
+}
+
+function convertTableRow(n: Node): Node {
+  return {
+    type:      'tablerow',
+    version:   1,
+    direction: null,
+    format:    '',
+    indent:    0,
+    children:  (n.content ?? []).map(convertTableCell),
+  }
+}
+
 function convertNode(n: Node): Node | null {
   switch (n.type) {
+    case 'table':
+      return {
+        type:      'table',
+        version:   1,
+        direction: null,
+        format:    '',
+        indent:    0,
+        children:  (n.content ?? []).map(convertTableRow),
+      }
+
     case 'paragraph':
       return block('paragraph', ensureChildren(inlines(n.content ?? [])))
 

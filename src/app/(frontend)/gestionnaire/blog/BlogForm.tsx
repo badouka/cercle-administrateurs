@@ -214,6 +214,7 @@ export function BlogForm({ postId, initialValues, existingCategories = [] }: Pro
         <ArticleEditor
           ref={editorRef}
           initialContent={initialValues?.contenu}
+          enableTables
         />
       </div>
 

@@ -12,6 +12,7 @@ import {
   OrderedListFeature,
   BlockquoteFeature,
   LinkFeature,
+  EXPERIMENTAL_TableFeature,
 } from '@payloadcms/richtext-lexical'
 
 const toSlug = (value: string) =>
@@ -100,6 +101,7 @@ export const BlogPosts: CollectionConfig = {
           OrderedListFeature(),
           BlockquoteFeature(),
           LinkFeature(),
+          EXPERIMENTAL_TableFeature(),
         ],
       }),
     },

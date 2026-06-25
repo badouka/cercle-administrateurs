@@ -6,9 +6,15 @@ import StarterKit from '@tiptap/starter-kit'
 import UnderlineExt from '@tiptap/extension-underline'
 import LinkExt from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
+import { Table } from '@tiptap/extension-table'
+import { TableRow } from '@tiptap/extension-table-row'
+import { TableHeader } from '@tiptap/extension-table-header'
+import { TableCell } from '@tiptap/extension-table-cell'
 import {
   Bold, Italic, Underline, Heading2, Heading3,
   List, ListOrdered, Quote, Link, Link2Off,
+  Table as TableIcon, ArrowLeftToLine, ArrowRightToLine,
+  ArrowUpToLine, ArrowDownToLine, Columns2, Rows2, Trash2,
 } from 'lucide-react'
 
 export interface ArticleEditorRef {
@@ -19,6 +25,8 @@ export interface ArticleEditorRef {
 interface Props {
   initialContent?: string
   placeholder?:    string
+  /** Active l'insertion de tableaux (collection avec EXPERIMENTAL_TableFeature). */
+  enableTables?:   boolean
 }
 
 function Divider() {
@@ -50,7 +58,7 @@ function ToolBtn({
 }
 
 export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
-  function ArticleEditor({ initialContent, placeholder = 'Rédigez votre article ici…' }, ref) {
+  function ArticleEditor({ initialContent, placeholder = 'Rédigez votre article ici…', enableTables = false }, ref) {
     const [showLinkInput, setShowLinkInput] = useState(false)
     const [linkUrl,       setLinkUrl]       = useState('')
 
@@ -60,6 +68,9 @@ export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
         UnderlineExt,
         LinkExt.configure({ openOnClick: false, HTMLAttributes: { class: 'underline text-gray-700' } }),
         Placeholder.configure({ placeholder }),
+        ...(enableTables
+          ? [Table.configure({ resizable: true }), TableRow, TableHeader, TableCell]
+          : []),
       ],
       content:        initialContent,
       editorProps: {
@@ -138,6 +149,46 @@ export const ArticleEditor = forwardRef<ArticleEditorRef, Props>(
             <ToolBtn onClick={() => { setShowLinkInput(s => !s); setLinkUrl('') }} title="Insérer un lien">
               <Link size={14} />
             </ToolBtn>
+          )}
+
+          {enableTables && (
+            <>
+              <Divider />
+
+              {/* ── Tableaux ── */}
+              <ToolBtn
+                onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+                title="Insérer un tableau (3×3)"
+              >
+                <TableIcon size={14} />
+              </ToolBtn>
+
+              {editor.isActive('table') && (
+                <>
+                  <ToolBtn onClick={() => editor.chain().focus().addColumnBefore().run()} title="Ajouter une colonne avant">
+                    <ArrowLeftToLine size={14} />
+                  </ToolBtn>
+                  <ToolBtn onClick={() => editor.chain().focus().addColumnAfter().run()} title="Ajouter une colonne après">
+                    <ArrowRightToLine size={14} />
+                  </ToolBtn>
+                  <ToolBtn onClick={() => editor.chain().focus().addRowBefore().run()} title="Ajouter une ligne avant">
+                    <ArrowUpToLine size={14} />
+                  </ToolBtn>
+                  <ToolBtn onClick={() => editor.chain().focus().addRowAfter().run()} title="Ajouter une ligne après">
+                    <ArrowDownToLine size={14} />
+                  </ToolBtn>
+                  <ToolBtn onClick={() => editor.chain().focus().deleteColumn().run()} title="Supprimer la colonne">
+                    <Columns2 size={14} />
+                  </ToolBtn>
+                  <ToolBtn onClick={() => editor.chain().focus().deleteRow().run()} title="Supprimer la ligne">
+                    <Rows2 size={14} />
+                  </ToolBtn>
+                  <ToolBtn onClick={() => editor.chain().focus().deleteTable().run()} title="Supprimer le tableau">
+                    <Trash2 size={14} />
+                  </ToolBtn>
+                </>
+              )}
+            </>
           )}
         </div>
 
