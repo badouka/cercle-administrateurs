@@ -1,295 +1,176 @@
 import { getPayload } from 'payload'
-import { headers as getHeaders } from 'next/headers'
-import Image from 'next/image'
+import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
-import type { Media } from '@/payload-types'
-import config from '@payload-config'
-import { ArrowLeft, Briefcase, Building2, Lock, ExternalLink, Phone, Mail } from 'lucide-react'
+import { ArrowLeft, Building2, Users, Lock, ArrowRight } from 'lucide-react'
+import type { Membre, Media } from '@/payload-types'
 import RichTextContent from '@/components/RichTextContent'
+import { PageHero } from '@/components/PageHero'
 
-interface Props {
-  params: Promise<{ slug: string }>
-}
-
-type HeaderVariant = 'bureau' | 'membre'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function detectBioType(bio: any): 'html' | 'lexical' | null {
-  if (!bio) return null
-  if (typeof bio === 'string') return 'html'
-  if (typeof bio === 'object' && bio.root) return 'lexical'
-  return null
-}
-
-function getHeaderVariant(posteCap?: string | null): HeaderVariant {
-  const p = posteCap?.trim() ?? ''
-  if (!p || p === 'Membre') return 'membre'
-  return 'bureau'
-}
-
-async function findMembre(payload: Awaited<ReturnType<typeof getPayload>>, slugOrId: string, depth: number) {
-  // Cherche d'abord par slug
-  const bySlug = await payload.find({
-    collection:     'membres',
-    where:          { slug: { equals: slugOrId } },
-    depth,
+export default async function MembrePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const res = await payload.find({
+    collection: 'membres',
+    where: { slug: { equals: slug } },
+    depth: 1,
+    limit: 1,
     overrideAccess: true,
-    limit:          1,
   })
-  if (bySlug.docs.length > 0) return bySlug.docs[0]
-
-  // Fallback : ID numérique
-  const numId = parseInt(slugOrId, 10)
-  if (isNaN(numId)) return null
-  try {
-    return await payload.findByID({ collection: 'membres', id: numId, depth, overrideAccess: true })
-  } catch {
-    return null
-  }
-}
-
-// ─── Metadata dynamique ───────────────────────────────────────────────────────
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  try {
-    const payload = await getPayload({ config })
-    const membre  = await findMembre(payload, slug, 0)
-    if (!membre) return {}
-    return { title: `${membre.prenom} ${membre.nom}` }
-  } catch {
-    return {}
-  }
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
-export default async function MembreDetailPage({ params }: Props) {
-  const { slug } = await params
-
-  const [payload, headers] = await Promise.all([
-    getPayload({ config }),
-    getHeaders(),
-  ])
-
-  const membre = await findMembre(payload, slug, 2)
+  const membre = res.docs[0] as Membre | undefined
   if (!membre) notFound()
 
-  const { user }        = await payload.auth({ headers })
-  const isAuthenticated = Boolean(user)
+  const photo = membre.photo && typeof membre.photo === 'object' && 'filename' in membre.photo
+    ? (membre.photo as Media)
+    : null
 
-  const variant       = getHeaderVariant(membre.poste?.posteCap)
-  const photo         = typeof membre.photo         === 'object' && membre.photo         ? (membre.photo         as Media) : null
-  const logoOrganisme = typeof membre.poste?.logoOrganisme === 'object' && membre.poste?.logoOrganisme ? (membre.poste.logoOrganisme as Media) : null
-  const initiales     = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
-  const hasPoste      = membre.poste?.posteCap || membre.poste?.fonctionProfessionnelle || membre.poste?.organisme || membre.poste?.direction
-  const hasCoord      = membre.coordonnees?.telephone || membre.coordonnees?.emailProfessionnel || membre.coordonnees?.linkedin
+  const posteCap = membre.poste?.posteCap ?? ''
+  const organisme = membre.poste?.organisme ?? ''
+  const fonctionPro = membre.poste?.fonctionProfessionnelle ?? ''
+
+  const initiales = `${membre.prenom?.[0] ?? ''}${membre.nom?.[0] ?? ''}`.toUpperCase()
+
+  const bioObj = membre.biographie as { root?: { children?: unknown[] } } | null | undefined
+  const hasBio = Boolean(bioObj?.root?.children?.length)
+  const bioDefaut = [
+    `${membre.prenom} ${membre.nom} est ${fonctionPro.toLowerCase() || 'administrateur public'} au sein de ${organisme}. Administrateur public engagé, ${membre.prenom} met son expertise au service de la modernisation de l'administration sénégalaise et de la bonne gouvernance du secteur parapublic.`,
+    "Membre du Cercle des Administrateurs Publics, il contribue activement au partage des meilleures pratiques de gouvernance et à la promotion d'une culture de la performance au sein des établissements publics.",
+  ]
+
+  const logoMedia = membre.poste?.logoOrganisme && typeof membre.poste.logoOrganisme === 'object'
+    ? (membre.poste.logoOrganisme as Media)
+    : null
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+    <div>
+      <PageHero
+        title={`${membre.prenom} ${membre.nom}`}
+        subtitle={posteCap || 'Membre du Cercle'}
+        breadcrumb={[
+          { label: 'Accueil', href: '/' },
+          { label: 'Annuaire', href: '/annuaire' },
+          { label: `${membre.prenom} ${membre.nom}`, href: `/annuaire/${slug}` },
+        ]}
+      />
+      <div className="bg-[#FAF8F3] min-h-screen pb-20">
+        <div className="max-w-3xl mx-auto px-6">
 
-      {/* Retour */}
-      <Link
-        href="/annuaire"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-black mb-8 transition-colors"
-      >
-        <ArrowLeft size={16} />
-        Retour à l'annuaire
-      </Link>
+        {/* Lien retour */}
+        <Link href="/annuaire" className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/50 hover:text-[#0B6B3A] transition-colors mb-8">
+          <ArrowLeft size={15} /> Retour à l&apos;annuaire
+        </Link>
 
-      <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden">
-
-        {/* Header */}
-        <div className={`px-8 py-8 ${variant === 'bureau' ? 'bg-blue-950' : 'bg-black'}`}>
-          <div className="flex items-center gap-6 text-white">
-
+        {/* Header card sombre */}
+        <div className="relative overflow-hidden rounded-2xl shadow-xl" style={{ background: 'linear-gradient(135deg, #083A1E, #062812)' }}>
+          {/* Pattern points */}
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.10) 1px, transparent 0)', backgroundSize: '20px 20px' }} />
+          {/* Filet tricolore haut */}
+          <div className="absolute top-0 left-0 right-0 h-1 flex">
+            <div className="flex-1 bg-[#0B6B3A]"></div>
+            <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
+              <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
+            </div>
+            <div className="flex-1 bg-[#E2231A]"></div>
+          </div>
+          {/* Contenu */}
+          <div className="relative flex flex-wrap items-center gap-6 p-8 pt-10">
             {/* Photo */}
-            <div className="shrink-0 h-40 w-40 overflow-hidden rounded-lg ring-2 ring-white/20 bg-gray-800">
-              {photo?.url ? (
-                <Image
-                  src={photo.url}
-                  alt={`${membre.prenom} ${membre.nom}`}
-                  width={160}
-                  height={160}
-                  className="h-full w-full object-cover"
+            <div className="flex-none w-32 h-40 rounded-xl overflow-hidden bg-[#0A5530] border border-[#0A5530] flex items-center justify-center shadow-lg">
+              {photo?.filename ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={`/api/media/file/${photo.filename}`} alt={`${membre.prenom} ${membre.nom}`} className="w-full h-full object-cover" />
+              ) : (
+                <span className="font-serif text-4xl font-bold text-[#C9A227]">{initiales}</span>
+              )}
+            </div>
+            {/* Identité */}
+            <div className="flex-1 min-w-[200px]">
+              <h1 className="font-serif text-3xl font-bold text-white">{membre.prenom} {membre.nom}</h1>
+              {posteCap && (
+                <span className="inline-block mt-3 bg-[#C9A227] text-[#062812] text-xs font-bold px-3 py-1 rounded-full">{posteCap}</span>
+              )}
+              {organisme && (
+                <p className="mt-3 text-sm font-semibold uppercase tracking-wider text-[#6FAE8E]">{organisme}</p>
+              )}
+            </div>
+            {/* Logo organisme */}
+            <div className="flex-none w-24 h-20 rounded-xl bg-white flex flex-col items-center justify-center gap-1 shadow p-2">
+              {logoMedia?.filename ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={`/api/media/file/${logoMedia.filename}`}
+                  alt={organisme || 'Organisme'}
+                  className="max-h-full max-w-full object-contain"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-gray-500">
-                  {initiales}
-                </div>
+                <>
+                  <Building2 size={24} className="text-[#0B6B3A]" />
+                  <span className="text-[8px] font-black uppercase tracking-wider text-[#062812] text-center leading-tight">
+                    {organisme.match(/\b([A-ZÉÈÀ])/g)?.join('').slice(0, 5) ?? 'CAP'}
+                  </span>
+                </>
               )}
             </div>
-
-            {/* Identité */}
-            <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-bold">{membre.prenom} {membre.nom}</h1>
-              {variant === 'bureau' && membre.poste?.posteCap && (
-                <span className="mt-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-blue-800 text-white">
-                  {membre.poste.posteCap}
-                </span>
-              )}
-              {membre.poste?.organisme && (
-                <p className="mt-1 text-gray-300 font-semibold">{membre.poste.organisme}</p>
-              )}
-            </div>
-
-            {/* Logo organisation */}
-            {logoOrganisme?.url && (
-              membre.poste?.siteOrganisme ? (
-                <a
-                  href={membre.poste.siteOrganisme}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="shrink-0 hover:opacity-80 transition-opacity"
-                  title={membre.poste.organisme ?? undefined}
-                >
-                  <div className="h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
-                    <Image
-                      src={logoOrganisme.url}
-                      alt={membre.poste.organisme ?? 'Logo organisation'}
-                      width={72} height={72}
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                </a>
-              ) : (
-                <div className="shrink-0 h-20 w-20 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20 flex items-center justify-center p-1">
-                  <Image
-                    src={logoOrganisme.url}
-                    alt={membre.poste?.organisme ?? 'Logo organisation'}
-                    width={72} height={72}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              )
-            )}
           </div>
         </div>
 
-        {/* Corps */}
-        <div className="bg-white p-8 space-y-8">
+        {/* Biographie */}
+        <section className="mt-10 px-1">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="block w-8 h-0.5 bg-[#C9A227]"></span>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Biographie</span>
+          </div>
+          {hasBio ? (
+            <div className="prose prose-sm max-w-none article-prose text-[#14110B]/70 leading-relaxed">
+              <RichTextContent data={membre.biographie} />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4 text-[#14110B]/70 text-base leading-relaxed">
+              {bioDefaut.map((para, i) => (
+                <p key={i} style={{ margin: 0, textAlign: 'justify' }}>{para}</p>
+              ))}
+            </div>
+          )}
+        </section>
 
-          {/* Biographie */}
-          {(() => {
-            const bioType = detectBioType(membre.biographie)
-            if (!bioType) return null
-            return (
-              <section>
-                <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
-                  Biographie
-                </h2>
-                {bioType === 'html' ? (
-                  <div
-                    className="text-gray-700 leading-relaxed bio-prose"
-                    dangerouslySetInnerHTML={{ __html: membre.biographie as unknown as string }}
-                  />
-                ) : (
-                  <RichTextContent data={membre.biographie} />
-                )}
-              </section>
-            )
-          })()}
-
-          <div className="grid gap-8 sm:grid-cols-2">
-
-            {/* Poste */}
-            {hasPoste && (
-              <section>
-                <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 flex items-center gap-1.5">
-                  <Briefcase size={13} />
-                  Poste
-                </h2>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  {membre.poste?.posteCap && (
-                    <li className="font-medium text-black">{membre.poste.posteCap}</li>
-                  )}
-                  {membre.poste?.fonctionProfessionnelle && (
-                    <li className="text-gray-600">{membre.poste.fonctionProfessionnelle}</li>
-                  )}
-                  {membre.poste?.organisme && (
-                    <li className="flex items-center gap-1.5">
-                      <Building2 size={13} className="shrink-0 text-gray-400" />
-                      {membre.poste.organisme}
-                    </li>
-                  )}
-                  {membre.poste?.direction && (
-                    <li className="text-gray-500">{membre.poste.direction}</li>
-                  )}
-                </ul>
-              </section>
+        {/* Poste + Coordonnées */}
+        <div className="grid sm:grid-cols-2 gap-8 mt-10 pt-8 border-t border-[#14110B]/10">
+          {/* Poste */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Building2 size={15} className="text-[#0B6B3A]" />
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Poste</span>
+            </div>
+            {posteCap && <p className="font-serif text-lg font-semibold text-[#062812]">{posteCap}</p>}
+            {fonctionPro && <p className="text-sm text-[#14110B]/60 mt-1">{fonctionPro}</p>}
+            {organisme && (
+              <p className="flex items-center gap-2 text-sm text-[#14110B]/60 mt-3">
+                <Building2 size={14} className="text-[#14110B]/30" /> {organisme}
+              </p>
             )}
-
-            {/* Coordonnées */}
-            <section>
-              <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
-                Coordonnées
-              </h2>
-
-              {isAuthenticated ? (
-                hasCoord ? (
-                  <ul className="space-y-2 text-sm">
-                    {membre.coordonnees?.telephone && (
-                      <li>
-                        <a
-                          href={`tel:${membre.coordonnees.telephone}`}
-                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
-                        >
-                          <Phone size={13} className="shrink-0 text-gray-400" />
-                          {membre.coordonnees.telephone}
-                        </a>
-                      </li>
-                    )}
-                    {membre.coordonnees?.emailProfessionnel && (
-                      <li>
-                        <a
-                          href={`mailto:${membre.coordonnees.emailProfessionnel}`}
-                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
-                        >
-                          <Mail size={13} className="shrink-0 text-gray-400" />
-                          {membre.coordonnees.emailProfessionnel}
-                        </a>
-                      </li>
-                    )}
-                    {membre.coordonnees?.linkedin && (
-                      <li>
-                        <a
-                          href={membre.coordonnees.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
-                        >
-                          <ExternalLink size={13} className="shrink-0 text-gray-400" />
-                          Profil LinkedIn
-                        </a>
-                      </li>
-                    )}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-gray-400 italic">Aucune coordonnée renseignée.</p>
-                )
-              ) : (
-                <div className="flex items-start gap-2.5 rounded-lg border border-gray-200 bg-gray-50 p-4">
-                  <Lock size={15} className="mt-0.5 shrink-0 text-gray-400" />
-                  <div>
-                    <p className="text-sm text-gray-600">
-                      Connectez-vous pour accéder aux coordonnées de ce membre.
-                    </p>
-                    <Link
-                      href="/connexion"
-                      className="mt-2 inline-block text-sm font-semibold text-black underline underline-offset-2 hover:text-gray-700"
-                    >
-                      Se connecter →
-                    </Link>
-                  </div>
+          </div>
+          {/* Coordonnées */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <Users size={15} className="text-[#0B6B3A]" />
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Coordonnées</span>
+            </div>
+            <div className="bg-white rounded-xl border border-[#14110B]/10 p-5">
+              <div className="flex items-start gap-3">
+                <Lock size={16} className="text-[#14110B]/30 mt-0.5 flex-none" />
+                <div>
+                  <p className="text-sm text-[#14110B]/60 leading-relaxed">Connectez-vous pour accéder aux coordonnées de ce membre.</p>
+                  <Link href="/connexion" className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-[#0B6B3A] hover:underline">
+                    Se connecter <ArrowRight size={14} />
+                  </Link>
                 </div>
-              )}
-            </section>
-
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
+    </div>
     </div>
   )
 }

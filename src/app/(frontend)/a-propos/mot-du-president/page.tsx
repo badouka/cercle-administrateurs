@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Membre, Media, Page } from '@/payload-types'
-import { ArrowRight, User } from 'lucide-react'
-import RichTextContent from '@/components/RichTextContent'
-import { PageHero } from '@/components/PageHero'
+import { BureauAutoCarousel } from '@/components/BureauAutoCarousel'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
+
+function initiales(prenom?: string | null, nom?: string | null): string {
+  return `${(prenom ?? '').charAt(0)}${(nom ?? '').charAt(0)}`.toUpperCase()
+}
 
 const ORDRE_POSTES = [
   "Président d'honneur",
@@ -42,6 +43,14 @@ function isAuBureau(m: Membre): boolean {
   return posteCap !== '' && posteCap !== 'Membre'
 }
 
+const messageParas = [
+  "Le Sénégal a toujours fait de la performance de son administration publique un chantier prioritaire. Du Plan Sénégal Émergent au Plan de Transformation Sénégal 2050 du Président Bassirou Diomaye Faye, la même conviction traverse les ambitions de notre pays : l'État ne peut pleinement servir ses citoyens qu'en se réformant lui-même, en s'allégeant, en se concentrant sur ses missions essentielles et en confiant l'exécution de certaines politiques publiques à des structures plus agiles et plus proches du terrain.",
+  "C'est dans cet esprit que sont nées les entités du secteur parapublic. En externalisant certaines missions au profit de structures dotées d'une plus grande autonomie de gestion, l'État sénégalais a voulu introduire une culture de la performance au cœur de l'action publique, en s'inspirant des méthodes du secteur privé sans renoncer aux exigences de l'intérêt général.",
+  "Mais une structure agile ne suffit pas. Ce qui fait la différence, c'est la qualité des femmes et des hommes qui la dirigent et notamment la compétence et la posture de ceux qui siègent dans ses organes délibérants. Un organe délibérant performant ne se décrète pas : il se construit, délibération après délibération, sur un socle de compétences diverses, de débats substantiels et d'une exigence collective tournée vers les résultats. C'est la conviction qui a présidé à la naissance du Cercle des Administrateurs Publics (CAP).",
+  "Le CAP rassemble les présidents des organes délibérants du secteur parapublic avec une ambition claire : être un cadre de réflexion, d'échanges et d'impulsion d'idées au service de la modernisation de l'administration sénégalaise. Renforcer les capacités de ses membres, partager les meilleures pratiques de gouvernance, veiller à la mise en œuvre des orientations présidentielles au sein des établissements publics, constituer une force de proposition pour les pouvoirs publics telles sont les missions que notre cercle s'est assignées depuis sa création.",
+  "Dans un secteur parapublic appelé à jouer un rôle croissant dans la mise en œuvre du Sénégal 2050, le CAP entend être bien plus qu'une association professionnelle. Il veut être un levier de transformation, un pilier de référence dans la promotion d'une gouvernance publique transparente, efficace et innovante au service du développement durable et de l'intérêt général.",
+]
+
 async function fetchPage(): Promise<Page | null> {
   const payload = await getPayload({ config })
   const { docs } = await payload.find({
@@ -64,57 +73,31 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MotDuPresidentPage() {
   const payload = await getPayload({ config })
 
-  const [page, optionPoint, membresRes] = await Promise.all([
-    fetchPage(),
-    // Option 1 — notation pointée sur le groupe "poste"
-    payload.find({
-      collection:     'membres',
-      where:          { 'poste.posteCap': { equals: 'Président' } },
-      depth:          0,
-      overrideAccess: true,
-    }),
-    payload.find({
-      collection:     'membres',
-      depth:          1,
-      limit:          500,
-      sort:           'nom',
-      overrideAccess: true,
-    }),
-  ])
+  const membresRes = await payload.find({
+    collection:     'membres',
+    depth:          1,
+    limit:          500,
+    sort:           'nom',
+    overrideAccess: true,
+  })
 
-  console.log('[MotDuPresidentPage] Option 1 "poste.posteCap" → ', optionPoint.totalDocs, 'membre(s) trouvé(s)')
-
-  // Option 2 — champ "posteCap" à la racine (au cas où il ne serait pas dans le groupe "poste").
-  // Payload valide le chemin du `where` au runtime et lève une QueryError si le champ
-  // n'existe pas à cet endroit du schéma : on capture donc l'erreur au lieu de planter la page.
-  try {
-    const optionRacine = await payload.find({
-      collection:     'membres',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      where:          { posteCap: { equals: 'Président' } } as any,
-      depth:          0,
-      overrideAccess: true,
-    })
-    console.log('[MotDuPresidentPage] Option 2 "posteCap"       → ', optionRacine.totalDocs, 'membre(s) trouvé(s)')
-  } catch (err) {
-    console.log(
-      '[MotDuPresidentPage] Option 2 "posteCap"       → erreur :',
-      err instanceof Error ? err.message : err,
-    )
-  }
-
-  // Les valeurs poste.posteCap importées de WordPress contiennent parfois des espaces
-  // parasites (ex. " Président" avec une espace de tête) qui font échouer un `equals`
-  // strict côté base de données : on retrouve donc le président côté JS avec un `.trim()`,
-  // comme le fait déjà isAuBureau()/rankPoste() pour le tri du bureau.
+  // Les valeurs poste.posteCap importées contiennent parfois des espaces parasites :
+  // on retrouve donc le président côté JS avec un `.trim()`.
   const president = (membresRes.docs as Membre[]).find(m => {
     const p = (m.poste?.posteCap ?? '').trim()
     return p === 'Président' || p === 'Présidente'
   }) ?? null
-  console.log(
-    '[MotDuPresidentPage] président trouvé via .trim() →',
-    president ? `${president.prenom} ${president.nom} (${president.poste?.posteCap})` : 'aucun',
-  )
+
+  const presidentMedia =
+    president?.photo && typeof president.photo === 'object' ? (president.photo as Media) : null
+  const presidentPhoto = presidentMedia?.url
+    ? presidentMedia.url
+    : presidentMedia?.filename
+      ? `/api/media/file/${presidentMedia.filename}`
+      : null
+
+  const presidentNom = president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'
+  const presidentInitiales = president ? initiales(president.prenom, president.nom) : 'LS'
 
   const bureau = (membresRes.docs as Membre[])
     .filter(isAuBureau)
@@ -125,144 +108,193 @@ export default async function MotDuPresidentPage() {
     })
 
   return (
-    <div>
-      <PageHero
-        title="Mot du Président"
-        breadcrumb={[
-          { label: 'Accueil', href: '/' },
-          { label: 'À propos', href: '/a-propos' },
-          { label: 'Mot du Président', href: '/a-propos/mot-du-president' },
-        ]}
-      />
+    <div className="bg-white">
+      {/* ── 1. Hero éditorial (fond sombre) ─────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#062812] pt-24 pb-16">
+        {/* Pattern de points */}
+        <div
+          className="absolute inset-0 opacity-50"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.10) 1px, transparent 0)',
+            backgroundSize: '22px 22px',
+          }}
+        />
+        {/* Cercle lumineux doré */}
+        <div className="absolute top-[-20%] right-[-8%] h-[40vw] max-h-[520px] w-[40vw] max-w-[520px] rounded-full bg-gradient-to-br from-[#C9A227]/20 to-transparent" />
+        {/* Filet tricolore en haut */}
+        <div className="absolute top-0 left-0 right-0 flex h-1.5">
+          <div className="flex-1 bg-[#0B6B3A]" />
+          <div className="relative flex-1 bg-[#C9A227]">
+            <span className="absolute inset-0 flex items-center justify-center text-[8px] text-[#0B6B3A]">
+              ★
+            </span>
+          </div>
+          <div className="flex-1 bg-[#E2231A]" />
+        </div>
 
-      {/* ── 2. Contenu ──────────────────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-5 lg:gap-16">
-            <div className="lg:col-span-3">
-              {page?.contenu ? (
-                <RichTextContent data={page.contenu} />
-              ) : (
-                <p className="text-ink/50">
-                  Le mot du Président n&apos;est pas encore disponible.
-                </p>
-              )}
-            </div>
+        <div className="relative z-10">
+          {/* Lien retour */}
+          <div className="mx-auto mb-8 max-w-7xl px-6">
+            <Link
+              href="/a-propos"
+              className="text-sm font-medium text-[#6FAE8E] transition-colors hover:text-white"
+            >
+              ← Qui sommes-nous ?
+            </Link>
+          </div>
 
-            <div className="lg:col-span-2">
-              {president ? (
-                <div className="rounded-2xl border border-ink/10 bg-[#F5F5F5] p-8 text-center">
-                  <div className="mx-auto mb-5 h-32 w-32 shrink-0 overflow-hidden rounded-full bg-ink/5 ring-4 ring-[#14B53A]/15">
-                    {president?.photo && typeof president.photo === 'object' && president.photo.filename ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={`/api/media/file/${president.photo.filename}`}
-                        alt={`${president.prenom} ${president.nom}`}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <User size={40} className="text-ink/30" />
-                      </div>
-                    )}
+          <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[0.7fr_1.3fr]">
+            {/* Colonne gauche : photo */}
+            <div className="relative max-w-[300px]">
+              <div className="overflow-hidden rounded-2xl border border-[#0A5530] shadow-2xl">
+                {presidentPhoto ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={presidentPhoto}
+                    alt={presidentNom}
+                    className="aspect-[4/5] w-full object-cover object-top"
+                  />
+                ) : (
+                  <div className="flex aspect-[4/5] w-full items-center justify-center bg-[#0A5530]">
+                    <span className="font-serif text-5xl font-bold text-[#C9A227]">
+                      {presidentInitiales}
+                    </span>
                   </div>
-                  <p className="font-serif text-xl font-medium text-ink">
-                    {president.prenom} {president.nom}
-                  </p>
-                  {president.poste?.posteCap?.trim() && (
-                    <p className="mt-1 text-sm font-semibold text-[#14B53A]">
-                      {president.poste.posteCap.trim()}
-                    </p>
-                  )}
-                  {president.poste?.organisme && (
-                    <p className="mt-1 text-sm text-ink/60">{president.poste.organisme}</p>
-                  )}
-                  {president.coordonnees?.linkedin && (
-                    <div className="mt-5 flex items-center justify-center gap-3">
-                      <a
-                        href={president.coordonnees.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="LinkedIn"
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/15 text-ink/50 transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
-                      >
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-                          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                          <rect x="2" y="9" width="4" height="12" />
-                          <circle cx="4" cy="4" r="2" />
-                        </svg>
-                      </a>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <p className="text-ink/50">Le Président n&apos;est pas encore renseigné.</p>
-              )}
+                )}
+              </div>
+              <div className="absolute right-[-16px] bottom-6 rounded-xl bg-[#C9A227] px-4 py-3 text-[#062812] shadow-xl">
+                <p className="text-base font-bold">{presidentNom}</p>
+                <p className="text-xs font-semibold">Président du CAP</p>
+              </div>
             </div>
+
+            {/* Colonne droite */}
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="h-0.5 w-8 bg-[#C9A227]" />
+                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C9A227]">
+                  Le mot du président
+                </span>
+              </div>
+              <h1 className="mt-4 font-serif text-5xl leading-tight text-white">
+                {'« Servir l\'État, une '}
+                <span className="text-[#C9A227]">exigence</span>
+                {' partagée »'}
+              </h1>
+              <p className="mt-5 max-w-prose text-base leading-relaxed text-[#6FAE8E]">
+                {"À l'occasion du renouvellement du bureau exécutif, le Président adresse son message aux membres du Cercle et à l'ensemble des serviteurs de l'État."}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Filet tricolore en bas */}
+        <div className="absolute bottom-0 left-0 right-0 h-1.5 flex">
+          <div className="flex-1 bg-[#0B6B3A]"></div>
+          <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
+            <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
+          </div>
+          <div className="flex-1 bg-[#E2231A]"></div>
+        </div>
+      </section>
+
+      {/* ── 2. Corps du message ─────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-3xl px-6 py-16">
+        <p className="font-serif text-xl text-[#083A1E] mb-6">
+          <span className="font-serif text-8xl font-bold text-[#0B6B3A] float-left mr-2 leading-none mt-1">L</span>
+          {messageParas[0].slice(1)}
+        </p>
+
+        <div className="flex flex-col gap-6 text-[#14110B]/80 text-base leading-relaxed mt-8">
+          {messageParas.slice(1).map((para, i) => (
+            <p key={i} style={{ margin: 0 }}>{para}</p>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 3. Signature ────────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-3xl px-6 pb-20">
+        <div className="flex flex-wrap items-center justify-between gap-6 border-t border-[#14110B]/10 pt-8">
+          {/* Gauche */}
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#C9A227] bg-[#0B6B3A]/10 text-lg font-bold text-[#0B6B3A]">
+              {presidentInitiales}
+            </div>
+            <div>
+              <p className="font-serif text-xl font-bold text-[#062812]">{presidentNom}</p>
+              <p className="text-sm font-semibold text-[#C9A227]">Président du CAP</p>
+            </div>
+          </div>
+
+          {/* Droite : réseaux sociaux */}
+          <div className="flex items-center gap-3">
+            <a
+              href="https://www.facebook.com/lansanagagny"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#0B6B3A] hover:bg-[#0B6B3A] hover:text-white"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </a>
+            <a
+              href="https://x.com/LansanaGagny"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X (Twitter)"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#0B6B3A] hover:bg-[#0B6B3A] hover:text-white"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/lansana-gagny-sakho/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#0B6B3A] hover:bg-[#0B6B3A] hover:text-white"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect x="2" y="9" width="4" height="12" />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ── 3. Bureau ───────────────────────────────────────────────────────── */}
-      <section className="bg-[#F5F5F5] py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#FCD116]">Gouvernance</p>
-            <h2 className="mt-3 font-serif text-3xl font-medium text-ink sm:text-4xl">Les membres du bureau</h2>
+      {/* ── 4. Bureau exécutif ──────────────────────────────────────────────── */}
+      <section className="bg-[#FAF8F3] py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-2 flex items-center gap-3">
+            <span className="h-0.5 w-10 bg-[#C9A227]" />
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">
+              Organe exécutif de l&apos;association
+            </span>
           </div>
+          <h2 className="mt-2 font-serif text-4xl font-bold text-[#14110B]">Les membres du bureau</h2>
+          <p className="mt-2 text-[#14110B]/60">
+            Les administrateurs publics qui composent le bureau exécutif du Cercle.
+          </p>
 
-          {bureau.length === 0 ? (
-            <p className="text-center text-ink/50">
-              Aucun membre du bureau renseigné pour le moment.
-            </p>
-          ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {bureau.map(membre => {
-                const photo = typeof membre.photo === 'object' && membre.photo
-                  ? (membre.photo as Media)
-                  : null
-
-                return (
-                  <Link
-                    key={membre.id}
-                    href={`/annuaire/${membre.slug || membre.id}`}
-                    className="group flex flex-col items-center rounded-xl border border-ink/10 bg-white p-6 text-center transition-shadow hover:shadow-lg"
-                  >
-                    <div className="mb-4 h-24 w-24 shrink-0 overflow-hidden rounded-full bg-ink/5 ring-2 ring-transparent transition-all group-hover:ring-[#14B53A]">
-                      {photo?.url ? (
-                        <Image
-                          src={photo.url}
-                          alt={`${membre.prenom} ${membre.nom}`}
-                          width={96}
-                          height={96}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center">
-                          <User size={32} className="text-ink/30" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="font-serif text-base font-medium text-ink">
-                      {membre.prenom} {membre.nom}
-                    </p>
-                    {membre.poste?.posteCap && (
-                      <p className="mt-1 text-sm text-[#14B53A]">{membre.poste.posteCap}</p>
-                    )}
-                  </Link>
-                )
-              })}
-            </div>
-          )}
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/annuaire?filtre=bureau"
-              className="inline-flex items-center gap-2 rounded-lg border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
-            >
-              Voir l&apos;annuaire
-              <ArrowRight size={16} />
-            </Link>
+          <div className="mt-10">
+            <BureauAutoCarousel membres={bureau.map(m => ({
+              id: String(m.id),
+              prenom: m.prenom,
+              nom: m.nom,
+              slug: m.slug,
+              photo: m.photo && typeof m.photo === 'object' && 'filename' in m.photo
+                ? { filename: (m.photo as { filename?: string | null }).filename ?? null }
+                : null,
+              poste: m.poste
+                ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
+                : null,
+            }))} />
           </div>
         </div>
       </section>

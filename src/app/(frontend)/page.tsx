@@ -1,14 +1,16 @@
 import { getPayload } from 'payload'
 import Link from 'next/link'
-import Image from 'next/image'
 import config from '@payload-config'
-import type { Membre, Media, Activity, Document, Page } from '@/payload-types'
-import { BureauCarousel } from '@/components/BureauCarousel'
+import type { Membre, Media, Activity, Document } from '@/payload-types'
+import { MembresCarousel } from '@/components/MembresCarousel'
+import { RevealOnScroll } from '@/components/RevealOnScroll'
+import { CountUp } from '@/components/CountUp'
 import {
   ArrowRight,
-  ArrowUpRight,
+  MapPin,
   User,
   FileText,
+  Download,
 } from 'lucide-react'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -70,44 +72,35 @@ function formatDate(dateStr?: string | null): string {
   }).format(new Date(dateStr))
 }
 
-const ENGAGEMENTS = [
-  {
-    numero: '01',
-    titre:  'Renforcer les capacités',
-    texte:  'Des programmes de formation continue sur la gouvernance et la gestion des risques.',
-  },
-  {
-    numero: '02',
-    titre:  'Promouvoir les meilleures pratiques',
-    texte:  'Diffusion de référentiels issus des meilleures pratiques africaines.',
-  },
-  {
-    numero: '03',
-    titre:  'Structurer le dialogue',
-    texte:  'Un dialogue permanent avec les ministères de tutelle et les corps de contrôle.',
-  },
-  {
-    numero: '04',
-    titre:  'Être une force de proposition',
-    texte:  "Promotion d'une culture de la performance au sein du secteur parapublic.",
-  },
-  {
-    numero: '05',
-    titre:  "Incarner l'exigence de résultats",
-    texte:  'Un suivi rigoureux des objectifs à travers des tableaux de bord.',
-  },
-]
+function moisAnnee(dateStr?: string | null): string {
+  if (!dateStr) return ''
+  return new Intl.DateTimeFormat('fr-FR', {
+    month: 'long', year: 'numeric',
+  }).format(new Date(dateStr))
+}
 
-async function fetchPresidentPage(): Promise<Page | null> {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
-    collection:     'pages',
-    where:          { slug: { equals: 'mot-du-president' } },
-    depth:          0,
-    limit:          1,
-    overrideAccess: true,
-  })
-  return (docs[0] as Page | undefined) ?? null
+const MOIS_COURT = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
+
+function jourMois(dateStr?: string | null): { jour: string; mois: string } {
+  if (!dateStr) return { jour: '', mois: '' }
+  const d = new Date(dateStr)
+  return { jour: String(d.getDate()), mois: MOIS_COURT[d.getMonth()] ?? '' }
+}
+
+function statutBadge(statut: Activity['statut']): { label: string; cls: string } {
+  if (statut === 'en_cours') return { label: 'En cours', cls: 'bg-[#C9A227] text-[#14110B]' }
+  if (statut === 'termine') return { label: 'Terminé', cls: 'bg-[#14110B]/70 text-white' }
+  return { label: 'À venir', cls: 'bg-[#0B6B3A] text-white' }
+}
+
+function categorieActivite(type: Activity['type']): string {
+  return type === 'atelier' || type === 'seminaire' ? 'Ateliers & Séminaires' : 'Actualités'
+}
+
+function mediaFilename(m: unknown): string | null {
+  return m && typeof m === 'object' && 'filename' in m
+    ? ((m as { filename?: string | null }).filename ?? null)
+    : null
 }
 
 // ── Page ───────────────────────────────────────────────────────────────────────
@@ -115,8 +108,7 @@ async function fetchPresidentPage(): Promise<Page | null> {
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
-  const [presidentPage, membresRes, activitesRes, magazinesRes] = await Promise.all([
-    fetchPresidentPage(),
+  const [membresRes, activitesRes, magazinesRes] = await Promise.all([
     payload.find({
       collection:     'membres',
       depth:          1,
@@ -128,7 +120,7 @@ export default async function HomePage() {
       collection:     'activities',
       sort:           '-date_debut',
       depth:          1,
-      limit:          3,
+      limit:          7,
       overrideAccess: true,
     }),
     payload.find({
@@ -141,7 +133,7 @@ export default async function HomePage() {
       },
       depth:          1,
       sort:           '-createdAt',
-      limit:          1,
+      limit:          4,
       overrideAccess: true,
     }),
   ])
@@ -161,353 +153,589 @@ export default async function HomePage() {
     return p === 'Président' || p === 'Présidente'
   }) ?? null
 
-  const citation = lexicalToExcerpt(presidentPage?.contenu, 320)
+  const citationFixe =
+    "Le Sénégal a toujours fait de la performance de son administration publique un chantier prioritaire. Du plan Sénégal Emergent au plan de Transformation Sénégal 2050 du Président Bassirou Diomaye Faye, la même conviction traverse les ambitions de notre pays : l'Etat ne peut pleinement servir ses citoyens qu'en se réformant lui-même, en s'allégeant, en se concentrent sur ses missions essentielles et en confiant l'exécution de certaines politiques publiques à des structures plus agiles et plus proches du terrain."
+
+  const citationClean = citationFixe.replace(/^[«\s"']+/, '')
+  const firstLetter = citationClean.charAt(0)
+  const restOfCitation = citationClean.slice(1)
 
   const activites = activitesRes.docs as Activity[]
-  const magazine  = (magazinesRes.docs[0] as Document | undefined) ?? null
+  const magazines = magazinesRes.docs as Document[]
+  const magazine  = magazines[0] ?? null
+  const anciensNumeros = magazines.slice(1, 4)
 
   const couverture = magazine && typeof magazine.couverture === 'object' && magazine.couverture
     ? (magazine.couverture as Media)
     : null
 
+  // Activités réutilisées comme actualités (section 4)
+  const actuVedette = activites[0] ?? null
+  const actuSecondaires = activites.slice(1, 4)
+
+  const presidentPhoto = mediaFilename(president?.photo)
+  const magazineFichier = mediaFilename(magazine?.fichier)
+
   return (
-    <div>
-      {/* ── 1. Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative w-full -mt-20">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/api/media/file/cap-banner.png"
-          alt="Cercle des Administrateurs Publics"
-          className="w-full h-auto block"
-        />
-        <div className="absolute bottom-[23%] left-[6%]">
-          <Link
-            href="/a-propos"
-            className="inline-flex items-center gap-2 bg-[#14B53A] text-white rounded-full px-7 py-3 font-semibold text-sm hover:bg-[#14B53A]/90 transition-colors"
-          >
-            En savoir plus <ArrowRight size={16} />
-          </Link>
+    <div className="bg-[#FAF8F3] font-sans">
+
+      {/* ── 1. Hero ───────────────────────────────────────────────────────── */}
+      <section className="bg-[#FAF8F3] pt-36 pb-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid items-center gap-16 lg:grid-cols-2">
+            {/* Gauche */}
+            <div className="animate-fade-left">
+              <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
+                — Plateforme officielle du CAP
+              </p>
+              <h1 className="mt-4 font-serif text-5xl font-bold leading-tight text-[#14110B] lg:text-6xl">
+                Cercle des Administrateurs Publics.
+              </h1>
+              <p className="mt-6 text-lg leading-relaxed text-[#14110B]/60">
+                Le CAP fédère les dirigeants des organes délibérants du secteur parapublic
+                sénégalais et accompagne l&apos;État dans la modernisation de l&apos;administration
+                publique.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/inscription"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                >
+                  Devenir membre <ArrowRight size={18} />
+                </Link>
+                <Link
+                  href="/a-propos"
+                  className="inline-flex items-center rounded-lg border-2 border-[#0B6B3A] px-7 py-3 font-semibold text-[#0B6B3A] transition-colors hover:bg-[#0B6B3A]/5"
+                >
+                  Découvrir le Cercle
+                </Link>
+              </div>
+            </div>
+
+            {/* Droite */}
+            <div className="relative animate-fade-right">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/api/media/file/cap-banner.png"
+                  alt="Cercle des Administrateurs Publics"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 flex h-1.5">
+                  <div className="flex-1 bg-[#0B6B3A]" />
+                  <div className="relative flex-1 bg-[#C9A227]">
+                    <span className="absolute inset-0 flex items-center justify-center text-[8px] text-[#0B6B3A]">
+                      ★
+                    </span>
+                  </div>
+                  <div className="flex-1 bg-[#E2231A]" />
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -left-6 rounded-xl border-t-4 border-[#C9A227] bg-white p-4 shadow-xl">
+                <p className="font-serif text-3xl font-bold text-[#0B6B3A]">30+</p>
+                <p className="text-xs text-[#14110B]/60">membres du bureau exécutif</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Barre stats */}
+          <RevealOnScroll>
+          <div className="mt-20 grid grid-cols-2 gap-8 border-t border-[#0B6B3A]/10 pt-10 sm:grid-cols-4">
+            {[
+              { chiffre: <CountUp end={30} suffix="+" />, label: 'Membres' },
+              { chiffre: <CountUp end={50} />, label: 'Organismes' },
+              { chiffre: <CountUp end={2} />, label: 'Ans' },
+              { chiffre: <CountUp end={10} suffix="+" />, label: 'Activités' },
+            ].map(({ chiffre, label }) => (
+              <div key={label}>
+                <p className="font-serif text-4xl text-[#0B6B3A]">{chiffre}</p>
+                <p className="mt-1 font-mono text-xs uppercase tracking-wider text-[#14110B]/50">
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+          </RevealOnScroll>
         </div>
       </section>
 
-      {/* ── 2. Nos cinq engagements ─────────────────────────────────────────── */}
+      {/* ── 2. Mot du Président ───────────────────────────────────────────── */}
+      <RevealOnScroll>
       <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">
-            01 / Notre raison d&apos;être
-          </p>
-          <h2 className="mt-2 font-serif text-4xl font-bold text-ink">Nos Cinq Engagements</h2>
-          <p className="mt-4 max-w-2xl text-ink/60">
-            Né de la volonté de fédérer les dirigeants des organes délibérants, le Cercle
-            accompagne l&apos;État dans sa stratégie de modernisation et de rationalisation
-            du secteur parapublic.
-          </p>
-
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3 lg:grid-cols-5">
-            {ENGAGEMENTS.map(({ numero, titre, texte }, index) => {
-              const isGreen = index % 2 === 0
-              return (
-                <div key={numero} className="flex flex-col items-center text-center">
-                  <div
-                    className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full font-mono text-lg font-bold ${
-                      isGreen ? 'bg-[#14B53A] text-white' : 'bg-[#FCD116] text-[#1B1A17]'
-                    }`}
-                  >
-                    {numero}
-                  </div>
-                  <div className={`mx-auto mt-3 h-0.5 w-10 rounded-full ${isGreen ? 'bg-[#14B53A]' : 'bg-[#FCD116]'}`} />
-                  <h3 className="mt-3 font-serif text-sm font-bold text-ink">{titre}</h3>
-                  <p className="mt-2 text-xs leading-relaxed text-ink/60">{texte}</p>
+        <div className="mx-auto grid max-w-7xl items-center gap-8 px-6 lg:grid-cols-[400px_1fr]">
+          {/* Gauche : photo */}
+          <div>
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#FAF8F3] shadow-xl">
+              {presidentPhoto ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={`/api/media/file/${presidentPhoto}`}
+                  alt={president ? `${president.prenom} ${president.nom}` : 'Président du CAP'}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <User size={56} className="text-[#0B6B3A]/20" />
                 </div>
-              )
-            })}
+              )}
+              <div className="absolute bottom-4 left-4 rounded-lg bg-[#C9A227] px-4 py-2 text-sm font-bold text-[#14110B]">
+                <span className="block">
+                  {president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'}
+                </span>
+                <span className="block text-xs font-medium">Président du CAP</span>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 h-1.5 flex z-10">
+                <div className="flex-1 bg-[#0B6B3A]"></div>
+                <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
+                  <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
+                </div>
+                <div className="flex-1 bg-[#E2231A]"></div>
+              </div>
+            </div>
           </div>
 
-          <div className="mt-12 flex justify-center">
+          {/* Droite : citation */}
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
+              — Le mot du président
+            </p>
+            <div className="mt-6">
+              <p className="font-serif text-2xl text-[#14110B] leading-relaxed">
+                <span className="font-serif text-8xl font-bold text-[#0B6B3A] float-left mr-2 leading-none mt-1">
+                  {firstLetter}
+                </span>
+                {restOfCitation}
+              </p>
+            </div>
             <Link
-              href="/a-propos"
-              className="inline-flex items-center gap-2 bg-[#14B53A] text-white px-8 py-3 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors"
+              href="/a-propos/mot-du-president"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
             >
-              En savoir plus <ArrowRight size={16} />
+              Lire le message <ArrowRight size={18} />
             </Link>
           </div>
         </div>
       </section>
+      </RevealOnScroll>
 
-      {/* ── 3. Mot du Président ─────────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2.5">
-            <span className="h-9 w-3 -skew-x-12 bg-[#14B53A]" />
-            <span className="h-9 w-3 -skew-x-12 bg-[#FCD116]" />
-            <span className="ml-1 font-mono text-xs font-semibold uppercase tracking-[0.3em] text-ink">
-              CAP
-            </span>
-          </div>
-                   <h2 className="mt-4 font-serif text-3xl font-bold text-ink sm:text-4xl">
-                Mot du président
-              </h2>
-
-          <div className="mt-10 grid gap-12 lg:grid-cols-5 lg:gap-16">
-            <div className="lg:col-span-1">
-              <div className="mx-auto aspect-[4/5] w-full max-w-xs overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10">
-                {president?.photo && typeof president.photo === 'object' && president.photo.filename ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={`/api/media/file/${president.photo.filename}`}
-                    alt={`${president.prenom} ${president.nom}`}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center">
-                    <User size={48} className="text-white/20" />
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-center lg:col-span-4">
-              {citation ? (
-                <p className="font-serif text-2xl italic leading-relaxed text-ink sm:text-3xl">
-                  « {citation} »
-                </p>
-              ) : (
-                <p className="font-serif text-2xl italic leading-relaxed text-ink/50 sm:text-3xl">
-                  Le mot du président n&apos;est pas encore disponible.
-                </p>
-              )}
-
-              <div className="mt-8">
-                <p className="font-serif text-lg font-medium text-ink">
-                  {president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'}
-                </p>
-                <p className="mt-1 text-sm text-[#14B53A]">
-                  Président du Cercle des Administrateurs Publics
-                </p>
-              </div>
-
-              <Link
-                href="/a-propos/mot-du-president"
-                className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#14B53A] transition-colors hover:text-ink"
-              >
-                Lire le mot du président
-                <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. Bureau exécutif ──────────────────────────────────────── */}
-      <BureauCarousel membres={bureau.map(m => ({
-        id: String(m.id),
-        prenom: m.prenom,
-        nom: m.nom,
-        slug: m.slug,
-        photo: m.photo && typeof m.photo === 'object' && 'filename' in m.photo
-          ? { filename: (m.photo as { filename?: string | null }).filename ?? null }
-          : null,
-        poste: m.poste
-          ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
-          : null,
-      }))} />
-
-      {/* ── 5. Nos dernières activités ───────────────────────────────── */}
-      <section className="bg-[#F5F4EF] py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* ── 3. Nos activités ──────────────────────────────────────────────── */}
+      <RevealOnScroll>
+      <section className="bg-[#FAF8F3] py-20">
+        <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
             <div>
-              <div className="flex items-center gap-2.5">
-                <span className="h-9 w-3 -skew-x-12 bg-[#14B53A]" />
-                <span className="h-9 w-3 -skew-x-12 bg-[#FCD116]" />
-                <span className="ml-1 font-mono text-xs font-semibold uppercase tracking-[0.3em] text-ink">
-                  CAP
-                </span>
-              </div>
-              <h2 className="mt-4 font-serif text-3xl font-bold text-ink sm:text-4xl">
-                Nos dernières activités
+              <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
+                — Nos activités
+              </p>
+              <h2 className="mt-3 font-serif text-4xl font-bold text-[#14110B]">
+                Découvrez toutes nos activités
               </h2>
-              <p className="mt-2 text-base text-ink/60">
-                Les articles récents qui vous tiennent informés de nos activités
+              <p className="mt-3 max-w-xl text-[#14110B]/60">
+                Ateliers, séminaires et rencontres qui rythment la vie du Cercle tout au long
+                de l&apos;année.
               </p>
             </div>
-
             <Link
-              href="/actualites"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#14B53A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
+              href="/activites"
+              className="inline-flex items-center gap-2 font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
             >
-              Voir plus
-              <ArrowUpRight size={16} />
+              Tout l&apos;agenda <ArrowRight size={16} />
             </Link>
           </div>
 
           {activites.length === 0 ? (
-            <p className="mt-12 text-ink/50">
-              Aucune activité disponible pour le moment.
-            </p>
+            <p className="mt-12 text-[#14110B]/50">Aucune activité disponible pour le moment.</p>
           ) : (
-            <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
-              {activites.map(activite => {
-                const image = typeof activite.image === 'object' && activite.image
-                  ? (activite.image as Media)
-                  : null
-                const categorie = activite.type === 'atelier' || activite.type === 'seminaire'
-                  ? 'Ateliers et Séminaires'
-                  : 'Actualités'
+            <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+              {activites.slice(0, 3).map(activite => {
+                const filename = mediaFilename(activite.image)
+                const { jour, mois } = jourMois(activite.date_debut)
+                const badge = statutBadge(activite.statut)
                 const href = activite.slug ? `/activites/${activite.slug}` : '/activites'
 
                 return (
                   <Link
                     key={activite.id}
                     href={href}
-                    className="group flex flex-col gap-4"
+                    className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md"
                   >
-                    <div className="aspect-[16/10] w-full overflow-hidden rounded-lg bg-ink/10">
-                      {image?.filename && (
+                    <div className="relative aspect-[16/10] overflow-hidden bg-[#0B6B3A]/5">
+                      {filename && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={`/api/media/file/${image.filename}`}
+                          src={`/api/media/file/${filename}`}
                           alt={activite.titre}
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       )}
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <span className="rounded-full border border-ink/15 px-3 py-1 text-sm text-ink/70">
-                        {categorie}
+                      <div className="absolute left-3 top-3 rounded-lg bg-white px-3 py-1 text-center shadow-sm">
+                        <span className="block font-bold leading-none text-[#14110B]">{jour}</span>
+                        <span className="block text-xs text-[#14110B]/60">{mois}</span>
+                      </div>
+                      <span
+                        className={`absolute right-3 top-3 rounded-full px-3 py-1 text-xs font-bold ${badge.cls}`}
+                      >
+                        {badge.label}
                       </span>
-                      <span className="text-sm text-ink/50">{formatDate(activite.date_debut)}</span>
                     </div>
-
-                    <h3 className="line-clamp-2 font-serif text-xl font-bold text-ink transition-colors group-hover:text-[#14B53A]">
-                      {activite.titre}
-                    </h3>
+                    <div className="p-5">
+                      <h3 className="font-serif text-lg font-bold leading-snug text-[#14110B]">
+                        {activite.titre}
+                      </h3>
+                      {activite.lieu && (
+                        <p className="mt-2 flex items-center gap-1 text-sm text-[#14110B]/60">
+                          <MapPin size={14} /> {activite.lieu}
+                        </p>
+                      )}
+                    </div>
                   </Link>
                 )
               })}
             </div>
           )}
-
-          <div className="mt-12 flex justify-center">
-            <p className="font-mono text-sm font-semibold text-bordeaux">
-              1 ── {activites.length}
-            </p>
-          </div>
         </div>
       </section>
+      </RevealOnScroll>
 
-      {/* ── 6. CAP Revue ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#F5F4EF] py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center mb-12">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#14B53A]">PUBLICATION</p>
-          <h2 className="font-serif text-4xl font-bold text-ink mt-2">CAP Revue</h2>
-        </div>
-
-        {magazine ? (
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="rounded-2xl overflow-hidden shadow-xl grid grid-cols-[1fr_1fr]">
-
-              {/* Colonne gauche */}
-              <div className="bg-white p-10 flex flex-col justify-center">
-                <div className="inline-flex items-center gap-2">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <rect x="0" y="0" width="8" height="20" fill="#14B53A" />
-                    <rect x="10" y="0" width="10" height="20" fill="#FCD116" />
-                  </svg>
-                  <span className="font-serif text-xl font-bold text-ink">CAP Revue</span>
-                </div>
-                <p className="font-mono text-xs text-[#14B53A] tracking-widest mt-2">
-                  {magazine.titre}
-                </p>
-                <p className="text-ink/60 text-sm leading-relaxed mt-4">
-                  {magazine.description ?? "Le Sénégal se trouve aujourd’hui à un moment charnière de son histoire institutionnelle et économique. Alors que l’Agenda National de Transformation exige un appareil public performant, un secteur financier robuste et des mécanismes de financement innovants, une réalité s’impose : les outils existent, mais leur mise en œuvre demeure incomplète. C’est cette tension entre ambition et exécution que révèlent les contributions réunies dans ce numéro du CAP..."}
-                </p>
-                <div className="mt-6 flex flex-col gap-3">
-                  <a
-                    href={magazine.fichier && typeof magazine.fichier === 'object' && magazine.fichier.filename
-                      ? `/api/media/file/${magazine.fichier.filename}`
-                      : '/magazines'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-[#14B53A] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#14B53A]/90 transition-colors text-center"
-                  >
-                    Lire la revue →
-                  </a>
-                  <Link
-                    href="/magazines"
-                    className="border border-ink/20 text-ink/60 px-5 py-2.5 rounded-lg text-sm font-semibold hover:border-[#14B53A] hover:text-[#14B53A] transition-colors text-center"
-                  >
-                    Voir les magazines
-                  </Link>
-                </div>
-              </div>
-
-              {/* Colonne droite */}
-              <div className="bg-[#F5F4EF] overflow-hidden flex items-center justify-center p-6">
-                <div className="relative w-full h-full min-h-[300px] rounded-none overflow-hidden">
-                  {couverture?.filename ? (
-                    <Image
-                      src={`/api/media/file/${couverture.filename}`}
-                      alt={couverture.alt || magazine.titre}
-                      fill
-                      className="object-contain"
-                      sizes="144px"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-white/10">
-                      <FileText size={28} className="text-white/20" strokeWidth={1.5} />
-                    </div>
-                  )}
-                </div>
-              </div>
-
+      {/* ── 4. La vie du Cercle ───────────────────────────────────────────── */}
+      <RevealOnScroll>
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
+                — Actualités
+              </p>
+              <h2 className="mt-3 font-serif text-4xl font-bold text-[#14110B]">La vie du Cercle</h2>
+              <p className="mt-3 max-w-xl text-[#14110B]/60">
+                Retour sur les temps forts et les dernières actualités du Cercle.
+              </p>
             </div>
-          </div>
-        ) : (
-          <div className="max-w-3xl mx-auto px-4 text-center">
-            <p className="text-ink/60">Retrouvez bientôt ici la dernière revue du CAP.</p>
-            <Link href="/magazines" className="mt-4 inline-block text-[#14B53A] text-sm font-semibold hover:underline">
-              Voir les magazines →
+            <Link
+              href="/actualites"
+              className="inline-flex items-center gap-2 font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
+            >
+              Toutes les actualités <ArrowRight size={16} />
             </Link>
           </div>
-        )}
-      </section>
 
-      {/* ── 7. Rejoindre le Cercle ───────────────────────────────────────────── */}
-      <section className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
-            <div className="border-l-4 border-[#14B53A] pl-8">
-              <p className="font-mono text-xs uppercase tracking-[0.3em] text-ink/50">
-                Rejoindre le Cercle
-              </p>
-              <h2 className="mt-4 font-serif text-4xl font-bold text-ink sm:text-5xl">
-                Vous présidez un organe délibérant du secteur parapublic ?
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-ink/70">
-                Rejoignez un cadre d&apos;échange, de réflexion et de mobilisation au service de la
-                modernisation de l&apos;administration publique sénégalaise.
+          {actuVedette ? (
+            <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_380px]">
+              {/* Grande carte */}
+              {(() => {
+                const filename = mediaFilename(actuVedette.image)
+                const { jour, mois } = jourMois(actuVedette.date_debut)
+                const href = actuVedette.slug ? `/activites/${actuVedette.slug}` : '/activites'
+                const excerpt = lexicalToExcerpt(actuVedette.description, 160)
+                return (
+                  <Link
+                    href={href}
+                    className="group overflow-hidden rounded-2xl bg-[#FAF8F3] transition-shadow hover:shadow-md"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-[#0B6B3A]/5">
+                      {filename && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`/api/media/file/${filename}`}
+                          alt={actuVedette.titre}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      )}
+                      <span className="absolute bottom-4 left-4 rounded-lg bg-[#C9A227] px-3 py-1 text-sm font-bold text-[#14110B]">
+                        {jour} {mois}
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <span className="inline-block rounded-full bg-[#0B6B3A]/10 px-3 py-1 text-xs font-medium text-[#0B6B3A]">
+                        {categorieActivite(actuVedette.type)}
+                      </span>
+                      <h3 className="mt-3 font-serif text-2xl font-bold leading-snug text-[#14110B]">
+                        {actuVedette.titre}
+                      </h3>
+                      {excerpt && (
+                        <p className="mt-2 text-sm leading-relaxed text-[#14110B]/60">{excerpt}</p>
+                      )}
+                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0B6B3A]">
+                        Lire l&apos;article <ArrowRight size={15} />
+                      </span>
+                    </div>
+                  </Link>
+                )
+              })()}
+
+              {/* Petites cartes */}
+              <div className="flex flex-col gap-4">
+                {actuSecondaires.length === 0 ? (
+                  <p className="text-sm text-[#14110B]/50">Pas d&apos;autres actualités récentes.</p>
+                ) : (
+                  actuSecondaires.map(actu => {
+                    const filename = mediaFilename(actu.image)
+                    const href = actu.slug ? `/activites/${actu.slug}` : '/activites'
+                    return (
+                      <Link
+                        key={actu.id}
+                        href={href}
+                        className="group flex gap-4 overflow-hidden rounded-xl bg-[#FAF8F3] p-3 transition-shadow hover:shadow-md"
+                      >
+                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[#0B6B3A]/5">
+                          {filename && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={`/api/media/file/${filename}`}
+                              alt={actu.titre}
+                              className="h-full w-full object-cover"
+                            />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <span className="font-mono text-xs uppercase tracking-wider text-[#C9A227]">
+                            {categorieActivite(actu.type)}
+                          </span>
+                          <h4 className="mt-1 line-clamp-2 font-serif text-sm font-bold text-[#14110B]">
+                            {actu.titre}
+                          </h4>
+                          <p className="mt-1 text-xs text-[#14110B]/50">
+                            {formatDate(actu.date_debut)}
+                          </p>
+                        </div>
+                      </Link>
+                    )
+                  })
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="mt-12 text-[#14110B]/50">Aucune actualité disponible pour le moment.</p>
+          )}
+        </div>
+      </section>
+      </RevealOnScroll>
+
+      {/* ── 5. Publications — La revue du CAP ─────────────────────────────── */}
+      <RevealOnScroll>
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          {/* En-tête */}
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <div className="mb-2 flex items-center gap-3">
+                <span className="h-0.5 w-8 bg-[#C9A227]" />
+                <span className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
+                  Publications
+                </span>
+              </div>
+              <h2 className="font-serif text-4xl font-bold text-[#14110B]">La revue du CAP</h2>
+              <p className="mt-2 text-[#14110B]/60">
+                Notre regard trimestriel sur la modernisation de l&apos;administration publique.
               </p>
             </div>
+            <Link
+              href="/magazines"
+              className="flex flex-shrink-0 items-center gap-1 text-sm font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
+            >
+              Tous les numéros <ArrowRight size={15} />
+            </Link>
+          </div>
 
-            <div className="flex flex-col items-start gap-4">
+          {magazine ? (
+            <>
+              {/* Card principale */}
+              <div className="mt-10 grid overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white shadow-sm lg:grid-cols-2">
+                {/* Colonne gauche : image */}
+                <div className="relative min-h-[350px] lg:min-h-[400px] overflow-hidden bg-[#FAF8F3]">
+                  {couverture?.url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={couverture.url}
+                      alt={magazine.titre}
+                      className="absolute inset-0 w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-[#0B6B3A]" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#14110B]/80 via-transparent to-transparent" />
+                  <span className="absolute top-4 left-4 bg-[#C9A227] text-[#14110B] font-black text-sm px-3 py-1 rounded-lg">CAP</span>
+                  <div className="absolute bottom-6 left-6 right-6">
+                    <div className="w-8 h-0.5 bg-[#C9A227] mb-3"></div>
+                    <p className="text-white font-serif text-xl font-bold">{magazine.titre}</p>
+                  </div>
+                </div>
+
+                {/* Colonne droite : contenu */}
+                <div className="flex flex-col justify-center p-8">
+                  <span className="mb-4 inline-flex w-fit rounded-full bg-[#C9A227] px-4 py-1.5 text-xs font-bold text-[#14110B]">
+                    Dernier numéro
+                  </span>
+                  <p className="mb-3 font-mono text-sm text-[#14110B]/50">
+                    {formatDate(magazine.createdAt)} · CAP Revue
+                  </p>
+                  <h3 className="font-serif text-2xl font-bold text-[#14110B]">{magazine.titre}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#14110B]/60">
+                    {magazine.description ??
+                      'Retrouvez dans ce numéro les contributions et analyses des membres du Cercle sur les grands enjeux de l’administration publique sénégalaise.'}
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link
+                      href="/magazines"
+                      className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                    >
+                      Lire le numéro <ArrowRight size={16} />
+                    </Link>
+                    {magazineFichier && (
+                      <a
+                        href={`/api/media/file/${magazineFichier}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-[#14110B]/20 px-6 py-2.5 text-sm font-semibold text-[#14110B] transition-colors hover:border-[#0B6B3A] hover:text-[#0B6B3A]"
+                      >
+                        <Download size={16} /> Télécharger le PDF
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Anciens numéros */}
+              {anciensNumeros.length > 0 && (
+                <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  {anciensNumeros.map((mag, i) => {
+                    const cov =
+                      mag.couverture && typeof mag.couverture === 'object'
+                        ? (mag.couverture as Media)
+                        : null
+                    const numero = magazines.length - (i + 1)
+                    return (
+                      <Link
+                        key={mag.id}
+                        href="/magazines"
+                        className="flex items-center gap-3 rounded-xl border border-[#14110B]/10 bg-white p-3 transition-colors hover:border-[#C9A227]"
+                      >
+                        {cov?.filename ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={`/api/media/file/${cov.filename}`}
+                            alt={mag.titre}
+                            className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-[#0B6B3A]/10">
+                            <FileText size={20} className="text-[#0B6B3A]/40" strokeWidth={1.5} />
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-mono text-xs font-bold text-[#C9A227]">
+                            N°{numero} {moisAnnee(mag.createdAt)}
+                          </p>
+                          <h4 className="mt-1 line-clamp-2 font-serif text-sm font-bold text-[#14110B]">
+                            {mag.titre}
+                          </h4>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="mt-10 rounded-2xl border border-[#14110B]/10 bg-white p-10 text-center shadow-sm">
+              <p className="text-[#14110B]/60">Retrouvez bientôt ici la dernière revue du CAP.</p>
               <Link
-                href="/inscription"
-                className="rounded-lg bg-[#14B53A] px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
+                href="/magazines"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0B6B3A] hover:underline"
               >
-                Demander une adhésion
+                Voir les magazines <ArrowRight size={15} />
               </Link>
-              <Link
-                href="/contact"
-                className="text-base font-semibold text-ink transition-colors hover:text-[#14B53A]"
+            </div>
+          )}
+        </div>
+      </section>
+      </RevealOnScroll>
+
+      {/* ── 6. Annuaire — Le Cercle ───────────────────────────────────────── */}
+      <RevealOnScroll>
+      <section className="bg-[#FAF8F3] py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          {/* En-tête */}
+          <div className="mb-10 flex items-start justify-between gap-6">
+            <div>
+              <div className="mb-2 flex items-center gap-3">
+                <span className="h-0.5 w-10 bg-[#C9A227]" />
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">
+                  Annuaire
+                </span>
+              </div>
+              <h2 className="font-serif text-4xl font-bold text-[#14110B]">Le Cercle</h2>
+              <p className="mt-2 text-[#14110B]/60">
+                Les administrateurs publics qui composent le Cercle et portent sa vision.
+              </p>
+            </div>
+            <div className="flex flex-shrink-0 items-center gap-4">
+              <select
+                defaultValue="tous"
+                aria-label="Filtrer l'annuaire"
+                className="rounded-lg border border-[#14110B]/20 bg-white px-3 py-2 text-sm text-[#14110B]"
               >
-                Nous contacter →
+                <option value="tous">Tous</option>
+              </select>
+              <Link
+                href="/annuaire"
+                className="flex items-center gap-1 text-sm font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
+              >
+                Tout l&apos;annuaire <ArrowRight size={15} />
               </Link>
             </div>
           </div>
+
+          <MembresCarousel
+            membres={tousLesMembres.slice(0, 12).map(m => {
+              const photo = mediaFilename(m.photo)
+              return {
+                id: m.id,
+                prenom: m.prenom,
+                nom: m.nom,
+                slug: m.slug,
+                photo: photo ? `/api/media/file/${photo}` : null,
+                poste: m.poste
+                  ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
+                  : null,
+              }
+            })}
+          />
         </div>
       </section>
+      </RevealOnScroll>
+
+      {/* ── 7. Rejoindre le Cercle ────────────────────────────────────────── */}
+      <RevealOnScroll>
+      <section className="bg-[#FAF8F3] py-16">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-[#0B6B3A]/10 bg-white p-12 text-center shadow-lg">
+          <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
+            — Rejoindre le Cercle
+          </p>
+          <h2 className="mt-4 font-serif text-4xl font-bold leading-tight text-[#14110B]">
+            Faites partie de l&apos;excellence du service public sénégalais
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-[#14110B]/60">
+            Rejoignez un cadre d&apos;échange, de réflexion et de mobilisation au service de la
+            modernisation de l&apos;administration publique.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Link
+              href="/inscription"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+            >
+              Faire une demande d&apos;adhésion <ArrowRight size={18} />
+            </Link>
+            <Link
+              href="/a-propos"
+              className="inline-flex items-center rounded-lg border border-[#0B6B3A] px-8 py-3 font-semibold text-[#0B6B3A] transition-colors hover:bg-[#0B6B3A]/5"
+            >
+              En savoir plus
+            </Link>
+          </div>
+        </div>
+      </section>
+      </RevealOnScroll>
     </div>
   )
 }
