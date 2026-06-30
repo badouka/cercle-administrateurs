@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import type { BlogPost, Media } from '@/payload-types'
 import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
-import { BlogList, type BlogCard } from './BlogList'
+import { BlogClient, type BlogPostCard } from '@/components/BlogClient'
 
 export const metadata: Metadata = { title: 'Blog' }
 
@@ -24,53 +24,56 @@ function lexicalToExcerpt(content: BlogPost['contenu'], maxChars = 200): string 
   }
 }
 
+function formatDateFr(dateStr?: string | null): string {
+  if (!dateStr) return ''
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(dateStr))
+}
+
 export default async function BlogPage() {
   const payload = await getPayload({ config })
 
-  const { docs: posts } = await payload.find({
+  const { docs } = await payload.find({
     collection:     'blog-posts',
     where:          { statut: { equals: 'published' } },
-    sort:           '-publie_le',
     depth:          1,
     limit:          50,
+    sort:           '-publie_le',
     overrideAccess: true,
   })
 
-  const cards: BlogCard[] = (posts as BlogPost[]).map(post => {
+  const posts: BlogPostCard[] = (docs as BlogPost[]).map(post => {
     const image = typeof post.image === 'object' && post.image ? (post.image as Media) : null
     return {
-      id:        post.id,
-      titre:     post.titre,
-      href:      post.slug ? `/blog/${post.slug}` : null,
-      excerpt:   post.extrait?.trim() || lexicalToExcerpt(post.contenu),
-      imageUrl:  image?.url ?? null,
-      imageAlt:  image?.alt || post.titre,
-      publieLe:  post.publie_le ?? null,
+      id: post.id,
+      titre: post.titre,
+      slug: post.slug ?? null,
+      excerpt: post.extrait?.trim() || lexicalToExcerpt(post.contenu),
+      image: image?.filename ?? null,
       categorie: post.categorie?.trim() || null,
+      date: formatDateFr(post.publie_le),
     }
   })
 
-  const categories = [
-    ...new Set(cards.map(c => c.categorie).filter((c): c is string => !!c)),
-  ].sort((a, b) => a.localeCompare(b, 'fr'))
-
   return (
     <div>
-      <PageHero title="Blog" />
+      <PageHero
+        title="Blog"
+        subtitle="Articles et réflexions de la communauté du Cercle des Administrateurs Publics."
+        breadcrumb={[
+          { label: 'Accueil', href: '/' },
+          { label: 'Blog', href: '/blog' },
+        ]}
+      />
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-10 border-b border-gray-200 pb-8">
-          <p className="mt-2 text-gray-500">
-            Articles et réflexions de la communauté du Cercle des Administrateurs Publics.
-          </p>
+      <section className="bg-white py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <BlogClient posts={posts} />
         </div>
-
-        {cards.length === 0 ? (
-          <p className="text-gray-500">Aucun article publié pour le moment.</p>
-        ) : (
-          <BlogList posts={cards} categories={categories} />
-        )}
-      </div>
+      </section>
     </div>
   )
 }

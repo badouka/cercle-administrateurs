@@ -7,7 +7,6 @@ import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { CountUp } from '@/components/CountUp'
 import {
   ArrowRight,
-  MapPin,
   User,
   FileText,
   Download,
@@ -85,12 +84,6 @@ function jourMois(dateStr?: string | null): { jour: string; mois: string } {
   if (!dateStr) return { jour: '', mois: '' }
   const d = new Date(dateStr)
   return { jour: String(d.getDate()), mois: MOIS_COURT[d.getMonth()] ?? '' }
-}
-
-function statutBadge(statut: Activity['statut']): { label: string; cls: string } {
-  if (statut === 'en_cours') return { label: 'En cours', cls: 'bg-[#C9A227] text-[#14110B]' }
-  if (statut === 'termine') return { label: 'Terminé', cls: 'bg-[#14110B]/70 text-white' }
-  return { label: 'À venir', cls: 'bg-[#0B6B3A] text-white' }
 }
 
 function categorieActivite(type: Activity['type']): string {
@@ -171,7 +164,7 @@ export default async function HomePage() {
 
   // Activités réutilisées comme actualités (section 4)
   const actuVedette = activites[0] ?? null
-  const actuSecondaires = activites.slice(1, 4)
+  const actuSecondaires = activites.slice(1, 7)
 
   const presidentPhoto = mediaFilename(president?.photo)
   const magazineFichier = mediaFilename(magazine?.fichier)
@@ -217,7 +210,7 @@ export default async function HomePage() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/api/media/file/cap-banner.png"
+                  src="/api/media/file/cap-1.png"
                   alt="Cercle des Administrateurs Publics"
                   className="h-full w-full object-cover"
                 />
@@ -240,14 +233,17 @@ export default async function HomePage() {
 
           {/* Barre stats */}
           <RevealOnScroll>
-          <div className="mt-20 grid grid-cols-2 gap-8 border-t border-[#0B6B3A]/10 pt-10 sm:grid-cols-4">
+          <div className="mt-20 grid grid-cols-2 border-t border-b border-[#C9A227]/30 bg-white sm:grid-cols-4">
             {[
               { chiffre: <CountUp end={30} suffix="+" />, label: 'Membres' },
               { chiffre: <CountUp end={50} />, label: 'Organismes' },
               { chiffre: <CountUp end={2} />, label: 'Ans' },
               { chiffre: <CountUp end={10} suffix="+" />, label: 'Activités' },
             ].map(({ chiffre, label }) => (
-              <div key={label}>
+              <div
+                key={label}
+                className="flex flex-col items-center justify-center py-8 px-6 border-r border-[#C9A227]/30 last:border-r-0"
+              >
                 <p className="font-serif text-4xl text-[#0B6B3A]">{chiffre}</p>
                 <p className="mt-1 font-mono text-xs uppercase tracking-wider text-[#14110B]/50">
                   {label}
@@ -262,7 +258,7 @@ export default async function HomePage() {
       {/* ── 2. Mot du Président ───────────────────────────────────────────── */}
       <RevealOnScroll>
       <section className="bg-white py-20">
-        <div className="mx-auto grid max-w-7xl items-center gap-8 px-6 lg:grid-cols-[400px_1fr]">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 px-6 lg:grid-cols-[500px_1fr]">
           {/* Gauche : photo */}
           <div>
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-[#FAF8F3] shadow-xl">
@@ -314,85 +310,6 @@ export default async function HomePage() {
               Lire le message <ArrowRight size={18} />
             </Link>
           </div>
-        </div>
-      </section>
-      </RevealOnScroll>
-
-      {/* ── 3. Nos activités ──────────────────────────────────────────────── */}
-      <RevealOnScroll>
-      <section className="bg-[#FAF8F3] py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
-                — Nos activités
-              </p>
-              <h2 className="mt-3 font-serif text-4xl font-bold text-[#14110B]">
-                Découvrez toutes nos activités
-              </h2>
-              <p className="mt-3 max-w-xl text-[#14110B]/60">
-                Ateliers, séminaires et rencontres qui rythment la vie du Cercle tout au long
-                de l&apos;année.
-              </p>
-            </div>
-            <Link
-              href="/activites"
-              className="inline-flex items-center gap-2 font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
-            >
-              Tout l&apos;agenda <ArrowRight size={16} />
-            </Link>
-          </div>
-
-          {activites.length === 0 ? (
-            <p className="mt-12 text-[#14110B]/50">Aucune activité disponible pour le moment.</p>
-          ) : (
-            <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-              {activites.slice(0, 3).map(activite => {
-                const filename = mediaFilename(activite.image)
-                const { jour, mois } = jourMois(activite.date_debut)
-                const badge = statutBadge(activite.statut)
-                const href = activite.slug ? `/activites/${activite.slug}` : '/activites'
-
-                return (
-                  <Link
-                    key={activite.id}
-                    href={href}
-                    className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md"
-                  >
-                    <div className="relative aspect-[16/10] overflow-hidden bg-[#0B6B3A]/5">
-                      {filename && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={`/api/media/file/${filename}`}
-                          alt={activite.titre}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      )}
-                      <div className="absolute left-3 top-3 rounded-lg bg-white px-3 py-1 text-center shadow-sm">
-                        <span className="block font-bold leading-none text-[#14110B]">{jour}</span>
-                        <span className="block text-xs text-[#14110B]/60">{mois}</span>
-                      </div>
-                      <span
-                        className={`absolute right-3 top-3 rounded-full px-3 py-1 text-xs font-bold ${badge.cls}`}
-                      >
-                        {badge.label}
-                      </span>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-serif text-lg font-bold leading-snug text-[#14110B]">
-                        {activite.titre}
-                      </h3>
-                      {activite.lieu && (
-                        <p className="mt-2 flex items-center gap-1 text-sm text-[#14110B]/60">
-                          <MapPin size={14} /> {activite.lieu}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          )}
         </div>
       </section>
       </RevealOnScroll>

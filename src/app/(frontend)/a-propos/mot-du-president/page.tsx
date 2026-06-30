@@ -3,44 +3,11 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Membre, Media, Page } from '@/payload-types'
-import { BureauAutoCarousel } from '@/components/BureauAutoCarousel'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 function initiales(prenom?: string | null, nom?: string | null): string {
   return `${(prenom ?? '').charAt(0)}${(nom ?? '').charAt(0)}`.toUpperCase()
-}
-
-const ORDRE_POSTES = [
-  "Président d'honneur",
-  "Présidente d'honneur",
-  'Président',
-  'Présidente',
-  'Vice-Président',
-  'Vice-Présidente',
-  'Secrétaire général',
-  'Secrétaire générale',
-  'Secrétaire général adjoint',
-  'Secrétaire générale adjointe',
-  'Trésorier',
-  'Trésorière',
-  'Trésorier Adjoint',
-  'Trésorière Adjointe',
-  'Présidente Commission Actions Sociales',
-  'Présidente Commission Communication',
-  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
-  'Président Commission Renforcement de Capacités',
-]
-
-function rankPoste(posteCap: string | null | undefined): number {
-  const p = (posteCap ?? '').trim()
-  const idx = ORDRE_POSTES.indexOf(p)
-  return idx === -1 ? 999 : idx
-}
-
-function isAuBureau(m: Membre): boolean {
-  const posteCap = (m.poste?.posteCap ?? '').trim()
-  return posteCap !== '' && posteCap !== 'Membre'
 }
 
 const messageParas = [
@@ -98,14 +65,6 @@ export default async function MotDuPresidentPage() {
 
   const presidentNom = president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'
   const presidentInitiales = president ? initiales(president.prenom, president.nom) : 'LS'
-
-  const bureau = (membresRes.docs as Membre[])
-    .filter(isAuBureau)
-    .sort((a, b) => {
-      const diff = rankPoste(a.poste?.posteCap) - rankPoste(b.poste?.posteCap)
-      if (diff !== 0) return diff
-      return `${a.nom} ${a.prenom}`.localeCompare(`${b.nom} ${b.prenom}`, 'fr')
-    })
 
   return (
     <div className="bg-white">
@@ -264,37 +223,6 @@ export default async function MotDuPresidentPage() {
                 <circle cx="4" cy="4" r="2" />
               </svg>
             </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. Bureau exécutif ──────────────────────────────────────────────── */}
-      <section className="bg-[#FAF8F3] py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-2 flex items-center gap-3">
-            <span className="h-0.5 w-10 bg-[#C9A227]" />
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">
-              Organe exécutif de l&apos;association
-            </span>
-          </div>
-          <h2 className="mt-2 font-serif text-4xl font-bold text-[#14110B]">Les membres du bureau</h2>
-          <p className="mt-2 text-[#14110B]/60">
-            Les administrateurs publics qui composent le bureau exécutif du Cercle.
-          </p>
-
-          <div className="mt-10">
-            <BureauAutoCarousel membres={bureau.map(m => ({
-              id: String(m.id),
-              prenom: m.prenom,
-              nom: m.nom,
-              slug: m.slug,
-              photo: m.photo && typeof m.photo === 'object' && 'filename' in m.photo
-                ? { filename: (m.photo as { filename?: string | null }).filename ?? null }
-                : null,
-              poste: m.poste
-                ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
-                : null,
-            }))} />
           </div>
         </div>
       </section>

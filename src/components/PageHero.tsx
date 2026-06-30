@@ -26,19 +26,23 @@ export function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
 
       <div className="relative z-10 pl-10 pr-6">
         <nav className="font-mono text-xs uppercase tracking-widest text-white/60">
-          <Link href="/" className="transition-colors hover:text-white">
-            Accueil
-          </Link>
-          {breadcrumb
-            ? breadcrumb.map(item => (
-                <span key={item.href}>
-                  {' / '}
-                  <Link href={item.href} className="transition-colors hover:text-white">
-                    {item.label}
-                  </Link>
-                </span>
-              ))
-            : ` / ${title}`}
+          {breadcrumb ? (
+            breadcrumb.map((item, i) => (
+              <span key={item.href}>
+                {i > 0 && ' / '}
+                <Link href={item.href} className="transition-colors hover:text-white">
+                  {item.label}
+                </Link>
+              </span>
+            ))
+          ) : (
+            <>
+              <Link href="/" className="transition-colors hover:text-white">
+                Accueil
+              </Link>
+              {` / ${title}`}
+            </>
+          )}
         </nav>
 
         <h1 className="mt-4 font-serif text-4xl font-bold text-white sm:text-5xl">{title}</h1>

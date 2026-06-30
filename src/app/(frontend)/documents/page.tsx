@@ -1,70 +1,59 @@
 import { getPayload } from 'payload'
-import { headers } from 'next/headers'
 import type { Metadata } from 'next'
-import type { Media } from '@/payload-types'
+import type { Document, Media } from '@/payload-types'
 import config from '@payload-config'
-import { DocumentsFilter } from './DocumentsFilter'
-import Link from 'next/link'
+import { PageHero } from '@/components/PageHero'
+import { DocumentsClient, type DocumentItem } from '@/components/DocumentsClient'
 
 export const metadata: Metadata = { title: 'Documents' }
 
 export default async function DocumentsPage() {
   const payload = await getPayload({ config })
 
-  const { user } = await payload.auth({ headers: await headers() })
-  const isLoggedIn = Boolean(user)
-
-  const { docs, totalDocs } = await payload.find({
-    collection: 'documents',
-    where: isLoggedIn ? undefined : { acces: { equals: 'public' } },
-    depth: 1,
-    sort: 'titre',
-    limit: 500,
+  const { docs } = await payload.find({
+    collection:     'documents',
+    where:          { categorie: { not_equals: 'magazines' } },
+    depth:          1,
+    limit:          100,
+    sort:           '-createdAt',
     overrideAccess: true,
   })
 
-  const serialised = docs.map(doc => {
-    const fichier = typeof doc.fichier === 'object' && doc.fichier ? (doc.fichier as Media) : null
+  const documents: DocumentItem[] = (docs as Document[]).map(d => {
+    const fichier = typeof d.fichier === 'object' && d.fichier ? (d.fichier as Media) : null
+    const ext = fichier?.filename ? fichier.filename.split('.').pop() : null
+    const isPublic = d.acces === 'public'
     return {
-      id:          doc.id,
-      titre:       doc.titre,
-      description: doc.description ?? null,
-      categorie:   doc.categorie,
-      acces:       doc.acces,
-      fichier:     fichier ? { url: fichier.url ?? null, filename: fichier.filename ?? null, filesize: fichier.filesize ?? null } : null,
+      id: d.id,
+      titre: d.titre,
+      slug: d.slug ?? null,
+      description: d.description ?? null,
+      categorie: d.categorie,
+      acces: d.acces,
+      fileType: ext ? ext.toUpperCase().slice(0, 4) : null,
+      // Le nom de fichier n'est exposé que pour les documents publics :
+      // les documents "membres" restent réellement verrouillés (pas d'URL en clair).
+      filename: isPublic ? (fichier?.filename ?? null) : null,
+      createdAt: d.createdAt,
     }
   })
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+    <div>
+      <PageHero
+        title="Documents"
+        subtitle="Textes de référence et documents officiels du Cercle des Administrateurs Publics."
+        breadcrumb={[
+          { label: 'Accueil', href: '/' },
+          { label: 'Documents', href: '/documents' },
+        ]}
+      />
 
-      <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl font-bold text-black">Documents</h1>
-        <p className="mt-2 text-gray-500">
-          Textes de référence et documents officiels du Cercle des Administrateurs Publics.
-          {totalDocs > 0 && (
-            <span className="ml-1 text-gray-400">({totalDocs} document{totalDocs > 1 ? 's' : ''})</span>
-          )}
-        </p>
-      </div>
-
-      {totalDocs === 0 ? (
-        <p className="text-gray-500">Aucun document disponible pour le moment.</p>
-      ) : (
-        <DocumentsFilter docs={serialised} isLoggedIn={isLoggedIn} />
-      )}
-
-      {/* Message connexion pour visiteurs */}
-      {!isLoggedIn && (
-        <div className="mt-12 rounded-xl border border-gray-200 bg-[#F5F5F5] p-5">
-          <p className="text-sm text-gray-600">
-            <Link href="/connexion" className="font-semibold text-black underline underline-offset-2 hover:text-gray-700">
-              Connectez-vous
-            </Link>{' '}
-            pour accéder aux PV de réunion, Ressources et autres documents réservés aux membres.
-          </p>
+      <section className="bg-white py-12">
+        <div className="mx-auto max-w-7xl px-6">
+          <DocumentsClient documents={documents} />
         </div>
-      )}
+      </section>
     </div>
   )
 }
