@@ -19,10 +19,6 @@ export function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
       }}
     >
       <div className="absolute inset-0 bg-black/50" />
-      <div
-        className="absolute left-0 top-0 bottom-0 w-[5px]"
-        style={{ background: 'linear-gradient(180deg, #0B6B3A 33%, #C9A227 33% 66%, #E2231A 66%)' }}
-      />
 
       <div className="relative z-10 pl-10 pr-6">
         <nav className="font-mono text-xs uppercase tracking-widest text-white/60">
