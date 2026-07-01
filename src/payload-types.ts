@@ -345,7 +345,16 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  /**
+   * Image unique (ancien système). Si la galerie ci-dessous contient des images, la première y fait office de couverture.
+   */
   image?: (number | null) | Media;
+  images?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
   documents?:
     | {
         /**
@@ -753,6 +762,12 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   contenu?: T;
   image?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
   documents?:
     | T
     | {

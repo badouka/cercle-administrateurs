@@ -113,6 +113,23 @@ export const Posts: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        description: "Image unique (ancien système). Si la galerie ci-dessous contient des images, la première y fait office de couverture.",
+      },
+    },
+    {
+      name: 'images',
+      type: 'array',
+      label: "Galerie d'images (la première sera l'image de couverture)",
+      minRows: 1,
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
     },
     {
       name: 'documents',

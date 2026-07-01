@@ -1,5 +1,4 @@
 import { getPayload } from 'payload'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -8,8 +7,21 @@ import config from '@payload-config'
 import { ArrowLeft, Calendar, Tag, Download } from 'lucide-react'
 import { ShareButtons } from '@/components/ShareButtons'
 import { PageHero } from '@/components/PageHero'
+import { ImageCarousel } from '@/components/ImageCarousel'
 
 import { lexicalToHtml } from '@/lib/lexical-to-html'
+
+// Retourne les images de couverture : la galerie « images » si renseignée,
+// sinon le champ « image » historique (rétrocompatibilité). La première image
+// sert de couverture.
+function postImages(post: Post): Media[] {
+  const galerie = (post.images ?? [])
+    .map(item => (item.image && typeof item.image === 'object' ? (item.image as Media) : null))
+    .filter((m): m is Media => m !== null)
+  if (galerie.length > 0) return galerie
+  const single = post.image && typeof post.image === 'object' ? (post.image as Media) : null
+  return single ? [single] : []
+}
 
 function lexicalToExcerpt(doc: Post['contenu'], max = 200): string {
   try {
@@ -77,7 +89,7 @@ export async function generateMetadata({
   const post = docs[0] as Post | undefined
   if (!post) return { title: 'Article non trouvé — CAP' }
 
-  const image   = typeof post.image === 'object' && post.image ? (post.image as Media) : null
+  const image   = postImages(post)[0] ?? null
   const excerpt = lexicalToExcerpt(post.contenu)
 
   return {
@@ -120,7 +132,9 @@ export default async function ArticleDetailPage({
   const post = docs[0] as Post | undefined
   if (!post) notFound()
 
-  const image    = typeof post.image === 'object' && post.image ? (post.image as Media) : null
+  const carouselImages = postImages(post)
+    .filter(m => !!m.url)
+    .map(m => ({ url: m.url as string, alt: m.alt || post.titre }))
   const htmlBody = lexicalToHtml(post.contenu)
   const catLabel = CATEGORIE_LABELS[post.categorie] ?? post.categorie
 
@@ -156,18 +170,9 @@ export default async function ArticleDetailPage({
 
       <article>
 
-        {/* ── Featured image ── */}
-        {image?.url ? (
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 mb-8">
-            <Image
-              src={image.url}
-              alt={image.alt || post.titre}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
-          </div>
+        {/* ── Image(s) de couverture ── */}
+        {carouselImages.length > 0 ? (
+          <ImageCarousel images={carouselImages} />
         ) : (
           <div className="aspect-video rounded-2xl bg-[#F5F5F5] flex items-center justify-center mb-8">
             <span className="text-4xl font-bold text-gray-200 select-none tracking-widest">CAP</span>

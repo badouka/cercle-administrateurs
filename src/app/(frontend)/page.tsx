@@ -96,6 +96,15 @@ function mediaFilename(m: unknown): string | null {
     : null
 }
 
+// Couverture d'un article : 1re image de la galerie, sinon champ « image » historique.
+function postCoverFilename(post: Post): string | null {
+  for (const item of post.images ?? []) {
+    const f = mediaFilename(item.image)
+    if (f) return f
+  }
+  return mediaFilename(post.image)
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
@@ -343,7 +352,7 @@ export default async function HomePage() {
             <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_380px]">
               {/* Grande carte */}
               {(() => {
-                const filename = mediaFilename(actuVedette.image)
+                const filename = postCoverFilename(actuVedette)
                 const { jour, mois } = jourMois(actuVedette.publie_le)
                 const href = actuVedette.slug ? `/actualites/${actuVedette.slug}` : '/actualites'
                 const excerpt = lexicalToExcerpt(actuVedette.contenu, 160)
@@ -389,7 +398,7 @@ export default async function HomePage() {
                   <p className="text-sm text-[#14110B]/50">Pas d&apos;autres actualités récentes.</p>
                 ) : (
                   actuSecondaires.map(actu => {
-                    const filename = mediaFilename(actu.image)
+                    const filename = postCoverFilename(actu)
                     const href = actu.slug ? `/actualites/${actu.slug}` : '/actualites'
                     return (
                       <Link
