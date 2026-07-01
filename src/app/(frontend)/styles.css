@@ -78,28 +78,6 @@ p, li, blockquote {
 .delay-400 { animation-delay: 0.4s; }
 .delay-500 { animation-delay: 0.5s; }
 
-/* ── Marquee horizontal (galerie d'article) ─────────────────────────── */
-/* La piste contient les miniatures dupliquées ; -50 % boucle sans couture. */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-.marquee-track {
-  animation: marquee linear infinite;
-}
-
-/* Pause au survol */
-.marquee-container:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-  }
-}
-
 .cap-reveal {
   opacity: 0;
   transform: translateY(24px);
