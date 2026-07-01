@@ -162,11 +162,11 @@ export default async function ArticleDetailPage({
   })
 
   const articlesLies = (liesDocs as Post[]).map(a => ({
-    id:       a.id,
-    slug:     a.slug,
-    titre:    a.titre,
-    date:     formatDate(a.publie_le),
-    imageUrl: coverImage(a)?.url ?? null,
+    id:            a.id,
+    slug:          a.slug,
+    titre:         a.titre,
+    date:          formatDate(a.publie_le),
+    imageFilename: coverImage(a)?.filename ?? null,
   }))
   const hasSidebar = articlesLies.length > 0
 
@@ -308,14 +308,16 @@ export default async function ArticleDetailPage({
                       className="grid grid-cols-[70px_1fr] overflow-hidden rounded-lg border border-[#14110B]/10 bg-white transition-colors hover:bg-[#FAF8F3]"
                     >
                       {/* Image */}
-                      <div className="relative bg-[#083A1E]">
-                        {a.imageUrl && (
+                      <div className="relative w-[70px] flex-none overflow-hidden bg-[#FAF8F3]" style={{ minHeight: '70px' }}>
+                        {a.imageFilename ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={a.imageUrl}
+                            src={`/api/media/file/${a.imageFilename}`}
                             alt={a.titre}
-                            className="h-full w-full object-cover"
+                            className="absolute inset-0 w-full h-full object-cover"
                           />
+                        ) : (
+                          <div className="absolute inset-0 bg-[#EEF6F1]" />
                         )}
                       </div>
 
