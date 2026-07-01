@@ -145,6 +145,31 @@ export default async function ArticleDetailPage({
     })
     .filter((d): d is { id: string | null | undefined; titre: string; url: string } => d !== null)
 
+  // Articles de la même catégorie (hors article courant) pour la sidebar.
+  const { docs: liesDocs } = await payload.find({
+    collection: 'posts',
+    where: {
+      and: [
+        { categorie: { equals: post.categorie } },
+        { slug: { not_equals: slug } },
+        { statut: { equals: 'publie' } },
+      ],
+    },
+    depth:          1,
+    limit:          3,
+    sort:           '-publie_le',
+    overrideAccess: true,
+  })
+
+  const articlesLies = (liesDocs as Post[]).map(a => ({
+    id:       a.id,
+    slug:     a.slug,
+    titre:    a.titre,
+    date:     formatDate(a.publie_le),
+    imageUrl: coverImage(a)?.url ?? null,
+  }))
+  const hasSidebar = articlesLies.length > 0
+
   return (
     <div>
       <PageHero
@@ -157,7 +182,7 @@ export default async function ArticleDetailPage({
         ]}
       />
 
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
 
       {/* ── Back link ── */}
       <Link
@@ -168,91 +193,174 @@ export default async function ArticleDetailPage({
         Retour aux actualités
       </Link>
 
-      <article>
+      <div className={hasSidebar ? 'grid gap-8 lg:grid-cols-[1fr_270px]' : 'grid grid-cols-1 gap-8'}>
 
-        {/* ── Image de couverture ── */}
-        {cover?.url ? (
-          <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 mb-8">
-            <Image
-              src={cover.url}
-              alt={cover.alt || post.titre}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
-          </div>
-        ) : (
-          <div className="aspect-video rounded-2xl bg-[#F5F5F5] flex items-center justify-center mb-8">
-            <span className="text-4xl font-bold text-gray-200 select-none tracking-widest">CAP</span>
-          </div>
-        )}
+        {/* ── Colonne gauche : article ── */}
+        <article className="min-w-0">
 
-        {/* ── Galerie d'images (miniatures + lightbox) ── */}
-        {galerie.length > 0 && (
-          <div className="mb-8">
-            <GaleriePost photos={galerie} titre={post.titre} />
-          </div>
-        )}
-
-        {/* ── Catégorie + date ── */}
-        <div className="flex flex-wrap items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1 text-xs font-semibold text-white">
-            <Tag size={10} />
-            {catLabel}
-          </span>
-          {post.publie_le && (
-            <time
-              dateTime={post.publie_le}
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500"
-            >
-              <Calendar size={13} />
-              {formatDate(post.publie_le)}
-            </time>
-          )}
-        </div>
-
-        {/* ── Title ── */}
-        <h1 className="text-3xl font-bold text-black leading-tight mb-8 sm:text-4xl">
-          {post.titre}
-        </h1>
-
-        {/* ── Content ── */}
-        <div
-          className="article-prose"
-          dangerouslySetInnerHTML={{ __html: htmlBody }}
-        />
-
-        {/* ── Documents associés ── */}
-        {documents.length > 0 && (
-          <div className="mt-12 pt-8 border-t border-gray-200">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-500">
-              Documents associés
-            </h2>
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              {documents.map(doc => (
-                <a
-                  key={doc.id ?? doc.url}
-                  href={doc.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
-                  className="inline-flex items-center gap-2.5 rounded-lg bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
-                >
-                  <Download size={16} className="shrink-0" />
-                  {doc.titre}
-                </a>
-              ))}
+          {/* ── Image de couverture ── */}
+          {cover?.url ? (
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 mb-8">
+              <Image
+                src={cover.url}
+                alt={cover.alt || post.titre}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 850px"
+              />
             </div>
+          ) : (
+            <div className="aspect-video rounded-2xl bg-[#F5F5F5] flex items-center justify-center mb-8">
+              <span className="text-4xl font-bold text-gray-200 select-none tracking-widest">CAP</span>
+            </div>
+          )}
+
+          {/* ── Galerie d'images (miniatures + lightbox) ── */}
+          {galerie.length > 0 && (
+            <div className="mb-8">
+              <GaleriePost photos={galerie} titre={post.titre} />
+            </div>
+          )}
+
+          {/* ── Contenu de l'article ── */}
+          <div className="bg-white rounded-xl p-8 border border-[#14110B]/10">
+
+            {/* Catégorie + date */}
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1 text-xs font-semibold text-white">
+                <Tag size={10} />
+                {catLabel}
+              </span>
+              {post.publie_le && (
+                <time
+                  dateTime={post.publie_le}
+                  className="inline-flex items-center gap-1.5 text-sm text-gray-500"
+                >
+                  <Calendar size={13} />
+                  {formatDate(post.publie_le)}
+                </time>
+              )}
+            </div>
+
+            {/* Title */}
+            <h1 className="text-3xl font-bold text-black leading-tight mb-8 sm:text-4xl">
+              {post.titre}
+            </h1>
+
+            {/* Content */}
+            <div
+              className="article-prose"
+              dangerouslySetInnerHTML={{ __html: htmlBody }}
+            />
+
+            {/* Documents associés */}
+            {documents.length > 0 && (
+              <div className="mt-12 pt-8 border-t border-gray-200">
+                <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-500">
+                  Documents associés
+                </h2>
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  {documents.map(doc => (
+                    <a
+                      key={doc.id ?? doc.url}
+                      href={doc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="inline-flex items-center gap-2.5 rounded-lg bg-black px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+                    >
+                      <Download size={16} className="shrink-0" />
+                      {doc.titre}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* ── Separator + share ── */}
+          <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
+            <ShareButtons title={post.titre} path={`/actualites/${post.slug}`} />
+          </div>
+
+        </article>
+
+        {/* ── Colonne droite : sidebar « À lire aussi » ── */}
+        {hasSidebar && (
+          <aside>
+            <div className="relative overflow-hidden rounded-xl bg-[#062812] p-4 sticky top-24">
+              {/* Motif de points */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.08) 1px, transparent 0)',
+                  backgroundSize: '16px 16px',
+                }}
+              />
+
+              <div className="relative z-10">
+                {/* En-tête */}
+                <div className="mb-4 flex items-center gap-2">
+                  <span className="h-0.5 w-6 bg-[#C9A227]" />
+                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C9A227]">
+                    À lire aussi
+                  </span>
+                </div>
+
+                {/* Liste des articles liés */}
+                <div className="grid gap-3">
+                  {articlesLies.map(a => (
+                    <Link
+                      key={a.id}
+                      href={`/actualites/${a.slug}`}
+                      className="grid grid-cols-[70px_1fr] overflow-hidden rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
+                    >
+                      {/* Image */}
+                      <div className="relative bg-[#083A1E]">
+                        {a.imageUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={a.imageUrl}
+                            alt={a.titre}
+                            className="h-full w-full object-cover"
+                          />
+                        )}
+                        {/* Filet tricolore */}
+                        <div className="absolute bottom-0 left-0 right-0 flex h-1.5">
+                          <div className="flex-1 bg-[#0B6B3A]" />
+                          <div className="flex-1 bg-[#C9A227]" />
+                          <div className="flex-1 bg-[#E2231A]" />
+                        </div>
+                      </div>
+
+                      {/* Contenu */}
+                      <div className="p-2">
+                        {a.date && (
+                          <p className="text-[10px] text-[#6FAE8E]">{a.date}</p>
+                        )}
+                        <p className="line-clamp-2 text-[11px] font-bold leading-snug text-white">
+                          {a.titre}
+                        </p>
+                        <span className="text-[10px] font-semibold text-[#C9A227]">Lire →</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Bouton */}
+                <Link
+                  href="/actualites"
+                  className="mt-3 block w-full rounded-lg bg-[#0B6B3A] py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                >
+                  Toutes les actualités →
+                </Link>
+              </div>
+            </div>
+          </aside>
         )}
 
-        {/* ── Separator + share ── */}
-        <div className="mt-12 pt-8 border-t border-gray-200 space-y-4">
-          <ShareButtons title={post.titre} path={`/actualites/${post.slug}`} />
-        </div>
-
-      </article>
+      </div>
 
       {/* ── Bottom back link ── */}
       <div className="mt-10">
