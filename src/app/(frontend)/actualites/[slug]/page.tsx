@@ -1,4 +1,5 @@
 import { getPayload } from 'payload'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -11,16 +12,16 @@ import { ImageCarousel } from '@/components/ImageCarousel'
 
 import { lexicalToHtml } from '@/lib/lexical-to-html'
 
-// Retourne les images de couverture : la galerie « images » si renseignée,
-// sinon le champ « image » historique (rétrocompatibilité). La première image
-// sert de couverture.
-function postImages(post: Post): Media[] {
-  const galerie = (post.images ?? [])
+// Image de couverture de l'article (champ « image »).
+function coverImage(post: Post): Media | null {
+  return post.image && typeof post.image === 'object' ? (post.image as Media) : null
+}
+
+// Images supplémentaires de la galerie (champ « images ») qui défilent dans l'article.
+function galleryImages(post: Post): Media[] {
+  return (post.images ?? [])
     .map(item => (item.image && typeof item.image === 'object' ? (item.image as Media) : null))
     .filter((m): m is Media => m !== null)
-  if (galerie.length > 0) return galerie
-  const single = post.image && typeof post.image === 'object' ? (post.image as Media) : null
-  return single ? [single] : []
 }
 
 function lexicalToExcerpt(doc: Post['contenu'], max = 200): string {
@@ -89,7 +90,7 @@ export async function generateMetadata({
   const post = docs[0] as Post | undefined
   if (!post) return { title: 'Article non trouvé — CAP' }
 
-  const image   = postImages(post)[0] ?? null
+  const image   = coverImage(post)
   const excerpt = lexicalToExcerpt(post.contenu)
 
   return {
@@ -132,7 +133,8 @@ export default async function ArticleDetailPage({
   const post = docs[0] as Post | undefined
   if (!post) notFound()
 
-  const carouselImages = postImages(post)
+  const cover = coverImage(post)
+  const galerie = galleryImages(post)
     .filter(m => !!m.url)
     .map(m => ({ url: m.url as string, alt: m.alt || post.titre }))
   const htmlBody = lexicalToHtml(post.contenu)
@@ -170,9 +172,18 @@ export default async function ArticleDetailPage({
 
       <article>
 
-        {/* ── Image(s) de couverture ── */}
-        {carouselImages.length > 0 ? (
-          <ImageCarousel images={carouselImages} />
+        {/* ── Image de couverture ── */}
+        {cover?.url ? (
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 mb-8">
+            <Image
+              src={cover.url}
+              alt={cover.alt || post.titre}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+          </div>
         ) : (
           <div className="aspect-video rounded-2xl bg-[#F5F5F5] flex items-center justify-center mb-8">
             <span className="text-4xl font-bold text-gray-200 select-none tracking-widest">CAP</span>
@@ -206,6 +217,13 @@ export default async function ArticleDetailPage({
           className="article-prose"
           dangerouslySetInnerHTML={{ __html: htmlBody }}
         />
+
+        {/* ── Galerie d'images (défilement automatique) ── */}
+        {galerie.length > 0 && (
+          <div className="mt-12">
+            <ImageCarousel images={galerie} />
+          </div>
+        )}
 
         {/* ── Documents associés ── */}
         {documents.length > 0 && (

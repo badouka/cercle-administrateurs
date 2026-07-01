@@ -113,15 +113,20 @@ export const Posts: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
+      required: true,
+      label: 'Image de couverture',
       admin: {
-        description: "Image unique (ancien système). Si la galerie ci-dessous contient des images, la première y fait office de couverture.",
+        description: "Image principale affichée en couverture de l'article",
       },
     },
     {
       name: 'images',
       type: 'array',
-      label: "Galerie d'images (la première sera l'image de couverture)",
-      minRows: 1,
+      label: "Galerie d'images (défilement automatique dans l'article)",
+      required: false,
+      admin: {
+        description: "Images supplémentaires qui défilent automatiquement dans l'article",
+      },
       fields: [
         {
           name: 'image',

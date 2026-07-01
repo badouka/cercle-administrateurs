@@ -48,11 +48,7 @@ export default async function ActualitesPage() {
   })
 
   const posts: ActualitePost[] = (docs as Post[]).map(p => {
-    const galerie = (p.images ?? [])
-      .map(item => (item.image && typeof item.image === 'object' ? (item.image as Media) : null))
-      .filter((m): m is Media => m !== null)
-    const image = galerie[0]
-      ?? (p.image && typeof p.image === 'object' ? (p.image as Media) : null)
+    const image = p.image && typeof p.image === 'object' ? (p.image as Media) : null
     return {
       id: p.id,
       titre: p.titre,

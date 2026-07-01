@@ -346,9 +346,12 @@ export interface Post {
     [k: string]: unknown;
   };
   /**
-   * Image unique (ancien système). Si la galerie ci-dessous contient des images, la première y fait office de couverture.
+   * Image principale affichée en couverture de l'article
    */
-  image?: (number | null) | Media;
+  image: number | Media;
+  /**
+   * Images supplémentaires qui défilent automatiquement dans l'article
+   */
   images?:
     | {
         image: number | Media;
