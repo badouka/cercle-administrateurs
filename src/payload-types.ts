@@ -348,7 +348,7 @@ export interface Post {
   /**
    * Image principale affichée en couverture de l'article
    */
-  image: number | Media;
+  image?: (number | null) | Media;
   /**
    * Images supplémentaires qui défilent automatiquement dans l'article
    */

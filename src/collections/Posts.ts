@@ -113,7 +113,7 @@ export const Posts: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
       label: 'Image de couverture',
       admin: {
         description: "Image principale affichée en couverture de l'article",
