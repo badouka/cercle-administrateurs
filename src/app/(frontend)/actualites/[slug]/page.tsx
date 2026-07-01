@@ -8,7 +8,7 @@ import config from '@payload-config'
 import { ArrowLeft, Calendar, Tag, Download } from 'lucide-react'
 import { ShareButtons } from '@/components/ShareButtons'
 import { PageHero } from '@/components/PageHero'
-import { ImageCarousel } from '@/components/ImageCarousel'
+import GaleriePost from '@/components/GaleriePost'
 
 import { lexicalToHtml } from '@/lib/lexical-to-html'
 
@@ -134,9 +134,7 @@ export default async function ArticleDetailPage({
   if (!post) notFound()
 
   const cover = coverImage(post)
-  const galerie = galleryImages(post)
-    .filter(m => !!m.url)
-    .map(m => ({ url: m.url as string, alt: m.alt || post.titre }))
+  const galerie = galleryImages(post).filter(m => !!m.url)
   const htmlBody = lexicalToHtml(post.contenu)
   const catLabel = CATEGORIE_LABELS[post.categorie] ?? post.categorie
 
@@ -190,6 +188,13 @@ export default async function ArticleDetailPage({
           </div>
         )}
 
+        {/* ── Galerie d'images (miniatures + lightbox) ── */}
+        {galerie.length > 0 && (
+          <div className="mb-8">
+            <GaleriePost photos={galerie} titre={post.titre} />
+          </div>
+        )}
+
         {/* ── Catégorie + date ── */}
         <div className="flex flex-wrap items-center gap-3 mb-4">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1 text-xs font-semibold text-white">
@@ -217,13 +222,6 @@ export default async function ArticleDetailPage({
           className="article-prose"
           dangerouslySetInnerHTML={{ __html: htmlBody }}
         />
-
-        {/* ── Galerie d'images (défilement automatique) ── */}
-        {galerie.length > 0 && (
-          <div className="mt-12">
-            <ImageCarousel images={galerie} />
-          </div>
-        )}
 
         {/* ── Documents associés ── */}
         {documents.length > 0 && (
