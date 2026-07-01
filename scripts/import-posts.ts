@@ -541,7 +541,7 @@ async function main(): Promise<void> {
         data: {
           titre:     post.title,
           slug:      post.slug,
-          contenu:   htmlToLexical(post.content),
+          contenu:   htmlToLexical(post.content) as unknown as Post['contenu'],
           categorie: post.categorie!,
           statut:    'publie',
           publie_le: post.date,

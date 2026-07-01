@@ -492,7 +492,7 @@ async function main(): Promise<void> {
           type:        'seminaire',
           statut:      'termine',
           date_debut:  activity.date,
-          description: htmlToLexical(activity.content),
+          description: htmlToLexical(activity.content) as unknown as NonNullable<Activity['description']>,
           ...(imageId ? { image: imageId } : {}),
         },
         overrideAccess: true,
