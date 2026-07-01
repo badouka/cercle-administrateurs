@@ -289,21 +289,12 @@ export default async function ArticleDetailPage({
         {/* ── Colonne droite : sidebar « À lire aussi » ── */}
         {hasSidebar && (
           <aside>
-            <div className="relative overflow-hidden rounded-xl bg-[#062812] p-4 sticky top-24">
-              {/* Motif de points */}
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.08) 1px, transparent 0)',
-                  backgroundSize: '16px 16px',
-                }}
-              />
-
+            <div className="relative overflow-hidden rounded-xl bg-[#FAF8F3] p-4 sticky top-24">
               <div className="relative z-10">
                 {/* En-tête */}
                 <div className="mb-4 flex items-center gap-2">
                   <span className="h-0.5 w-6 bg-[#C9A227]" />
-                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C9A227]">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#0B6B3A]">
                     À lire aussi
                   </span>
                 </div>
@@ -314,7 +305,7 @@ export default async function ArticleDetailPage({
                     <Link
                       key={a.id}
                       href={`/actualites/${a.slug}`}
-                      className="grid grid-cols-[70px_1fr] overflow-hidden rounded-lg border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
+                      className="grid grid-cols-[70px_1fr] overflow-hidden rounded-lg border border-[#14110B]/10 bg-white transition-colors hover:bg-[#FAF8F3]"
                     >
                       {/* Image */}
                       <div className="relative bg-[#083A1E]">
@@ -326,23 +317,17 @@ export default async function ArticleDetailPage({
                             className="h-full w-full object-cover"
                           />
                         )}
-                        {/* Filet tricolore */}
-                        <div className="absolute bottom-0 left-0 right-0 flex h-1.5">
-                          <div className="flex-1 bg-[#0B6B3A]" />
-                          <div className="flex-1 bg-[#C9A227]" />
-                          <div className="flex-1 bg-[#E2231A]" />
-                        </div>
                       </div>
 
                       {/* Contenu */}
                       <div className="p-2">
                         {a.date && (
-                          <p className="text-[10px] text-[#6FAE8E]">{a.date}</p>
+                          <p className="text-[10px] text-[#14110B]/50">{a.date}</p>
                         )}
-                        <p className="line-clamp-2 text-[11px] font-bold leading-snug text-white">
+                        <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#14110B]">
                           {a.titre}
                         </p>
-                        <span className="text-[10px] font-semibold text-[#C9A227]">Lire →</span>
+                        <span className="text-[10px] font-semibold text-[#0B6B3A]">Lire →</span>
                       </div>
                     </Link>
                   ))}
