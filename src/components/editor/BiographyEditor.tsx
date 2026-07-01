@@ -5,6 +5,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Bold, Italic, List } from 'lucide-react'
+import type { Membre } from '@/payload-types'
 
 export interface BiographyEditorRef {
   getHTML:  () => string
@@ -12,7 +13,8 @@ export interface BiographyEditorRef {
 }
 
 interface Props {
-  initialContent?: string
+  // Accepte une chaîne HTML (legacy) ou l'objet Lexical du champ biographie.
+  initialContent?: string | Membre['biographie']
   placeholder?:    string
 }
 
