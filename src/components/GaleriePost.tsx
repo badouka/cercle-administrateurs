@@ -15,72 +15,67 @@ const INTERVAL_MS = 3000
 
 export default function GaleriePost({ photos, titre }: GaleriePostProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
-  const [group, setGroup] = useState(0)
+  const [index, setIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
-  const openLightbox = useCallback((index: number) => setLightboxIndex(index), [])
+  const total = photos.length
+
+  const openLightbox = useCallback((i: number) => setLightboxIndex(i), [])
   const closeLightbox = useCallback(() => setLightboxIndex(null), [])
   const prevPhoto = useCallback(() => {
-    setLightboxIndex(i => (i === null ? null : (i - 1 + photos.length) % photos.length))
-  }, [photos.length])
+    setLightboxIndex(i => (i === null ? null : (i - 1 + total) % total))
+  }, [total])
   const nextPhoto = useCallback(() => {
-    setLightboxIndex(i => (i === null ? null : (i + 1) % photos.length))
-  }, [photos.length])
+    setLightboxIndex(i => (i === null ? null : (i + 1) % total))
+  }, [total])
 
-  const pageCount = Math.max(1, Math.ceil(photos.length / PER_VIEW))
+  // Fenêtre glissante : n'avance que s'il y a plus de 3 images.
+  const isScrolling = total > PER_VIEW
 
-  // Défilement automatique par groupe toutes les 3 s, en pause au survol.
+  // Défilement automatique : avance d'une image toutes les 3 s, en pause au survol.
   useEffect(() => {
-    if (isHovered || pageCount <= 1) return
+    if (isHovered || !isScrolling) return
     const id = setInterval(() => {
-      setGroup(g => (g + 1) % pageCount)
+      setIndex(i => (i + 1) % total)
     }, INTERVAL_MS)
     return () => clearInterval(id)
-  }, [isHovered, pageCount])
+  }, [isHovered, isScrolling, total])
 
-  if (photos.length === 0) return null
+  if (total === 0) return null
 
-  // Regroupe les photos par pages de 3 (dernier groupe éventuellement incomplet).
-  const pages = Array.from({ length: pageCount }, (_, p) =>
-    photos.slice(p * PER_VIEW, p * PER_VIEW + PER_VIEW),
-  )
+  // Les 3 images visibles : fenêtre glissante avec bouclage par modulo.
+  // Moins de 4 images : on les affiche toutes, sans défilement.
+  const visible = isScrolling
+    ? Array.from({ length: PER_VIEW }, (_, k) => (index + k) % total)
+    : photos.map((_, i) => i)
 
   return (
     <>
       <div
-        className="overflow-hidden"
+        className="grid grid-cols-3 gap-3"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${group * 100}%)` }}
-        >
-          {pages.map((page, p) => (
-            <div key={p} className="grid w-full flex-shrink-0 grid-cols-3 gap-3">
-              {page.map((photo, j) => {
-                const index = p * PER_VIEW + j
-                return (
-                  <button
-                    key={photo.id ?? index}
-                    type="button"
-                    onClick={() => openLightbox(index)}
-                    aria-label={`Agrandir l'image ${index + 1}`}
-                    className="group relative aspect-square overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B6B3A]"
-                  >
-                    <Image
-                      src={photo.url!}
-                      alt={photo.alt || titre}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 768px) 33vw, 240px"
-                    />
-                  </button>
-                )
-              })}
-            </div>
-          ))}
-        </div>
+        {visible.map(realIndex => {
+          const photo = photos[realIndex]
+          return (
+            <button
+              key={photo.id ?? realIndex}
+              type="button"
+              onClick={() => openLightbox(realIndex)}
+              aria-label={`Agrandir l'image ${realIndex + 1}`}
+              className="group relative aspect-square overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B6B3A]"
+            >
+              <Image
+                src={photo.url!}
+                alt={photo.alt || titre}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 33vw, 240px"
+              />
+            </button>
+          )
+        })}
       </div>
 
       {lightboxIndex !== null && (
