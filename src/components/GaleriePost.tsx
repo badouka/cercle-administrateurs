@@ -24,26 +24,46 @@ export default function GaleriePost({ photos, titre }: GaleriePostProps) {
 
   if (photos.length === 0) return null
 
+  // Défilement continu seulement s'il y a plus d'une miniature.
+  // La piste est dupliquée pour un défilement en boucle sans couture.
+  const shouldScroll = photos.length > 1
+  const items = shouldScroll ? [...photos, ...photos] : photos
+  // Vitesse constante : ~3 s par miniature, boucle continue et fluide.
+  const durationSec = photos.length * 3
+
   return (
     <>
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
-        {photos.map((photo, index) => (
-          <button
-            key={photo.id ?? index}
-            type="button"
-            onClick={() => openLightbox(index)}
-            aria-label={`Agrandir l'image ${index + 1}`}
-            className="group relative aspect-square overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B6B3A]"
-          >
-            <Image
-              src={photo.url!}
-              alt={photo.alt || titre}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 20vw"
-            />
-          </button>
-        ))}
+      <div className="marquee-container overflow-hidden">
+        <div
+          className={shouldScroll ? 'marquee-track flex w-max' : 'flex flex-wrap gap-3'}
+          style={shouldScroll ? { animationDuration: `${durationSec}s` } : undefined}
+        >
+          {items.map((photo, i) => {
+            const realIndex = i % photos.length
+            const isClone = i >= photos.length
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => openLightbox(realIndex)}
+                aria-hidden={isClone}
+                tabIndex={isClone ? -1 : 0}
+                aria-label={`Agrandir l'image ${realIndex + 1}`}
+                className={`group relative h-32 w-32 shrink-0 overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B6B3A]${
+                  shouldScroll ? ' mr-3' : ''
+                }`}
+              >
+                <Image
+                  src={photo.url!}
+                  alt={photo.alt || titre}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="128px"
+                />
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       {lightboxIndex !== null && (
