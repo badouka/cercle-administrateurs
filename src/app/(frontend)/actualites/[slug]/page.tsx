@@ -7,6 +7,7 @@ import type { Post, Media } from '@/payload-types'
 import config from '@payload-config'
 import { ArrowLeft, Calendar, Tag, Download } from 'lucide-react'
 import { ShareButtons } from '@/components/ShareButtons'
+import { PageHero } from '@/components/PageHero'
 
 import { lexicalToHtml } from '@/lib/lexical-to-html'
 
@@ -131,7 +132,18 @@ export default async function ArticleDetailPage({
     .filter((d): d is { id: string | null | undefined; titre: string; url: string } => d !== null)
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <div>
+      <PageHero
+        title={post.titre}
+        subtitle={undefined}
+        breadcrumb={[
+          { label: 'Accueil', href: '/' },
+          { label: 'Actualités', href: '/actualites' },
+          { label: post.titre, href: `/actualites/${post.slug}` },
+        ]}
+      />
+
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
 
       {/* ── Back link ── */}
       <Link
@@ -231,6 +243,7 @@ export default async function ArticleDetailPage({
           Retour aux actualités
         </Link>
       </div>
+    </div>
     </div>
   )
 }

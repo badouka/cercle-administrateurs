@@ -33,11 +33,7 @@ const NAV_LINKS: NavItem[] = [
   { href: '/actualites', label: 'Actualités' },
   { href: '/blog', label: 'Blog' },
   { href: '/documents', label: 'Documents' },
-  {
-    href: '/magazines',
-    label: 'Magazines',
-    children: [{ href: '/magazines', label: 'Tous les magazines' }],
-  },
+  { href: '/magazines', label: 'Magazines' },
 ]
 
 interface AuthUser {

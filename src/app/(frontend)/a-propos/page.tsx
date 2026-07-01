@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import Link from 'next/link'
 import config from '@payload-config'
-import type { Membre, Media } from '@/payload-types'
+import type { Membre } from '@/payload-types'
 import { PageHero } from '@/components/PageHero'
 import { Award, GraduationCap, MessageSquare, Lightbulb, Target, ArrowRight } from 'lucide-react'
 
@@ -128,15 +128,6 @@ export default async function AProposPage() {
     return p === 'Président' || p === 'Présidente'
   }) ?? null
 
-  const presidentMedia =
-    president?.photo && typeof president.photo === 'object' ? (president.photo as Media) : null
-  const presidentPhoto = presidentMedia?.url
-    ? presidentMedia.url
-    : presidentMedia?.filename
-      ? `/api/media/file/${presidentMedia.filename}`
-      : null
-  const heroImage = presidentPhoto ?? '/api/media/file/cap-banner.png'
-
   return (
     <div className="bg-[#FAF8F3]">
       {/* ── 1. Hero ─────────────────────────────────────────────────────────── */}
@@ -221,7 +212,7 @@ export default async function AProposPage() {
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-[#14110B]/10 shadow-xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={heroImage}
+                  src="/api/media/file/a-propos.jpg"
                   alt={president ? `${president.prenom} ${president.nom}` : 'Cercle des Administrateurs Publics'}
                   className="h-full w-full object-cover"
                 />

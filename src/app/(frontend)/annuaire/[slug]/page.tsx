@@ -53,10 +53,10 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
         ]}
       />
       <div className="bg-[#FAF8F3] min-h-screen pb-20">
-        <div className="max-w-3xl mx-auto px-6">
+        <div className="max-w-3xl mx-auto px-6 pt-8">
 
         {/* Lien retour */}
-        <Link href="/annuaire" className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/50 hover:text-[#0B6B3A] transition-colors mb-8">
+        <Link href="/annuaire" className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/50 hover:text-[#0B6B3A] transition-colors mb-12">
           <ArrowLeft size={15} /> Retour à l&apos;annuaire
         </Link>
 
@@ -64,8 +64,8 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
         <div className="relative overflow-hidden rounded-2xl shadow-xl" style={{ background: 'linear-gradient(135deg, #083A1E, #062812)' }}>
           {/* Pattern points */}
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.10) 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          {/* Filet tricolore haut */}
-          <div className="absolute top-0 left-0 right-0 h-1 flex">
+          {/* Filet tricolore bas */}
+          <div className="absolute bottom-0 left-0 right-0 h-1.5 flex">
             <div className="flex-1 bg-[#0B6B3A]"></div>
             <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
               <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
@@ -121,7 +121,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Biographie</span>
           </div>
           {hasBio ? (
-            <div className="prose prose-sm max-w-none article-prose text-[#14110B]/70 leading-relaxed">
+            <div className="prose prose-sm max-w-none article-prose text-[#14110B]/70 leading-relaxed text-justify">
               <RichTextContent data={membre.biographie} />
             </div>
           ) : (

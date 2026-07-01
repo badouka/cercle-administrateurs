@@ -1,4 +1,5 @@
 import { getPayload } from 'payload'
+import { headers as getHeaders } from 'next/headers'
 import type { Metadata } from 'next'
 import type { Document, Media } from '@/payload-types'
 import config from '@payload-config'
@@ -8,7 +9,10 @@ import { DocumentsClient, type DocumentItem } from '@/components/DocumentsClient
 export const metadata: Metadata = { title: 'Documents' }
 
 export default async function DocumentsPage() {
-  const payload = await getPayload({ config })
+  const [payload, headers] = await Promise.all([getPayload({ config }), getHeaders()])
+
+  const { user } = await payload.auth({ headers })
+  const isLoggedIn = Boolean(user)
 
   const { docs } = await payload.find({
     collection:     'documents',
@@ -31,9 +35,10 @@ export default async function DocumentsPage() {
       categorie: d.categorie,
       acces: d.acces,
       fileType: ext ? ext.toUpperCase().slice(0, 4) : null,
-      // Le nom de fichier n'est exposé que pour les documents publics :
-      // les documents "membres" restent réellement verrouillés (pas d'URL en clair).
-      filename: isPublic ? (fichier?.filename ?? null) : null,
+      // Le nom de fichier n'est exposé que pour les documents publics, ou pour
+      // un utilisateur connecté : les documents "membres" restent verrouillés
+      // (pas d'URL en clair) tant que le visiteur n'est pas authentifié.
+      filename: isPublic || isLoggedIn ? (fichier?.filename ?? null) : null,
       createdAt: d.createdAt,
     }
   })
@@ -51,7 +56,7 @@ export default async function DocumentsPage() {
 
       <section className="bg-white py-12">
         <div className="mx-auto max-w-7xl px-6">
-          <DocumentsClient documents={documents} />
+          <DocumentsClient documents={documents} isLoggedIn={isLoggedIn} />
         </div>
       </section>
     </div>

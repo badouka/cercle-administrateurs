@@ -26,7 +26,7 @@ export function Footer() {
   return (
     <footer className="border-t border-[#14110B]/10 bg-white py-16">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr_1fr_1fr] gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[4fr_2fr_2fr_4fr] gap-8 items-start">
 
           {/* Colonne 1 — Logo + description */}
           <div className="flex flex-col gap-3 items-start">
@@ -88,17 +88,13 @@ export function Footer() {
         </div>
 
         {/* Barre bas */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[#14110B]/10 pt-8 text-xs text-[#14110B]/40 sm:flex-row">
-          <p>© 2026 Cercle des Administrateurs Publics du Sénégal. Tous droits réservés.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/confidentialite" className="transition-colors hover:text-[#0B6B3A]">
-              Politique de confidentialité
-            </Link>
-            <span>|</span>
-            <Link href="/mentions-legales" className="transition-colors hover:text-[#0B6B3A]">
-              Mentions légales
-            </Link>
-          </div>
+        <div className="mt-12 flex flex-col items-center justify-center gap-3 border-t border-[#14110B]/10 pt-8 text-xs text-[#14110B]/40 sm:flex-row">
+          <p className="text-xs text-[#14110B]/40 text-center">
+            Copyright © 2025 CAP. Tous droits réservés. | Développé et hébergé par{' '}
+            <a href="https://digissol.com/" target="_blank" rel="noopener noreferrer" className="text-[#0B6B3A] font-semibold hover:text-[#C9A227] transition-colors underline">
+              DIGISSOL
+            </a>
+          </p>
         </div>
       </div>
     </footer>

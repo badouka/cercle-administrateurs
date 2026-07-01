@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { Download } from 'lucide-react'
 
 export interface DocumentItem {
   id: string | number
@@ -31,7 +32,13 @@ const BADGE: Record<string, { label: string; cls: string }> = {
   magazines: { label: 'Magazine', cls: 'bg-purple-50 text-purple-700' },
 }
 
-export function DocumentsClient({ documents }: { documents: DocumentItem[] }) {
+export function DocumentsClient({
+  documents,
+  isLoggedIn = false,
+}: {
+  documents: DocumentItem[]
+  isLoggedIn?: boolean
+}) {
   const [q, setQ] = useState('')
   const [activeCategorie, setActiveCategorie] = useState('all')
   const [activeAcces, setActiveAcces] = useState<'public' | 'membres'>('public')
@@ -153,16 +160,16 @@ export function DocumentsClient({ documents }: { documents: DocumentItem[] }) {
                       <p className="mt-1 line-clamp-2 text-xs text-[#14110B]/50">{d.description}</p>
                     )}
 
-                    {d.acces === 'public' && d.filename ? (
+                    {d.filename && (d.acces === 'public' || isLoggedIn) ? (
                       <a
                         href={`/api/media/file/${d.filename}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#0B6B3A] px-2.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
                       >
-                        ↓ Télécharger
+                        <Download size={12} /> Télécharger
                       </a>
-                    ) : d.acces === 'membres' ? (
+                    ) : d.acces === 'membres' && !isLoggedIn ? (
                       <span className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#FAF8F3] px-3 py-1.5 text-xs font-semibold text-[#14110B]/40">
                         🔒 Réservé aux membres
                       </span>

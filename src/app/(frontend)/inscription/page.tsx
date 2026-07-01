@@ -209,13 +209,12 @@ export default function InscriptionPage() {
       <div className="max-w-lg w-full mx-auto bg-white rounded-2xl shadow-lg p-8 border border-ink/10">
 
         {/* En-tête */}
-        <div className="flex items-center gap-2">
-          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M3 2h6l-2 16H1z" fill="#0B6B3A" />
-            <path d="M11 2h6l-2 16H9z" fill="#FCD116" />
-          </svg>
-          <span className="font-bold text-ink">CAP</span>
-          <span className="text-ink/50 text-sm">· Demande d&apos;adhésion</span>
+        <div className="flex justify-center">
+          <img
+            src="/api/media/file/cap-logo.png"
+            alt="CAP"
+            style={{ height: '80px', width: 'auto' }}
+          />
         </div>
 
         {/* Barre de progression */}
@@ -314,7 +313,7 @@ export default function InscriptionPage() {
             </button>
           </div>
 
-          {/* ── Étape 2 : Mandat ── */}
+          {/* ── Étape 2 : Informations ── */}
           <div className={currentStep === 2 ? 'flex flex-col gap-4' : 'hidden'}>
             <div>
               <label htmlFor="fonctionProfessionnelle" className={LABEL_CLS}>

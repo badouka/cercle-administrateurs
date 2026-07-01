@@ -54,11 +54,12 @@ export default function ConnexionPage() {
         {/* Colonne gauche */}
         <div className="bg-[#FAF8F3] border-r-4 border-[#0B6B3A] p-10 flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="rounded bg-[#0B6B3A] px-2 py-0.5 text-sm font-extrabold text-cream tracking-wide">
-                CAP
-              </span>
-              <span className="text-ink/70 text-sm">Cercle des Administrateurs Publics</span>
+            <div className="flex justify-center">
+              <img
+                src="/api/media/file/cap-logo.png"
+                alt="CAP"
+                style={{ height: '80px', width: 'auto' }}
+              />
             </div>
 
             <p className="mt-12 font-mono text-xs uppercase tracking-widest text-[#0B6B3A]">Espace membre</p>

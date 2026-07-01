@@ -1,7 +1,7 @@
 import { getPayload } from 'payload'
 import Link from 'next/link'
 import config from '@payload-config'
-import type { Membre, Media, Activity, Document } from '@/payload-types'
+import type { Membre, Media, Document, Post } from '@/payload-types'
 import { MembresCarousel } from '@/components/MembresCarousel'
 import { RevealOnScroll } from '@/components/RevealOnScroll'
 import { CountUp } from '@/components/CountUp'
@@ -86,8 +86,8 @@ function jourMois(dateStr?: string | null): { jour: string; mois: string } {
   return { jour: String(d.getDate()), mois: MOIS_COURT[d.getMonth()] ?? '' }
 }
 
-function categorieActivite(type: Activity['type']): string {
-  return type === 'atelier' || type === 'seminaire' ? 'Ateliers & Séminaires' : 'Actualités'
+function categoriePost(categorie: Post['categorie']): string {
+  return categorie === 'ateliers_seminaires' ? 'Ateliers & Séminaires' : 'Actualités'
 }
 
 function mediaFilename(m: unknown): string | null {
@@ -101,7 +101,7 @@ function mediaFilename(m: unknown): string | null {
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
-  const [membresRes, activitesRes, magazinesRes] = await Promise.all([
+  const [membresRes, postsRes, magazinesRes] = await Promise.all([
     payload.find({
       collection:     'membres',
       depth:          1,
@@ -110,11 +110,14 @@ export default async function HomePage() {
       overrideAccess: true,
     }),
     payload.find({
-      collection:     'activities',
-      sort:           '-date_debut',
+      collection:     'posts',
+      sort:           '-publie_le',
       depth:          1,
       limit:          7,
       overrideAccess: true,
+      where: {
+        statut: { equals: 'publie' },
+      },
     }),
     payload.find({
       collection: 'documents',
@@ -153,7 +156,7 @@ export default async function HomePage() {
   const firstLetter = citationClean.charAt(0)
   const restOfCitation = citationClean.slice(1)
 
-  const activites = activitesRes.docs as Activity[]
+  const posts = postsRes.docs as Post[]
   const magazines = magazinesRes.docs as Document[]
   const magazine  = magazines[0] ?? null
   const anciensNumeros = magazines.slice(1, 4)
@@ -162,9 +165,9 @@ export default async function HomePage() {
     ? (magazine.couverture as Media)
     : null
 
-  // Activités réutilisées comme actualités (section 4)
-  const actuVedette = activites[0] ?? null
-  const actuSecondaires = activites.slice(1, 7)
+  // Articles (section 4)
+  const actuVedette = posts[0] ?? null
+  const actuSecondaires = posts.slice(1, 7)
 
   const presidentPhoto = mediaFilename(president?.photo)
   const magazineFichier = mediaFilename(magazine?.fichier)
@@ -341,9 +344,9 @@ export default async function HomePage() {
               {/* Grande carte */}
               {(() => {
                 const filename = mediaFilename(actuVedette.image)
-                const { jour, mois } = jourMois(actuVedette.date_debut)
-                const href = actuVedette.slug ? `/activites/${actuVedette.slug}` : '/activites'
-                const excerpt = lexicalToExcerpt(actuVedette.description, 160)
+                const { jour, mois } = jourMois(actuVedette.publie_le)
+                const href = actuVedette.slug ? `/actualites/${actuVedette.slug}` : '/actualites'
+                const excerpt = lexicalToExcerpt(actuVedette.contenu, 160)
                 return (
                   <Link
                     href={href}
@@ -364,7 +367,7 @@ export default async function HomePage() {
                     </div>
                     <div className="p-6">
                       <span className="inline-block rounded-full bg-[#0B6B3A]/10 px-3 py-1 text-xs font-medium text-[#0B6B3A]">
-                        {categorieActivite(actuVedette.type)}
+                        {categoriePost(actuVedette.categorie)}
                       </span>
                       <h3 className="mt-3 font-serif text-2xl font-bold leading-snug text-[#14110B]">
                         {actuVedette.titre}
@@ -387,7 +390,7 @@ export default async function HomePage() {
                 ) : (
                   actuSecondaires.map(actu => {
                     const filename = mediaFilename(actu.image)
-                    const href = actu.slug ? `/activites/${actu.slug}` : '/activites'
+                    const href = actu.slug ? `/actualites/${actu.slug}` : '/actualites'
                     return (
                       <Link
                         key={actu.id}
@@ -406,13 +409,13 @@ export default async function HomePage() {
                         </div>
                         <div className="min-w-0">
                           <span className="font-mono text-xs uppercase tracking-wider text-[#C9A227]">
-                            {categorieActivite(actu.type)}
+                            {categoriePost(actu.categorie)}
                           </span>
                           <h4 className="mt-1 line-clamp-2 font-serif text-sm font-bold text-[#14110B]">
                             {actu.titre}
                           </h4>
                           <p className="mt-1 text-xs text-[#14110B]/50">
-                            {formatDate(actu.date_debut)}
+                            {formatDate(actu.publie_le)}
                           </p>
                         </div>
                       </Link>
@@ -492,12 +495,23 @@ export default async function HomePage() {
                       'Retrouvez dans ce numéro les contributions et analyses des membres du Cercle sur les grands enjeux de l’administration publique sénégalaise.'}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <Link
-                      href="/magazines"
-                      className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
-                    >
-                      Lire le numéro <ArrowRight size={16} />
-                    </Link>
+                    {magazineFichier ? (
+                      <a
+                        href={`/api/media/file/${magazineFichier}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                      >
+                        Lire le numéro <ArrowRight size={16} />
+                      </a>
+                    ) : (
+                      <Link
+                        href="/magazines"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                      >
+                        Lire le numéro <ArrowRight size={16} />
+                      </Link>
+                    )}
                     {magazineFichier && (
                       <a
                         href={`/api/media/file/${magazineFichier}`}
@@ -520,11 +534,16 @@ export default async function HomePage() {
                       mag.couverture && typeof mag.couverture === 'object'
                         ? (mag.couverture as Media)
                         : null
+                    const fichier =
+                      mag.fichier && typeof mag.fichier === 'object'
+                        ? (mag.fichier as Media)
+                        : null
                     const numero = magazines.length - (i + 1)
                     return (
-                      <Link
+                      <a
                         key={mag.id}
-                        href="/magazines"
+                        href={fichier?.filename ? `/api/media/file/${fichier.filename}` : '/magazines'}
+                        {...(fichier?.filename ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         className="flex items-center gap-3 rounded-xl border border-[#14110B]/10 bg-white p-3 transition-colors hover:border-[#C9A227]"
                       >
                         {cov?.filename ? (
@@ -547,7 +566,7 @@ export default async function HomePage() {
                             {mag.titre}
                           </h4>
                         </div>
-                      </Link>
+                      </a>
                     )
                   })}
                 </div>
