@@ -12,7 +12,11 @@
 import * as fs   from 'node:fs'
 import * as path from 'node:path'
 import { getPayload } from 'payload'
+import type { Post } from '../src/payload-types'
 import config from '../src/payload.config'
+
+// Type du champ richText « contenu » attendu par Payload.
+type LexicalField = Post['contenu']
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -214,7 +218,7 @@ function cleanWordPressHtml(html: string): string {
     .trim()
 }
 
-function htmlToLexical(rawHtml: string): LexicalDocument {
+function htmlToLexical(rawHtml: string): LexicalField {
   const html   = cleanWordPressHtml(rawHtml)
   const blocks: LexicalBlockNode[] = []
 
@@ -257,12 +261,13 @@ function htmlToLexical(rawHtml: string): LexicalDocument {
     blocks.push(makeParagraph([makeText('(contenu vide)')]))
   }
 
-  return {
+  const doc: LexicalDocument = {
     root: {
       type: 'root', format: '', indent: 0, version: 1,
       direction: 'ltr', children: blocks,
     },
   }
+  return doc as unknown as LexicalField
 }
 
 // ─── SQL parsing ──────────────────────────────────────────────────────────────
