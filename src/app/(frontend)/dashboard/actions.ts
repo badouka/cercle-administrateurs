@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import config from '@payload-config'
+import type { User } from '@/payload-types'
 
 const LOGO_MIME    = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
 const LOGO_MAX     = 2 * 1024 * 1024 // 2 Mo
@@ -58,6 +59,22 @@ export async function updateProfile(
 
     if (!user) return { error: 'Vous devez être connecté.' }
 
+    // Vérifie que l'utilisateur connecté est bien le propriétaire du profil
+    // (ou un admin) avant d'autoriser la mise à jour.
+    const existing = await payload.findByID({
+      collection:     'membres',
+      id:             membreId,
+      depth:          0,
+      overrideAccess: true,
+    })
+    const ownerId = existing.user && typeof existing.user === 'object'
+      ? existing.user.id
+      : existing.user
+    const isAdmin = (user as User).role === 'admin'
+    if (!isAdmin && ownerId !== user.id) {
+      return { error: "Vous n'êtes pas autorisé à modifier ce profil." }
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const poste: any = {
       posteCap:                data.posteCap?.trim()                || undefined,
@@ -85,12 +102,14 @@ export async function updateProfile(
       },
     }
 
+    // Server Action authentifiée : la propriété du profil a déjà été vérifiée
+    // ci-dessus, on contourne donc les règles d'accès (qui refusaient l'update).
     await payload.update({
-      collection: 'membres',
-      id:         membreId,
-      data:       updateData,
+      collection:     'membres',
+      id:             membreId,
+      data:           updateData,
       user,
-      overrideAccess: false,
+      overrideAccess: true,
     })
 
     revalidatePath('/dashboard')

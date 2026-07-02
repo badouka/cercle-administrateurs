@@ -6,6 +6,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Bold, Italic, List } from 'lucide-react'
 import type { Membre } from '@/payload-types'
+import { lexicalToHtml } from '@/lib/lexical-to-html'
 
 export interface BiographyEditorRef {
   getHTML:  () => string
@@ -16,6 +17,17 @@ interface Props {
   // Accepte une chaîne HTML (legacy) ou l'objet Lexical du champ biographie.
   initialContent?: string | Membre['biographie']
   placeholder?:    string
+}
+
+// TipTap attend du HTML. Le contenu peut arriver sous 3 formes :
+//  - chaîne HTML (legacy)        → utilisée telle quelle
+//  - objet Lexical (a un root)   → converti en HTML via lexical-to-html
+//  - autre objet (ex. TipTap JSON) → ignoré (chaîne vide) pour éviter tout crash
+function toEditorHtml(input?: string | Membre['biographie']): string {
+  if (!input) return ''
+  if (typeof input === 'string') return input
+  if (typeof input === 'object' && 'root' in input) return lexicalToHtml(input)
+  return ''
 }
 
 function ToolBtn({
@@ -55,7 +67,7 @@ export const BiographyEditor = forwardRef<BiographyEditorRef, Props>(
         }),
         Placeholder.configure({ placeholder }),
       ],
-      content: initialContent,
+      content: toEditorHtml(initialContent),
       editorProps: {
         attributes: { class: 'tiptap-bio focus:outline-none' },
       },
