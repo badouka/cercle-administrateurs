@@ -12,11 +12,7 @@
 import * as fs   from 'node:fs'
 import * as path from 'node:path'
 import { getPayload } from 'payload'
-import type { Post } from '../src/payload-types'
 import config from '../src/payload.config'
-
-// Type du champ richText « contenu » attendu par Payload.
-type LexicalField = Post['contenu']
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -218,7 +214,10 @@ function cleanWordPressHtml(html: string): string {
     .trim()
 }
 
-function htmlToLexical(rawHtml: string): LexicalField {
+// Retour typé « any » : script de tooling, le champ richText de Payload varie
+// selon le contexte de build — « any » évite toute erreur d'assignabilité.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function htmlToLexical(rawHtml: string): any {
   const html   = cleanWordPressHtml(rawHtml)
   const blocks: LexicalBlockNode[] = []
 
@@ -267,7 +266,7 @@ function htmlToLexical(rawHtml: string): LexicalField {
       direction: 'ltr', children: blocks,
     },
   }
-  return doc as unknown as LexicalField
+  return doc
 }
 
 // ─── SQL parsing ──────────────────────────────────────────────────────────────
@@ -541,7 +540,7 @@ async function main(): Promise<void> {
         data: {
           titre:     post.title,
           slug:      post.slug,
-          contenu:   htmlToLexical(post.content) as unknown as Post['contenu'],
+          contenu:   htmlToLexical(post.content),
           categorie: post.categorie!,
           statut:    'publie',
           publie_le: post.date,

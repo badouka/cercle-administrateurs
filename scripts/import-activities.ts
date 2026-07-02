@@ -15,11 +15,7 @@
 import * as fs   from 'node:fs'
 import * as path from 'node:path'
 import { getPayload } from 'payload'
-import type { Activity } from '../src/payload-types'
 import config from '../src/payload.config'
-
-// Type du champ richText « description » attendu par Payload (sans null/undefined).
-type LexicalField = NonNullable<Activity['description']>
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -209,7 +205,10 @@ function cleanWordPressHtml(html: string): string {
     .trim()
 }
 
-function htmlToLexical(rawHtml: string): LexicalField {
+// Retour typé « any » : script de tooling, le champ richText de Payload varie
+// selon le contexte de build — « any » évite toute erreur d'assignabilité.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function htmlToLexical(rawHtml: string): any {
   const html   = cleanWordPressHtml(rawHtml)
   const blocks: LexicalBlockNode[] = []
 
@@ -258,7 +257,7 @@ function htmlToLexical(rawHtml: string): LexicalField {
       direction: 'ltr', children: blocks,
     },
   }
-  return doc as unknown as LexicalField
+  return doc
 }
 
 // ─── SQL parsing ──────────────────────────────────────────────────────────────
@@ -492,7 +491,7 @@ async function main(): Promise<void> {
           type:        'seminaire',
           statut:      'termine',
           date_debut:  activity.date,
-          description: htmlToLexical(activity.content) as unknown as NonNullable<Activity['description']>,
+          description: htmlToLexical(activity.content),
           ...(imageId ? { image: imageId } : {}),
         },
         overrideAccess: true,
