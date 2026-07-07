@@ -44,7 +44,15 @@ export default buildConfig({
     vercelBlobStorage({
       enabled: true,
       collections: {
-        media: true,
+        media: {
+          disablePayloadAccessControl: true,
+          generateFileURL: ({ filename }) => {
+            const base =
+              process.env.BLOB_BASE_URL ||
+              'https://fc3ao21hfkjktvli.public.blob.vercel-storage.com'
+            return `${base}/${encodeURIComponent(filename)}`
+          },
+        },
       },
       token: process.env.BLOB_READ_WRITE_TOKEN,
       clientUploads: true,
