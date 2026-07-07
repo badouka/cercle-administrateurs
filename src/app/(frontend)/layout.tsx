@@ -10,6 +10,13 @@ import { AnnuaireSectionWrapper } from '@/components/AnnuaireSectionWrapper'
 import { PartenairesSection } from '@/components/PartenairesSection'
 import './styles.css'
 
+// Rendu dynamique de tout le front public : les URLs des médias (CDN Vercel
+// Blob) sont générées par le plugin au moment de la lecture. En statique, si le
+// token Blob n'est pas présent au build, le plugin se désactive et les URLs
+// retombent sur /api/media/file/. Le rendu à la requête garantit des URLs Blob
+// correctes (le token étant disponible au runtime).
+export const dynamic = 'force-dynamic'
+
 const crimsonPro = Crimson_Pro({ subsets: ['latin'], variable: '--font-crimson' })
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' })
 

@@ -44,14 +44,12 @@ export default buildConfig({
     vercelBlobStorage({
       enabled: true,
       collections: {
+        // disablePayloadAccessControl => l'URL native pointe directement sur le
+        // CDN Blob (https://<store>.public.blob.vercel-storage.com/<fichier>)
+        // au lieu de la route proxy /api/media/file/. Le hook afterRead du
+        // plugin ne prend la branche « URL Blob directe » que si ce flag est mis.
         media: {
           disablePayloadAccessControl: true,
-          generateFileURL: ({ filename }) => {
-            const base =
-              process.env.BLOB_BASE_URL ||
-              'https://fc3ao21hfkjktvli.public.blob.vercel-storage.com'
-            return `${base}/${encodeURIComponent(filename)}`
-          },
         },
       },
       token: process.env.BLOB_READ_WRITE_TOKEN,
