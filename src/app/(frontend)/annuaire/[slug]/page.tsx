@@ -66,11 +66,11 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.10) 1px, transparent 0)', backgroundSize: '20px 20px' }} />
           {/* Filet tricolore bas */}
           <div className="absolute bottom-0 left-0 right-0 h-1.5 flex">
-            <div className="flex-1 bg-[#0B6B3A]"></div>
-            <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
-              <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
+            <div className="flex-1" style={{ background: '#14b53a' }}></div>
+            <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
+              <span className="absolute text-[8px] leading-none" style={{ color: '#14b53a' }}>★</span>
             </div>
-            <div className="flex-1 bg-[#E2231A]"></div>
+            <div className="flex-1" style={{ background: '#ce0726' }}></div>
           </div>
           {/* Contenu */}
           <div className="relative flex flex-wrap items-center gap-6 p-8 pt-10">

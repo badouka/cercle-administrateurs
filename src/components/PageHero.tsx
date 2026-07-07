@@ -48,13 +48,11 @@ export function PageHero({ title, subtitle, breadcrumb }: PageHeroProps) {
 
       {/* Filet tricolore en bas */}
       <div className="absolute bottom-0 left-0 right-0 flex h-1.5">
-        <div className="flex-1 bg-[#0B6B3A]" />
-        <div className="relative flex-1 bg-[#C9A227]">
-          <span className="absolute inset-0 flex items-center justify-center text-[8px] text-[#0B6B3A]">
-            ★
-          </span>
+        <div className="flex-1" style={{ background: '#14b53a' }}></div>
+        <div className="flex-1 relative flex items-center justify-center" style={{ background: '#fcd116' }}>
+          <span className="absolute text-[8px] leading-none" style={{ color: '#14b53a' }}>★</span>
         </div>
-        <div className="flex-1 bg-[#E2231A]" />
+        <div className="flex-1" style={{ background: '#ce0726' }}></div>
       </div>
     </section>
   )

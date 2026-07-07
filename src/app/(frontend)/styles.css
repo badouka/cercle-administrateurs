@@ -12,6 +12,13 @@
   --font-mono:  var(--font-ibm-plex-mono), ui-monospace, monospace;
 }
 
+/* ── Couleurs du filet tricolore ─────────────────────────────────────── */
+:root {
+  --primary-color: #14b53a;
+  --secondary-color: #fcd116;
+  --third-color: #ce0726;
+}
+
 /* ── Justification globale des textes ────────────────────────────────── */
 p, li, blockquote {
   text-align: justify;

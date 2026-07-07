@@ -218,13 +218,11 @@ export default async function HomePage() {
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute bottom-0 left-0 right-0 flex h-1.5">
-                  <div className="flex-1 bg-[#0B6B3A]" />
-                  <div className="relative flex-1 bg-[#C9A227]">
-                    <span className="absolute inset-0 flex items-center justify-center text-[8px] text-[#0B6B3A]">
-                      ★
-                    </span>
+                  <div className="flex-1" style={{ background: '#14b53a' }}></div>
+                  <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
+                    <span className="absolute text-[8px] leading-none" style={{ color: '#14b53a' }}>★</span>
                   </div>
-                  <div className="flex-1 bg-[#E2231A]" />
+                  <div className="flex-1" style={{ background: '#ce0726' }}></div>
                 </div>
               </div>
               <div className="absolute -bottom-6 -left-6 rounded-xl border-t-4 border-[#C9A227] bg-white p-4 shadow-xl">
@@ -284,11 +282,11 @@ export default async function HomePage() {
                 <span className="block text-xs font-medium">Président du CAP</span>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-1.5 flex z-10">
-                <div className="flex-1 bg-[#0B6B3A]"></div>
-                <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
-                  <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
+                <div className="flex-1" style={{ background: '#14b53a' }}></div>
+                <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
+                  <span className="absolute text-[8px] leading-none" style={{ color: '#14b53a' }}>★</span>
                 </div>
-                <div className="flex-1 bg-[#E2231A]"></div>
+                <div className="flex-1" style={{ background: '#ce0726' }}></div>
               </div>
             </div>
           </div>

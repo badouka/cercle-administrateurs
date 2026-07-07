@@ -104,11 +104,11 @@ export default async function FrontendLayout({ children }: { children: React.Rea
 
         {/* Filet tricolore */}
         <div className="w-full h-1.5 flex">
-          <div className="flex-1 bg-[#0B6B3A]"></div>
-          <div className="flex-1 bg-[#C9A227] relative flex items-center justify-center">
-            <span className="absolute text-[#0B6B3A] text-[8px] leading-none">★</span>
+          <div className="flex-1" style={{ background: '#14b53a' }}></div>
+          <div className="flex-1 relative flex items-center justify-center" style={{ background: '#fcd116' }}>
+            <span className="absolute text-[8px] leading-none" style={{ color: '#14b53a' }}>★</span>
           </div>
-          <div className="flex-1 bg-[#E2231A]"></div>
+          <div className="flex-1" style={{ background: '#ce0726' }}></div>
         </div>
 
         <Footer />
