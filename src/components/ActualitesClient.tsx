@@ -9,7 +9,7 @@ export interface ActualitePost {
   titre: string
   slug?: string | null
   excerpt: string
-  image?: string | null // filename
+  imageUrl?: string | null // media .url (Blob CDN)
   categorie?: string | null
   date?: string | null
   type?: string | null
@@ -99,10 +99,10 @@ export function ActualitesClient({ posts }: { posts: ActualitePost[] }) {
               >
                 <Link href={`/actualites/${p.slug || p.id}`} className="block cursor-pointer">
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#EEF6F1]">
-                    {p.image && (
+                    {p.imageUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={`/api/media/file/${p.image}`}
+                        src={p.imageUrl}
                         alt={p.titre}
                         className="h-full w-full object-cover"
                       />

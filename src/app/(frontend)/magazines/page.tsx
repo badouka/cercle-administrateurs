@@ -57,16 +57,16 @@ export default async function MagazinesPage() {
                 return (
                   <div key={mag.id} className="group cursor-pointer bg-white rounded-2xl border border-[#14110B]/10 hover:border-[#C9A227]/50 hover:shadow-md transition-all p-3">
                     <Link
-                      href={fichier?.filename ? `/api/media/file/${fichier.filename}` : '/magazines'}
-                      {...(fichier?.filename ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      href={fichier?.url ?? '/magazines'}
+                      {...(fichier?.url ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                       className="block"
                     >
                       {/* Couverture */}
                       <div className="relative aspect-[3/4] rounded-lg overflow-hidden bg-[#062812] shadow-lg group-hover:shadow-xl transition-shadow">
-                        {couverture?.filename ? (
+                        {couverture?.url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={`/api/media/file/${couverture.filename}`}
+                            src={couverture.url}
                             alt={mag.titre}
                             className="absolute inset-0 w-full h-full object-cover"
                           />
@@ -83,9 +83,9 @@ export default async function MagazinesPage() {
                       <span className="text-xs text-[#14110B]/50">
                         {mag.createdAt ? new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' }).format(new Date(mag.createdAt)) : ''}
                       </span>
-                      {fichier?.filename ? (
+                      {fichier?.url ? (
                         <a
-                          href={`/api/media/file/${fichier.filename}`}
+                          href={fichier.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-xs font-semibold text-[#0B6B3A] hover:underline"

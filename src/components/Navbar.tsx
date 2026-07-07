@@ -122,7 +122,7 @@ export function Navbar() {
             </div>
           ) : (
             <img
-              src="/api/media/file/cap-logo.png"
+              src="/cap-logo.png"
               alt="CAP"
               style={{ height: '55px', width: 'auto' }}
               onError={() => setLogoError(true)}

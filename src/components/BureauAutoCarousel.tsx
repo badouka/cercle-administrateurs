@@ -10,7 +10,7 @@ interface BureauAutoCarouselProps {
     prenom: string
     nom: string
     slug?: string | null
-    photo?: { filename?: string | null } | null
+    photo?: { url?: string | null } | null
     poste?: { posteCap?: string | null; organisme?: string | null } | null
   }>
 }
@@ -73,9 +73,7 @@ export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
                 style={{ transform: `translateX(-${index * (100 / visibleCount)}%)` }}
               >
                 {membres.map(membre => {
-                  const photoUrl = membre.photo?.filename
-                    ? `/api/media/file/${membre.photo.filename}`
-                    : null
+                  const photoUrl = membre.photo?.url ?? null
                   const posteCap  = membre.poste?.posteCap?.trim()
                   const organisme = membre.poste?.organisme?.trim()
 

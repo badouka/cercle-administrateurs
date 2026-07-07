@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 type Partenaire = {
   id: string
   nom: string
-  logo?: { filename?: string | null } | null
+  logo?: { url?: string | null } | null
   site_web?: string | null
 }
 
@@ -59,9 +59,9 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
                 rel="noopener noreferrer"
                 className="flex-none w-40 h-20 bg-white rounded-xl border border-[#14110B]/10 flex items-center justify-center p-4 hover:border-[#C9A227]/50 hover:shadow-sm transition-all cursor-pointer"
               >
-                {p.logo?.filename ? (
+                {p.logo?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={`/api/media/file/${p.logo.filename}`} alt={p.nom} className="max-h-12 max-w-full object-contain" />
+                  <img src={p.logo.url} alt={p.nom} className="max-h-12 max-w-full object-contain" />
                 ) : (
                   <span className="text-xs font-bold text-[#14110B]/40 text-center">{p.nom}</span>
                 )}
@@ -71,9 +71,9 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
                 key={`${p.id}-${i}`}
                 className="flex-none w-40 h-20 bg-white rounded-xl border border-[#14110B]/10 flex items-center justify-center p-4 hover:border-[#C9A227]/50 hover:shadow-sm transition-all"
               >
-                {p.logo?.filename ? (
+                {p.logo?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={`/api/media/file/${p.logo.filename}`} alt={p.nom} className="max-h-12 max-w-full object-contain" />
+                  <img src={p.logo.url} alt={p.nom} className="max-h-12 max-w-full object-contain" />
                 ) : (
                   <span className="text-xs font-bold text-[#14110B]/40 text-center">{p.nom}</span>
                 )}

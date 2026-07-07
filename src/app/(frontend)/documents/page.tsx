@@ -39,6 +39,7 @@ export default async function DocumentsPage() {
       // un utilisateur connecté : les documents "membres" restent verrouillés
       // (pas d'URL en clair) tant que le visiteur n'est pas authentifié.
       filename: isPublic || isLoggedIn ? (fichier?.filename ?? null) : null,
+      url: isPublic || isLoggedIn ? (fichier?.url ?? null) : null,
       createdAt: d.createdAt,
     }
   })

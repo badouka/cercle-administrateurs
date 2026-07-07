@@ -52,7 +52,7 @@ export default async function BlogPage() {
       titre: post.titre,
       slug: post.slug ?? null,
       excerpt: post.extrait?.trim() || lexicalToExcerpt(post.contenu),
-      image: image?.filename ?? null,
+      image: image?.url ?? null,
       categorie: post.categorie?.trim() || null,
       date: formatDateFr(post.publie_le),
     }

@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
+    // Les médias sont servis directement depuis le CDN Vercel Blob (champ
+    // media.url réécrit par le plugin). next/image doit autoriser ce host.
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fc3ao21hfkjktvli.public.blob.vercel-storage.com',
+      },
+    ],
   },
   async rewrites() {
     return [

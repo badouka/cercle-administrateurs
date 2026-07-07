@@ -212,7 +212,7 @@ export default async function AProposPage() {
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-[#14110B]/10 shadow-xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/api/media/file/a-propos.jpg"
+                  src="/a-propos.jpg"
                   alt={president ? `${president.prenom} ${president.nom}` : 'Cercle des Administrateurs Publics'}
                   className="h-full w-full object-cover"
                 />

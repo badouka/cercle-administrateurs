@@ -61,7 +61,7 @@ export default async function BureauPage() {
         prenom: m.prenom,
         nom: m.nom,
         slug: m.slug ?? null,
-        photo: photoMedia?.filename ?? null,
+        photo: photoMedia?.url ?? null,
         posteCap: m.poste?.posteCap ?? null,
         fonctionProfessionnelle: m.poste?.fonctionProfessionnelle ?? null,
         organisme: m.poste?.organisme ?? null,

@@ -90,9 +90,9 @@ function categoriePost(categorie: Post['categorie']): string {
   return categorie === 'ateliers_seminaires' ? 'Ateliers & Séminaires' : 'Actualités'
 }
 
-function mediaFilename(m: unknown): string | null {
-  return m && typeof m === 'object' && 'filename' in m
-    ? ((m as { filename?: string | null }).filename ?? null)
+function mediaUrl(m: unknown): string | null {
+  return m && typeof m === 'object' && 'url' in m
+    ? ((m as { url?: string | null }).url ?? null)
     : null
 }
 
@@ -169,8 +169,8 @@ export default async function HomePage() {
   const actuVedette = posts[0] ?? null
   const actuSecondaires = posts.slice(1, 7)
 
-  const presidentPhoto = mediaFilename(president?.photo)
-  const magazineFichier = mediaFilename(magazine?.fichier)
+  const presidentPhoto = mediaUrl(president?.photo)
+  const magazineFichier = mediaUrl(magazine?.fichier)
 
   return (
     <div className="bg-[#FAF8F3] font-sans">
@@ -213,7 +213,7 @@ export default async function HomePage() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/api/media/file/cap-1.png"
+                  src="/cap-1.png"
                   alt="Cercle des Administrateurs Publics"
                   className="h-full w-full object-cover"
                 />
@@ -268,7 +268,7 @@ export default async function HomePage() {
               {presidentPhoto ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`/api/media/file/${presidentPhoto}`}
+                  src={presidentPhoto}
                   alt={president ? `${president.prenom} ${president.nom}` : 'Président du CAP'}
                   className="h-full w-full object-cover"
                 />
@@ -343,7 +343,7 @@ export default async function HomePage() {
             <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_380px]">
               {/* Grande carte */}
               {(() => {
-                const filename = mediaFilename(actuVedette.image)
+                const imageUrl = mediaUrl(actuVedette.image)
                 const { jour, mois } = jourMois(actuVedette.publie_le)
                 const href = actuVedette.slug ? `/actualites/${actuVedette.slug}` : '/actualites'
                 const excerpt = lexicalToExcerpt(actuVedette.contenu, 160)
@@ -353,10 +353,10 @@ export default async function HomePage() {
                     className="group overflow-hidden rounded-2xl bg-[#FAF8F3] transition-shadow hover:shadow-md"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden bg-[#0B6B3A]/5">
-                      {filename && (
+                      {imageUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={`/api/media/file/${filename}`}
+                          src={imageUrl}
                           alt={actuVedette.titre}
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
@@ -389,7 +389,7 @@ export default async function HomePage() {
                   <p className="text-sm text-[#14110B]/50">Pas d&apos;autres actualités récentes.</p>
                 ) : (
                   actuSecondaires.map(actu => {
-                    const filename = mediaFilename(actu.image)
+                    const imageUrl = mediaUrl(actu.image)
                     const href = actu.slug ? `/actualites/${actu.slug}` : '/actualites'
                     return (
                       <Link
@@ -398,10 +398,10 @@ export default async function HomePage() {
                         className="group flex gap-4 overflow-hidden rounded-xl bg-[#FAF8F3] p-3 transition-shadow hover:shadow-md"
                       >
                         <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[#0B6B3A]/5">
-                          {filename && (
+                          {imageUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
-                              src={`/api/media/file/${filename}`}
+                              src={imageUrl}
                               alt={actu.titre}
                               className="h-full w-full object-cover"
                             />
@@ -497,7 +497,7 @@ export default async function HomePage() {
                   <div className="mt-6 flex flex-wrap gap-3">
                     {magazineFichier ? (
                       <a
-                        href={`/api/media/file/${magazineFichier}`}
+                        href={magazineFichier}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
@@ -514,7 +514,7 @@ export default async function HomePage() {
                     )}
                     {magazineFichier && (
                       <a
-                        href={`/api/media/file/${magazineFichier}`}
+                        href={magazineFichier}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 rounded-lg border border-[#14110B]/20 px-6 py-2.5 text-sm font-semibold text-[#14110B] transition-colors hover:border-[#0B6B3A] hover:text-[#0B6B3A]"
@@ -542,14 +542,14 @@ export default async function HomePage() {
                     return (
                       <a
                         key={mag.id}
-                        href={fichier?.filename ? `/api/media/file/${fichier.filename}` : '/magazines'}
-                        {...(fichier?.filename ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        href={fichier?.url ?? '/magazines'}
+                        {...(fichier?.url ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         className="flex items-center gap-3 rounded-xl border border-[#14110B]/10 bg-white p-3 transition-colors hover:border-[#C9A227]"
                       >
-                        {cov?.filename ? (
+                        {cov?.url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={`/api/media/file/${cov.filename}`}
+                            src={cov.url}
                             alt={mag.titre}
                             className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
                           />
@@ -624,13 +624,13 @@ export default async function HomePage() {
 
           <MembresCarousel
             membres={tousLesMembres.slice(0, 12).map(m => {
-              const photo = mediaFilename(m.photo)
+              const photo = mediaUrl(m.photo)
               return {
                 id: m.id,
                 prenom: m.prenom,
                 nom: m.nom,
                 slug: m.slug,
-                photo: photo ? `/api/media/file/${photo}` : null,
+                photo: photo ?? null,
                 poste: m.poste
                   ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
                   : null,

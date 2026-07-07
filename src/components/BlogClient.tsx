@@ -9,7 +9,7 @@ export interface BlogPostCard {
   titre: string
   slug?: string | null
   excerpt: string
-  image?: string | null // filename
+  image?: string | null // url
   categorie?: string | null
   date?: string | null
 }
@@ -89,7 +89,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
                     {p.image && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={`/api/media/file/${p.image}`}
+                        src={p.image}
                         alt={p.titre}
                         className="h-full w-full object-cover"
                       />

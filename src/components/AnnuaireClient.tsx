@@ -10,7 +10,7 @@ export interface AnnuaireMembre {
   prenom: string
   nom: string
   slug?: string | null
-  photo?: string | null // filename
+  photo?: string | null // url
   posteCap?: string | null
   fonctionProfessionnelle?: string | null
   organisme?: string | null
@@ -107,7 +107,7 @@ export function AnnuaireClient({
                 {m.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={`/api/media/file/${m.photo}`}
+                    src={m.photo}
                     alt={`${m.prenom} ${m.nom}`}
                     className="h-full w-full object-cover object-top"
                   />

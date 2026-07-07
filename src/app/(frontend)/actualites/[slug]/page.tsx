@@ -166,7 +166,7 @@ export default async function ArticleDetailPage({
     slug:          a.slug,
     titre:         a.titre,
     date:          formatDate(a.publie_le),
-    imageFilename: coverImage(a)?.filename ?? null,
+    imageUrl:      coverImage(a)?.url ?? null,
   }))
   const hasSidebar = articlesLies.length > 0
 
@@ -309,10 +309,10 @@ export default async function ArticleDetailPage({
                     >
                       {/* Image */}
                       <div className="relative w-[70px] flex-none overflow-hidden bg-[#FAF8F3]" style={{ minHeight: '70px' }}>
-                        {a.imageFilename ? (
+                        {a.imageUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={`/api/media/file/${a.imageFilename}`}
+                            src={a.imageUrl}
                             alt={a.titre}
                             className="absolute inset-0 w-full h-full object-cover"
                           />

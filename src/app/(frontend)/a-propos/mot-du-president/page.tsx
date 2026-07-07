@@ -57,11 +57,7 @@ export default async function MotDuPresidentPage() {
 
   const presidentMedia =
     president?.photo && typeof president.photo === 'object' ? (president.photo as Media) : null
-  const presidentPhoto = presidentMedia?.url
-    ? presidentMedia.url
-    : presidentMedia?.filename
-      ? `/api/media/file/${presidentMedia.filename}`
-      : null
+  const presidentPhoto = presidentMedia?.url ?? null
 
   const presidentNom = president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'
   const presidentInitiales = president ? initiales(president.prenom, president.nom) : 'LS'

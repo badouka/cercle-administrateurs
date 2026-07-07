@@ -76,9 +76,9 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           <div className="relative flex flex-wrap items-center gap-6 p-8 pt-10">
             {/* Photo */}
             <div className="flex-none w-32 h-40 rounded-xl overflow-hidden bg-[#0A5530] border border-[#0A5530] flex items-center justify-center shadow-lg">
-              {photo?.filename ? (
+              {photo?.url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={`/api/media/file/${photo.filename}`} alt={`${membre.prenom} ${membre.nom}`} className="w-full h-full object-cover" />
+                <img src={photo.url} alt={`${membre.prenom} ${membre.nom}`} className="w-full h-full object-cover" />
               ) : (
                 <span className="font-serif text-4xl font-bold text-[#C9A227]">{initiales}</span>
               )}
@@ -95,10 +95,10 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
             </div>
             {/* Logo organisme */}
             <div className="flex-none w-24 h-20 rounded-xl bg-white flex flex-col items-center justify-center gap-1 shadow p-2">
-              {logoMedia?.filename ? (
+              {logoMedia?.url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`/api/media/file/${logoMedia.filename}`}
+                  src={logoMedia.url}
                   alt={organisme || 'Organisme'}
                   className="max-h-full max-w-full object-contain"
                 />

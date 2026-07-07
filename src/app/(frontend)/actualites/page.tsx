@@ -54,7 +54,7 @@ export default async function ActualitesPage() {
       titre: p.titre,
       slug: p.slug ?? null,
       excerpt: lexicalToExcerpt(p.contenu, 200),
-      image: image?.filename ?? null,
+      imageUrl: image?.url ?? null,
       categorie: p.categorie ?? null,
       type: p.categorie ?? null,
       date: formatDateFr(p.publie_le),

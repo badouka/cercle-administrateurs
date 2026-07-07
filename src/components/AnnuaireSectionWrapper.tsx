@@ -9,7 +9,7 @@ type Membre = {
   prenom: string
   nom: string
   slug?: string | null
-  photo?: { filename?: string | null } | null
+  photo?: { url?: string | null } | null
   poste?: { posteCap?: string | null; organisme?: string | null } | null
 }
 
@@ -22,13 +22,13 @@ export function AnnuaireSectionWrapper({ membres }: { membres: Membre[] }) {
     return null
   }
 
-  // MembresCarousel attend `photo` sous forme d'URL : on convertit le filename.
+  // MembresCarousel attend `photo` sous forme d'URL : on passe l'URL du média.
   const cards = membres.map(m => ({
     id: m.id,
     prenom: m.prenom,
     nom: m.nom,
     slug: m.slug ?? null,
-    photo: m.photo?.filename ? `/api/media/file/${m.photo.filename}` : null,
+    photo: m.photo?.url ?? null,
     poste: m.poste ?? null,
   }))
 

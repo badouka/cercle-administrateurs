@@ -37,7 +37,7 @@ export function Footer() {
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src="/api/media/file/cap-logo.png"
+                src="/cap-logo.png"
                 alt="CAP"
                 style={{ height: '55px', width: 'auto' }}
                 onError={() => setLogoError(true)}

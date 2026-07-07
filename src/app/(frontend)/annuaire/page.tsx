@@ -71,7 +71,7 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
         prenom: m.prenom,
         nom: m.nom,
         slug: m.slug ?? null,
-        photo: photoMedia?.filename ?? null,
+        photo: photoMedia?.url ?? null,
         posteCap,
         fonctionProfessionnelle: m.poste?.fonctionProfessionnelle ?? null,
         organisme: m.poste?.organisme ?? null,

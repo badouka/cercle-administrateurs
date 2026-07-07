@@ -63,8 +63,8 @@ export default async function FrontendLayout({ children }: { children: React.Rea
     nom: m.nom,
     slug: m.slug ?? null,
     photo:
-      m.photo && typeof m.photo === 'object' && 'filename' in m.photo
-        ? { filename: (m.photo as { filename?: string | null }).filename ?? null }
+      m.photo && typeof m.photo === 'object' && 'url' in m.photo
+        ? { url: (m.photo as { url?: string | null }).url ?? null }
         : null,
     poste: m.poste
       ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
@@ -82,8 +82,8 @@ export default async function FrontendLayout({ children }: { children: React.Rea
     id: String(p.id),
     nom: p.nom,
     logo:
-      p.logo && typeof p.logo === 'object' && 'filename' in p.logo
-        ? { filename: (p.logo as { filename?: string | null }).filename ?? null }
+      p.logo && typeof p.logo === 'object' && 'url' in p.logo
+        ? { url: (p.logo as { url?: string | null }).url ?? null }
         : null,
     site_web: p.site_web ?? null,
   }))

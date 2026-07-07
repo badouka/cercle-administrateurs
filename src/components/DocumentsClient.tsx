@@ -12,6 +12,7 @@ export interface DocumentItem {
   acces: string // 'public' | 'membres'
   fileType?: string | null // ex. "PDF" — sûr à exposer
   filename?: string | null // uniquement pour les documents publics (téléchargement)
+  url?: string | null // URL Blob directe — uniquement pour les documents publics
   createdAt?: string | null
 }
 
@@ -160,9 +161,9 @@ export function DocumentsClient({
                       <p className="mt-1 line-clamp-2 text-xs text-[#14110B]/50">{d.description}</p>
                     )}
 
-                    {d.filename && (d.acces === 'public' || isLoggedIn) ? (
+                    {d.url && (d.acces === 'public' || isLoggedIn) ? (
                       <a
-                        href={`/api/media/file/${d.filename}`}
+                        href={d.url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#0B6B3A] px-2.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
