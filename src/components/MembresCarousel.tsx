@@ -145,8 +145,8 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
                           className="h-full w-full object-cover object-top"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-[#0B6B3A]/10">
-                          <span className="font-serif text-3xl font-bold text-[#0B6B3A]">
+                        <div className="flex h-full w-full items-center justify-center bg-[#14b53a]/10">
+                          <span className="font-serif text-3xl font-bold text-[#14b53a]">
                             {initiales(membre.prenom, membre.nom)}
                           </span>
                         </div>

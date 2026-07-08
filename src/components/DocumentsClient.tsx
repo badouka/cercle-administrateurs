@@ -25,7 +25,7 @@ const CATEGORIES: { value: string; label: string }[] = [
 ]
 
 const BADGE: Record<string, { label: string; cls: string }> = {
-  textes_statutaires: { label: 'Statutaire', cls: 'bg-[#EEF6F1] text-[#0B6B3A]' },
+  textes_statutaires: { label: 'Statutaire', cls: 'bg-[#EEF6F1] text-[#14b53a]' },
   textes_reglementaires: { label: 'Réglementaire', cls: 'bg-[#FAF4E0] text-[#8A6E18]' },
   pv_reunion: { label: 'PV Réunion', cls: 'bg-[#FAF8F3] text-[#14110B]/60' },
   ressources: { label: 'Ressource', cls: 'bg-blue-50 text-blue-700' },
@@ -67,13 +67,13 @@ export function DocumentsClient({
 
   const catBtn = (active: boolean) =>
     `flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
-      active ? 'bg-[#0B6B3A] font-semibold text-white' : 'text-[#14110B]/60 hover:bg-[#FAF8F3]'
+      active ? 'bg-[#14b53a] font-semibold text-white' : 'text-[#14110B]/60 hover:bg-[#FAF8F3]'
     }`
   const countBadge = (active: boolean) =>
     `text-xs px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-[#FAF8F3] text-[#14110B]/40'}`
   const accesBtn = (active: boolean) =>
     `flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
-      active ? 'bg-[#EEF6F1] font-semibold text-[#0B6B3A]' : 'text-[#14110B]/60 hover:bg-[#FAF8F3]'
+      active ? 'bg-[#EEF6F1] font-semibold text-[#14b53a]' : 'text-[#14110B]/60 hover:bg-[#FAF8F3]'
     }`
 
   return (
@@ -124,7 +124,7 @@ export function DocumentsClient({
           value={q}
           onChange={e => setQ(e.target.value)}
           placeholder="Rechercher un document…"
-          className="w-full rounded-xl border border-[#14110B]/15 bg-[#FAF8F3] px-5 py-3 text-sm text-[#14110B] placeholder:text-[#14110B]/40 focus:border-[#0B6B3A] focus:outline-none"
+          className="w-full rounded-xl border border-[#14110B]/15 bg-[#FAF8F3] px-5 py-3 text-sm text-[#14110B] placeholder:text-[#14110B]/40 focus:border-[#14b53a] focus:outline-none"
         />
 
         {filtered.length === 0 ? (
@@ -166,7 +166,7 @@ export function DocumentsClient({
                         href={d.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#0B6B3A] px-2.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                        className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#14b53a] px-2.5 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
                       >
                         <Download size={12} /> Télécharger
                       </a>

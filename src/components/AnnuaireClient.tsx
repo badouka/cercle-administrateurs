@@ -59,7 +59,7 @@ export function AnnuaireClient({
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder="Rechercher par nom, fonction ou organisme…"
-          className="w-full max-w-sm rounded-xl border border-[#14110B]/15 bg-[#FAF8F3] px-5 py-3 text-sm text-[#14110B] placeholder:text-[#14110B]/40 focus:border-[#0B6B3A] focus:outline-none"
+          className="w-full max-w-sm rounded-xl border border-[#14110B]/15 bg-[#FAF8F3] px-5 py-3 text-sm text-[#14110B] placeholder:text-[#14110B]/40 focus:border-[#14b53a] focus:outline-none"
         />
         {!hideBadgeFilter && (
           <div className="flex gap-2">
@@ -70,7 +70,7 @@ export function AnnuaireClient({
                 onClick={() => setFiltre(s.key)}
                 className={
                   filtre === s.key
-                    ? 'rounded-lg bg-[#0B6B3A] px-4 py-2 text-sm font-semibold text-white'
+                    ? 'rounded-lg bg-[#14b53a] px-4 py-2 text-sm font-semibold text-white'
                     : 'rounded-lg bg-[#FAF8F3] px-4 py-2 text-sm text-[#14110B]/60 transition-colors hover:text-[#14110B]'
                 }
               >
@@ -91,10 +91,10 @@ export function AnnuaireClient({
             <Link
               key={m.id}
               href={`/annuaire/${m.slug || m.id}`}
-              className="relative cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#0B6B3A] bg-white transition-all hover:border-[#C9A227]/50 hover:shadow-md"
+              className="relative cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#14b53a] bg-white transition-all hover:border-[#C9A227]/50 hover:shadow-md"
             >
               {m.isBureau ? (
-                <span className="absolute right-3 top-3 z-10 rounded-full bg-[#0B6B3A] px-2 py-0.5 text-xs font-bold text-white">
+                <span className="absolute right-3 top-3 z-10 rounded-full bg-[#14b53a] px-2 py-0.5 text-xs font-bold text-white">
                   Bureau
                 </span>
               ) : (
@@ -112,7 +112,7 @@ export function AnnuaireClient({
                     className="h-full w-full object-cover object-top"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center font-serif text-3xl font-bold text-[#0B6B3A]">
+                  <div className="flex h-full w-full items-center justify-center font-serif text-3xl font-bold text-[#14b53a]">
                     {initiales(m.prenom, m.nom)}
                   </div>
                 )}

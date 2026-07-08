@@ -64,7 +64,7 @@ export default function GaleriePost({ photos, titre }: GaleriePostProps) {
               type="button"
               onClick={() => openLightbox(realIndex)}
               aria-label={`Agrandir l'image ${realIndex + 1}`}
-              className="group relative aspect-square overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0B6B3A]"
+              className="group relative aspect-square overflow-hidden rounded-xl border border-[#E5E5E5] bg-gray-50 transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#14b53a]"
             >
               <Image
                 src={photo.url!}

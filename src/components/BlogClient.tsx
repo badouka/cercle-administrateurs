@@ -48,7 +48,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
         value={query}
         onChange={e => setQuery(e.target.value)}
         placeholder="Rechercher un article…"
-        className="mb-6 w-full rounded-xl border border-[#14110B]/15 bg-[#FAF8F3] px-5 py-3 text-sm text-[#14110B] placeholder:text-[#14110B]/40 focus:border-[#0B6B3A] focus:outline-none"
+        className="mb-6 w-full rounded-xl border border-[#14110B]/15 bg-[#FAF8F3] px-5 py-3 text-sm text-[#14110B] placeholder:text-[#14110B]/40 focus:border-[#14b53a] focus:outline-none"
       />
 
       <div className="mb-8 flex flex-wrap gap-3">
@@ -61,8 +61,8 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
               onClick={() => setFiltre(cat)}
               className={
                 actif
-                  ? 'cursor-pointer rounded-full border border-[#0B6B3A] bg-[#0B6B3A] px-5 py-2 text-sm font-semibold text-white transition-all'
-                  : 'cursor-pointer rounded-full border border-[#14110B]/20 bg-transparent px-5 py-2 text-sm font-semibold text-[#14110B]/60 transition-all hover:border-[#0B6B3A]/40 hover:text-[#14110B]'
+                  ? 'cursor-pointer rounded-full border border-[#14b53a] bg-[#14b53a] px-5 py-2 text-sm font-semibold text-white transition-all'
+                  : 'cursor-pointer rounded-full border border-[#14110B]/20 bg-transparent px-5 py-2 text-sm font-semibold text-[#14110B]/60 transition-all hover:border-[#14b53a]/40 hover:text-[#14110B]'
               }
             >
               {cat === 'tous' ? 'Tous' : cat}
@@ -78,7 +78,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
           {filtered.map(p => {
             const lien = `${origin}/blog/${p.slug || p.id}`
             const shareBtn =
-              'inline-flex items-center gap-1.5 text-xs font-medium text-[#14110B]/60 border border-[#14110B]/15 px-3 py-1.5 rounded-lg hover:border-[#0B6B3A] hover:text-[#0B6B3A] transition-colors'
+              'inline-flex items-center gap-1.5 text-xs font-medium text-[#14110B]/60 border border-[#14110B]/15 px-3 py-1.5 rounded-lg hover:border-[#14b53a] hover:text-[#14b53a] transition-colors'
             return (
               <div
                 key={p.id}
@@ -95,7 +95,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
                       />
                     )}
                     {p.categorie && (
-                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#0B6B3A] backdrop-blur-sm">
+                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#14b53a] backdrop-blur-sm">
                         {p.categorie}
                       </span>
                     )}
@@ -114,7 +114,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
                         {p.excerpt}
                       </p>
                     )}
-                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#0B6B3A]">
+                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#14b53a]">
                       Lire l&apos;article <ArrowRight size={14} />
                     </span>
                   </div>

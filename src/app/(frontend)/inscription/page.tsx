@@ -9,7 +9,7 @@ const LABEL_CLS =
   'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-1'
 
 const INPUT_CLS =
-  'border border-ink/20 rounded-lg px-4 py-2.5 w-full text-sm focus:border-[#0B6B3A] focus:outline-none'
+  'border border-ink/20 rounded-lg px-4 py-2.5 w-full text-sm focus:border-[#14b53a] focus:outline-none'
 
 const SELECT_CLS = INPUT_CLS + ' bg-white'
 
@@ -40,7 +40,7 @@ function Field({
   return (
     <div>
       <label htmlFor={id} className={LABEL_CLS}>
-        {label}{required && <span className="text-[#0B6B3A]">*</span>}
+        {label}{required && <span className="text-[#14b53a]">*</span>}
       </label>
       <input
         id={id} name={name} type={type}
@@ -185,7 +185,7 @@ export default function InscriptionPage() {
     return (
       <div className="min-h-screen bg-[#FAF8F3] flex items-center justify-center py-16 px-4">
         <div className="max-w-lg w-full mx-auto bg-white rounded-2xl shadow-lg p-8 border border-ink/10 text-center">
-          <CheckCircle2 size={52} className="mx-auto text-[#0B6B3A] mb-5" strokeWidth={1.5} />
+          <CheckCircle2 size={52} className="mx-auto text-[#14b53a] mb-5" strokeWidth={1.5} />
           <h1 className="text-xl font-bold text-ink mb-2">Demande envoyée</h1>
           <p className="text-sm text-ink/60 leading-relaxed">
             Votre demande d&apos;adhésion est en attente de validation par l&apos;administrateur du CAP.
@@ -193,7 +193,7 @@ export default function InscriptionPage() {
           </p>
           <Link
             href="/"
-            className="mt-6 inline-block text-sm font-semibold text-[#0B6B3A] hover:text-ink transition-colors"
+            className="mt-6 inline-block text-sm font-semibold text-[#14b53a] hover:text-ink transition-colors"
           >
             Retour à l&apos;accueil
           </Link>
@@ -222,13 +222,13 @@ export default function InscriptionPage() {
           {STEPS.map((_, i) => (
             <div
               key={i}
-              className={`h-1 flex-1 rounded-full ${i + 1 <= currentStep ? 'bg-[#0B6B3A]' : 'bg-ink/15'}`}
+              className={`h-1 flex-1 rounded-full ${i + 1 <= currentStep ? 'bg-[#14b53a]' : 'bg-ink/15'}`}
             />
           ))}
         </div>
         <div className="flex justify-between text-xs mt-2">
           {STEPS.map((label, i) => (
-            <span key={label} className={i + 1 === currentStep ? 'text-[#0B6B3A] font-bold' : 'text-ink/30'}>
+            <span key={label} className={i + 1 === currentStep ? 'text-[#14b53a] font-bold' : 'text-ink/30'}>
               {label}
             </span>
           ))}
@@ -250,7 +250,7 @@ export default function InscriptionPage() {
 
             <div>
               <span className={LABEL_CLS}>
-                Genre<span className="text-[#0B6B3A]">*</span>
+                Genre<span className="text-[#14b53a]">*</span>
               </span>
               <div className="flex gap-6">
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -258,7 +258,7 @@ export default function InscriptionPage() {
                     type="radio" name="genre" value="homme" required
                     checked={genre === 'homme'}
                     onChange={() => { setGenre('homme'); setFonction('') }}
-                    className="w-4 h-4 accent-[#0B6B3A]"
+                    className="w-4 h-4 accent-[#14b53a]"
                   />
                   <span className="text-sm text-ink/70">Homme</span>
                 </label>
@@ -267,7 +267,7 @@ export default function InscriptionPage() {
                     type="radio" name="genre" value="femme" required
                     checked={genre === 'femme'}
                     onChange={() => { setGenre('femme'); setFonction('') }}
-                    className="w-4 h-4 accent-[#0B6B3A]"
+                    className="w-4 h-4 accent-[#14b53a]"
                   />
                   <span className="text-sm text-ink/70">Femme</span>
                 </label>
@@ -282,7 +282,7 @@ export default function InscriptionPage() {
 
             <div>
               <label htmlFor="motDePasse" className={LABEL_CLS}>
-                Mot de passe<span className="text-[#0B6B3A]">*</span>
+                Mot de passe<span className="text-[#14b53a]">*</span>
               </label>
               <div className="relative">
                 <input
@@ -307,7 +307,7 @@ export default function InscriptionPage() {
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="mt-2 w-full bg-[#0B6B3A] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#0B6B3A]/90 transition-colors"
+              className="mt-2 w-full bg-[#14b53a] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#14b53a]/90 transition-colors"
             >
               Suivant →
             </button>
@@ -317,7 +317,7 @@ export default function InscriptionPage() {
           <div className={currentStep === 2 ? 'flex flex-col gap-4' : 'hidden'}>
             <div>
               <label htmlFor="fonctionProfessionnelle" className={LABEL_CLS}>
-                Fonction<span className="text-[#0B6B3A]">*</span>
+                Fonction<span className="text-[#14b53a]">*</span>
               </label>
               <select
                 id="fonctionProfessionnelle"
@@ -360,14 +360,14 @@ export default function InscriptionPage() {
               <button
                 type="button"
                 onClick={() => setCurrentStep(1)}
-                className="border border-ink/20 text-ink px-6 py-3 rounded-lg font-semibold text-sm hover:border-[#0B6B3A] hover:text-[#0B6B3A] transition-colors"
+                className="border border-ink/20 text-ink px-6 py-3 rounded-lg font-semibold text-sm hover:border-[#14b53a] hover:text-[#14b53a] transition-colors"
               >
                 ← Retour
               </button>
               <button
                 type="button"
                 onClick={() => setCurrentStep(3)}
-                className="flex-1 bg-[#0B6B3A] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#0B6B3A]/90 transition-colors"
+                className="flex-1 bg-[#14b53a] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#14b53a]/90 transition-colors"
               >
                 Suivant →
               </button>
@@ -404,7 +404,7 @@ export default function InscriptionPage() {
                 <button
                   type="button"
                   onClick={() => photoRef.current?.click()}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-ink/20 px-4 py-5 text-sm text-ink/50 hover:border-[#0B6B3A] hover:text-[#0B6B3A] transition-colors"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-ink/20 px-4 py-5 text-sm text-ink/50 hover:border-[#14b53a] hover:text-[#14b53a] transition-colors"
                 >
                   <Upload size={16} />
                   Sélectionner une photo
@@ -429,7 +429,7 @@ export default function InscriptionPage() {
 
             <div>
               <label className={LABEL_CLS}>
-                Pièce justificative<span className="text-[#0B6B3A]">*</span>
+                Pièce justificative<span className="text-[#14b53a]">*</span>
               </label>
               <p className="text-xs text-ink/50 mb-2">
                 Joignez un document justifiant votre fonction (arrêté de nomination, décision, carte professionnelle…)
@@ -455,7 +455,7 @@ export default function InscriptionPage() {
                 <button
                   type="button"
                   onClick={() => justificatifRef.current?.click()}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-ink/20 px-4 py-5 text-sm text-ink/50 hover:border-[#0B6B3A] hover:text-[#0B6B3A] transition-colors"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-ink/20 px-4 py-5 text-sm text-ink/50 hover:border-[#14b53a] hover:text-[#14b53a] transition-colors"
                 >
                   <Upload size={16} />
                   Sélectionner un fichier
@@ -482,13 +482,13 @@ export default function InscriptionPage() {
               <button
                 type="button"
                 onClick={() => setCurrentStep(2)}
-                className="border border-ink/20 text-ink px-6 py-3 rounded-lg font-semibold text-sm hover:border-[#0B6B3A] hover:text-[#0B6B3A] transition-colors"
+                className="border border-ink/20 text-ink px-6 py-3 rounded-lg font-semibold text-sm hover:border-[#14b53a] hover:text-[#14b53a] transition-colors"
               >
                 ← Retour
               </button>
               <button
                 type="submit" disabled={loading}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#0B6B3A] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#0B6B3A]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 bg-[#14b53a] text-white py-3 rounded-lg font-semibold text-sm hover:bg-[#14b53a]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading && (
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -501,7 +501,7 @@ export default function InscriptionPage() {
 
         <p className="mt-6 text-center text-sm text-ink/60">
           Déjà membre ?{' '}
-          <Link href="/connexion" className="text-[#0B6B3A] font-semibold">
+          <Link href="/connexion" className="text-[#14b53a] font-semibold">
             Se connecter
           </Link>
         </p>

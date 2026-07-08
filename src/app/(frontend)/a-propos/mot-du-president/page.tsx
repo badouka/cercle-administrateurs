@@ -155,7 +155,7 @@ export default async function MotDuPresidentPage() {
       {/* ── 2. Corps du message ─────────────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-6 py-16">
         <p className="font-serif text-xl text-[#083A1E] mb-6">
-          <span className="font-serif text-8xl font-bold text-[#0B6B3A] float-left mr-2 leading-none mt-1">L</span>
+          <span className="font-serif text-8xl font-bold text-[#14b53a] float-left mr-2 leading-none mt-1">L</span>
           {messageParas[0].slice(1)}
         </p>
 
@@ -171,7 +171,7 @@ export default async function MotDuPresidentPage() {
         <div className="flex flex-wrap items-center justify-between gap-6 border-t border-[#14110B]/10 pt-8">
           {/* Gauche */}
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#C9A227] bg-[#0B6B3A]/10 text-lg font-bold text-[#0B6B3A]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#C9A227] bg-[#14b53a]/10 text-lg font-bold text-[#14b53a]">
               {presidentInitiales}
             </div>
             <div>
@@ -187,7 +187,7 @@ export default async function MotDuPresidentPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#0B6B3A] hover:bg-[#0B6B3A] hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#14b53a] hover:bg-[#14b53a] hover:text-white"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -198,7 +198,7 @@ export default async function MotDuPresidentPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X (Twitter)"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#0B6B3A] hover:bg-[#0B6B3A] hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#14b53a] hover:bg-[#14b53a] hover:text-white"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -209,7 +209,7 @@ export default async function MotDuPresidentPage() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#0B6B3A] hover:bg-[#0B6B3A] hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#14110B]/15 text-[#14110B]/50 transition-colors hover:border-[#14b53a] hover:bg-[#14b53a] hover:text-white"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />

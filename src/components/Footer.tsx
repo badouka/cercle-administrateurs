@@ -18,7 +18,7 @@ const RESSOURCES = [
 ]
 
 const TITRE_COLONNE = 'mb-4 font-mono text-xs uppercase tracking-widest text-[#C9A227]'
-const LIEN_COLONNE = 'text-sm text-[#14110B]/70 transition-colors hover:text-[#0B6B3A]'
+const LIEN_COLONNE = 'text-sm text-[#14110B]/70 transition-colors hover:text-[#14b53a]'
 
 export function Footer() {
   const [logoError, setLogoError] = useState(false)
@@ -32,7 +32,7 @@ export function Footer() {
           <div className="flex flex-col gap-3 items-start">
             {logoError ? (
               <div className="flex items-center gap-2">
-                <span className="rounded bg-[#0B6B3A] px-2 py-1 text-sm font-black text-white">CAP</span>
+                <span className="rounded bg-[#14b53a] px-2 py-1 text-sm font-black text-white">CAP</span>
               </div>
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
@@ -77,10 +77,10 @@ export function Footer() {
             <h3 className={TITRE_COLONNE}>Contact</h3>
             <div className="flex flex-col gap-3 text-sm text-[#14110B]/70">
               <span>📍 Dakar, Sénégal</span>
-              <a href="mailto:contact@cap-senegal.org" className="transition-colors hover:text-[#0B6B3A]">
+              <a href="mailto:contact@cap-senegal.org" className="transition-colors hover:text-[#14b53a]">
                 ✉️ contact@cap-senegal.org
               </a>
-              <a href="tel:+221338000000" className="transition-colors hover:text-[#0B6B3A]">
+              <a href="tel:+221338000000" className="transition-colors hover:text-[#14b53a]">
                 📞 +221 33 800 00 00
               </a>
             </div>
@@ -91,7 +91,7 @@ export function Footer() {
         <div className="mt-12 flex flex-col items-center justify-center gap-3 border-t border-[#14110B]/10 pt-8 text-xs text-[#14110B]/40 sm:flex-row">
           <p className="text-xs text-[#14110B]/40 text-center">
             Copyright © 2025 CAP. Tous droits réservés. | Développé et hébergé par{' '}
-            <a href="https://digissol.com/" target="_blank" rel="noopener noreferrer" className="text-[#0B6B3A] font-semibold hover:text-[#C9A227] transition-colors underline">
+            <a href="https://digissol.com/" target="_blank" rel="noopener noreferrer" className="text-[#14b53a] font-semibold hover:text-[#C9A227] transition-colors underline">
               DIGISSOL
             </a>
           </p>

@@ -195,13 +195,13 @@ export default async function HomePage() {
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
                   href="/inscription"
-                  className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#14b53a] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
                 >
                   Devenir membre <ArrowRight size={18} />
                 </Link>
                 <Link
                   href="/a-propos"
-                  className="inline-flex items-center rounded-lg border-2 border-[#0B6B3A] px-7 py-3 font-semibold text-[#0B6B3A] transition-colors hover:bg-[#0B6B3A]/5"
+                  className="inline-flex items-center rounded-lg border-2 border-[#14b53a] px-7 py-3 font-semibold text-[#14b53a] transition-colors hover:bg-[#14b53a]/5"
                 >
                   Découvrir le Cercle
                 </Link>
@@ -226,7 +226,7 @@ export default async function HomePage() {
                 </div>
               </div>
               <div className="absolute -bottom-6 -left-6 rounded-xl border-t-4 border-[#C9A227] bg-white p-4 shadow-xl">
-                <p className="font-serif text-3xl font-bold text-[#0B6B3A]">30+</p>
+                <p className="font-serif text-3xl font-bold text-[#14b53a]">30+</p>
                 <p className="text-xs text-[#14110B]/60">membres du bureau exécutif</p>
               </div>
             </div>
@@ -245,7 +245,7 @@ export default async function HomePage() {
                 key={label}
                 className="flex flex-col items-center justify-center py-8 px-6 border-r border-[#C9A227]/30 last:border-r-0"
               >
-                <p className="font-serif text-4xl text-[#0B6B3A]">{chiffre}</p>
+                <p className="font-serif text-4xl text-[#14b53a]">{chiffre}</p>
                 <p className="mt-1 font-mono text-xs uppercase tracking-wider text-[#14110B]/50">
                   {label}
                 </p>
@@ -272,7 +272,7 @@ export default async function HomePage() {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <User size={56} className="text-[#0B6B3A]/20" />
+                  <User size={56} className="text-[#14b53a]/20" />
                 </div>
               )}
               <div className="absolute bottom-4 left-4 rounded-lg bg-[#C9A227] px-4 py-2 text-sm font-bold text-[#14110B]">
@@ -298,7 +298,7 @@ export default async function HomePage() {
             </p>
             <div className="mt-6">
               <p className="font-serif text-2xl text-[#14110B] leading-relaxed">
-                <span className="font-serif text-8xl font-bold text-[#0B6B3A] float-left mr-2 leading-none mt-1">
+                <span className="font-serif text-8xl font-bold text-[#14b53a] float-left mr-2 leading-none mt-1">
                   {firstLetter}
                 </span>
                 {restOfCitation}
@@ -306,7 +306,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/a-propos/mot-du-president"
-              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#14b53a] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
             >
               Lire le message <ArrowRight size={18} />
             </Link>
@@ -331,7 +331,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/actualites"
-              className="inline-flex items-center gap-2 font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
+              className="inline-flex items-center gap-2 font-semibold text-[#14b53a] transition-colors hover:text-[#14b53a]/70"
             >
               Toutes les actualités <ArrowRight size={16} />
             </Link>
@@ -350,7 +350,7 @@ export default async function HomePage() {
                     href={href}
                     className="group overflow-hidden rounded-2xl bg-[#FAF8F3] transition-shadow hover:shadow-md"
                   >
-                    <div className="relative aspect-[16/10] overflow-hidden bg-[#0B6B3A]/5">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-[#14b53a]/5">
                       {imageUrl && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -364,7 +364,7 @@ export default async function HomePage() {
                       </span>
                     </div>
                     <div className="p-6">
-                      <span className="inline-block rounded-full bg-[#0B6B3A]/10 px-3 py-1 text-xs font-medium text-[#0B6B3A]">
+                      <span className="inline-block rounded-full bg-[#14b53a]/10 px-3 py-1 text-xs font-medium text-[#14b53a]">
                         {categoriePost(actuVedette.categorie)}
                       </span>
                       <h3 className="mt-3 font-serif text-2xl font-bold leading-snug text-[#14110B]">
@@ -373,7 +373,7 @@ export default async function HomePage() {
                       {excerpt && (
                         <p className="mt-2 text-sm leading-relaxed text-[#14110B]/60">{excerpt}</p>
                       )}
-                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0B6B3A]">
+                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#14b53a]">
                         Lire l&apos;article <ArrowRight size={15} />
                       </span>
                     </div>
@@ -395,7 +395,7 @@ export default async function HomePage() {
                         href={href}
                         className="group flex gap-4 overflow-hidden rounded-xl bg-[#FAF8F3] p-3 transition-shadow hover:shadow-md"
                       >
-                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[#0B6B3A]/5">
+                        <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[#14b53a]/5">
                           {imageUrl && (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
@@ -449,7 +449,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/magazines"
-              className="flex flex-shrink-0 items-center gap-1 text-sm font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
+              className="flex flex-shrink-0 items-center gap-1 text-sm font-semibold text-[#14b53a] transition-colors hover:text-[#14b53a]/70"
             >
               Tous les numéros <ArrowRight size={15} />
             </Link>
@@ -469,7 +469,7 @@ export default async function HomePage() {
                       className="absolute inset-0 w-full h-full object-contain"
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-[#0B6B3A]" />
+                    <div className="absolute inset-0 bg-[#14b53a]" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#14110B]/80 via-transparent to-transparent" />
                   <span className="absolute top-4 left-4 bg-[#C9A227] text-[#14110B] font-black text-sm px-3 py-1 rounded-lg">CAP</span>
@@ -498,14 +498,14 @@ export default async function HomePage() {
                         href={magazineFichier}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#14b53a] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
                       >
                         Lire le numéro <ArrowRight size={16} />
                       </a>
                     ) : (
                       <Link
                         href="/magazines"
-                        className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#14b53a] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
                       >
                         Lire le numéro <ArrowRight size={16} />
                       </Link>
@@ -515,7 +515,7 @@ export default async function HomePage() {
                         href={magazineFichier}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-lg border border-[#14110B]/20 px-6 py-2.5 text-sm font-semibold text-[#14110B] transition-colors hover:border-[#0B6B3A] hover:text-[#0B6B3A]"
+                        className="inline-flex items-center gap-2 rounded-lg border border-[#14110B]/20 px-6 py-2.5 text-sm font-semibold text-[#14110B] transition-colors hover:border-[#14b53a] hover:text-[#14b53a]"
                       >
                         <Download size={16} /> Télécharger le PDF
                       </a>
@@ -552,8 +552,8 @@ export default async function HomePage() {
                             className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
                           />
                         ) : (
-                          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-[#0B6B3A]/10">
-                            <FileText size={20} className="text-[#0B6B3A]/40" strokeWidth={1.5} />
+                          <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-lg bg-[#14b53a]/10">
+                            <FileText size={20} className="text-[#14b53a]/40" strokeWidth={1.5} />
                           </div>
                         )}
                         <div className="min-w-0">
@@ -575,7 +575,7 @@ export default async function HomePage() {
               <p className="text-[#14110B]/60">Retrouvez bientôt ici la dernière revue du CAP.</p>
               <Link
                 href="/magazines"
-                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0B6B3A] hover:underline"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#14b53a] hover:underline"
               >
                 Voir les magazines <ArrowRight size={15} />
               </Link>
@@ -613,7 +613,7 @@ export default async function HomePage() {
               </select>
               <Link
                 href="/annuaire"
-                className="flex items-center gap-1 text-sm font-semibold text-[#0B6B3A] transition-colors hover:text-[#0B6B3A]/70"
+                className="flex items-center gap-1 text-sm font-semibold text-[#14b53a] transition-colors hover:text-[#14b53a]/70"
               >
                 Tout l&apos;annuaire <ArrowRight size={15} />
               </Link>
@@ -642,7 +642,7 @@ export default async function HomePage() {
       {/* ── 7. Rejoindre le Cercle ────────────────────────────────────────── */}
       <RevealOnScroll>
       <section className="bg-[#FAF8F3] py-16">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-[#0B6B3A]/10 bg-white p-12 text-center shadow-lg">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-[#14b53a]/10 bg-white p-12 text-center shadow-lg">
           <p className="font-mono text-xs uppercase tracking-widest text-[#C9A227]">
             — Rejoindre le Cercle
           </p>
@@ -656,13 +656,13 @@ export default async function HomePage() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="/inscription"
-              className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#14b53a] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
             >
               Faire une demande d&apos;adhésion <ArrowRight size={18} />
             </Link>
             <Link
               href="/a-propos"
-              className="inline-flex items-center rounded-lg border border-[#0B6B3A] px-8 py-3 font-semibold text-[#0B6B3A] transition-colors hover:bg-[#0B6B3A]/5"
+              className="inline-flex items-center rounded-lg border border-[#14b53a] px-8 py-3 font-semibold text-[#14b53a] transition-colors hover:bg-[#14b53a]/5"
             >
               En savoir plus
             </Link>
