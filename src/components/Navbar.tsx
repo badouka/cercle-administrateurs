@@ -34,6 +34,7 @@ const NAV_LINKS: NavItem[] = [
   { href: '/blog', label: 'Blog' },
   { href: '/documents', label: 'Documents' },
   { href: '/magazines', label: 'Magazines' },
+  { href: '/assistant', label: 'Assistant' },
 ]
 
 interface AuthUser {
