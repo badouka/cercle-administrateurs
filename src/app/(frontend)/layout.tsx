@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import React, { Suspense } from 'react'
+import Script from 'next/script'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Newsreader, IBM_Plex_Mono, Archivo, Crimson_Pro, DM_Sans } from 'next/font/google'
@@ -112,6 +113,15 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         </div>
 
         <Footer />
+
+        <Script id="chatlab-config" strategy="afterInteractive">
+          {`window.aichatbotApiKey="56e6942e-b0d2-44ef-b0b0-b60b6a777aa1"; window.aichatbotProviderId="f9e9c5e4-6d1a-4b8c-8d3f-3f9e9c5e46d1";`}
+        </Script>
+        <Script
+          src="https://script.chatlab.com/aichatbot.js"
+          id="56e6942e-b0d2-44ef-b0b0-b60b6a777aa1"
+          strategy="afterInteractive"
+        />
 
       </body>
     </html>
