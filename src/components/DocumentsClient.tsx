@@ -80,7 +80,7 @@ export function DocumentsClient({
     <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[250px_1fr]">
       {/* ── Sidebar filtres ─────────────────────────────────────────────── */}
       <aside className="rounded-xl border border-[#14110B]/10 bg-white p-5 lg:sticky lg:top-24">
-        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#C9A227]">Filtres</p>
+        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#fcd116]">Filtres</p>
 
         <p className="mb-2 text-[10px] font-bold uppercase text-[#14110B]/40">Catégorie</p>
         <div className="flex flex-col gap-1">
@@ -136,7 +136,7 @@ export function DocumentsClient({
               return (
                 <div
                   key={d.id}
-                  className="flex items-start gap-4 rounded-xl border border-[#14110B]/10 bg-white p-4 transition-all hover:border-[#C9A227]/40 hover:shadow-sm"
+                  className="flex items-start gap-4 rounded-xl border border-[#14110B]/10 bg-white p-4 transition-all hover:border-[#fcd116]/40 hover:shadow-sm"
                 >
                   <span className="flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-[#EAD79A] bg-[#FAF4E0] text-xs font-black text-[#8A6E18]">
                     {d.fileType || 'DOC'}

@@ -93,8 +93,8 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
       <section className="bg-[#FAF8F3] border-b border-[#14110B]/10 py-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-3">
-            <span className="block w-10 h-0.5 bg-[#C9A227]"></span>
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Membres CAP</span>
+            <span className="block w-10 h-0.5 bg-[#fcd116]"></span>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">Membres CAP</span>
           </div>
           <p className="text-[#14110B]/70 text-base leading-relaxed max-w-3xl">
             Le Cercle des administrateurs publics (CAP) regroupe les présidents de conseil d’administration, de surveillance ou d’orientation des établissements du secteur parapublic.

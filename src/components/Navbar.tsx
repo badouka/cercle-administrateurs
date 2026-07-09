@@ -141,7 +141,7 @@ export function Navbar() {
                   className={cn(
                     'inline-flex items-center gap-1 text-sm transition-colors py-1',
                     isParentActive(item)
-                      ? 'text-[#14b53a] font-semibold border-b-2 border-[#C9A227]'
+                      ? 'text-[#14b53a] font-semibold border-b-2 border-[#fcd116]'
                       : 'font-medium text-[#14110B]/70 hover:text-[#14b53a]',
                   )}
                 >
@@ -175,7 +175,7 @@ export function Navbar() {
                 className={cn(
                   'text-sm transition-colors py-1',
                   pathname === item.href
-                    ? 'text-[#14b53a] font-semibold border-b-2 border-[#C9A227]'
+                    ? 'text-[#14b53a] font-semibold border-b-2 border-[#fcd116]'
                     : 'font-medium text-[#14110B]/70 hover:text-[#14b53a]',
                 )}
               >

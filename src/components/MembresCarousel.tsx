@@ -134,7 +134,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
                   <Link
                     key={membre.id}
                     href={`/annuaire/${membre.slug || membre.id}`}
-                    className="block cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-colors hover:border-[#C9A227]/50"
+                    className="block cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-colors hover:border-[#fcd116]/50"
                   >
                     <div className="relative aspect-[3/4] overflow-hidden">
                       {membre.photo ? (
@@ -156,7 +156,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
                       <p className="font-serif text-base font-bold text-[#14110B]">
                         {membre.prenom} {membre.nom}
                       </p>
-                      <p className="mt-1 font-mono text-xs uppercase tracking-wider text-[#C9A227]">
+                      <p className="mt-1 font-mono text-xs uppercase tracking-wider text-[#fcd116]">
                         {posteCap || 'MEMBRE'}
                       </p>
                       {organisme && (
@@ -180,7 +180,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
             onClick={() => goTo(page - 1)}
             disabled={page === 0}
             aria-label="Précédent"
-            className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-x-4 -translate-y-1/2 items-center justify-center rounded-full border border-[#14110B]/10 bg-white shadow-md transition-colors hover:border-[#C9A227] disabled:opacity-40"
+            className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-x-4 -translate-y-1/2 items-center justify-center rounded-full border border-[#14110B]/10 bg-white shadow-md transition-colors hover:border-[#fcd116] disabled:opacity-40"
           >
             <ChevronLeft size={18} className="text-[#14110B]" />
           </button>
@@ -189,7 +189,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
             onClick={() => goTo(page + 1)}
             disabled={page === pageCount - 1}
             aria-label="Suivant"
-            className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 translate-x-4 items-center justify-center rounded-full border border-[#14110B]/10 bg-white shadow-md transition-colors hover:border-[#C9A227] disabled:opacity-40"
+            className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 translate-x-4 items-center justify-center rounded-full border border-[#14110B]/10 bg-white shadow-md transition-colors hover:border-[#fcd116] disabled:opacity-40"
           >
             <ChevronRight size={18} className="text-[#14110B]" />
           </button>
@@ -203,7 +203,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
                 aria-label={`Page ${i + 1}`}
                 className={
                   i === page
-                    ? 'h-2 w-6 rounded-full bg-[#C9A227]'
+                    ? 'h-2 w-6 rounded-full bg-[#fcd116]'
                     : 'h-2 w-2 rounded-full bg-[#14110B]/20'
                 }
               />

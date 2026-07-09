@@ -80,14 +80,14 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={photo.url} alt={`${membre.prenom} ${membre.nom}`} className="w-full h-full object-cover" />
               ) : (
-                <span className="font-serif text-4xl font-bold text-[#C9A227]">{initiales}</span>
+                <span className="font-serif text-4xl font-bold text-[#fcd116]">{initiales}</span>
               )}
             </div>
             {/* Identité */}
             <div className="flex-1 min-w-[200px]">
               <h1 className="font-serif text-3xl font-bold text-white">{membre.prenom} {membre.nom}</h1>
               {posteCap && (
-                <span className="inline-block mt-3 bg-[#C9A227] text-[#062812] text-xs font-bold px-3 py-1 rounded-full">{posteCap}</span>
+                <span className="inline-block mt-3 bg-[#fcd116] text-[#062812] text-xs font-bold px-3 py-1 rounded-full">{posteCap}</span>
               )}
               {organisme && (
                 <p className="mt-3 text-sm font-semibold uppercase tracking-wider text-[#6FAE8E]">{organisme}</p>
@@ -117,8 +117,8 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
         {/* Biographie */}
         <section className="mt-10 px-1">
           <div className="flex items-center gap-3 mb-5">
-            <span className="block w-8 h-0.5 bg-[#C9A227]"></span>
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Biographie</span>
+            <span className="block w-8 h-0.5 bg-[#fcd116]"></span>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">Biographie</span>
           </div>
           {hasBio ? (
             <div className="prose prose-sm max-w-none article-prose text-[#14110B]/70 leading-relaxed text-justify">
@@ -139,7 +139,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Building2 size={15} className="text-[#14b53a]" />
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Poste</span>
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">Poste</span>
             </div>
             {posteCap && <p className="font-serif text-lg font-semibold text-[#062812]">{posteCap}</p>}
             {fonctionPro && <p className="text-sm text-[#14110B]/60 mt-1">{fonctionPro}</p>}
@@ -153,7 +153,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Users size={15} className="text-[#14b53a]" />
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C9A227]">Coordonnées</span>
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">Coordonnées</span>
             </div>
             <div className="bg-white rounded-xl border border-[#14110B]/10 p-5">
               <div className="flex items-start gap-3">

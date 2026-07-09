@@ -82,7 +82,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
             return (
               <div
                 key={p.id}
-                className="overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-all hover:border-[#C9A227]/30 hover:shadow-md"
+                className="overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-all hover:border-[#fcd116]/30 hover:shadow-md"
               >
                 <Link href={`/blog/${p.slug || p.id}`} className="block cursor-pointer">
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#EEF6F1]">
@@ -100,7 +100,7 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
                       </span>
                     )}
                     {p.date && (
-                      <span className="absolute bottom-3 left-3 rounded-lg bg-[#C9A227] px-3 py-1 text-xs font-bold text-[#14110B]">
+                      <span className="absolute bottom-3 left-3 rounded-lg bg-[#fcd116] px-3 py-1 text-xs font-bold text-[#14110B]">
                         {p.date}
                       </span>
                     )}
