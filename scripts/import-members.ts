@@ -60,6 +60,71 @@ interface ImportStats {
 // ─── Parsing SQL ──────────────────────────────────────────────────────────────
 
 /**
+ * Extrait les tuples d'un (ou plusieurs) INSERT INTO `table` (...) VALUES ...;
+ * au format phpMyAdmin multi-lignes :
+ *
+ *   INSERT INTO `table` (`col1`, `col2`, ...) VALUES
+ *   (v1, 'v2', ...),
+ *   (v1, 'v2', ...);
+ *
+ * Renvoie un tableau de tuples, chaque tuple étant un tableau de valeurs (string).
+ * Les chaînes ('...') sont déséchappées ; les valeurs nues (nombres, NULL) sont
+ * conservées brutes (trim). Le tokenizer respecte l'état « dans une chaîne » afin
+ * que virgules / points-virgules / parenthèses présents à l'intérieur d'une valeur
+ * (ex. PHP sérialisé) ne cassent pas le découpage.
+ */
+function parseInsertRows(content: string, table: string): string[][] {
+  const rows   = new Array<string[]>()
+  const marker = `INSERT INTO \`${table}\``
+  const n      = content.length
+  let searchIdx = 0
+
+  while (true) {
+    const insertIdx = content.indexOf(marker, searchIdx)
+    if (insertIdx === -1) break
+
+    const valuesIdx = content.indexOf('VALUES', insertIdx)
+    if (valuesIdx === -1) break
+
+    let i = valuesIdx + 'VALUES'.length
+
+    // Lit les tuples jusqu'au ';' de fin d'instruction (hors chaîne).
+    let done = false
+    while (i < n && !done) {
+      const ch = content[i]
+      if (ch === ';') { i++; done = true; break }
+      if (ch !== '(') { i++; continue }
+
+      // Parse un tuple ( ... )
+      i++ // consomme '('
+      const values: string[] = []
+      let cur      = ''
+      let inString = false
+      let quoted   = false
+
+      while (i < n) {
+        const c = content[i]!
+        if (inString) {
+          if (c === '\\') { cur += c + (content[i + 1] ?? ''); i += 2; continue } // séquence échappée
+          if (c === "'")  { inString = false; i++; continue }                      // fin de chaîne
+          cur += c; i++; continue
+        }
+        if (c === "'") { inString = true; quoted = true; cur = ''; i++; continue }  // début de chaîne (ignore l'espace avant le quote)
+        if (c === ',') { values.push(quoted ? unescapeSql(cur) : cur.trim()); cur = ''; quoted = false; i++; continue }
+        if (c === ')') { values.push(quoted ? unescapeSql(cur) : cur.trim()); i++; break }
+        cur += c; i++
+      }
+
+      rows.push(values)
+    }
+
+    searchIdx = i
+  }
+
+  return rows
+}
+
+/**
  * Extrait les membres depuis le dump SQL WordPress.
  *
  * wprb_users    : (ID, login, pass, nicename, EMAIL, url, date, key, status, DISPLAY_NAME)
@@ -74,50 +139,37 @@ function parseSql(content: string): MemberRecord[] {
     'user_position', 'societe', 'user_linkedin', 'civilite',
   ])
 
-  const ESC_VALUE = String.raw`((?:[^'\\]|\\.)*)`
+  // ── wprb_users ──
+  for (const row of parseInsertRows(content, 'wprb_users')) {
+    if (row.length < 10) continue
+    const id = parseInt(row[0]!, 10)
+    if (!Number.isFinite(id)) continue
+    if (id === 1) continue // exclure l'admin WordPress
+    const email = row[4] ?? ''
+    if (!email) continue
+    users.set(id, {
+      id,
+      email,
+      displayName: row[9] ?? '',
+    })
+  }
 
-  const RE_USER = new RegExp(
-    String.raw`INSERT INTO \`wprb_users\` VALUES \((\d+),'[^']*','[^']*','[^']*','([^']+)','[^']*','[^']+','[^']*',\d+,'` +
-    ESC_VALUE +
-    String.raw`'\)`,
-  )
+  // ── wprb_usermeta ──
+  for (const row of parseInsertRows(content, 'wprb_usermeta')) {
+    if (row.length < 4) continue
+    const userId = parseInt(row[1]!, 10)
+    const key    = row[2] ?? ''
+    if (!Number.isFinite(userId)) continue
+    if (!WANTED_KEYS.has(key)) continue
 
-  const RE_META = new RegExp(
-    String.raw`INSERT INTO \`wprb_usermeta\` VALUES \(\d+,(\d+),'([^']+)','` +
-    ESC_VALUE +
-    String.raw`'\)`,
-  )
-
-  for (const line of content.split('\n')) {
-    if (line.startsWith('INSERT INTO `wprb_users`')) {
-      const m = line.match(RE_USER)
-      if (!m) continue
-      const id = parseInt(m[1], 10)
-      if (id === 1) continue // exclure l'admin WordPress
-      users.set(id, {
-        id,
-        email:       m[2],
-        displayName: unescapeSql(m[3]),
-      })
-      continue
-    }
-
-    if (line.startsWith('INSERT INTO `wprb_usermeta`')) {
-      const m = line.match(RE_META)
-      if (!m) continue
-      const userId = parseInt(m[1], 10)
-      const key    = m[2]
-      if (!WANTED_KEYS.has(key)) continue
-
-      if (!metas.has(userId)) metas.set(userId, {})
-      ;(metas.get(userId) as Record<string, string>)[key] = unescapeSql(m[3])
-    }
+    if (!metas.has(userId)) metas.set(userId, {})
+    ;(metas.get(userId) as Record<string, string>)[key] = row[3] ?? ''
   }
 
   return Array.from(users.values())
     .filter(u => {
       const m = metas.get(u.id) ?? {}
-      return Boolean(m.first_name ?? m.last_name)
+      return Boolean(m.first_name || m.last_name)
     })
     .map(user => ({ user, meta: metas.get(user.id) ?? {} }))
 }
