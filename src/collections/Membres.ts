@@ -69,10 +69,13 @@ export const Membres: CollectionConfig = {
       name: 'user',
       type: 'relationship',
       relationTo: 'users',
-      required: true,
+      required: false,
       unique: true,
       hasMany: false,
-      admin: { description: 'Compte utilisateur associé à ce profil' },
+      admin: {
+        description:
+          "Compte utilisateur associé à ce profil (optionnel). Laissez vide pour un membre importé qui ne s'est pas encore connecté.",
+      },
     },
 
     // ── Identité ──────────────────────────────────────────────────────────────

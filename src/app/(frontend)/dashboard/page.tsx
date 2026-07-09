@@ -11,6 +11,7 @@ import {
   Clock, AlertCircle, LayoutDashboard, ShieldCheck,
 } from 'lucide-react'
 import { EditProfileForm } from './EditProfileForm'
+import { AccountSettingsForm } from './AccountSettingsForm'
 
 export const metadata: Metadata = { title: 'Mon espace' }
 
@@ -297,6 +298,9 @@ export default async function DashboardPage() {
           <EditProfileForm membre={membre} />
         </div>
       </div>
+
+      {/* ── Paramètres du compte ── */}
+      <AccountSettingsForm email={user.email} />
 
       {/* ── Documents membres ── */}
       <section>

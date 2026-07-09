@@ -187,9 +187,9 @@ export interface Media {
 export interface Membre {
   id: number;
   /**
-   * Compte utilisateur associé à ce profil
+   * Compte utilisateur associé à ce profil (optionnel). Laissez vide pour un membre importé qui ne s'est pas encore connecté.
    */
-  user: number | User;
+  user?: (number | null) | User;
   prenom: string;
   nom: string;
   genre?: ('homme' | 'femme') | null;

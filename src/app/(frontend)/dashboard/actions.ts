@@ -119,3 +119,86 @@ export async function updateProfile(
     return { error: err instanceof Error ? err.message : 'Erreur lors de la mise à jour.' }
   }
 }
+
+// ─── Paramètres du compte ──────────────────────────────────────────────────────
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export async function updateAccountEmail(
+  email: string,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    const payload = await getPayload({ config })
+    const h        = await headers()
+    const { user } = await payload.auth({ headers: h })
+
+    if (!user) return { error: 'Vous devez être connecté.' }
+
+    const nextEmail = email.trim().toLowerCase()
+    if (!EMAIL_RE.test(nextEmail)) return { error: 'Adresse email invalide.' }
+    if (nextEmail === (user as User).email.toLowerCase()) {
+      return { error: 'Cette adresse est déjà votre email actuel.' }
+    }
+
+    await payload.update({
+      collection:     'users',
+      id:             user.id,
+      data:           { email: nextEmail },
+      user,
+      overrideAccess: true,
+    })
+
+    revalidatePath('/dashboard')
+    return { success: true }
+  } catch (err) {
+    console.error('[updateAccountEmail]', err)
+    const msg = err instanceof Error ? err.message : "Erreur lors de la mise à jour de l'email."
+    // Message plus clair en cas d'email déjà utilisé
+    if (/unique|already|exist/i.test(msg)) {
+      return { error: 'Cette adresse email est déjà utilisée par un autre compte.' }
+    }
+    return { error: msg }
+  }
+}
+
+export async function updateAccountPassword(
+  currentPassword: string,
+  newPassword: string,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    const payload = await getPayload({ config })
+    const h        = await headers()
+    const { user } = await payload.auth({ headers: h })
+
+    if (!user) return { error: 'Vous devez être connecté.' }
+
+    if (!currentPassword) return { error: 'Veuillez saisir votre mot de passe actuel.' }
+    if (newPassword.length < 8) {
+      return { error: 'Le nouveau mot de passe doit contenir au moins 8 caractères.' }
+    }
+
+    // Vérifie le mot de passe actuel en tentant une connexion.
+    try {
+      await payload.login({
+        collection: 'users',
+        data:       { email: (user as User).email, password: currentPassword },
+      })
+    } catch {
+      return { error: 'Mot de passe actuel incorrect.' }
+    }
+
+    // Payload hache automatiquement le champ `password` fourni à update.
+    await payload.update({
+      collection:     'users',
+      id:             user.id,
+      data:           { password: newPassword },
+      user,
+      overrideAccess: true,
+    })
+
+    return { success: true }
+  } catch (err) {
+    console.error('[updateAccountPassword]', err)
+    return { error: err instanceof Error ? err.message : 'Erreur lors du changement de mot de passe.' }
+  }
+}
