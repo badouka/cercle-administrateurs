@@ -54,6 +54,9 @@ export default buildConfig({
       },
       token: process.env.BLOB_READ_WRITE_TOKEN,
       clientUploads: true,
+      // Ajoute un suffixe aléatoire au nom du fichier sur Vercel Blob pour éviter
+      // l'erreur « This blob already exists » lorsqu'un fichier du même nom existe déjà.
+      addRandomSuffix: true,
     }),
   ],
 })
