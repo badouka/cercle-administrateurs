@@ -586,40 +586,26 @@ export default async function HomePage() {
       </RevealOnScroll>
 
       {/* ── 6. Annuaire — Le Cercle ───────────────────────────────────────── */}
-      <RevealOnScroll>
-      <section className="bg-[#FAF8F3] py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          {/* En-tête */}
-          <div className="mb-10 flex items-start justify-between gap-6">
+      <section className="bg-[#FAF8F3] py-16 border-t border-[#14110B]/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-end mb-10">
             <div>
-              <div className="mb-2 flex items-center gap-3">
-                <span className="h-0.5 w-10 bg-[#fcd116]" />
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">
-                  Annuaire
-                </span>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="block w-10 h-0.5 bg-[#fcd116]"></span>
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">ANNUAIRE</span>
               </div>
-              <h2 className="font-serif text-4xl font-bold text-[#14110B]">Le Cercle</h2>
-              <p className="mt-2 text-[#14110B]/60">
-                Les administrateurs publics qui composent le Cercle et portent sa vision.
+              <h2 className="font-serif text-3xl font-bold text-[#14110B]">Le Cercle</h2>
+              <p className="text-[#14110B]/60 mt-1 text-sm">
+                Les administrateurs publics qui composent le Cercle.
               </p>
             </div>
-            <div className="flex flex-shrink-0 items-center gap-4">
-              <select
-                defaultValue="tous"
-                aria-label="Filtrer l'annuaire"
-                className="rounded-lg border border-[#14110B]/20 bg-white px-3 py-2 text-sm text-[#14110B]"
-              >
-                <option value="tous">Tous</option>
-              </select>
-              <Link
-                href="/annuaire"
-                className="flex items-center gap-1 text-sm font-semibold text-[#14b53a] transition-colors hover:text-[#14b53a]/70"
-              >
-                Tout l&apos;annuaire <ArrowRight size={15} />
-              </Link>
-            </div>
+            <Link
+              href="/annuaire"
+              className="text-[#14b53a] font-semibold text-sm flex items-center gap-1 hover:underline"
+            >
+              Tout l&apos;annuaire →
+            </Link>
           </div>
-
           <MembresCarousel
             membres={tousLesMembres.slice(0, 12).map(m => {
               const photo = mediaUrl(m.photo)
@@ -637,7 +623,6 @@ export default async function HomePage() {
           />
         </div>
       </section>
-      </RevealOnScroll>
 
       {/* ── 7. Rejoindre le Cercle ────────────────────────────────────────── */}
       <RevealOnScroll>
