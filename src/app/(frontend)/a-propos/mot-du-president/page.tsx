@@ -78,7 +78,7 @@ export default async function MotDuPresidentPage() {
         {/* Cercle lumineux doré */}
         <div className="absolute top-[-20%] right-[-8%] h-[40vw] max-h-[520px] w-[40vw] max-w-[520px] rounded-full bg-gradient-to-br from-[#fcd116]/20 to-transparent" />
         {/* Filet tricolore en haut */}
-        <div className="absolute top-0 left-0 right-0 flex h-5">
+        <div className="absolute top-0 left-0 right-0 flex h-4">
           <div className="flex-1" style={{ background: '#14b53a' }}></div>
           <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
             <span className="absolute text-[16px] font-bold leading-none" style={{ color: '#14b53a' }}>★</span>
@@ -143,7 +143,7 @@ export default async function MotDuPresidentPage() {
         </div>
 
         {/* Filet tricolore en bas */}
-        <div className="absolute bottom-0 left-0 right-0 h-5 flex">
+        <div className="absolute bottom-0 left-0 right-0 h-4 flex">
           <div className="flex-1" style={{ background: '#14b53a' }}></div>
           <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
             <span className="absolute text-[16px] font-bold leading-none" style={{ color: '#14b53a' }}>★</span>

@@ -104,7 +104,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         <PartenairesSection partenaires={partenaires} />
 
         {/* Filet tricolore */}
-        <div className="w-full h-5 flex">
+        <div className="w-full h-4 flex">
           <div className="flex-1" style={{ background: '#14b53a' }}></div>
           <div className="flex-1 relative flex items-center justify-center" style={{ background: '#fcd116' }}>
             <span className="absolute text-[16px] font-bold leading-none" style={{ color: '#14b53a' }}>★</span>

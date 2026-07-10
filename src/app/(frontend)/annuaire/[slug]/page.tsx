@@ -65,7 +65,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           {/* Pattern points */}
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.10) 1px, transparent 0)', backgroundSize: '20px 20px' }} />
           {/* Filet tricolore bas */}
-          <div className="absolute bottom-0 left-0 right-0 h-5 flex">
+          <div className="absolute bottom-0 left-0 right-0 h-4 flex">
             <div className="flex-1" style={{ background: '#14b53a' }}></div>
             <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
               <span className="absolute text-[16px] font-bold leading-none" style={{ color: '#14b53a' }}>★</span>

@@ -217,7 +217,7 @@ export default async function HomePage() {
                   alt="Cercle des Administrateurs Publics"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute bottom-0 left-0 right-0 flex h-5">
+                <div className="absolute bottom-0 left-0 right-0 flex h-4">
                   <div className="flex-1" style={{ background: '#14b53a' }}></div>
                   <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
                     <span className="absolute text-[16px] font-bold leading-none" style={{ color: '#14b53a' }}>★</span>
@@ -281,7 +281,7 @@ export default async function HomePage() {
                 </span>
                 <span className="block text-xs font-medium">Président du CAP</span>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-5 flex z-10">
+              <div className="absolute bottom-0 left-0 right-0 h-4 flex z-10">
                 <div className="flex-1" style={{ background: '#14b53a' }}></div>
                 <div className="relative flex flex-1 items-center justify-center" style={{ background: '#fcd116' }}>
                   <span className="absolute text-[16px] font-bold leading-none" style={{ color: '#14b53a' }}>★</span>
