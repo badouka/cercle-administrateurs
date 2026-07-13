@@ -48,7 +48,7 @@ export function AnnuaireSectionWrapper({ membres }: { membres: Membre[] }) {
           </div>
           <Link
             href="/annuaire"
-            className="text-[#14b53a] font-semibold text-sm flex items-center gap-1 hover:underline"
+            className="text-[#0B6B3A] font-semibold text-sm flex items-center gap-1 hover:underline"
           >
             Tout l&apos;annuaire →
           </Link>

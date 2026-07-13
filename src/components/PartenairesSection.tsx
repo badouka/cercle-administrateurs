@@ -37,7 +37,7 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
       <div className="max-w-7xl mx-auto px-6 mb-6">
         <div className="flex items-center gap-3">
           <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">NOS PARTENAIRES</span>
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#C8A24A]">NOS PARTENAIRES</span>
         </div>
       </div>
       <div

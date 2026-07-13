@@ -35,7 +35,7 @@ const ACCES_FILTERS = [
 ]
 
 const CATEGORIE_BADGE: Record<string, { label: string; className: string }> = {
-  textes_statutaires:        { label: 'Statutaire',     className: 'bg-[#14B53A]/15 text-[#14B53A]' },
+  textes_statutaires:        { label: 'Statutaire',     className: 'bg-[#0B6B3A]/15 text-[#0B6B3A]' },
   textes_reglementaires:     { label: 'Réglementaire',  className: 'bg-[#FCD116]/20 text-[#b8870a]' },
   pv_reunion:                { label: 'PV Réunion',     className: 'bg-ink/10 text-ink/60' },
   ressources:                { label: 'Ressource',      className: 'bg-blue-50 text-blue-700' },
@@ -122,7 +122,7 @@ function DocCard({ doc, isLoggedIn }: { doc: Doc; isLoggedIn: boolean }) {
       href={doc.fichier?.url ?? '#'}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex cursor-pointer items-start gap-3 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-[#14B53A]/30"
+      className="relative flex cursor-pointer items-start gap-3 rounded-xl border border-ink/10 bg-white p-4 transition-colors hover:border-[#0B6B3A]/30"
     >
       {content}
     </a>
@@ -159,7 +159,7 @@ export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn:
 
       {/* COLONNE GAUCHE — Filtres */}
       <aside className="h-fit rounded-xl border border-ink/10 bg-white p-5">
-        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#14B53A]">Filtres</p>
+        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#0B6B3A]">Filtres</p>
 
         <p className="mb-2 text-xs font-semibold uppercase text-ink/50">Catégorie</p>
         <ul className="flex flex-col gap-1">
@@ -172,11 +172,11 @@ export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn:
                   type="button"
                   onClick={() => setSelectedFilter(value)}
                   className={`flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors ${
-                    active ? 'bg-[#14B53A] font-semibold text-white' : 'text-ink/70 hover:bg-ink/5'
+                    active ? 'bg-[#0B6B3A] font-semibold text-white' : 'text-ink/70 hover:bg-ink/5'
                   }`}
                 >
                   <span>{label}</span>
-                  <span className={active ? 'rounded-full bg-white px-2 py-0.5 text-xs text-[#14B53A]' : 'text-xs text-ink/40'}>
+                  <span className={active ? 'rounded-full bg-white px-2 py-0.5 text-xs text-[#0B6B3A]' : 'text-xs text-ink/40'}>
                     {count}
                   </span>
                 </button>
@@ -197,7 +197,7 @@ export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn:
                   type="button"
                   onClick={() => setSelectedFilter(active ? 'all' : value)}
                   className={`flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-colors ${
-                    active ? 'bg-[#14B53A] font-semibold text-white' : 'text-ink/70 hover:bg-ink/5'
+                    active ? 'bg-[#0B6B3A] font-semibold text-white' : 'text-ink/70 hover:bg-ink/5'
                   }`}
                 >
                   <span>{label}</span>
@@ -215,7 +215,7 @@ export function DocumentsFilter({ docs, isLoggedIn }: { docs: Doc[]; isLoggedIn:
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Rechercher un document…"
-          className="mb-6 w-full rounded-xl border border-ink/10 bg-white px-5 py-3 text-sm focus:border-[#14B53A] focus:outline-none"
+          className="mb-6 w-full rounded-xl border border-ink/10 bg-white px-5 py-3 text-sm focus:border-[#0B6B3A] focus:outline-none"
         />
 
         {filtered.length === 0 ? (

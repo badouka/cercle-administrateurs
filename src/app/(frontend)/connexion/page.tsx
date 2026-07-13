@@ -52,7 +52,7 @@ export default function ConnexionPage() {
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden max-w-3xl w-full mx-4 grid lg:grid-cols-2">
 
         {/* Colonne gauche */}
-        <div className="bg-[#FAF8F3] border-r-4 border-[#14b53a] p-10 flex flex-col justify-between">
+        <div className="bg-[#FAF8F3] border-r-4 border-[#0B6B3A] p-10 flex flex-col justify-between">
           <div>
             <div className="flex justify-center">
               <img
@@ -62,7 +62,7 @@ export default function ConnexionPage() {
               />
             </div>
 
-            <p className="mt-12 font-mono text-xs uppercase tracking-widest text-[#14b53a]">Espace membre</p>
+            <p className="mt-12 font-mono text-xs uppercase tracking-widest text-[#0B6B3A]">Espace membre</p>
             <h1 className="mt-3 font-serif text-4xl font-bold text-ink">Bienvenue dans votre espace</h1>
             <p className="mt-4 text-ink/60">
               Accédez à vos ressources, suivez les activités du Cercle et gérez votre profil de membre.
@@ -70,15 +70,15 @@ export default function ConnexionPage() {
 
             <div className="mt-6 flex flex-col gap-3">
               <div className="flex items-center gap-3">
-                <span className="text-[#14b53a] font-bold">✓</span>
+                <span className="text-[#0B6B3A] font-bold">✓</span>
                 <span className="text-ink/70 text-sm">Accès aux documents exclusifs</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[#14b53a] font-bold">✓</span>
+                <span className="text-[#0B6B3A] font-bold">✓</span>
                 <span className="text-ink/70 text-sm">Suivi des activités et séminaires</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[#14b53a] font-bold">✓</span>
+                <span className="text-[#0B6B3A] font-bold">✓</span>
                 <span className="text-ink/70 text-sm">Gestion de votre profil</span>
               </div>
             </div>
@@ -99,7 +99,7 @@ export default function ConnexionPage() {
                 <input
                   id="email" name="email" type="email"
                   autoComplete="email" required
-                  className="border border-ink/20 rounded-lg px-4 py-3 w-full focus:border-[#14b53a] focus:outline-none text-sm"
+                  className="border border-ink/20 rounded-lg px-4 py-3 w-full focus:border-[#0B6B3A] focus:outline-none text-sm"
                 />
               </div>
 
@@ -112,7 +112,7 @@ export default function ConnexionPage() {
                     id="password" name="password"
                     type={showPwd ? 'text' : 'password'}
                     autoComplete="current-password" required
-                    className="border border-ink/20 rounded-lg px-4 py-3 pr-10 w-full focus:border-[#14b53a] focus:outline-none text-sm"
+                    className="border border-ink/20 rounded-lg px-4 py-3 pr-10 w-full focus:border-[#0B6B3A] focus:outline-none text-sm"
                   />
                   <button
                     type="button"
@@ -128,7 +128,7 @@ export default function ConnexionPage() {
 
               <button
                 type="submit" disabled={loading}
-                className="mt-2 flex items-center justify-center gap-2 bg-[#14b53a] text-white w-full py-3 rounded-lg font-semibold text-sm hover:bg-[#14b53a]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-2 flex items-center justify-center gap-2 bg-[#0B6B3A] text-white w-full py-3 rounded-lg font-semibold text-sm hover:bg-[#0B6B3A]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading && (
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -143,7 +143,7 @@ export default function ConnexionPage() {
 
             <p className="mt-6 text-center text-sm text-ink/60">
               Pas encore membre ?{' '}
-              <Link href="/inscription" className="text-[#14b53a] font-semibold">
+              <Link href="/inscription" className="text-[#0B6B3A] font-semibold">
                 Faire une demande d&apos;adhésion
               </Link>
             </p>

@@ -294,7 +294,7 @@ export default async function ArticleDetailPage({
                 {/* En-tête */}
                 <div className="mb-4 flex items-center gap-2">
                   <span className="h-0.5 w-6 bg-[#C8A24A]" />
-                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#14b53a]">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#0B6B3A]">
                     À lire aussi
                   </span>
                 </div>
@@ -329,7 +329,7 @@ export default async function ArticleDetailPage({
                         <p className="line-clamp-2 text-[11px] font-bold leading-snug text-[#14110B]">
                           {a.titre}
                         </p>
-                        <span className="text-[10px] font-semibold text-[#14b53a]">Lire →</span>
+                        <span className="text-[10px] font-semibold text-[#0B6B3A]">Lire →</span>
                       </div>
                     </Link>
                   ))}
@@ -338,7 +338,7 @@ export default async function ArticleDetailPage({
                 {/* Bouton */}
                 <Link
                   href="/actualites"
-                  className="mt-3 block w-full rounded-lg bg-[#14b53a] py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-[#14b53a]/90"
+                  className="mt-3 block w-full rounded-lg bg-[#0B6B3A] py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
                 >
                   Toutes les actualités →
                 </Link>

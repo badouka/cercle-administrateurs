@@ -56,7 +56,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
         <div className="max-w-3xl mx-auto px-6 pt-8">
 
         {/* Lien retour */}
-        <Link href="/annuaire" className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/50 hover:text-[#14b53a] transition-colors mb-12">
+        <Link href="/annuaire" className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/50 hover:text-[#0B6B3A] transition-colors mb-12">
           <ArrowLeft size={15} /> Retour à l&apos;annuaire
         </Link>
 
@@ -104,7 +104,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
                 />
               ) : (
                 <>
-                  <Building2 size={24} className="text-[#14b53a]" />
+                  <Building2 size={24} className="text-[#0B6B3A]" />
                   <span className="text-[8px] font-black uppercase tracking-wider text-[#062812] text-center leading-tight">
                     {organisme.match(/\b([A-ZÉÈÀ])/g)?.join('').slice(0, 5) ?? 'CAP'}
                   </span>
@@ -138,7 +138,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           {/* Poste */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Building2 size={15} className="text-[#14b53a]" />
+              <Building2 size={15} className="text-[#0B6B3A]" />
               <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">Poste</span>
             </div>
             {posteCap && <p className="font-serif text-lg font-semibold text-[#062812]">{posteCap}</p>}
@@ -152,7 +152,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
           {/* Coordonnées */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Users size={15} className="text-[#14b53a]" />
+              <Users size={15} className="text-[#0B6B3A]" />
               <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">Coordonnées</span>
             </div>
             <div className="bg-white rounded-xl border border-[#14110B]/10 p-5">
@@ -160,7 +160,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
                 <Lock size={16} className="text-[#14110B]/30 mt-0.5 flex-none" />
                 <div>
                   <p className="text-sm text-[#14110B]/60 leading-relaxed">Connectez-vous pour accéder aux coordonnées de ce membre.</p>
-                  <Link href="/connexion" className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-[#14b53a] hover:underline">
+                  <Link href="/connexion" className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-[#0B6B3A] hover:underline">
                     Se connecter <ArrowRight size={14} />
                   </Link>
                 </div>

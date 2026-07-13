@@ -25,7 +25,7 @@ export function BureauCarousel({ membres }: BureauCarouselProps) {
       <div className="flex flex-col gap-6 bg-[#F5F4EF] p-8 sm:p-10">
         {/* Logo CAP */}
         <div className="flex items-center gap-2.5">
-          <span className="h-9 w-3 -skew-x-12 bg-[#14B53A]" />
+          <span className="h-9 w-3 -skew-x-12 bg-[#0B6B3A]" />
           <span className="h-9 w-3 -skew-x-12 bg-[#FCD116]" />
           <span className="ml-1 font-mono text-xs font-semibold uppercase tracking-[0.3em] text-ink">
             CAP
@@ -48,7 +48,7 @@ export function BureauCarousel({ membres }: BureauCarouselProps) {
 
         <Link
           href="/annuaire"
-          className="mt-auto inline-flex items-center justify-center gap-2 self-start rounded-lg bg-[#14B53A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
+          className="mt-auto inline-flex items-center justify-center gap-2 self-start rounded-lg bg-[#0B6B3A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
         >
           Voir tous les membres
           <ArrowUpRight size={16} />

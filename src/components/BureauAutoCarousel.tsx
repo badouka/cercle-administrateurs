@@ -55,7 +55,7 @@ export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
     <section className="bg-[#F5F4EF] py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <p className="font-mono text-xs uppercase tracking-widest text-[#14B53A]">
+          <p className="font-mono text-xs uppercase tracking-widest text-[#0B6B3A]">
             Organe exécutif de l&apos;association
           </p>
           <h2 className="mt-2 font-serif text-4xl font-bold text-ink">Les membres du bureau</h2>
@@ -115,14 +115,14 @@ export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
                 <button
                   onClick={goPrev}
                   aria-label="Précédent"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-[#0B6B3A] hover:text-[#0B6B3A]"
                 >
                   <ChevronLeft size={18} />
                 </button>
                 <button
                   onClick={goNext}
                   aria-label="Suivant"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-[#14B53A] hover:text-[#14B53A]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors hover:border-[#0B6B3A] hover:text-[#0B6B3A]"
                 >
                   <ChevronRight size={18} />
                 </button>
@@ -134,7 +134,7 @@ export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
         <div className="mt-10 text-center">
           <Link
             href="/annuaire"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#14B53A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#14B53A]/90"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
           >
             Voir l&apos;annuaire de tous les membres du CAP
             <ArrowUpRight size={16} />

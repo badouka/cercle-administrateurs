@@ -119,7 +119,7 @@ export function BlogList({ posts, categories }: Props) {
                 {/* Catégorie + date */}
                 <div className="flex flex-wrap items-center gap-2">
                   {post.categorie && (
-                    <span className="inline-flex items-center rounded-full bg-[#14B53A]/10 px-2.5 py-0.5 text-xs font-semibold text-[#14B53A]">
+                    <span className="inline-flex items-center rounded-full bg-[#0B6B3A]/10 px-2.5 py-0.5 text-xs font-semibold text-[#0B6B3A]">
                       {post.categorie}
                     </span>
                   )}

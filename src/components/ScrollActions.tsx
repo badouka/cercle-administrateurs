@@ -18,7 +18,7 @@ export function ScrollActions() {
 
   return (
     <div className="fixed right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-40">
-      <Link href="/dashboard" className="flex items-center gap-2 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#14b53a' }}>
+      <Link href="/dashboard" className="flex items-center gap-2 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#0B6B3A' }}>
         🔒 Accès membres
       </Link>
       <Link href="/contact" className="flex items-center gap-2 text-[#14110B] px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#C8A24A' }}>
