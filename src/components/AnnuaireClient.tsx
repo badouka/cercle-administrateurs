@@ -23,8 +23,8 @@ function initiales(prenom: string, nom: string): string {
 
 const SEGMENTS: { key: AnnuaireFiltre; label: string }[] = [
   { key: 'tous', label: 'Tous' },
-  { key: 'bureau', label: 'Bureau' },
-  { key: 'membres', label: 'Membres' },
+  { key: 'bureau', label: 'Membres Bureau' },
+  { key: 'membres', label: 'Autres Membres' },
 ]
 
 export function AnnuaireClient({
