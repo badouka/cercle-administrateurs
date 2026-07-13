@@ -94,6 +94,14 @@ export function Footer() {
                 </a>
               </div>
             </div>
+            <div className="mt-6 pt-4 border-t border-[#14110B]/10 flex flex-col gap-2">
+              <Link href="/mentions-legales" className="text-xs text-[#14110B]/50 hover:text-[#1a7a3a] transition-colors">
+                Mentions légales
+              </Link>
+              <Link href="/politique-confidentialite" className="text-xs text-[#14110B]/50 hover:text-[#1a7a3a] transition-colors">
+                Politique de confidentialité
+              </Link>
+            </div>
           </div>
         </div>
 
