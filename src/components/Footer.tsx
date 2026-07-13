@@ -17,7 +17,7 @@ const RESSOURCES = [
   { href: '/a-propos/nos-partenaires',  label: 'Partenaires' },
 ]
 
-const TITRE_COLONNE = 'mb-4 font-mono text-xs uppercase tracking-widest text-[#fcd116]'
+const TITRE_COLONNE = 'mb-4 font-mono text-xs uppercase tracking-widest text-[#C8A24A]'
 const LIEN_COLONNE = 'text-sm text-[#14110B]/70 transition-colors hover:text-[#14b53a]'
 
 export function Footer() {
@@ -91,7 +91,7 @@ export function Footer() {
         <div className="mt-12 flex flex-col items-center justify-center gap-3 border-t border-[#14110B]/10 pt-8 text-xs text-[#14110B]/40 sm:flex-row">
           <p className="text-xs text-[#14110B]/40 text-center">
             Copyright © 2025 CAP. Tous droits réservés. | Développé et hébergé par{' '}
-            <a href="https://digissol.com/" target="_blank" rel="noopener noreferrer" className="text-[#14b53a] font-semibold hover:text-[#fcd116] transition-colors underline">
+            <a href="https://digissol.com/" target="_blank" rel="noopener noreferrer" className="text-[#14b53a] font-semibold hover:text-[#C8A24A] transition-colors underline">
               DIGISSOL
             </a>
           </p>

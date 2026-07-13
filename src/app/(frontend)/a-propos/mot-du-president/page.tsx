@@ -76,7 +76,7 @@ export default async function MotDuPresidentPage() {
           }}
         />
         {/* Cercle lumineux doré */}
-        <div className="absolute top-[-20%] right-[-8%] h-[40vw] max-h-[520px] w-[40vw] max-w-[520px] rounded-full bg-gradient-to-br from-[#fcd116]/20 to-transparent" />
+        <div className="absolute top-[-20%] right-[-8%] h-[40vw] max-h-[520px] w-[40vw] max-w-[520px] rounded-full bg-gradient-to-br from-[#C8A24A]/20 to-transparent" />
         {/* Filet tricolore en haut */}
         <div className="absolute top-0 left-0 right-0 flex h-4">
           <div className="flex-1" style={{ background: '#14b53a' }}></div>
@@ -110,13 +110,13 @@ export default async function MotDuPresidentPage() {
                   />
                 ) : (
                   <div className="flex aspect-[4/5] w-full items-center justify-center bg-[#0A5530]">
-                    <span className="font-serif text-5xl font-bold text-[#fcd116]">
+                    <span className="font-serif text-5xl font-bold text-[#C8A24A]">
                       {presidentInitiales}
                     </span>
                   </div>
                 )}
               </div>
-              <div className="absolute right-[-16px] bottom-6 rounded-xl bg-[#fcd116] px-4 py-3 text-[#062812] shadow-xl">
+              <div className="absolute right-[-16px] bottom-6 rounded-xl bg-[#C8A24A] px-4 py-3 text-[#062812] shadow-xl">
                 <p className="text-base font-bold">{presidentNom}</p>
                 <p className="text-xs font-semibold">Président du CAP</p>
               </div>
@@ -125,14 +125,14 @@ export default async function MotDuPresidentPage() {
             {/* Colonne droite */}
             <div>
               <div className="flex items-center gap-3">
-                <span className="h-0.5 w-8 bg-[#fcd116]" />
-                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#fcd116]">
+                <span className="h-0.5 w-8 bg-[#C8A24A]" />
+                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
                   Le mot du président
                 </span>
               </div>
               <h1 className="mt-4 font-serif text-5xl leading-tight text-white">
                 {'« Servir l\'État, une '}
-                <span className="text-[#fcd116]">exigence</span>
+                <span className="text-[#C8A24A]">exigence</span>
                 {' partagée »'}
               </h1>
               <p className="mt-5 max-w-prose text-base leading-relaxed text-[#6FAE8E]">
@@ -171,12 +171,12 @@ export default async function MotDuPresidentPage() {
         <div className="flex flex-wrap items-center justify-between gap-6 border-t border-[#14110B]/10 pt-8">
           {/* Gauche */}
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#fcd116] bg-[#14b53a]/10 text-lg font-bold text-[#14b53a]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#C8A24A] bg-[#14b53a]/10 text-lg font-bold text-[#14b53a]">
               {presidentInitiales}
             </div>
             <div>
               <p className="font-serif text-xl font-bold text-[#062812]">{presidentNom}</p>
-              <p className="text-sm font-semibold text-[#fcd116]">Président du CAP</p>
+              <p className="text-sm font-semibold text-[#C8A24A]">Président du CAP</p>
             </div>
           </div>
 

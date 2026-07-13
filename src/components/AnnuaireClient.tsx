@@ -91,7 +91,7 @@ export function AnnuaireClient({
             <Link
               key={m.id}
               href={`/annuaire/${m.slug || m.id}`}
-              className="relative cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#14b53a] bg-white transition-all hover:border-[#fcd116]/50 hover:shadow-md"
+              className="relative cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#14b53a] bg-white transition-all hover:border-[#C8A24A]/50 hover:shadow-md"
             >
               {m.isBureau ? (
                 <span className="absolute right-3 top-3 z-10 rounded-full bg-[#14b53a] px-2 py-0.5 text-xs font-bold text-white">
@@ -103,7 +103,7 @@ export function AnnuaireClient({
                 </span>
               )}
 
-              <div className="aspect-square overflow-hidden bg-gradient-to-br from-[#BFDDCD] to-[#EEF6F1]">
+              <div className="aspect-[3/4] overflow-hidden bg-gradient-to-br from-[#BFDDCD] to-[#EEF6F1]">
                 {m.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -122,7 +122,7 @@ export function AnnuaireClient({
                 <p className="font-serif text-base font-bold leading-tight text-[#062812]">
                   {m.prenom} {m.nom}
                 </p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-wider text-[#fcd116]">
+                <p className="mt-2 text-xs font-bold uppercase tracking-wider text-[#C8A24A]">
                   {m.posteCap && m.posteCap.trim() !== '' ? m.posteCap : 'Membre'}
                 </p>
                 {m.fonctionProfessionnelle && (

@@ -36,8 +36,8 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
     <section className="bg-white py-10 border-t border-[#14110B]/10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-6">
         <div className="flex items-center gap-3">
-          <span className="block w-10 h-0.5 bg-[#fcd116]"></span>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">NOS PARTENAIRES</span>
+          <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">NOS PARTENAIRES</span>
         </div>
       </div>
       <div
@@ -57,7 +57,7 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
                 href={p.site_web}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-none w-40 h-20 bg-white rounded-xl border border-[#14110B]/10 flex items-center justify-center p-4 hover:border-[#fcd116]/50 hover:shadow-sm transition-all cursor-pointer"
+                className="flex-none w-40 h-20 bg-white rounded-xl border border-[#14110B]/10 flex items-center justify-center p-4 hover:border-[#C8A24A]/50 hover:shadow-sm transition-all cursor-pointer"
               >
                 {p.logo?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -69,7 +69,7 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
             ) : (
               <div
                 key={`${p.id}-${i}`}
-                className="flex-none w-40 h-20 bg-white rounded-xl border border-[#14110B]/10 flex items-center justify-center p-4 hover:border-[#fcd116]/50 hover:shadow-sm transition-all"
+                className="flex-none w-40 h-20 bg-white rounded-xl border border-[#14110B]/10 flex items-center justify-center p-4 hover:border-[#C8A24A]/50 hover:shadow-sm transition-all"
               >
                 {p.logo?.url ? (
                   // eslint-disable-next-line @next/next/no-img-element

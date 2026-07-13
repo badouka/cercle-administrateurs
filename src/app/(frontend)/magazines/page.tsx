@@ -38,8 +38,8 @@ export default async function MagazinesPage() {
 
           {/* En-tête */}
           <div className="flex items-center gap-3 mb-10">
-            <span className="block w-10 h-0.5 bg-[#fcd116]"></span>
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">PUBLICATIONS</span>
+            <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">PUBLICATIONS</span>
           </div>
 
           {magazines.length === 0 ? (
@@ -55,7 +55,7 @@ export default async function MagazinesPage() {
                   : null
 
                 return (
-                  <div key={mag.id} className="group cursor-pointer bg-white rounded-2xl border border-[#14110B]/10 hover:border-[#fcd116]/50 hover:shadow-md transition-all p-3">
+                  <div key={mag.id} className="group cursor-pointer bg-white rounded-2xl border border-[#14110B]/10 hover:border-[#C8A24A]/50 hover:shadow-md transition-all p-3">
                     <Link
                       href={fichier?.url ?? '/magazines'}
                       {...(fichier?.url ? { target: '_blank', rel: 'noopener noreferrer' } : {})}

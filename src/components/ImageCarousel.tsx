@@ -60,7 +60,7 @@ export function ImageCarousel({ images }: { images: CarouselImage[] }) {
             type="button"
             onClick={() => go(index - 1)}
             aria-label="Image précédente"
-            className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#14110B]/10 bg-white/90 shadow-md backdrop-blur-sm transition-colors hover:border-[#fcd116] hover:bg-white"
+            className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#14110B]/10 bg-white/90 shadow-md backdrop-blur-sm transition-colors hover:border-[#C8A24A] hover:bg-white"
           >
             <ChevronLeft size={18} className="text-[#14110B]" />
           </button>
@@ -68,7 +68,7 @@ export function ImageCarousel({ images }: { images: CarouselImage[] }) {
             type="button"
             onClick={() => go(index + 1)}
             aria-label="Image suivante"
-            className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#14110B]/10 bg-white/90 shadow-md backdrop-blur-sm transition-colors hover:border-[#fcd116] hover:bg-white"
+            className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#14110B]/10 bg-white/90 shadow-md backdrop-blur-sm transition-colors hover:border-[#C8A24A] hover:bg-white"
           >
             <ChevronRight size={18} className="text-[#14110B]" />
           </button>
@@ -83,7 +83,7 @@ export function ImageCarousel({ images }: { images: CarouselImage[] }) {
                 aria-label={`Aller à l'image ${i + 1}`}
                 className={
                   i === index
-                    ? 'h-2 w-6 rounded-full bg-[#fcd116] transition-all'
+                    ? 'h-2 w-6 rounded-full bg-[#C8A24A] transition-all'
                     : 'h-2 w-2 rounded-full bg-white/70 transition-all hover:bg-white'
                 }
               />

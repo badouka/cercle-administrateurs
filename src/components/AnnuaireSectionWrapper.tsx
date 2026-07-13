@@ -38,8 +38,8 @@ export function AnnuaireSectionWrapper({ membres }: { membres: Membre[] }) {
         <div className="flex justify-between items-end mb-10">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="block w-10 h-0.5 bg-[#fcd116]"></span>
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#fcd116]">ANNUAIRE</span>
+              <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">ANNUAIRE</span>
             </div>
             <h2 className="font-serif text-3xl font-bold text-[#14110B]">Le Cercle</h2>
             <p className="text-[#14110B]/60 mt-1 text-sm">

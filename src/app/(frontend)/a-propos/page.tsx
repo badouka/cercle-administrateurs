@@ -86,8 +86,8 @@ const CADRE = [
 function Eyebrow({ children }: { children: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="h-0.5 w-8 bg-[#fcd116]" />
-      <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#fcd116]">
+      <span className="h-0.5 w-8 bg-[#C8A24A]" />
+      <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
         {children}
       </span>
     </div>
@@ -98,11 +98,11 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; 
   return (
     <div className="mx-auto max-w-2xl text-center">
       <div className="flex items-center justify-center gap-3">
-        <span className="h-0.5 w-8 bg-[#fcd116]" />
-        <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#fcd116]">
+        <span className="h-0.5 w-8 bg-[#C8A24A]" />
+        <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
           {eyebrow}
         </span>
-        <span className="h-0.5 w-8 bg-[#fcd116]" />
+        <span className="h-0.5 w-8 bg-[#C8A24A]" />
       </div>
       <h2 className="mt-4 font-serif text-4xl font-bold text-[#062812]">{title}</h2>
       {sub && <p className="mt-3 leading-relaxed text-[#14110B]/60">{sub}</p>}
@@ -142,8 +142,8 @@ export default async function AProposPage() {
           <div className="grid items-start gap-16 lg:grid-cols-2">
             {/* Gauche */}
             <div className="relative pl-6">
-              <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#14b53a] to-[#fcd116]" />
-              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#fcd116]">
+              <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#14b53a] to-[#C8A24A]" />
+              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
                 Le secteur parapublic
               </p>
               <p className="font-serif text-2xl leading-snug text-[#083A1E]">{INTRO_LEAD}</p>
@@ -170,13 +170,13 @@ export default async function AProposPage() {
                 backgroundSize: '22px 22px',
               }}
             />
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#14b53a] to-[#fcd116]" />
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#14b53a] to-[#C8A24A]" />
             <div className="relative grid grid-cols-[auto_1fr] items-start gap-8">
               <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-[#BFDDCD] bg-white text-[#14b53a]">
                 <Award size={28} />
               </div>
               <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#fcd116]">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
                   Un diagnostic lucide
                 </p>
                 <h3 className="mb-4 font-serif text-2xl text-[#062812]">{DIAGNOSTIC_TITRE}</h3>
@@ -217,7 +217,7 @@ export default async function AProposPage() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="absolute -left-5 bottom-7 max-w-[200px] rounded-xl border-t-4 border-[#fcd116] bg-white p-5 shadow-xl">
+              <div className="absolute -left-5 bottom-7 max-w-[200px] rounded-xl border-t-4 border-[#C8A24A] bg-white p-5 shadow-xl">
                 <p className="font-serif text-xl font-bold text-[#14b53a]">12 octobre 2024</p>
                 <p className="mt-1 text-xs text-[#14110B]/60">
                   Création du Cercle des Administrateurs Publics
@@ -261,7 +261,7 @@ export default async function AProposPage() {
             {CADRE.map(({ titre, texte }) => (
               <div
                 key={titre}
-                className="rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#fcd116] bg-white p-7"
+                className="rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#C8A24A] bg-white p-7"
               >
                 <h3 className="mb-2 font-serif text-lg text-[#062812]">{titre}</h3>
                 <p className="text-sm leading-relaxed text-[#14110B]/60">{texte}</p>

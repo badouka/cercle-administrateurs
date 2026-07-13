@@ -21,7 +21,7 @@ export function ScrollActions() {
       <Link href="/dashboard" className="flex items-center gap-2 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#14b53a' }}>
         🔒 Accès membres
       </Link>
-      <Link href="/contact" className="flex items-center gap-2 text-[#14110B] px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#fcd116' }}>
+      <Link href="/contact" className="flex items-center gap-2 text-[#14110B] px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#C8A24A' }}>
         ✉️ Contactez-nous
       </Link>
       <Link href="/inscription" className="flex items-center gap-2 text-white px-4 py-2.5 rounded-full text-xs font-semibold shadow-lg transition-all" style={{ background: '#ce0726' }}>

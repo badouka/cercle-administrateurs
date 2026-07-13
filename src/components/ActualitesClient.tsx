@@ -95,7 +95,7 @@ export function ActualitesClient({ posts }: { posts: ActualitePost[] }) {
             return (
               <div
                 key={p.id}
-                className="overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-all hover:border-[#fcd116]/30 hover:shadow-md"
+                className="overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-all hover:border-[#C8A24A]/30 hover:shadow-md"
               >
                 <Link href={`/actualites/${p.slug || p.id}`} className="block cursor-pointer">
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#EEF6F1]">
@@ -111,7 +111,7 @@ export function ActualitesClient({ posts }: { posts: ActualitePost[] }) {
                       {categorieLabel(p.categorie, p.type)}
                     </span>
                     {p.date && (
-                      <span className="absolute bottom-3 left-3 rounded-lg bg-[#fcd116] px-3 py-1 text-xs font-bold text-[#14110B]">
+                      <span className="absolute bottom-3 left-3 rounded-lg bg-[#C8A24A] px-3 py-1 text-xs font-bold text-[#14110B]">
                         {p.date}
                       </span>
                     )}
