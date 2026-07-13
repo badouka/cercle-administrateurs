@@ -227,7 +227,7 @@ export default async function HomePage() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/cap-1.png"
+                  src="https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-1-gCMYU5Xi0vxv8qIZF11KDobwQ2W6vb.webp"
                   alt="Cercle des Administrateurs Publics"
                   className="h-full w-full object-cover"
                 />

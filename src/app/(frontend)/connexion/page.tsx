@@ -56,7 +56,7 @@ export default function ConnexionPage() {
           <div>
             <div className="flex justify-center">
               <img
-                src="/cap-logo.png"
+                src="https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png"
                 alt="CAP"
                 style={{ height: '80px', width: 'auto' }}
               />
