@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { MapPin, Mail, Phone } from 'lucide-react'
 
 const NAVIGUER = [
   { href: '/',           label: 'Accueil' },
@@ -37,7 +38,7 @@ export function Footer() {
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src="/cap-logo.png"
+                src="https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png"
                 alt="CAP"
                 style={{ height: '55px', width: 'auto' }}
                 onError={() => setLogoError(true)}
@@ -76,13 +77,22 @@ export function Footer() {
           <div>
             <h3 className={TITRE_COLONNE}>Contact</h3>
             <div className="flex flex-col gap-3 text-sm text-[#14110B]/70">
-              <span>📍 Dakar, Sénégal</span>
-              <a href="mailto:contact@cap-senegal.org" className="transition-colors hover:text-[#1a7a3a]">
-                ✉️ contact@cap-senegal.org
-              </a>
-              <a href="tel:+221338000000" className="transition-colors hover:text-[#1a7a3a]">
-                📞 +221 33 800 00 00
-              </a>
+              <div className="flex items-start gap-2">
+                <MapPin size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
+                <span>Dakar, Sénégal</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Mail size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
+                <a href="mailto:contact@cap-senegal.org" className="transition-colors hover:text-[#1a7a3a]">
+                  contact@cap-senegal.org
+                </a>
+              </div>
+              <div className="flex items-start gap-2">
+                <Phone size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
+                <a href="tel:+221338000000" className="transition-colors hover:text-[#1a7a3a]">
+                  +221 33 800 00 00
+                </a>
+              </div>
             </div>
           </div>
         </div>

@@ -111,7 +111,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="hover:opacity-80 transition-opacity">
           <img
-            src="/api/media/file/cap-logo.png"
+            src="https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png"
             alt="CAP"
             style={{ height: '55px', width: 'auto' }}
           />
