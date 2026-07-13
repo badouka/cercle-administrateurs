@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Building2, Users, Lock, ArrowRight } from 'lucide-react'
+import { ArrowLeft, Building2, Lock, ArrowRight } from 'lucide-react'
 import type { Membre, Media } from '@/payload-types'
 import RichTextContent from '@/components/RichTextContent'
 import { PageHero } from '@/components/PageHero'
@@ -165,30 +165,27 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
         {/* Poste + Coordonnées */}
         <div className="grid sm:grid-cols-2 gap-8 mt-10 pt-8 border-t border-[#14110B]/10">
           {/* Poste */}
-          <div>
+          <div className="bg-[#C8A24A] rounded-xl p-6 border border-[#14110B]/10">
             <div className="flex items-center gap-2 mb-4">
-              <Building2 size={15} className="text-[#1a7a3a]" />
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">Poste</span>
+              <span className="font-mono text-sm font-black uppercase tracking-widest text-[#062812]">{posteCap}</span>
             </div>
-            {posteCap && <p className="font-serif text-lg font-semibold text-[#062812]">{posteCap}</p>}
-            {fonctionPro && <p className="text-sm text-[#14110B]/60 mt-1">{fonctionPro}</p>}
+            {fonctionPro && <p className="text-sm text-white/80 mt-1">{fonctionPro}</p>}
             {organisme && (
-              <p className="flex items-center gap-2 text-sm text-[#14110B]/60 mt-3">
-                <Building2 size={14} className="text-[#14110B]/30" /> {organisme}
+              <p className="flex items-center gap-2 text-sm text-white/70 mt-3">
+                <Building2 size={14} className="text-white/60" /> {organisme}
               </p>
             )}
           </div>
           {/* Coordonnées */}
-          <div>
+          <div className="bg-[#FAF8F3] rounded-xl p-6 border border-[#14110B]/10">
             <div className="flex items-center gap-2 mb-4">
-              <Users size={15} className="text-[#1a7a3a]" />
-              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">Coordonnées</span>
+              <span className="font-mono text-xs uppercase tracking-widest font-black text-[#C8A24A]">COORDONNÉES</span>
             </div>
             <div className="bg-white rounded-xl border border-[#14110B]/10 p-5">
               <div className="flex items-start gap-3">
                 <Lock size={16} className="text-[#14110B]/30 mt-0.5 flex-none" />
                 <div>
-                  <p className="text-sm text-[#14110B]/60 leading-relaxed">Connectez-vous pour accéder aux coordonnées de ce membre.</p>
+                  <p className="text-sm text-[#14110B]/60 leading-relaxed">Connectez-vous pour accéder aux coordonnées</p>
                   <Link href="/connexion" className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-[#1a7a3a] hover:underline">
                     Se connecter <ArrowRight size={14} />
                   </Link>
