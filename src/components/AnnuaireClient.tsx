@@ -118,17 +118,17 @@ export function AnnuaireClient({
                 )}
               </div>
 
-              <div className="p-5">
+              <div className="p-5 flex flex-col gap-0.5">
                 <p className="font-serif text-base font-bold leading-tight text-[#062812]">
                   {m.prenom} {m.nom}
                 </p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-wider text-[#C8A24A]">
+                {m.fonctionProfessionnelle && (
+                  <p className="text-xs font-bold text-[#1a7a3a] mt-1 leading-tight">{m.fonctionProfessionnelle}</p>
+                )}
+                {m.organisme && <p className="text-xs text-[#14110B]/60 mt-1 leading-tight">{m.organisme}</p>}
+                <p className="text-xs text-[#C8A24A] italic mt-1 leading-tight">
                   {m.posteCap && m.posteCap.trim() !== '' ? m.posteCap : 'Membre'}
                 </p>
-                {m.fonctionProfessionnelle && (
-                  <p className="text-xs text-[#14110B]/50 mt-1 italic">{m.fonctionProfessionnelle}</p>
-                )}
-                {m.organisme && <p className="mt-2 text-sm text-[#14110B]/60">{m.organisme}</p>}
               </div>
             </Link>
           ))}

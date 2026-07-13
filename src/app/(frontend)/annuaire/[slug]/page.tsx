@@ -28,6 +28,12 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
   const organisme = membre.poste?.organisme ?? ''
   const fonctionPro = membre.poste?.fonctionProfessionnelle ?? ''
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const siteOrganisme = (membre.poste as any)?.siteOrganisme ?? ''
+  const siteUrl = siteOrganisme
+    ? (siteOrganisme.startsWith('http') ? siteOrganisme : `https://${siteOrganisme}`)
+    : `https://www.google.com/search?q=${encodeURIComponent(organisme)}`
+
   const initiales = `${membre.prenom?.[0] ?? ''}${membre.nom?.[0] ?? ''}`.toUpperCase()
 
   const bioObj = membre.biographie as { root?: { children?: unknown[] } } | null | undefined
@@ -92,25 +98,48 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
               {organisme && (
                 <p className="mt-3 text-sm font-semibold uppercase tracking-wider text-[#6FAE8E]">{organisme}</p>
               )}
-            </div>
-            {/* Logo organisme */}
-            <div className="flex-none w-24 h-20 rounded-xl bg-white flex flex-col items-center justify-center gap-1 shadow p-2">
-              {logoMedia?.url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={logoMedia.url}
-                  alt={organisme || 'Organisme'}
-                  className="max-h-full max-w-full object-contain"
-                />
-              ) : (
-                <>
-                  <Building2 size={24} className="text-[#1a7a3a]" />
-                  <span className="text-[8px] font-black uppercase tracking-wider text-[#062812] text-center leading-tight">
-                    {organisme.match(/\b([A-ZÉÈÀ])/g)?.join('').slice(0, 5) ?? 'CAP'}
-                  </span>
-                </>
+              {fonctionPro && (
+                <p className="mt-2 text-sm text-white/70">{fonctionPro}</p>
               )}
             </div>
+            {/* Logo organisme */}
+            {organisme ? (
+              <a
+                href={siteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-none w-24 h-20 rounded-xl bg-white flex flex-col items-center justify-center gap-1 shadow p-2 hover:shadow-md transition-shadow"
+              >
+                {logoMedia?.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={logoMedia.url}
+                    alt={organisme || 'Organisme'}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                ) : (
+                  <>
+                    <Building2 size={24} className="text-[#1a7a3a]" />
+                    <span className="text-[8px] font-black uppercase tracking-wider text-[#062812] text-center leading-tight">
+                      {organisme.match(/\b([A-ZÉÈÀ])/g)?.join('').slice(0, 5) ?? 'CAP'}
+                    </span>
+                  </>
+                )}
+              </a>
+            ) : (
+              <div className="flex-none w-24 h-20 rounded-xl bg-white flex flex-col items-center justify-center gap-1 shadow p-2">
+                {logoMedia?.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={logoMedia.url}
+                    alt={organisme || 'Organisme'}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                ) : (
+                  <Building2 size={24} className="text-[#1a7a3a]" />
+                )}
+              </div>
+            )}
           </div>
         </div>
 
