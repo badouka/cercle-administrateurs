@@ -42,9 +42,8 @@ export function AnnuaireSectionWrapper({ membres }: { membres: Membre[] }) {
               <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
               <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">MEMBRES BUREAU</span>
             </div>
-            <h2 className="font-serif text-3xl font-bold text-[#14110B]">Membres Bureau</h2>
             <p className="text-[#14110B]/60 mt-1 text-sm">
-              Les administrateurs publics qui composent le Cercle.
+              Les membres du bureau exécutif du Cercle des Administrateurs Publics.
             </p>
           </div>
           <Link

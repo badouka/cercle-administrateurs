@@ -608,7 +608,6 @@ export default async function HomePage() {
                 <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">MEMBRES BUREAU</span>
               </div>
-              <h2 className="font-serif text-3xl font-bold text-[#14110B]">Le Bureau Exécutif</h2>
               <p className="text-[#14110B]/60 mt-1 text-sm">Les membres du bureau exécutif du Cercle des Administrateurs Publics.</p>
             </div>
             <Link href="/annuaire/bureau" className="text-[#1a7a3a] font-semibold text-sm flex items-center gap-1 hover:underline">
