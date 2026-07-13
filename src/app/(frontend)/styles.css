@@ -14,7 +14,7 @@
 
 /* ── Couleurs du filet tricolore ─────────────────────────────────────── */
 :root {
-  --primary-color: #0B6B3A;
+  --primary-color: #1a7a3a;
   --secondary-color: #C8A24A;
   --third-color: #ce0726;
 }
@@ -114,7 +114,7 @@ p, li, blockquote {
 .tiptap-article table th            { background: #F3F4F6; font-weight: 600; text-align: left; }
 .tiptap-article table p             { margin-bottom: 0; }
 .tiptap-article table .selectedCell:after { content: ''; position: absolute; inset: 0; background: rgba(20,181,58,0.12); pointer-events: none; }
-.tiptap-article table .column-resize-handle { position: absolute; right: -2px; top: 0; bottom: 0; width: 4px; background: #0B6B3A; cursor: col-resize; }
+.tiptap-article table .column-resize-handle { position: absolute; right: -2px; top: 0; bottom: 0; width: 4px; background: #1a7a3a; cursor: col-resize; }
 
 /* ── TipTap editor — biography (simple) ─────────────────────────────── */
 .tiptap-bio                        { min-height: 80px; font-size: 0.875rem; line-height: 1.6; }

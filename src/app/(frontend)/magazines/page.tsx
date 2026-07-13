@@ -73,7 +73,7 @@ export default async function MagazinesPage() {
                         ) : null}
                       </div>
                       {/* Titre (cliquable) */}
-                      <h3 className="mt-3 px-1 font-serif font-bold text-[#14110B] text-sm leading-tight line-clamp-2 hover:text-[#0B6B3A] transition-colors cursor-pointer">
+                      <h3 className="mt-3 px-1 font-serif font-bold text-[#14110B] text-sm leading-tight line-clamp-2 hover:text-[#1a7a3a] transition-colors cursor-pointer">
                         {mag.titre}
                       </h3>
                     </Link>
@@ -88,12 +88,12 @@ export default async function MagazinesPage() {
                           href={fichier.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-[#0B6B3A] hover:underline"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-[#1a7a3a] hover:underline"
                         >
                           Lire →
                         </a>
                       ) : (
-                        <span className="text-xs font-semibold text-[#0B6B3A]">Lire →</span>
+                        <span className="text-xs font-semibold text-[#1a7a3a]">Lire →</span>
                       )}
                     </div>
                   </div>

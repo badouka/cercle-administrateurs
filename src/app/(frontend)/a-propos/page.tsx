@@ -142,7 +142,7 @@ export default async function AProposPage() {
           <div className="grid items-start gap-16 lg:grid-cols-2">
             {/* Gauche */}
             <div className="relative pl-6">
-              <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#0B6B3A] to-[#C8A24A]" />
+              <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#1a7a3a] to-[#C8A24A]" />
               <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
                 Le secteur parapublic
               </p>
@@ -170,9 +170,9 @@ export default async function AProposPage() {
                 backgroundSize: '22px 22px',
               }}
             />
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#0B6B3A] to-[#C8A24A]" />
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#1a7a3a] to-[#C8A24A]" />
             <div className="relative grid grid-cols-[auto_1fr] items-start gap-8">
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-[#BFDDCD] bg-white text-[#0B6B3A]">
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-[#BFDDCD] bg-white text-[#1a7a3a]">
                 <Award size={28} />
               </div>
               <div>
@@ -202,7 +202,7 @@ export default async function AProposPage() {
               </div>
               <Link
                 href="/inscription"
-                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#0B6B3A] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#0B6B3A]/90"
+                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1a7a3a] px-7 py-3 font-semibold text-white transition-colors hover:bg-[#1a7a3a]/90"
               >
                 Rejoindre le Cercle <ArrowRight size={18} />
               </Link>
@@ -218,7 +218,7 @@ export default async function AProposPage() {
                 />
               </div>
               <div className="absolute -left-5 bottom-7 max-w-[200px] rounded-xl border-t-4 border-[#C8A24A] bg-white p-5 shadow-xl">
-                <p className="font-serif text-xl font-bold text-[#0B6B3A]">12 octobre 2024</p>
+                <p className="font-serif text-xl font-bold text-[#1a7a3a]">12 octobre 2024</p>
                 <p className="mt-1 text-xs text-[#14110B]/60">
                   Création du Cercle des Administrateurs Publics
                 </p>
@@ -236,9 +236,9 @@ export default async function AProposPage() {
             {ENGAGEMENTS.map(({ Icon, titre, texte }) => (
               <div
                 key={titre}
-                className="rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#0B6B3A] bg-white p-7 transition-shadow hover:shadow-md"
+                className="rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#1a7a3a] bg-white p-7 transition-shadow hover:shadow-md"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-[#BFDDCD] bg-[#EEF6F1] text-[#0B6B3A]">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-[#BFDDCD] bg-[#EEF6F1] text-[#1a7a3a]">
                   <Icon size={22} />
                 </div>
                 <h3 className="mb-2 font-serif text-lg text-[#062812]">{titre}</h3>

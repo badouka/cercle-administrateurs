@@ -101,10 +101,10 @@ export function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-colors duration-300',
         scrolled
-          ? 'bg-white shadow-md border-b border-[#0B6B3A]/10'
+          ? 'bg-white shadow-md border-b border-[#1a7a3a]/10'
           : isHome
             ? 'bg-transparent'
-            : 'bg-[#FAF8F3]/95 border-b border-[#0B6B3A]/10',
+            : 'bg-[#FAF8F3]/95 border-b border-[#1a7a3a]/10',
         dmSans,
       )}
     >
@@ -113,10 +113,10 @@ export function Navbar() {
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           {logoError ? (
             <div className="flex items-center gap-2">
-              <span className="bg-[#0B6B3A] text-white font-bold px-2 py-1 rounded text-sm">
+              <span className="bg-[#1a7a3a] text-white font-bold px-2 py-1 rounded text-sm">
                 CAP
               </span>
-              <span className="text-xs text-[#0B6B3A] font-medium">
+              <span className="text-xs text-[#1a7a3a] font-medium">
                 Cercle des Administrateurs Publics du Sénégal
               </span>
             </div>
@@ -140,8 +140,8 @@ export function Navbar() {
                   className={cn(
                     'inline-flex items-center gap-1 text-sm transition-colors py-1',
                     isParentActive(item)
-                      ? 'text-[#0B6B3A] font-semibold border-b-2 border-[#C8A24A]'
-                      : 'font-medium text-[#14110B]/70 hover:text-[#0B6B3A]',
+                      ? 'text-[#1a7a3a] font-semibold border-b-2 border-[#C8A24A]'
+                      : 'font-medium text-[#14110B]/70 hover:text-[#1a7a3a]',
                   )}
                 >
                   {item.label}
@@ -150,7 +150,7 @@ export function Navbar() {
                     className="transition-transform group-hover:rotate-180"
                   />
                 </Link>
-                <div className="absolute top-full left-0 mt-1 hidden group-hover:block bg-white rounded-xl shadow-lg border border-[#0B6B3A]/10 py-2 min-w-[220px] z-50">
+                <div className="absolute top-full left-0 mt-1 hidden group-hover:block bg-white rounded-xl shadow-lg border border-[#1a7a3a]/10 py-2 min-w-[220px] z-50">
                   {item.children.map(child => (
                     <Link
                       key={child.href}
@@ -158,8 +158,8 @@ export function Navbar() {
                       className={cn(
                         'block px-4 py-2.5 text-sm transition-colors hover:bg-[#FAF8F3]',
                         isChildActive(child.href)
-                          ? 'text-[#0B6B3A] font-semibold'
-                          : 'text-[#14110B]/70 hover:text-[#0B6B3A]',
+                          ? 'text-[#1a7a3a] font-semibold'
+                          : 'text-[#14110B]/70 hover:text-[#1a7a3a]',
                       )}
                     >
                       {child.label}
@@ -174,8 +174,8 @@ export function Navbar() {
                 className={cn(
                   'text-sm transition-colors py-1',
                   pathname === item.href
-                    ? 'text-[#0B6B3A] font-semibold border-b-2 border-[#C8A24A]'
-                    : 'font-medium text-[#14110B]/70 hover:text-[#0B6B3A]',
+                    ? 'text-[#1a7a3a] font-semibold border-b-2 border-[#C8A24A]'
+                    : 'font-medium text-[#14110B]/70 hover:text-[#1a7a3a]',
                 )}
               >
                 {item.label}
@@ -187,7 +187,7 @@ export function Navbar() {
         {/* Boutons droite — desktop */}
         <div className="hidden lg:flex items-center gap-3">
           {user === undefined ? (
-            <div className="h-9 w-40 rounded-lg bg-[#0B6B3A]/5 animate-pulse" />
+            <div className="h-9 w-40 rounded-lg bg-[#1a7a3a]/5 animate-pulse" />
           ) : isLoggedIn ? (
             <>
               {isManager && (
@@ -196,8 +196,8 @@ export function Navbar() {
                   className={cn(
                     'inline-flex items-center gap-1.5 text-sm px-4 py-2 transition-colors',
                     pathname.startsWith('/gestionnaire')
-                      ? 'text-[#0B6B3A] font-semibold'
-                      : 'text-[#14110B] font-medium hover:text-[#0B6B3A]',
+                      ? 'text-[#1a7a3a] font-semibold'
+                      : 'text-[#14110B] font-medium hover:text-[#1a7a3a]',
                   )}
                 >
                   <Settings2 size={16} />
@@ -209,8 +209,8 @@ export function Navbar() {
                 className={cn(
                   'inline-flex items-center gap-1.5 text-sm px-4 py-2 transition-colors',
                   pathname.startsWith('/dashboard')
-                    ? 'text-[#0B6B3A] font-semibold'
-                    : 'text-[#14110B] font-medium hover:text-[#0B6B3A]',
+                    ? 'text-[#1a7a3a] font-semibold'
+                    : 'text-[#14110B] font-medium hover:text-[#1a7a3a]',
                 )}
               >
                 <LayoutDashboard size={16} />
@@ -219,7 +219,7 @@ export function Navbar() {
               <button
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-[#14110B]/70 px-4 py-2 hover:text-[#0B6B3A] transition-colors disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-[#14110B]/70 px-4 py-2 hover:text-[#1a7a3a] transition-colors disabled:opacity-50"
               >
                 <LogOut size={16} />
                 {loggingOut ? '…' : 'Déconnexion'}
@@ -229,13 +229,13 @@ export function Navbar() {
             <>
               <Link
                 href="/connexion"
-                className="text-[#14110B] font-medium text-sm px-4 py-2 hover:text-[#0B6B3A] transition-colors"
+                className="text-[#14110B] font-medium text-sm px-4 py-2 hover:text-[#1a7a3a] transition-colors"
               >
                 Connexion
               </Link>
               <Link
                 href="/inscription"
-                className="bg-[#0B6B3A] text-white font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-[#0B6B3A]/90 transition-colors"
+                className="bg-[#1a7a3a] text-white font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-[#1a7a3a]/90 transition-colors"
               >
                 Devenir membre
               </Link>
@@ -246,7 +246,7 @@ export function Navbar() {
         {/* Hamburger — mobile */}
         <button
           onClick={() => setOpen(prev => !prev)}
-          className="lg:hidden p-2 text-[#14110B] hover:text-[#0B6B3A] transition-colors"
+          className="lg:hidden p-2 text-[#14110B] hover:text-[#1a7a3a] transition-colors"
           aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
@@ -257,7 +257,7 @@ export function Navbar() {
       {open && (
         <div
           className={cn(
-            'lg:hidden fixed inset-x-0 top-[60px] bg-[#FAF8F3] shadow-lg border-b border-[#0B6B3A]/10 py-6 px-6 flex flex-col gap-4',
+            'lg:hidden fixed inset-x-0 top-[60px] bg-[#FAF8F3] shadow-lg border-b border-[#1a7a3a]/10 py-6 px-6 flex flex-col gap-4',
             dmSans,
           )}
         >
@@ -267,7 +267,7 @@ export function Navbar() {
                 <span
                   className={cn(
                     'text-sm font-semibold',
-                    isParentActive(item) ? 'text-[#0B6B3A]' : 'text-[#14110B]',
+                    isParentActive(item) ? 'text-[#1a7a3a]' : 'text-[#14110B]',
                   )}
                 >
                   {item.label}
@@ -280,8 +280,8 @@ export function Navbar() {
                     className={cn(
                       'pl-4 text-sm transition-colors',
                       isChildActive(child.href)
-                        ? 'text-[#0B6B3A] font-semibold'
-                        : 'font-medium text-[#14110B]/70 hover:text-[#0B6B3A]',
+                        ? 'text-[#1a7a3a] font-semibold'
+                        : 'font-medium text-[#14110B]/70 hover:text-[#1a7a3a]',
                     )}
                   >
                     {child.label}
@@ -296,8 +296,8 @@ export function Navbar() {
                 className={cn(
                   'text-sm transition-colors',
                   pathname === item.href
-                    ? 'text-[#0B6B3A] font-semibold'
-                    : 'font-medium text-[#14110B]/70 hover:text-[#0B6B3A]',
+                    ? 'text-[#1a7a3a] font-semibold'
+                    : 'font-medium text-[#14110B]/70 hover:text-[#1a7a3a]',
                 )}
               >
                 {item.label}
@@ -305,14 +305,14 @@ export function Navbar() {
             ),
           )}
 
-          <div className="mt-2 flex flex-col gap-3 border-t border-[#0B6B3A]/10 pt-4">
+          <div className="mt-2 flex flex-col gap-3 border-t border-[#1a7a3a]/10 pt-4">
             {isLoggedIn ? (
               <>
                 {isManager && (
                   <Link
                     href="/gestionnaire"
                     onClick={() => setOpen(false)}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B] hover:text-[#0B6B3A] transition-colors"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B] hover:text-[#1a7a3a] transition-colors"
                   >
                     <Settings2 size={16} />
                     Gestion
@@ -321,7 +321,7 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   onClick={() => setOpen(false)}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B] hover:text-[#0B6B3A] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B] hover:text-[#1a7a3a] transition-colors"
                 >
                   <LayoutDashboard size={16} />
                   Mon Espace
@@ -329,7 +329,7 @@ export function Navbar() {
                 <button
                   onClick={handleLogout}
                   disabled={loggingOut}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/70 hover:text-[#0B6B3A] transition-colors disabled:opacity-50"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[#14110B]/70 hover:text-[#1a7a3a] transition-colors disabled:opacity-50"
                 >
                   <LogOut size={16} />
                   {loggingOut ? 'Déconnexion…' : 'Déconnexion'}
@@ -340,14 +340,14 @@ export function Navbar() {
                 <Link
                   href="/connexion"
                   onClick={() => setOpen(false)}
-                  className="text-center text-[#14110B] font-medium text-sm px-4 py-2.5 hover:text-[#0B6B3A] transition-colors"
+                  className="text-center text-[#14110B] font-medium text-sm px-4 py-2.5 hover:text-[#1a7a3a] transition-colors"
                 >
                   Connexion
                 </Link>
                 <Link
                   href="/inscription"
                   onClick={() => setOpen(false)}
-                  className="text-center bg-[#0B6B3A] text-white font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-[#0B6B3A]/90 transition-colors"
+                  className="text-center bg-[#1a7a3a] text-white font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-[#1a7a3a]/90 transition-colors"
                 >
                   Devenir membre
                 </Link>
