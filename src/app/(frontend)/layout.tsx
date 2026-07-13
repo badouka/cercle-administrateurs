@@ -72,6 +72,33 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       : null,
   }))
 
+  const ORDRE_POSTES = [
+    "Président d'honneur", "Présidente d'honneur",
+    'Président', 'Présidente',
+    'Vice-Président', 'Vice-Présidente',
+    'Secrétaire général', 'Secrétaire générale',
+    'Secrétaire général adjoint', 'Secrétaire générale adjointe',
+    'Trésorier Adjoint', 'Trésorière Adjointe',
+    'Trésorier', 'Trésorière',
+    'Présidente Commission Actions Sociales',
+    'Présidente Commission Communication',
+    'Président Commission Stratégie Vulgarisation',
+    'President Commission Strategie Vulgarisation',
+    'Président Commission Renforcement de Capacités',
+    'President Commission Renforcement',
+  ]
+
+  const membresBureau = membres
+    .filter(m => {
+      const p = (m.poste?.posteCap ?? '').trim()
+      return p !== '' && p !== 'Membre'
+    })
+    .sort((a, b) => {
+      const ia = ORDRE_POSTES.indexOf((a.poste?.posteCap ?? '').trim())
+      const ib = ORDRE_POSTES.indexOf((b.poste?.posteCap ?? '').trim())
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib)
+    })
+
   const partenairesRes = await payload.find({
     collection:     'partenaires',
     depth:          1,
@@ -99,7 +126,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
 
         <ScrollActions />
 
-        <AnnuaireSectionWrapper membres={membres} />
+        <AnnuaireSectionWrapper membres={membresBureau} />
 
         <PartenairesSection partenaires={partenaires} />
 

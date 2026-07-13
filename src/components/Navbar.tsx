@@ -50,7 +50,6 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const [user, setUser] = useState<AuthUser | null | undefined>(undefined)
   const [loggingOut, setLoggingOut] = useState(false)
-  const [logoError, setLogoError] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   const currentFullPath =
@@ -110,24 +109,12 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-6 py-1 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          {logoError ? (
-            <div className="flex items-center gap-2">
-              <span className="bg-[#1a7a3a] text-white font-bold px-2 py-1 rounded text-sm">
-                CAP
-              </span>
-              <span className="text-xs text-[#1a7a3a] font-medium">
-                Cercle des Administrateurs Publics du Sénégal
-              </span>
-            </div>
-          ) : (
-            <img
-              src="/cap-logo.png"
-              alt="CAP"
-              style={{ height: '55px', width: 'auto' }}
-              onError={() => setLogoError(true)}
-            />
-          )}
+        <Link href="/" className="hover:opacity-80 transition-opacity">
+          <img
+            src="/api/media/file/cap-logo.png"
+            alt="CAP"
+            style={{ height: '55px', width: 'auto' }}
+          />
         </Link>
 
         {/* Liens centre — desktop */}
