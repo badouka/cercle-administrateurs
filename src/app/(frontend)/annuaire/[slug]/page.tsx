@@ -1,8 +1,9 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { headers } from 'next/headers'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Building2, Lock, ArrowRight } from 'lucide-react'
+import { ArrowLeft, Building2, Lock, ArrowRight, Mail, Phone } from 'lucide-react'
 import type { Membre, Media } from '@/payload-types'
 import RichTextContent from '@/components/RichTextContent'
 import { PageHero } from '@/components/PageHero'
@@ -19,6 +20,20 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
   })
   const membre = res.docs[0] as Membre | undefined
   if (!membre) notFound()
+
+  // Utilisateur connecté (pour l'affichage des coordonnées)
+  const headersList = await headers()
+  let currentUser = null
+  try {
+    const { user } = await payload.auth({ headers: headersList })
+    currentUser = user
+  } catch {
+    currentUser = null
+  }
+
+  const email = membre.coordonnees?.emailProfessionnel ?? ''
+  const telephone = membre.coordonnees?.telephone ?? ''
+  const telephoneSecondaire = membre.coordonnees?.telephoneSecondaire ?? ''
 
   const photo = membre.photo && typeof membre.photo === 'object' && 'filename' in membre.photo
     ? (membre.photo as Media)
@@ -182,15 +197,41 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
               <span className="font-mono text-xs uppercase tracking-widest font-black text-[#C8A24A]">COORDONNÉES</span>
             </div>
             <div className="bg-white rounded-xl border border-[#14110B]/10 p-5">
-              <div className="flex items-start gap-3">
-                <Lock size={16} className="text-[#14110B]/30 mt-0.5 flex-none" />
-                <div>
-                  <p className="text-sm text-[#14110B]/60 leading-relaxed">Connectez-vous pour accéder aux coordonnées</p>
-                  <Link href="/connexion" className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-[#1a7a3a] hover:underline">
-                    Se connecter <ArrowRight size={14} />
-                  </Link>
+              {currentUser ? (
+                <div className="flex flex-col gap-3">
+                  {email && (
+                    <div className="flex items-center gap-2">
+                      <Mail size={16} className="text-[#1a7a3a] flex-none" />
+                      <a href={`mailto:${email}`} className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a] break-all">{email}</a>
+                    </div>
+                  )}
+                  {telephone && (
+                    <div className="flex items-center gap-2">
+                      <Phone size={16} className="text-[#1a7a3a] flex-none" />
+                      <a href={`tel:${telephone}`} className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">{telephone}</a>
+                    </div>
+                  )}
+                  {telephoneSecondaire && (
+                    <div className="flex items-center gap-2">
+                      <Phone size={16} className="text-[#1a7a3a] flex-none" />
+                      <a href={`tel:${telephoneSecondaire}`} className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">{telephoneSecondaire}</a>
+                    </div>
+                  )}
+                  {!email && !telephone && !telephoneSecondaire && (
+                    <p className="text-sm text-[#14110B]/60 leading-relaxed">Aucune coordonnée renseignée</p>
+                  )}
                 </div>
-              </div>
+              ) : (
+                <div className="flex items-start gap-3">
+                  <Lock size={16} className="text-[#14110B]/30 mt-0.5 flex-none" />
+                  <div>
+                    <p className="text-sm text-[#14110B]/60 leading-relaxed">Connectez-vous pour accéder aux coordonnées</p>
+                    <Link href="/connexion" className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-[#1a7a3a] hover:underline">
+                      Se connecter <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
