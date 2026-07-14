@@ -201,19 +201,19 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
                 <div className="flex flex-col gap-3">
                   {email && (
                     <div className="flex items-center gap-2">
-                      <Mail size={16} className="text-[#1a7a3a] flex-none" />
+                      <Mail size={14} className="text-[#1a7a3a] flex-none" />
                       <a href={`mailto:${email}`} className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a] break-all">{email}</a>
                     </div>
                   )}
                   {telephone && (
                     <div className="flex items-center gap-2">
-                      <Phone size={16} className="text-[#1a7a3a] flex-none" />
+                      <Phone size={14} className="text-[#1a7a3a] flex-none" />
                       <a href={`tel:${telephone}`} className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">{telephone}</a>
                     </div>
                   )}
                   {telephoneSecondaire && (
                     <div className="flex items-center gap-2">
-                      <Phone size={16} className="text-[#1a7a3a] flex-none" />
+                      <Phone size={14} className="text-[#1a7a3a] flex-none" />
                       <a href={`tel:${telephoneSecondaire}`} className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">{telephoneSecondaire}</a>
                     </div>
                   )}
