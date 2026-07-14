@@ -7,7 +7,8 @@ import type { User, Membre } from '@/payload-types'
 import config from '@payload-config'
 import { Users, ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import type { Media } from '@/payload-types'
-import { MembreActionButtons, MembreInfoLink, PosteEditButton, StatutActions, type MembreInfo } from '../MembreActionButtons'
+import { MembreActionButtons, MembreInfoLink, type MembreInfo } from '../MembreActionButtons'
+import { MembresTableClient } from '@/components/MembresTableClient'
 
 export const metadata: Metadata = { title: 'Gestion des membres' }
 
@@ -146,60 +147,7 @@ export default async function MembreManagementPage() {
           Tous les membres
         </h2>
 
-        {membres.length === 0 ? (
-          <p className="text-sm text-gray-500">Aucun membre enregistré.</p>
-        ) : (
-          <div className="rounded-xl border border-[#E5E5E5] bg-white overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm min-w-[640px]">
-                <thead>
-                  <tr className="border-b border-gray-100 bg-[#F9F9F9]">
-                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Membre</th>
-                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Organisme</th>
-                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">N° Adhésion</th>
-                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
-                    <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Poste</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {(membres as Membre[]).map(m => {
-                    return (
-                      <tr key={m.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-5 py-3.5">
-                          <p className="font-medium text-black">{m.prenom} {m.nom}</p>
-                        </td>
-                        <td className="px-5 py-3.5 text-gray-500 text-xs">
-                          {m.poste?.organisme ?? <span className="text-gray-300">—</span>}
-                        </td>
-                        <td className="px-5 py-3.5 text-xs font-mono text-gray-500">
-                          {m.adhesion?.numeroAdhesion ?? <span className="text-gray-300">—</span>}
-                        </td>
-                        <td className="px-5 py-3.5 text-xs text-gray-500">
-                          {m.adhesion?.dateAdhesion
-                            ? formatDate(m.adhesion.dateAdhesion)
-                            : formatDate(m.createdAt)
-                          }
-                        </td>
-                        <td className="px-5 py-3.5">
-                          <StatutActions membreId={m.id} statut={m.adhesion?.statut ?? 'inactif'} />
-                        </td>
-                        <td className="px-5 py-3.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-gray-700">
-                              {m.poste?.posteCap ?? <span className="text-gray-300">—</span>}
-                            </span>
-                            <PosteEditButton membreId={m.id} nom={`${m.prenom} ${m.nom}`} currentPoste={m.poste?.posteCap} />
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+        <MembresTableClient membres={membres as Membre[]} />
       </section>
     </div>
   )
