@@ -261,11 +261,11 @@ export default async function DashboardPage() {
   const initiales = `${membre.prenom[0] ?? ''}${membre.nom[0] ?? ''}`.toUpperCase()
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 space-y-10">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-12 sm:px-6 lg:px-8 space-y-10">
 
       {/* ── En-tête profil ── */}
       <div className="rounded-2xl border border-[#E5E5E5] overflow-hidden">
-        <div className="bg-black px-6 py-8 sm:px-8">
+        <div className="px-6 py-8 sm:px-8" style={{ background: 'linear-gradient(135deg, #062812, #1a7a3a)' }}>
           <div className="flex flex-col sm:flex-row items-center gap-5 text-white">
             <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full ring-2 ring-white/20 bg-gray-800">
               {photo?.url ? (
