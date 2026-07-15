@@ -42,11 +42,48 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   title: {
-    default: 'CAP — Cercle des Administrateurs Publics',
-    template: '%s | CAP',
+    default: 'CAP - Cercle des Administrateurs Publics du Sénégal',
+    template: '%s | CAP Sénégal',
   },
-  description:
-    'Plateforme du Cercle des Administrateurs Publics du Sénégal — actualités, activités, annuaire des membres et ressources documentaires.',
+  description: 'Le Cercle des Administrateurs Publics (CAP) rassemble les présidents des conseils d\'administration, de surveillance et d\'orientation des entités du secteur parapublic sénégalais. Un cadre de réflexion, d\'échanges et d\'impulsion d\'idées au service de la modernisation de l\'administration sénégalaise.',
+  keywords: [
+    'Cercle des Administrateurs Publics',
+    'CAP Sénégal',
+    'gouvernance parapublic',
+    'administrateurs publics',
+    'conseil d\'administration',
+    'secteur parapublic sénégalais',
+    'modernisation administration',
+    'Sénégal 2050',
+    'organes délibérants',
+    'gouvernance publique',
+    'Lansana Gagny SAKHO',
+    'performance administration publique',
+    'établissements publics Sénégal',
+  ],
+  authors: [{ name: 'Cercle des Administrateurs Publics', url: 'https://cap-senegal.org' }],
+  creator: 'DIGISSOL',
+  publisher: 'CAP Sénégal',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_SN',
+    url: 'https://cap-senegal.org',
+    siteName: 'CAP - Cercle des Administrateurs Publics',
+    title: 'CAP - Cercle des Administrateurs Publics du Sénégal',
+    description: 'Le Cercle des Administrateurs Publics rassemble les présidents des organes délibérants du secteur parapublic sénégalais pour promouvoir l\'excellence de la gouvernance publique.',
+    images: [{ url: 'https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png', width: 1200, height: 630, alt: 'CAP Sénégal' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CAP - Cercle des Administrateurs Publics du Sénégal',
+    description: 'Le Cercle des Administrateurs Publics du Sénégal — gouvernance, performance et modernisation du secteur parapublic.',
+    images: ['https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png'],
+  },
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
@@ -119,6 +156,33 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <html lang="fr" className={`${newsreader.variable} ${ibmPlexMono.variable} ${archivo.variable}`}>
       <body className={`${crimsonPro.variable} ${dmSans.variable} min-h-screen bg-white font-sans text-ink antialiased`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Cercle des Administrateurs Publics",
+              "alternateName": "CAP Sénégal",
+              "url": "https://cap-senegal.org",
+              "logo": "https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png",
+              "description": "Le Cercle des Administrateurs Publics rassemble les présidents des conseils d'administration, de surveillance et d'orientation des entités du secteur parapublic sénégalais.",
+              "foundingDate": "2024-10-12",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Dakar",
+                "addressCountry": "SN"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "contact@cap-senegal.org",
+                "telephone": "+221338000000",
+                "contactType": "customer service"
+              },
+              "sameAs": []
+            })
+          }}
+        />
         <Suspense fallback={null}>
           <Navbar />
         </Suspense>

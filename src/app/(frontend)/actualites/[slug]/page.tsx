@@ -244,9 +244,9 @@ export default async function ArticleDetailPage({
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl font-bold text-black leading-tight mb-8 sm:text-4xl">
+            <h2 className="text-3xl font-bold text-black leading-tight mb-8 sm:text-4xl">
               {post.titre}
-            </h1>
+            </h2>
 
             {/* Content */}
             <div

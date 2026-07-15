@@ -5,7 +5,10 @@ import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
 import { ActualitesClient, type ActualitePost } from '@/components/ActualitesClient'
 
-export const metadata: Metadata = { title: 'Actualités' }
+export const metadata: Metadata = {
+  title: 'Actualités',
+  description: 'Toute l\'actualité du Cercle des Administrateurs Publics : décisions, partenariats, activités et temps forts de l\'association.',
+}
 
 // Extrait un texte court (max maxChars) d'un contenu richText Lexical.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

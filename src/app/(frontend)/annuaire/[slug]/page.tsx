@@ -106,7 +106,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
             </div>
             {/* Identité */}
             <div className="flex-1 min-w-[200px]">
-              <h1 className="font-serif text-3xl font-bold text-white">{membre.prenom} {membre.nom}</h1>
+              <h2 className="font-serif text-3xl font-bold text-white">{membre.prenom} {membre.nom}</h2>
               {posteCap && (
                 <span className="inline-block mt-3 bg-[#C8A24A] text-[#062812] text-xs font-bold px-3 py-1 rounded-full">{posteCap}</span>
               )}

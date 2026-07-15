@@ -6,7 +6,10 @@ import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
 import { DocumentsClient, type DocumentItem } from '@/components/DocumentsClient'
 
-export const metadata: Metadata = { title: 'Documents' }
+export const metadata: Metadata = {
+  title: 'Documents',
+  description: 'Textes statutaires, réglementaires et ressources documentaires du Cercle des Administrateurs Publics du Sénégal.',
+}
 
 export default async function DocumentsPage() {
   const [payload, headers] = await Promise.all([getPayload({ config }), getHeaders()])

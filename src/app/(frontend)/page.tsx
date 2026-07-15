@@ -12,6 +12,11 @@ import {
   Download,
 } from 'lucide-react'
 
+export const metadata = {
+  title: 'Accueil',
+  description: 'Plateforme officielle du Cercle des Administrateurs Publics du Sénégal. Actualités, activités, annuaire des membres et ressources documentaires pour les présidents d\'organes délibérants du secteur parapublic.',
+}
+
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
 const ORDRE_POSTES = [

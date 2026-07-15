@@ -5,7 +5,10 @@ import type { Membre, Media } from '@/payload-types'
 import { PageHero } from '@/components/PageHero'
 import { AnnuaireClient, type AnnuaireFiltre, type AnnuaireMembre } from '@/components/AnnuaireClient'
 
-export const metadata: Metadata = { title: 'Annuaire des membres' }
+export const metadata: Metadata = {
+  title: 'Annuaire des membres',
+  description: 'Annuaire des présidents d\'organes délibérants membres du Cercle des Administrateurs Publics du Sénégal.',
+}
 
 const ORDRE_POSTES = [
   "Président d'honneur",

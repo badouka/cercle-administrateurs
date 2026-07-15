@@ -7,7 +7,9 @@ import { PageHero } from '@/components/PageHero'
 import { Award, GraduationCap, MessageSquare, Lightbulb, Target, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Qui sommes-nous ? — CAP',
+  title: 'À propos',
+  description: 'Le CAP a été créé le 12 octobre 2024 pour rassembler les présidents des conseils d\'administration, de surveillance et d\'orientation des entités du secteur parapublic sénégalais autour d\'une conviction : la qualité de la gouvernance se construit d\'abord dans les organes délibérants.',
+  keywords: ['CAP création', 'gouvernance parapublic', 'organes délibérants Sénégal', 'loi 2022-08', 'Sénégal 2050'],
 }
 
 // ── Contenu éditorial (en constantes pour éviter l'échappement JSX) ──────────────

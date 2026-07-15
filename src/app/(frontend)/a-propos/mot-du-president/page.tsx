@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+export const metadata: Metadata = {
+  title: 'Mot du Président',
+  description: 'Message du Président du Cercle des Administrateurs Publics, Lansana Gagny SAKHO. Vision et engagements pour la modernisation de la gouvernance du secteur parapublic sénégalais.',
+  keywords: ['Lansana Gagny SAKHO', 'Président CAP', 'mot du président', 'gouvernance Sénégal'],
+}
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Membre, Media, Page } from '@/payload-types'
