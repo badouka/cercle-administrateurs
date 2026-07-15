@@ -265,7 +265,7 @@ export default async function ArticleDetailPage({
                       target="_blank"
                       rel="noopener noreferrer"
                       download
-                      className="inline-flex items-center gap-2.5 rounded-lg bg-[#1a7a3a] px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+                      className="inline-flex items-center gap-2.5 rounded-lg bg-[#1a7a3a] px-4 py-3 text-sm font-semibold text-white hover:bg-[#C8A24A] transition-colors"
                     >
                       <Download size={16} className="shrink-0" />
                       {doc.titre}
