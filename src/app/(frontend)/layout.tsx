@@ -40,13 +40,26 @@ const archivo = Archivo({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: {
-    default: 'CAP - Cercle des Administrateurs Publics du Sénégal',
-    template: '%s | CAP Sénégal',
-  },
-  description: 'Le Cercle des Administrateurs Publics (CAP) rassemble les présidents des conseils d\'administration, de surveillance et d\'orientation des entités du secteur parapublic sénégalais. Un cadre de réflexion, d\'échanges et d\'impulsion d\'idées au service de la modernisation de l\'administration sénégalaise.',
-  keywords: [
+export async function generateMetadata(): Promise<Metadata> {
+  const payload = await getPayload({ config })
+  const membresRes = await payload.find({
+    collection:     'membres',
+    depth:          1,
+    limit:          200,
+    overrideAccess: true,
+  })
+
+  // Mots-clés dynamiques : noms des membres, fonctions professionnelles et postes au CAP.
+  const nomsMembers = membresRes.docs.map(m => `${m.prenom} ${m.nom}`)
+  const fonctions = membresRes.docs
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .map(m => (m.poste as any)?.fonctionProfessionnelle ?? '')
+    .filter(Boolean)
+  const postesCAP = membresRes.docs
+    .map(m => m.poste?.posteCap ?? '')
+    .filter(Boolean)
+
+  const allKeywords = [
     'Cercle des Administrateurs Publics',
     'CAP Sénégal',
     'gouvernance parapublic',
@@ -60,30 +73,42 @@ export const metadata: Metadata = {
     'Lansana Gagny SAKHO',
     'performance administration publique',
     'établissements publics Sénégal',
-  ],
-  authors: [{ name: 'Cercle des Administrateurs Publics', url: 'https://cap-senegal.org' }],
-  creator: 'DIGISSOL',
-  publisher: 'CAP Sénégal',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'fr_SN',
-    url: 'https://cap-senegal.org',
-    siteName: 'CAP - Cercle des Administrateurs Publics',
-    title: 'CAP - Cercle des Administrateurs Publics du Sénégal',
-    description: 'Le Cercle des Administrateurs Publics rassemble les présidents des organes délibérants du secteur parapublic sénégalais pour promouvoir l\'excellence de la gouvernance publique.',
-    images: [{ url: 'https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png', width: 1200, height: 630, alt: 'CAP Sénégal' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'CAP - Cercle des Administrateurs Publics du Sénégal',
-    description: 'Le Cercle des Administrateurs Publics du Sénégal — gouvernance, performance et modernisation du secteur parapublic.',
-    images: ['https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png'],
-  },
+    ...new Set(nomsMembers),
+    ...new Set(fonctions),
+    ...new Set(postesCAP),
+  ]
+
+  return {
+    title: {
+      default: 'CAP - Cercle des Administrateurs Publics du Sénégal',
+      template: '%s | CAP Sénégal',
+    },
+    description: 'Le Cercle des Administrateurs Publics (CAP) rassemble les présidents des conseils d\'administration, de surveillance et d\'orientation des entités du secteur parapublic sénégalais. Un cadre de réflexion, d\'échanges et d\'impulsion d\'idées au service de la modernisation de l\'administration sénégalaise.',
+    keywords: allKeywords,
+    authors: [{ name: 'Cercle des Administrateurs Publics', url: 'https://cap-senegal.org' }],
+    creator: 'DIGISSOL',
+    publisher: 'CAP Sénégal',
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true },
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'fr_SN',
+      url: 'https://cap-senegal.org',
+      siteName: 'CAP - Cercle des Administrateurs Publics',
+      title: 'CAP - Cercle des Administrateurs Publics du Sénégal',
+      description: 'Le Cercle des Administrateurs Publics rassemble les présidents des organes délibérants du secteur parapublic sénégalais pour promouvoir l\'excellence de la gouvernance publique.',
+      images: [{ url: 'https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png', width: 1200, height: 630, alt: 'CAP Sénégal' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'CAP - Cercle des Administrateurs Publics du Sénégal',
+      description: 'Le Cercle des Administrateurs Publics du Sénégal — gouvernance, performance et modernisation du secteur parapublic.',
+      images: ['https://fc3ao21hfkjktvli.public.blob.vercel-storage.com/cap-logoQ-nP1BOFyniyLA4pkjl2P3xsiEJ1ooZ7.png'],
+    },
+  }
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
