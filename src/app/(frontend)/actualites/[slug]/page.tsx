@@ -257,9 +257,6 @@ export default async function ArticleDetailPage({
             {/* Documents associés */}
             {documents.length > 0 && (
               <div className="mt-12 pt-8 border-t border-gray-200">
-                <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-500">
-                  Documents associés
-                </h2>
                 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   {documents.map(doc => (
                     <a
