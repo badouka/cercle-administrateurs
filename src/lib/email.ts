@@ -1,12 +1,12 @@
 import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
-  host:   'smtp.gmail.com',
-  port:   587,
-  secure: false,
+  host:   'mail.cercle-administrateurs.sn',
+  port:   465,
+  secure: true,
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
   },
 })
 
@@ -14,7 +14,7 @@ export const GESTIONNAIRE_EMAIL = 'alla.faye@digissol.com'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://cap-senegal.org'
 
-const FROM_EMAIL = process.env.GMAIL_USER || 'allafaye2901@gmail.com'
+const FROM_EMAIL = process.env.SMTP_USER || 'noreply@cercle-administrateurs.sn'
 
 function emailTemplate(title: string, contentHtml: string): string {
   return `
