@@ -77,7 +77,6 @@ export async function updateProfile(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const poste: any = {
-      posteCap:                data.posteCap?.trim()                || undefined,
       fonctionProfessionnelle: data.fonctionProfessionnelle?.trim() || undefined,
       organisme:               data.organisme?.trim()               ?? '',
       siteOrganisme:           data.siteOrganisme?.trim()           || undefined,

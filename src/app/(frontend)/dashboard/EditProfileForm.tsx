@@ -14,24 +14,6 @@ interface Props {
 const INPUT_CLS =
   'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
 
-const SELECT_CLS =
-  'block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-black bg-white focus:border-black focus:outline-none focus:ring-1 focus:ring-black'
-
-const FONCTIONS = [
-  "Président d'honneur",
-  'Président',
-  'Vice-Président',
-  'Secrétaire général',
-  'Secrétaire général adjoint',
-  'Trésorier',
-  'Trésorier Adjoint',
-  'Présidente Commission Actions Sociales',
-  'Présidente Commission Communication',
-  'Président Commission Stratégie et Vulgarisation des Politiques Publiques',
-  'Président Commission Renforcement de Capacités',
-  'Membre',
-]
-
 const LOGO_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
 const LOGO_MAX  = 2 * 1024 * 1024
 
@@ -50,7 +32,7 @@ export function EditProfileForm({ membre }: Props) {
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState<string | null>(null)
   const [saved, setSaved]           = useState(false)
-  const [posteCap, setPosteCap]     = useState(membre.poste?.posteCap ?? '')
+  const posteCap                    = membre.poste?.posteCap ?? ''
   const [logoFile, setLogoFile]     = useState<File | null>(null)
   const [logoError, setLogoError]   = useState<string | null>(null)
 
@@ -104,7 +86,6 @@ export function EditProfileForm({ membre }: Props) {
       prenom:                  fd.get('prenom')                  as string,
       nom:                     fd.get('nom')                     as string,
       biographie:              bioEditorRef.current?.getHTML()   ?? '',
-      posteCap:                fd.get('posteCap')                as string,
       fonctionProfessionnelle: fd.get('fonctionProfessionnelle') as string,
       organisme:               fd.get('organisme')               as string,
       siteOrganisme:           fd.get('siteOrganisme')           as string,
@@ -258,18 +239,12 @@ export function EditProfileForm({ membre }: Props) {
             <label htmlFor="posteCap" className="block text-xs font-medium text-gray-600 mb-1">
               Poste au CAP
             </label>
-            <select
-              id="posteCap"
-              name="posteCap"
-              value={posteCap}
-              onChange={e => setPosteCap(e.target.value)}
-              className={SELECT_CLS}
-            >
-              <option value="">— Sélectionnez un poste —</option>
-              {FONCTIONS.map(f => (
-                <option key={f} value={f}>{f}</option>
-              ))}
-            </select>
+            <p className="rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-500">
+              {posteCap || '—'}
+            </p>
+            <p className="mt-1 text-xs text-gray-400">
+              Ce champ est géré par l'administration et ne peut pas être modifié.
+            </p>
           </div>
 
           <div>

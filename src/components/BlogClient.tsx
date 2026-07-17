@@ -61,8 +61,8 @@ export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
               onClick={() => setFiltre(cat)}
               className={
                 actif
-                  ? 'cursor-pointer rounded-full border border-[#1a7a3a] bg-[#1a7a3a] px-5 py-2 text-sm font-semibold text-white transition-all'
-                  : 'cursor-pointer rounded-full border border-[#14110B]/20 bg-transparent px-5 py-2 text-sm font-semibold text-[#14110B]/60 transition-all hover:border-[#1a7a3a]/40 hover:text-[#14110B]'
+                  ? 'cursor-pointer rounded-full border border-[#1a7a3a] bg-[#1a7a3a] px-5 py-2 text-sm font-semibold capitalize text-white transition-all'
+                  : 'cursor-pointer rounded-full border border-[#14110B]/20 bg-transparent px-5 py-2 text-sm font-semibold capitalize text-[#14110B]/60 transition-all hover:border-[#1a7a3a]/40 hover:text-[#14110B]'
               }
             >
               {cat === 'tous' ? 'Tous' : cat}

@@ -95,7 +95,7 @@ export function ActualitesClient({ posts }: { posts: ActualitePost[] }) {
             return (
               <div
                 key={p.id}
-                className="overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-all hover:border-[#C8A24A]/30 hover:shadow-md"
+                className="overflow-hidden rounded-2xl border border-[#14110B]/10 bg-white transition-all hover:border-[#C8A24A] hover:shadow-md"
               >
                 <Link href={`/actualites/${p.slug || p.id}`} className="block cursor-pointer">
                   <div className="relative aspect-[16/10] overflow-hidden bg-[#EEF6F1]">

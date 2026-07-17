@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 export const GESTIONNAIRE_EMAIL = 'alla.faye@digissol.com'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://cap-senegal.org'
+const SITE_URL = 'https://cercle-administrateurs.sn/'
 
 const FROM_EMAIL = process.env.SMTP_USER || 'noreply@cercle-administrateurs.sn'
 
@@ -38,7 +38,9 @@ function emailTemplate(title: string, contentHtml: string): string {
                 </tr>
                 <tr>
                   <td style="padding:20px 32px;border-top:1px solid #eeeeee;">
-                    <a href="${SITE_URL}" style="color:#000000;font-size:13px;text-decoration:underline;">${SITE_URL}</a>
+                    <p style="color:#888; font-size:12px; text-align:center; margin-top:20px;">
+                      Ceci est un mail automatique, merci de ne pas y répondre.
+                    </p>
                   </td>
                 </tr>
               </table>
@@ -72,7 +74,7 @@ export async function sendWelcomeEmail(prenom: string, nom: string, email: strin
       <a href="${SITE_URL}" style="color:#000000;font-weight:bold;">Visiter le site du CAP</a>
     </p>
   `)
-  return send(email, 'Bienvenue au Cercle des Administrateurs Publics', html)
+  return send(email, 'Inscription - Cercle des Administrateurs Publics', html)
 }
 
 // ── Gestionnaire : notification de nouvelle demande d'adhésion ─────────────────
@@ -105,7 +107,7 @@ export async function sendNewMemberNotification(
 // ── Membre : email d'approbation ────────────────────────────────────────────────
 
 export async function sendApprovalEmail(prenom: string, nom: string, email: string) {
-  const html = emailTemplate('Votre adhésion a été approuvée', `
+  const html = emailTemplate('Félicitation', `
     <p>Bonjour ${prenom} ${nom},</p>
     <p>
       Bonne nouvelle ! Votre adhésion au Cercle des Administrateurs Publics a été
@@ -119,7 +121,7 @@ export async function sendApprovalEmail(prenom: string, nom: string, email: stri
       <a href="${SITE_URL}/dashboard" style="color:#000000;font-weight:bold;">Accéder à mon espace membre</a>
     </p>
   `)
-  return send(email, 'Votre adhésion au CAP a été approuvée', html)
+  return send(email, 'Inscription approuvée - Cercle des Administrateurs Publics', html)
 }
 
 // ── Membre : email de rejet ──────────────────────────────────────────────────────
