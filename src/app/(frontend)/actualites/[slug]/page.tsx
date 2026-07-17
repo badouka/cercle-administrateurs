@@ -228,7 +228,7 @@ export default async function ArticleDetailPage({
 
             {/* Catégorie + date */}
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-black px-3 py-1 text-xs font-semibold text-white">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#C8A24A] px-3 py-1 text-xs font-semibold text-[#14110B]">
                 <Tag size={10} />
                 {catLabel}
               </span>
