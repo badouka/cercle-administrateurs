@@ -257,7 +257,7 @@ export default async function ArticleDetailPage({
             {/* Documents associés */}
             {documents.length > 0 && (
               <div className="mt-12 pt-8 border-t border-gray-200">
-                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
                   {documents.map(doc => (
                     <a
                       key={doc.id ?? doc.url}
