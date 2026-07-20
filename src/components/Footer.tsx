@@ -79,7 +79,7 @@ export function Footer() {
             <div className="flex flex-col gap-3 text-sm text-[#14110B]/70">
               <div className="flex items-start gap-2">
                 <MapPin size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
-                <span>Dakar, Sénégal</span>
+                <span>Cabinet Maitre Bamba Cissé, 38 Avenue Malick SY Dakar</span>
               </div>
               <div className="flex items-start gap-2">
                 <Mail size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
