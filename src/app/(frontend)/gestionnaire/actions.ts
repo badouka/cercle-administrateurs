@@ -5,7 +5,7 @@ import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import config from '@payload-config'
 import type { User } from '@/payload-types'
-import { sendApprovalEmail, sendRejectionEmail } from '@/lib/email'
+import { sendApprovalEmail, sendRejectionEmail, sendContactMessage } from '@/lib/email'
 
 type ActionResult = { success: true } | { error: string }
 type AuthOK       = { payload: BasePayload; user: User }
@@ -173,6 +173,37 @@ export async function reactivateMembre(membreId: number): Promise<ActionResult> 
     return { success: true }
   } catch (err) {
     return { error: err instanceof Error ? err.message : 'Erreur lors de la réactivation' }
+  }
+}
+
+// ── Formulaire de contact ────────────────────────────────────────────────────
+
+export async function envoyerMessageContact(data: {
+  prenom: string
+  nom: string
+  email: string
+  telephone?: string
+  message: string
+}): Promise<ActionResult> {
+  const prenom    = data.prenom.trim()
+  const nom       = data.nom.trim()
+  const email     = data.email.trim()
+  const telephone = data.telephone?.trim() || null
+  const message   = data.message.trim()
+
+  if (!prenom)  return { error: 'Le prénom est requis' }
+  if (!nom)     return { error: 'Le nom est requis' }
+  if (!email)   return { error: "L'email est requis" }
+  if (!message) return { error: 'Le message est requis' }
+
+  const nomComplet     = `${prenom} ${nom}`
+  const messageComplet = telephone ? `Téléphone : ${telephone}\n\n${message}` : message
+
+  try {
+    await sendContactMessage(nomComplet, email, messageComplet)
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Erreur lors de l'envoi du message" }
   }
 }
 
