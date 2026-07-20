@@ -89,7 +89,7 @@ function Eyebrow({ children }: { children: string }) {
   return (
     <div className="flex items-center gap-3">
       <span className="h-0.5 w-8 bg-[#C8A24A]" />
-      <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
+      <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
         {children}
       </span>
     </div>
@@ -101,7 +101,7 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; 
     <div className="mx-auto max-w-2xl text-center">
       <div className="flex items-center justify-center gap-3">
         <span className="h-0.5 w-8 bg-[#C8A24A]" />
-        <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
+        <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
           {eyebrow}
         </span>
         <span className="h-0.5 w-8 bg-[#C8A24A]" />
@@ -145,7 +145,7 @@ export default async function AProposPage() {
             {/* Gauche */}
             <div className="relative pl-6">
               <span className="absolute left-0 top-2 bottom-2 w-0.5 bg-gradient-to-b from-[#1a7a3a] to-[#C8A24A]" />
-              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
+              <p className="mb-4 text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
                 Le secteur parapublic
               </p>
               <p className="font-serif text-2xl leading-snug text-[#083A1E]">{INTRO_LEAD}</p>
@@ -178,7 +178,7 @@ export default async function AProposPage() {
                 <Award size={28} />
               </div>
               <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
+                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
                   Un diagnostic lucide
                 </p>
                 <h3 className="mb-4 font-serif text-2xl text-[#062812]">{DIAGNOSTIC_TITRE}</h3>
@@ -251,9 +251,9 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* ── 6. Le cadre ─────────────────────────────────────────────────────── */}
+      {/* ── 6. Le cadre  */}
       <section className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-7xl px-6X ">
           <SectionHead
             eyebrow="Le cadre"
             title="Une réforme posée, une mise en œuvre à accomplir"

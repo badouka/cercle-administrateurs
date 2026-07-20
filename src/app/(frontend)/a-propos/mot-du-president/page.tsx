@@ -126,7 +126,7 @@ export default async function MotDuPresidentPage() {
             <div>
               <div className="flex items-center gap-3">
                 <span className="h-0.5 w-8 bg-[#C8A24A]" />
-                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#C8A24A]">
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
                   Le mot du président
                 </span>
               </div>

@@ -83,8 +83,8 @@ export function Footer() {
               </div>
               <div className="flex items-start gap-2">
                 <Mail size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
-                <a href="mailto:contact@cap-senegal.org" className="transition-colors hover:text-[#1a7a3a]">
-                  contact@cap-senegal.org
+                <a href="mailto:contact@cercle-administrateurs.sn" className="transition-colors hover:text-[#1a7a3a]">
+                  contact@cercle-administrateurs.sn
                 </a>
               </div>
               <div className="flex items-start gap-2">

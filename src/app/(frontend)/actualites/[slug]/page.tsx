@@ -290,7 +290,7 @@ export default async function ArticleDetailPage({
               <div className="relative z-10">
                 {/* En-tête */}
                 <div className="mb-4 flex items-center gap-2">
-                  <span className="h-0.5 w-6 bg-[#C8A24A]" />
+                  <span className="h-0.5 w-8 bg-[#C8A24A]" />
                   <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#1a7a3a]">
                     À lire aussi
                   </span>

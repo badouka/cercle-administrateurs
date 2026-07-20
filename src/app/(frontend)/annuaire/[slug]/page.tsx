@@ -162,7 +162,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
         <section className="mt-10 px-1">
           <div className="flex items-center gap-3 mb-5">
             <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A]">Biographie</span>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">Biographie</span>
           </div>
           {hasBio ? (
             <div className="prose prose-sm max-w-none article-prose text-[#14110B]/70 leading-relaxed text-justify">

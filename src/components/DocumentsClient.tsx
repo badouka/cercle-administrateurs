@@ -80,7 +80,7 @@ export function DocumentsClient({
     <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[250px_1fr]">
       {/* ── Sidebar filtres ─────────────────────────────────────────────── */}
       <aside className="rounded-xl border border-[#14110B]/10 bg-white p-5 lg:sticky lg:top-24">
-        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#C8A24A]">Filtres</p>
+        <p className="mb-4 font-mono text-xs uppercase tracking-widest text-[#C8A24A] font-bold">Filtres</p>
 
         <p className="mb-2 text-[10px] font-bold uppercase text-[#14110B]/40">Catégorie</p>
         <div className="flex flex-col gap-1">

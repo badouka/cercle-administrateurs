@@ -610,7 +610,7 @@ export default async function HomePage() {
           <div className="flex justify-between items-end mb-10">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="block w-10 h-0.5 bg-[#C8A24A]"></span>
+                <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">MEMBRES BUREAU</span>
               </div>
               <p className="text-[#14110B]/60 mt-1 text-sm">Les membres du bureau exécutif du Cercle des Administrateurs Publics.</p>
