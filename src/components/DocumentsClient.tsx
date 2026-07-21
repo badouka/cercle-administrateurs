@@ -42,12 +42,11 @@ export function DocumentsClient({
 }) {
   const [q, setQ] = useState('')
   const [activeCategorie, setActiveCategorie] = useState('all')
-  const [activeAcces, setActiveAcces] = useState<'public' | 'membres'>('public')
 
-  // Filtre par accès : "public" → publics seulement ; "membres" → tous.
+  // Connecté → tous les documents ; non connecté → publics uniquement.
   const parAcces = useMemo(
-    () => documents.filter(d => (activeAcces === 'public' ? d.acces === 'public' : true)),
-    [documents, activeAcces],
+    () => documents.filter(d => (isLoggedIn ? true : d.acces === 'public')),
+    [documents, isLoggedIn],
   )
 
   const counts = useMemo(() => {
@@ -71,10 +70,6 @@ export function DocumentsClient({
     }`
   const countBadge = (active: boolean) =>
     `text-xs px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-[#FAF8F3] text-[#14110B]/40'}`
-  const accesBtn = (active: boolean) =>
-    `flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
-      active ? 'bg-[#EEF6F1] font-semibold text-[#1a7a3a]' : 'text-[#14110B]/60 hover:bg-[#FAF8F3]'
-    }`
 
   return (
     <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[250px_1fr]">
@@ -102,18 +97,6 @@ export function DocumentsClient({
               </button>
             )
           })}
-        </div>
-
-        <div className="my-4 border-t border-[#14110B]/10" />
-
-        <p className="mb-2 text-[10px] font-bold uppercase text-[#14110B]/40">Accès</p>
-        <div className="flex flex-col gap-1">
-          <button type="button" onClick={() => setActiveAcces('public')} className={accesBtn(activeAcces === 'public')}>
-            🌐 Public
-          </button>
-          <button type="button" onClick={() => setActiveAcces('membres')} className={accesBtn(activeAcces === 'membres')}>
-            🔒 Membres
-          </button>
         </div>
       </aside>
 
