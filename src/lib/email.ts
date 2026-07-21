@@ -146,14 +146,17 @@ export async function sendRejectionEmail(prenom: string, nom: string, email: str
 
 // ── Gestionnaire : message du formulaire de contact ─────────────────────────────
 
-export async function sendContactMessage(nom: string, email: string, message: string) {
+export async function sendContactMessage(
+  { nom, email, objet, message }: { nom: string; email: string; objet: string; message: string },
+) {
   const html = emailTemplate('Nouveau message de contact', `
     <p>Un nouveau message a été envoyé depuis le formulaire de contact du site du CAP :</p>
     <ul style="padding-left:20px;">
       <li><strong>Nom :</strong> ${nom}</li>
       <li><strong>Email :</strong> ${email}</li>
+      <li><strong>Objet :</strong> ${objet}</li>
     </ul>
     <p style="white-space:pre-wrap;">${message}</p>
   `)
-  return send(GESTIONNAIRE_EMAIL, `Message de contact — ${nom}`, html, email)
+  return send(GESTIONNAIRE_EMAIL, `Message de contact — ${objet}`, html, email)
 }

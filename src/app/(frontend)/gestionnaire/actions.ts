@@ -200,7 +200,12 @@ export async function envoyerMessageContact(data: {
   const messageComplet = telephone ? `Téléphone : ${telephone}\n\n${message}` : message
 
   try {
-    await sendContactMessage(nomComplet, email, messageComplet)
+    await sendContactMessage({
+      nom: nomComplet,
+      email,
+      objet: 'Message de contact',
+      message: messageComplet,
+    })
     return { success: true }
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Erreur lors de l'envoi du message" }

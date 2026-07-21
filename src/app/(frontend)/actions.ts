@@ -18,7 +18,12 @@ export async function envoyerMessageContact(
   }
 
   try {
-    await sendContactMessage(nom.trim(), email.toLowerCase().trim(), message.trim())
+    await sendContactMessage({
+      nom: nom.trim(),
+      email: email.toLowerCase().trim(),
+      objet: 'Message de contact',
+      message: message.trim(),
+    })
     return { success: true }
   } catch (err) {
     console.error('[envoyerMessageContact]', err)
