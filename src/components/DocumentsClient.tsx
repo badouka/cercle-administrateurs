@@ -147,23 +147,6 @@ export function DocumentsClient({
                       <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${badge.cls}`}>
                         {badge.label}
                       </span>
-                      {d.acces === 'membres' &&
-                        (isLoggedIn ? (
-                          d.filename && (
-                            <a
-                              href={`/api/media/file/${d.filename}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 bg-[#1a7a3a] text-white px-2.5 py-1 rounded-lg text-[11px] font-semibold hover:bg-[#C8A24A] transition-colors"
-                            >
-                              <Download size={11} /> Télécharger
-                            </a>
-                          )
-                        ) : (
-                          <span className="inline-flex items-center gap-1 bg-[#FAF8F3] text-[#14110B]/40 px-2.5 py-1 rounded-lg text-[11px] border border-[#14110B]/15">
-                            <Lock size={11} /> Membres
-                          </span>
-                        ))}
                     </div>
 
                     <h3 className="mt-1 line-clamp-2 font-serif text-sm font-semibold text-[#14110B]">
