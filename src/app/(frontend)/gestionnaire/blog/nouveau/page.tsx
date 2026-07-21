@@ -8,7 +8,7 @@ import config from '@payload-config'
 import { ArrowLeft, PlusCircle } from 'lucide-react'
 import { BlogForm } from '../BlogForm'
 
-export const metadata: Metadata = { title: 'Nouvel article de blog' }
+export const metadata: Metadata = { title: 'Nouvel blog' }
 
 export default async function NouvelArticleBlogPage() {
   const [payload, headers] = await Promise.all([getPayload({ config }), getHeaders()])
@@ -45,7 +45,7 @@ export default async function NouvelArticleBlogPage() {
             <PlusCircle size={20} className="text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-black">Nouvel article</h1>
+            <h1 className="text-2xl font-bold text-black">Nouvel blog</h1>
             <p className="text-sm text-gray-500">Rédigez et publiez un article de blog sur la plateforme CAP.</p>
           </div>
         </div>

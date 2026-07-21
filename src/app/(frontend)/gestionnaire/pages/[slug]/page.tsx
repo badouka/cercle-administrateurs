@@ -12,6 +12,9 @@ import { PageEditor } from './PageEditor'
 interface RawPage {
   id:      number
   titre:   string
+  description?: string | null
+  extrait?:     string | null
+  citation?:    string | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contenu?: any
   statut:  'brouillon' | 'publie'
@@ -93,6 +96,11 @@ export default async function ModifierPagePage({
       <div className="rounded-2xl border border-[#E5E5E5] bg-white p-6 sm:p-8">
         <PageEditor
           slug={slug}
+          publicPath={publicPath}
+          initialTitre={page.titre}
+          initialDescription={page.description ?? ''}
+          initialExtrait={page.extrait ?? ''}
+          initialCitation={page.citation ?? ''}
           initialContent={htmlContent}
           initialStatut={page.statut}
         />

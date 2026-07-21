@@ -17,7 +17,7 @@ export function ContactForm() {
     setStatus('loading')
     setErreur('')
 
-    const result = await envoyerMessageContact({ nom, email, message })
+    const result = await envoyerMessageContact({nom, email, message })
 
     if ('error' in result) {
       setStatus('error')

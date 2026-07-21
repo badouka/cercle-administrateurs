@@ -71,7 +71,7 @@ export default async function ModifierArticleBlogPage({
           </div>
           <div>
             <h1 className="text-2xl font-bold text-black truncate max-w-lg">{post.titre}</h1>
-            <p className="text-sm text-gray-500">Modifier cet article</p>
+            <p className="text-sm text-gray-500">Modifier cet blog</p>
           </div>
         </div>
       </div>

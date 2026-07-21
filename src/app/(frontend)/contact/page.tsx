@@ -45,11 +45,11 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-3">
                     <MapPin size={16} className="text-[#1a7a3a] flex-none" />
-                    <span className="text-sm text-[#14110B]/70">Dakar, Sénégal</span>
+                    <span className="text-sm text-[#14110B]/70">Cabinet Maitre Bamba Cissé, 38 Avenue Malick SY Dakar</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Mail size={16} className="text-[#1a7a3a] flex-none" />
-                    <a href="mailto:contact@cap-senegal.org" className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">contact@cap-senegal.org</a>
+                    <a href="mailto:contact@cap-senegal.org" className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">contact@cercle-administrateurs.sn</a>
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone size={16} className="text-[#1a7a3a] flex-none" />
@@ -72,7 +72,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Card horaires */}
+              {/* Card horaires 
               <div className="bg-[#062812] rounded-2xl p-8 relative overflow-hidden">
                 <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(143,185,168,0.08) 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
                 <div className="relative">
@@ -83,7 +83,7 @@ export default function ContactPage() {
                     <p className="text-white/70 text-sm">Samedi : 9h00 - 13h00</p>
                   </div>
                 </div>
-              </div>
+              </div>*/}
             </div>
 
           </div>

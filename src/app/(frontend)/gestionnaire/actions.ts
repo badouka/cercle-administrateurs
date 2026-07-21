@@ -294,6 +294,9 @@ export async function updatePageAction(
   const contenuJson = formData.get('contenuJson') as string | null
   const statut      = formData.get('statut') as 'brouillon' | 'publie' | null
   const titre       = (formData.get('titre') as string | null)?.trim()
+  const description = formData.get('description') as string | null
+  const extrait     = formData.get('extrait') as string | null
+  const citation    = formData.get('citation') as string | null
 
   if (!contenuJson) return { error: 'Le contenu est requis' }
 
@@ -313,8 +316,11 @@ export async function updatePageAction(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: Record<string, any> = { contenu }
-    if (statut) data.statut = statut
-    if (titre)  data.titre  = titre
+    if (statut)              data.statut      = statut
+    if (titre)               data.titre       = titre
+    if (description !== null) data.description = description
+    if (extrait     !== null) data.extrait     = extrait
+    if (citation    !== null) data.citation    = citation
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (ctx.payload.update as any)({

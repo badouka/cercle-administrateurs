@@ -47,6 +47,27 @@ export const Pages: CollectionConfig = {
       },
     },
     {
+      name: 'description',
+      type: 'textarea',
+      required: false,
+      label: 'Description',
+      admin: { description: 'Sous-titre ou résumé court de la page.' },
+    },
+    {
+      name: 'extrait',
+      type: 'textarea',
+      required: false,
+      label: 'Extrait',
+      admin: { description: "Texte d'introduction affiché en tête de page." },
+    },
+    {
+      name: 'citation',
+      type: 'textarea',
+      required: false,
+      label: 'Citation',
+      admin: { description: "Citation mise en avant (utilisée sur la page « Mot du Président »)." },
+    },
+    {
       name: 'contenu',
       type: 'richText',
       label: 'Contenu',

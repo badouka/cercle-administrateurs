@@ -460,6 +460,18 @@ export interface Page {
    * Identifiant unique : 'a-propos', 'mot-du-president', 'partenaires'
    */
   slug: string;
+  /**
+   * Sous-titre ou résumé court de la page.
+   */
+  description?: string | null;
+  /**
+   * Texte d'introduction affiché en tête de page.
+   */
+  extrait?: string | null;
+  /**
+   * Citation mise en avant (utilisée sur la page « Mot du Président »).
+   */
+  citation?: string | null;
   contenu?: {
     root: {
       type: string;
@@ -833,6 +845,9 @@ export interface MediathequeSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   titre?: T;
   slug?: T;
+  description?: T;
+  extrait?: T;
+  citation?: T;
   contenu?: T;
   statut?: T;
   updatedAt?: T;
