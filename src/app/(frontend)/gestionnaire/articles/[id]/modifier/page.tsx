@@ -44,6 +44,20 @@ export default async function ModifierArticlePage({
   const image       = typeof post.image === 'object' && post.image ? (post.image as Media) : null
   const htmlContent = lexicalToHtml(post.contenu)
 
+  const galerie = (Array.isArray(post.images) ? post.images : []).flatMap(it => {
+    const m = it.image && typeof it.image === 'object' ? (it.image as Media) : null
+    return m?.url ? [{ id: m.id, url: m.url }] : []
+  })
+
+  const documents = (Array.isArray(post.documents) ? post.documents : []).map(d => {
+    const f = d.fichier && typeof d.fichier === 'object' ? (d.fichier as Media) : null
+    return {
+      titre:       d.titre,
+      fichierId:   f ? f.id : (typeof d.fichier === 'number' ? d.fichier : 0),
+      fichierName: f?.filename ?? undefined,
+    }
+  })
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
 
@@ -77,6 +91,9 @@ export default async function ModifierArticlePage({
             statut:    post.statut,
             imageId:   image?.id,
             imageUrl:  image?.url ?? undefined,
+            publie_le: post.publie_le ? post.publie_le.slice(0, 10) : undefined,
+            galerie,
+            documents,
           }}
         />
       </div>

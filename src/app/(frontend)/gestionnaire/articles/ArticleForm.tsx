@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Upload, X, Save, Globe, AlertCircle } from 'lucide-react'
+import { Upload, X, Save, Globe, AlertCircle, Plus, Trash2, FileText } from 'lucide-react'
 import { createPostAction, updatePostAction, uploadMedia } from '../actions'
 import { ArticleEditor, type ArticleEditorRef } from '@/components/editor/ArticleEditor'
 import { tiptapToLexical } from '@/lib/tiptap-to-lexical'
@@ -16,6 +16,9 @@ export interface ArticleFormInitial {
   imageId?:   number
   imageUrl?:  string
   imageAlt?:  string
+  publie_le?: string   // 'YYYY-MM-DD'
+  galerie?:   { id: number; url: string }[]
+  documents?: { titre: string; fichierId: number; fichierName?: string }[]
 }
 
 interface Props {
@@ -23,18 +26,33 @@ interface Props {
   initialValues?: Partial<ArticleFormInitial>
 }
 
+interface GalerieItem { key: string; existingId?: number; file?: File; preview: string }
+interface DocItem     { key: string; titre: string; existingId?: number; existingName?: string; file?: File }
+
 export function ArticleForm({ postId, initialValues }: Props) {
   const router     = useRouter()
   const editorRef  = useRef<ArticleEditorRef>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const galerieInputRef = useRef<HTMLInputElement>(null)
+  const keyCounter = useRef(0)
+  const newKey = () => `item-${keyCounter.current++}`
 
   const [titre,     setTitre]     = useState(initialValues?.titre     ?? '')
   const [categorie, setCategorie] = useState<'actualites' | 'ateliers_seminaires'>(
     initialValues?.categorie ?? 'actualites',
   )
+  const [publieLe, setPublieLe] = useState(initialValues?.publie_le ?? '')
   const [imageFile,       setImageFile]       = useState<File | null>(null)
   const [imagePreview,    setImagePreview]    = useState<string | null>(initialValues?.imageUrl ?? null)
   const [existingImageId, setExistingImageId] = useState<number | undefined>(initialValues?.imageId)
+  const [galerie, setGalerie] = useState<GalerieItem[]>(() =>
+    (initialValues?.galerie ?? []).map((g, i) => ({ key: `g-init-${i}`, existingId: g.id, preview: g.url })),
+  )
+  const [documents, setDocuments] = useState<DocItem[]>(() =>
+    (initialValues?.documents ?? []).map((d, i) => ({
+      key: `d-init-${i}`, titre: d.titre, existingId: d.fichierId, existingName: d.fichierName,
+    })),
+  )
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState<string | null>(null)
 
@@ -54,6 +72,37 @@ export function ArticleForm({ postId, initialValues }: Props) {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
+  function handleGalerieChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (files.length) {
+      setGalerie(prev => [
+        ...prev,
+        ...files.map(f => ({ key: newKey(), file: f, preview: URL.createObjectURL(f) })),
+      ])
+    }
+    if (galerieInputRef.current) galerieInputRef.current.value = ''
+  }
+
+  function removeGalerie(key: string) {
+    setGalerie(prev => prev.filter(g => g.key !== key))
+  }
+
+  function addDocument() {
+    setDocuments(prev => [...prev, { key: newKey(), titre: '' }])
+  }
+
+  function removeDocument(key: string) {
+    setDocuments(prev => prev.filter(d => d.key !== key))
+  }
+
+  function setDocumentTitre(key: string, titre: string) {
+    setDocuments(prev => prev.map(d => (d.key === key ? { ...d, titre } : d)))
+  }
+
+  function setDocumentFile(key: string, file: File | null) {
+    setDocuments(prev => prev.map(d => (d.key === key ? { ...d, file: file ?? undefined } : d)))
+  }
+
   async function handleSubmit(targetStatut: 'brouillon' | 'publie') {
     if (!titre.trim()) { setError('Le titre est requis.'); return }
     if (editorRef.current?.isEmpty()) { setError('Le contenu est requis.'); return }
@@ -62,29 +111,61 @@ export function ArticleForm({ postId, initialValues }: Props) {
     setLoading(true)
 
     try {
+      // ── Image de couverture ──
       let imageId = existingImageId
-
       if (imageFile) {
         const fd = new FormData()
         fd.append('file', imageFile)
         fd.append('alt', titre.trim())
         const uploadResult = await uploadMedia(fd)
-        if ('error' in uploadResult) {
-          setError(uploadResult.error)
-          setLoading(false)
-          return
-        }
+        if ('error' in uploadResult) { setError(uploadResult.error); setLoading(false); return }
         imageId = uploadResult.id
+      }
+
+      // ── Galerie d'images ──
+      const imageIds: number[] = []
+      for (const g of galerie) {
+        if (g.file) {
+          const fd = new FormData()
+          fd.append('file', g.file)
+          fd.append('alt', titre.trim())
+          const r = await uploadMedia(fd)
+          if ('error' in r) { setError(r.error); setLoading(false); return }
+          imageIds.push(r.id)
+        } else if (g.existingId) {
+          imageIds.push(g.existingId)
+        }
+      }
+
+      // ── Documents associés ──
+      const docs: { titre: string; fichierId: number }[] = []
+      for (const d of documents) {
+        const t = d.titre.trim()
+        if (!t) { setError('Chaque document associé doit avoir un titre.'); setLoading(false); return }
+        let fichierId = d.existingId
+        if (d.file) {
+          const fd = new FormData()
+          fd.append('file', d.file)
+          fd.append('alt', t)
+          const r = await uploadMedia(fd)
+          if ('error' in r) { setError(r.error); setLoading(false); return }
+          fichierId = r.id
+        }
+        if (!fichierId) { setError(`Le document « ${t} » doit avoir un fichier.`); setLoading(false); return }
+        docs.push({ titre: t, fichierId })
       }
 
       const lexical = tiptapToLexical(editorRef.current!.getJSON())
 
       const fd = new FormData()
-      fd.append('titre',       titre.trim())
-      fd.append('contenuJson', JSON.stringify(lexical))
-      fd.append('categorie',   categorie)
-      fd.append('statut',      targetStatut)
-      if (imageId) fd.append('imageId', String(imageId))
+      fd.append('titre',         titre.trim())
+      fd.append('contenuJson',   JSON.stringify(lexical))
+      fd.append('categorie',     categorie)
+      fd.append('statut',        targetStatut)
+      fd.append('imagesJson',    JSON.stringify(imageIds))
+      fd.append('documentsJson', JSON.stringify(docs))
+      if (imageId)  fd.append('imageId',   String(imageId))
+      if (publieLe) fd.append('publie_le', publieLe)
 
       const result = postId
         ? await updatePostAction(postId, fd)
@@ -142,7 +223,21 @@ export function ArticleForm({ postId, initialValues }: Props) {
         </select>
       </div>
 
-      {/* Image */}
+      {/* Date de publication */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-900 mb-1.5">
+          Date de publication
+        </label>
+        <input
+          type="date"
+          value={publieLe}
+          onChange={e => setPublieLe(e.target.value)}
+          className="block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-black focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+        />
+        <p className="mt-1 text-xs text-gray-400">Laissez vide pour utiliser la date de première publication automatique.</p>
+      </div>
+
+      {/* Image de couverture */}
       <div>
         <label className="block text-sm font-semibold text-gray-900 mb-1.5">
           Image de couverture
@@ -179,6 +274,99 @@ export function ArticleForm({ postId, initialValues }: Props) {
           className="hidden"
         />
         <p className="mt-1 text-xs text-gray-400">JPG, PNG, WebP — recommandé 1200×630 px</p>
+      </div>
+
+      {/* Galerie d'images */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-900 mb-1.5">
+          Galerie d&apos;images
+        </label>
+        {galerie.length > 0 && (
+          <div className="mb-3 grid grid-cols-3 sm:grid-cols-4 gap-3">
+            {galerie.map(g => (
+              <div key={g.key} className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={g.preview} alt="" className="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removeGalerie(g.key)}
+                  className="absolute top-1 right-1 rounded-full bg-black/70 p-1 text-white hover:bg-black transition-colors"
+                  title="Retirer"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => galerieInputRef.current?.click()}
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:border-black hover:text-black transition-colors"
+        >
+          <Plus size={15} />
+          Ajouter des images
+        </button>
+        <input
+          ref={galerieInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleGalerieChange}
+          className="hidden"
+        />
+        <p className="mt-1 text-xs text-gray-400">Images supplémentaires qui défilent dans l&apos;article.</p>
+      </div>
+
+      {/* Documents associés */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-900 mb-1.5">
+          Documents associés
+        </label>
+        {documents.length > 0 && (
+          <div className="mb-3 space-y-3">
+            {documents.map(d => (
+              <div key={d.key} className="flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-gray-200 p-3">
+                <input
+                  type="text"
+                  value={d.titre}
+                  onChange={e => setDocumentTitre(d.key, e.target.value)}
+                  placeholder="Titre du document"
+                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm text-black placeholder:text-gray-400 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+                />
+                <label className="inline-flex items-center gap-1.5 cursor-pointer rounded-lg border border-gray-300 px-3 py-2 text-xs text-gray-600 hover:border-black hover:text-black transition-colors">
+                  <FileText size={13} />
+                  <span className="max-w-[140px] truncate">
+                    {d.file?.name ?? d.existingName ?? 'Choisir un PDF'}
+                  </span>
+                  <input
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    onChange={e => setDocumentFile(d.key, e.target.files?.[0] ?? null)}
+                    className="hidden"
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={() => removeDocument(d.key)}
+                  className="inline-flex items-center justify-center rounded-lg p-2 text-gray-400 hover:text-red-600 transition-colors"
+                  title="Retirer ce document"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={addDocument}
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:border-black hover:text-black transition-colors"
+        >
+          <Plus size={15} />
+          Ajouter un document
+        </button>
+        <p className="mt-1 text-xs text-gray-400">Fichiers PDF téléchargeables depuis l&apos;article.</p>
       </div>
 
       {/* Contenu */}

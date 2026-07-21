@@ -11,7 +11,6 @@ import {
 } from 'lucide-react'
 import type { Media } from '@/payload-types'
 import { MembreActionButtons } from './MembreActionButtons'
-import { PostListActions } from './articles/PostListActions'
 
 export const metadata: Metadata = { title: 'Tableau de bord gestionnaire' }
 
@@ -22,6 +21,11 @@ function formatDate(d: string) {
 const CATEGORIES: Record<string, string> = {
   actualites:           'Actualités',
   ateliers_seminaires:  'Ateliers & Séminaires',
+}
+
+const CATEGORIE_BADGE: Record<string, string> = {
+  actualites:          'bg-blue-100 text-blue-700',
+  ateliers_seminaires: 'bg-amber-100 text-amber-700',
 }
 
 export default async function GestionnairePage() {
@@ -48,9 +52,9 @@ export default async function GestionnairePage() {
     }),
     payload.find({
       collection:     'posts',
-      sort:           '-updatedAt',
-      limit:          8,
       depth:          1,
+      limit:          100,
+      sort:           '-publie_le',
       overrideAccess: true,
     }),
     payload.find({
@@ -61,10 +65,8 @@ export default async function GestionnairePage() {
     }),
   ])
 
-  const isAdmin = role === 'admin'
-
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-5xl px-4 py-10 pt-24 sm:px-6 lg:px-8 space-y-8">
 
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -201,38 +203,64 @@ export default async function GestionnairePage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-[#F9F9F9]">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Image</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Titre</th>
                   <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Catégorie</th>
+                  <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
                   <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {(recentPosts as Post[]).map(post => (
-                  <tr key={post.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3.5 font-medium text-black max-w-[200px] truncate">{post.titre}</td>
-                    <td className="hidden sm:table-cell px-5 py-3.5 text-gray-500 text-xs">
-                      {CATEGORIES[post.categorie] ?? post.categorie}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        post.statut === 'publie'
-                          ? 'bg-black text-white'
-                          : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {post.statut === 'publie' ? 'Publié' : 'Brouillon'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-right">
-                      <PostListActions
-                        postId={post.id}
-                        titre={post.titre}
-                        statut={post.statut}
-                        isAdmin={isAdmin}
-                      />
-                    </td>
-                  </tr>
-                ))}
+                {(recentPosts as Post[]).map(post => {
+                  const image = post.image && typeof post.image === 'object' ? (post.image as Media) : null
+                  return (
+                    <tr key={post.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-5 py-3.5">
+                        {image?.url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={image.url}
+                            alt={image.alt ?? post.titre}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-lg bg-[#F5F5F5] flex items-center justify-center">
+                            <FileText size={16} className="text-gray-300" />
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-5 py-3.5 font-medium text-black max-w-[200px] truncate">{post.titre}</td>
+                      <td className="hidden sm:table-cell px-5 py-3.5">
+                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                          CATEGORIE_BADGE[post.categorie] ?? 'bg-gray-100 text-gray-600'
+                        }`}>
+                          {CATEGORIES[post.categorie] ?? post.categorie}
+                        </span>
+                      </td>
+                      <td className="hidden sm:table-cell px-5 py-3.5 text-gray-500 text-xs">
+                        {post.publie_le ? formatDate(post.publie_le) : '—'}
+                      </td>
+                      <td className="px-5 py-3.5">
+                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                          post.statut === 'publie'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-gray-100 text-gray-600'
+                        }`}>
+                          {post.statut === 'publie' ? 'Publié' : 'Brouillon'}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3.5 text-right">
+                        <Link
+                          href={`/admin/collections/posts/${post.id}`}
+                          className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-black transition-colors"
+                        >
+                          Modifier <ChevronRight size={14} />
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

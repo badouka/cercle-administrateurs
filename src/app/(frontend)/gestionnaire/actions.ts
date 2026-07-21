@@ -366,6 +366,28 @@ function textToLexical(text: string) {
   }
 }
 
+// ── Article : parseurs galerie / documents ─────────────────────────────────────
+
+function parseImages(json: string | null): { image: number }[] {
+  if (!json) return []
+  try {
+    const arr = JSON.parse(json) as number[]
+    return Array.isArray(arr) ? arr.filter(id => Number.isFinite(id)).map(id => ({ image: id })) : []
+  } catch { return [] }
+}
+
+function parseDocuments(json: string | null): { titre: string; fichier: number }[] {
+  if (!json) return []
+  try {
+    const arr = JSON.parse(json) as { titre: string; fichierId: number }[]
+    return Array.isArray(arr)
+      ? arr
+          .filter(d => d && d.titre && Number.isFinite(d.fichierId))
+          .map(d => ({ titre: d.titre, fichier: d.fichierId }))
+      : []
+  } catch { return [] }
+}
+
 // ── Article CRUD ──────────────────────────────────────────────────────────────
 
 export async function createPostAction(
@@ -379,6 +401,9 @@ export async function createPostAction(
   const categorie    = formData.get('categorie') as 'actualites' | 'ateliers_seminaires' | null
   const statut       = (formData.get('statut')   as 'brouillon' | 'publie' | null) ?? 'brouillon'
   const imageId      = formData.get('imageId')   ? Number(formData.get('imageId')) : undefined
+  const imagesJson    = formData.get('imagesJson')    as string | null
+  const documentsJson = formData.get('documentsJson') as string | null
+  const publieLe      = formData.get('publie_le')     as string | null
 
   if (!titre)       return { error: 'Le titre est requis' }
   if (!contenuJson) return { error: 'Le contenu est requis' }
@@ -387,6 +412,9 @@ export async function createPostAction(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let contenu: any
   try { contenu = JSON.parse(contenuJson) } catch { return { error: 'Contenu invalide' } }
+
+  const images    = parseImages(imagesJson)
+  const documents = parseDocuments(documentsJson)
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -399,6 +427,9 @@ export async function createPostAction(
         statut,
         auteur:    ctx.user.id,
         ...(imageId ? { image: imageId } : {}),
+        ...(images.length    ? { images }    : {}),
+        ...(documents.length ? { documents } : {}),
+        ...(publieLe ? { publie_le: new Date(publieLe).toISOString() } : {}),
       },
       overrideAccess: true,
     })
@@ -422,6 +453,9 @@ export async function updatePostAction(
   const categorie   = formData.get('categorie') as 'actualites' | 'ateliers_seminaires' | null
   const statut      = formData.get('statut')    as 'brouillon' | 'publie' | null
   const imageId     = formData.get('imageId')   ? Number(formData.get('imageId')) : undefined
+  const imagesJson    = formData.get('imagesJson')    as string | null
+  const documentsJson = formData.get('documentsJson') as string | null
+  const publieLe      = formData.get('publie_le')     as string | null
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: Record<string, any> = {}
@@ -430,6 +464,9 @@ export async function updatePostAction(
   if (categorie)   data.categorie = categorie
   if (statut)      data.statut    = statut
   if (imageId)     data.image     = imageId
+  if (imagesJson    !== null) data.images    = parseImages(imagesJson)
+  if (documentsJson !== null) data.documents = parseDocuments(documentsJson)
+  if (publieLe)               data.publie_le = new Date(publieLe).toISOString()
 
   try {
     if (ctx.user.role === 'gestionnaire') {
