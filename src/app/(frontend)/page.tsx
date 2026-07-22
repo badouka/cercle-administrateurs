@@ -200,9 +200,10 @@ export default async function HomePage() {
           <div className="grid items-center gap-16 lg:grid-cols-2">
             {/* Gauche */}
             <div className="animate-fade-left">
-              <p className="font-mono text-xs uppercase tracking-widest text-[#C8A24A] font-bold">
-                — Plateforme officielle du CAP
-              </p>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">PLATEFORME OFFICIELLE DU CAP</span>
+              </div>
               <h1 className="mt-4 font-serif text-5xl font-bold leading-tight text-[#14110B] lg:text-6xl">
                 Cercle des Administrateurs Publics.
               </h1>
@@ -312,9 +313,10 @@ export default async function HomePage() {
 
           {/* Droite : citation */}
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-[#C8A24A] font-bold">
-              — Le mot du président
-            </p>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
+              <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">LE MOT DU PRÉSIDENT</span>
+            </div>
             <div className="mt-6">
               <p className="font-serif text-2xl text-[#14110B] leading-relaxed">
                 <span className="font-serif text-8xl font-bold text-[#1a7a3a] float-left mr-2 leading-none mt-1">
@@ -340,9 +342,10 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
             <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-[#C8A24A] font-bold">
-                — Actualités
-              </p>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">ACTUALITÉS</span>
+              </div>
               <h2 className="mt-3 font-serif text-4xl font-bold text-[#14110B]">La vie du Cercle</h2>
               <p className="mt-3 max-w-xl text-[#14110B]/60">
                 Retour sur les temps forts et les dernières actualités du Cercle.
@@ -456,7 +459,7 @@ export default async function HomePage() {
           <div className="flex items-start justify-between gap-6">
             <div>
               <div className="mb-2 flex items-center gap-3">
-                <span className="h-0.5 w-8 bg-[#C8A24A]" />
+                <span className="h-0.5 w-6 bg-[#C8A24A]" />
                 <span className="font-mono text-xs uppercase tracking-widest text-[#C8A24A] font-bold">
                   Publications
                 </span>
@@ -627,9 +630,10 @@ export default async function HomePage() {
       <RevealOnScroll>
       <section className="bg-[#FAF8F3] py-16">
         <div className="mx-auto max-w-3xl rounded-3xl border border-[#1a7a3a]/10 bg-white p-12 text-center shadow-lg">
-          <p className="font-mono text-xs uppercase tracking-widest text-[#C8A24A] font-bold">
-            — Rejoindre le Cercle
-          </p>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
+            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">REJOINDRE LE CERCLE</span>
+          </div>
           <h2 className="mt-4 font-serif text-4xl font-bold leading-tight text-[#14110B]">
             Faites partie de l&apos;excellence du service public sénégalais
           </h2>
