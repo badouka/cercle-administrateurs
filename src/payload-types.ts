@@ -472,6 +472,14 @@ export interface Page {
    * Citation mise en avant (utilisée sur la page « Mot du Président »).
    */
   citation?: string | null;
+  /**
+   * Nom affiché dans la signature (page « Mot du Président »).
+   */
+  signature_nom?: string | null;
+  /**
+   * Titre/fonction affiché sous le nom dans la signature.
+   */
+  signature_titre?: string | null;
   contenu?: {
     root: {
       type: string;
@@ -848,6 +856,8 @@ export interface PagesSelect<T extends boolean = true> {
   description?: T;
   extrait?: T;
   citation?: T;
+  signature_nom?: T;
+  signature_titre?: T;
   contenu?: T;
   statut?: T;
   updatedAt?: T;

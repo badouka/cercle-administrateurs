@@ -8,13 +8,16 @@ import config from '@payload-config'
 import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import { lexicalToHtml } from '@/lib/lexical-to-html'
 import { PageEditor } from './PageEditor'
+import { MotPresidentSections } from './MotPresidentSections'
 
 interface RawPage {
   id:      number
   titre:   string
-  description?: string | null
-  extrait?:     string | null
-  citation?:    string | null
+  description?:     string | null
+  extrait?:         string | null
+  citation?:        string | null
+  signature_nom?:   string | null
+  signature_titre?: string | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contenu?: any
   statut:  'brouillon' | 'publie'
@@ -93,18 +96,29 @@ export default async function ModifierPagePage({
       </div>
 
       {/* ── Éditeur ── */}
-      <div className="rounded-2xl border border-[#E5E5E5] bg-white p-6 sm:p-8">
-        <PageEditor
+      {slug === 'mot-du-president' ? (
+        <MotPresidentSections
           slug={slug}
-          publicPath={publicPath}
           initialTitre={page.titre}
-          initialDescription={page.description ?? ''}
-          initialExtrait={page.extrait ?? ''}
           initialCitation={page.citation ?? ''}
-          initialContent={htmlContent}
-          initialStatut={page.statut}
+          initialMessageHtml={htmlContent}
+          initialSignatureNom={page.signature_nom ?? ''}
+          initialSignatureTitre={page.signature_titre ?? ''}
         />
-      </div>
+      ) : (
+        <div className="rounded-2xl border border-[#E5E5E5] bg-white p-6 sm:p-8">
+          <PageEditor
+            slug={slug}
+            publicPath={publicPath}
+            initialTitre={page.titre}
+            initialDescription={page.description ?? ''}
+            initialExtrait={page.extrait ?? ''}
+            initialCitation={page.citation ?? ''}
+            initialContent={htmlContent}
+            initialStatut={page.statut}
+          />
+        </div>
+      )}
 
       {/* ── Lien page publique ── */}
       <div className="mt-4 text-right">

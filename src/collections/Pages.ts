@@ -68,6 +68,20 @@ export const Pages: CollectionConfig = {
       admin: { description: "Citation mise en avant (utilisée sur la page « Mot du Président »)." },
     },
     {
+      name: 'signature_nom',
+      type: 'text',
+      required: false,
+      label: 'Signature — nom',
+      admin: { description: 'Nom affiché dans la signature (page « Mot du Président »).' },
+    },
+    {
+      name: 'signature_titre',
+      type: 'text',
+      required: false,
+      label: 'Signature — titre',
+      admin: { description: 'Titre/fonction affiché sous le nom dans la signature.' },
+    },
+    {
       name: 'contenu',
       type: 'richText',
       label: 'Contenu',

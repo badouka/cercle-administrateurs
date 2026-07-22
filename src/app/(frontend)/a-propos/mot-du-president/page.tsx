@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Membre, Media, Page } from '@/payload-types'
+import { lexicalToHtml } from '@/lib/lexical-to-html'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -62,6 +63,14 @@ export default async function MotDuPresidentPage() {
   const presidentNom = president ? `${president.prenom} ${president.nom}` : 'Lansana Gagny SAKHO'
   const presidentInitiales = president ? initiales(president.prenom, president.nom) : 'LS'
 
+  // ── Contenu éditable depuis la collection `pages` (valeurs en dur en fallback) ──
+  const page           = await fetchPage()
+  const citationText   = page?.citation?.trim() ?? ''
+  const messageHtml    = lexicalToHtml(page?.contenu)
+  const hasMessageHtml = messageHtml.replace(/<[^>]*>/g, '').trim().length > 0
+  const signatureNom   = page?.signature_nom?.trim() || presidentNom
+  const signatureTitre = page?.signature_titre?.trim() || 'Président du CAP'
+
   return (
     <div className="bg-white">
       {/* ── 1. Hero éditorial (fond sombre) ─────────────────────────────────── */}
@@ -117,8 +126,8 @@ export default async function MotDuPresidentPage() {
                 )}
               </div>
               <div className="absolute right-[-16px] bottom-6 rounded-xl bg-[#C8A24A] px-4 py-3 text-[#062812] shadow-xl">
-                <p className="text-base font-bold">{presidentNom}</p>
-                <p className="text-xs font-semibold">Président du CAP</p>
+                <p className="text-base font-bold">{signatureNom}</p>
+                <p className="text-xs font-semibold">{signatureTitre}</p>
               </div>
             </div>
 
@@ -131,9 +140,15 @@ export default async function MotDuPresidentPage() {
                 </span>
               </div>
               <h1 className="mt-4 font-serif text-5xl leading-tight text-white">
-                {'« Servir l\'État, une '}
-                <span className="text-[#C8A24A]">exigence</span>
-                {' partagée »'}
+                {citationText ? (
+                  citationText
+                ) : (
+                  <>
+                    {'« Servir l\'État, une '}
+                    <span className="text-[#C8A24A]">exigence</span>
+                    {' partagée »'}
+                  </>
+                )}
               </h1>
               <p className="mt-5 max-w-prose text-base leading-relaxed text-[#6FAE8E]">
                 {"À l'occasion du renouvellement du bureau exécutif, le Président adresse son message aux membres du Cercle et à l'ensemble des serviteurs de l'État."}
@@ -154,16 +169,25 @@ export default async function MotDuPresidentPage() {
 
       {/* ── 2. Corps du message ─────────────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-6 py-16">
-        <p className="font-serif text-xl text-[#083A1E] mb-6">
-          <span className="font-serif text-8xl font-bold text-[#1a7a3a] float-left mr-2 leading-none mt-1">L</span>
-          {messageParas[0].slice(1)}
-        </p>
+        {hasMessageHtml ? (
+          <div
+            className="text-[#14110B]/80 text-base leading-relaxed [&_p]:mb-6 [&_p:first-of-type]:font-serif [&_p:first-of-type]:text-xl [&_p:first-of-type]:text-[#083A1E] [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:text-[#062812] [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:mt-6 [&_h3]:mb-2 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_blockquote]:border-l-2 [&_blockquote]:border-[#C8A24A] [&_blockquote]:pl-4 [&_blockquote]:italic"
+            dangerouslySetInnerHTML={{ __html: messageHtml }}
+          />
+        ) : (
+          <>
+            <p className="font-serif text-xl text-[#083A1E] mb-6">
+              <span className="font-serif text-8xl font-bold text-[#1a7a3a] float-left mr-2 leading-none mt-1">L</span>
+              {messageParas[0].slice(1)}
+            </p>
 
-        <div className="flex flex-col gap-6 text-[#14110B]/80 text-base leading-relaxed mt-8">
-          {messageParas.slice(1).map((para, i) => (
-            <p key={i} style={{ margin: 0 }}>{para}</p>
-          ))}
-        </div>
+            <div className="flex flex-col gap-6 text-[#14110B]/80 text-base leading-relaxed mt-8">
+              {messageParas.slice(1).map((para, i) => (
+                <p key={i} style={{ margin: 0 }}>{para}</p>
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       {/* ── 3. Signature ────────────────────────────────────────────────────── */}
@@ -175,8 +199,8 @@ export default async function MotDuPresidentPage() {
               {presidentInitiales}
             </div>
             <div>
-              <p className="font-serif text-xl font-bold text-[#062812]">{presidentNom}</p>
-              <p className="text-sm font-semibold text-[#C8A24A]">Président du CAP</p>
+              <p className="font-serif text-xl font-bold text-[#062812]">{signatureNom}</p>
+              <p className="text-sm font-semibold text-[#C8A24A]">{signatureTitre}</p>
             </div>
           </div>
 

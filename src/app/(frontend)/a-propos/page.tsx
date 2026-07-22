@@ -104,7 +104,6 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; 
         <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
           {eyebrow}
         </span>
-        <span className="h-0.5 w-8 bg-[#C8A24A]" />
       </div>
       <h2 className="mt-4 font-serif text-4xl font-bold text-[#062812]">{title}</h2>
       {sub && <p className="mt-3 leading-relaxed text-[#14110B]/60">{sub}</p>}

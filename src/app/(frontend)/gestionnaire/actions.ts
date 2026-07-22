@@ -340,6 +340,59 @@ export async function updatePageAction(
   }
 }
 
+// ── Pages : sauvegarde d'une section isolée ─────────────────────────────────────
+
+export async function updatePageSection(
+  slug:     string,
+  formData: FormData,
+): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  const titre          = (formData.get('titre') as string | null)?.trim()
+  const citation       = formData.get('citation') as string | null
+  const signatureNom   = formData.get('signature_nom') as string | null
+  const signatureTitre = formData.get('signature_titre') as string | null
+  const contenuJson    = formData.get('contenuJson') as string | null
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: Record<string, any> = {}
+  if (titre)                    data.titre           = titre
+  if (citation !== null)        data.citation        = citation
+  if (signatureNom !== null)    data.signature_nom   = signatureNom
+  if (signatureTitre !== null)  data.signature_titre = signatureTitre
+  if (contenuJson) {
+    try { data.contenu = JSON.parse(contenuJson) } catch { return { error: 'Contenu invalide' } }
+  }
+
+  if (Object.keys(data).length === 0) return { success: true }
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { docs } = await (ctx.payload.find as any)({
+      collection:     'pages',
+      where:          { slug: { equals: slug } },
+      limit:          1,
+      overrideAccess: true,
+    })
+    if (!docs[0]) return { error: 'Page introuvable' }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (ctx.payload.update as any)({
+      collection:     'pages',
+      id:             docs[0].id,
+      data,
+      overrideAccess: true,
+    })
+
+    revalidatePath('/a-propos/mot-du-president')
+    revalidatePath(`/gestionnaire/pages/${slug}`)
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la mise à jour' }
+  }
+}
+
 // ── Lexical helper ────────────────────────────────────────────────────────────
 
 function textToLexical(text: string) {

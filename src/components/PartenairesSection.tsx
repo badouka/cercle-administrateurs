@@ -36,7 +36,7 @@ export function PartenairesSection({ partenaires }: { partenaires: Partenaire[] 
     <section className="bg-white py-10 border-t border-[#14110B]/10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-6">
         <div className="flex items-center gap-3">
-          <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
+          <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
           <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#C8A24A]">NOS PARTENAIRES</span>
         </div>
       </div>

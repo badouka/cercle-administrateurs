@@ -84,13 +84,13 @@ export default async function BureauPage() {
       <section className="bg-[#FAF8F3] border-b border-[#14110B]/10 py-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-3">
-            <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
+            <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">
               Bureau Exécutif
             </span>
           </div>
           <p className="text-[#14110B]/70 text-base leading-relaxed max-w-3xl">
-            Le bureau exécutif est composé de onze (11) membres élus par l&apos;Assemblée Générale.
+            Le bureau exécutif est composé de dix (1O) membres élus par l&apos;Assemblée Générale.
             Il joue le rôle d&apos;organe exécutif de l&apos;Association.
           </p>
         </div>

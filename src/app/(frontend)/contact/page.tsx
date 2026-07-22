@@ -24,7 +24,7 @@ export default function ContactPage() {
             {/* Colonne gauche - Formulaire */}
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
+                <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">FORMULAIRE DE CONTACT</span>
               </div>
               <h2 className="font-serif text-3xl font-bold text-[#14110B] mt-2">Envoyez-nous un message</h2>
@@ -37,7 +37,7 @@ export default function ContactPage() {
               {/* Card coordonnées */}
               <div className="bg-[#FAF8F3] rounded-2xl p-8 border border-[#14110B]/10">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
+                  <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
                   <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">COORDONNÉES</span>
                 </div>
                 <h3 className="font-serif text-xl font-bold text-[#14110B] mt-2">Cercle des Administrateurs Publics</h3>

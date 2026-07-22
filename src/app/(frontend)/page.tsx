@@ -493,7 +493,7 @@ export default async function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#14110B]/80 via-transparent to-transparent" />
                   <span className="absolute top-4 left-4 bg-[#C8A24A] text-[#14110B] font-black text-sm px-3 py-1 rounded-lg">CAP</span>
                   <div className="absolute bottom-6 left-6 right-6">
-                    <div className="w-8 h-0.5 bg-[#C8A24A] mb-3"></div>
+                    <div className="w-6 h-0.5 bg-[#C8A24A] mb-3"></div>
                     <p className="text-white font-serif text-xl font-bold">{magazine.titre}</p>
                   </div>
                 </div>
@@ -610,7 +610,7 @@ export default async function HomePage() {
           <div className="flex justify-between items-end mb-10">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="block w-8 h-0.5 bg-[#C8A24A]"></span>
+                <span className="block w-6 h-0.5 bg-[#C8A24A]"></span>
                 <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold">MEMBRES BUREAU</span>
               </div>
               <p className="text-[#14110B]/60 mt-1 text-sm">Les membres du bureau exécutif du Cercle des Administrateurs Publics.</p>
