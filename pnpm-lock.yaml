@@ -22,7 +22,7 @@ importers:
         version: 3.84.1(@faceless-ui/modal@3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@faceless-ui/scroll-info@2.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@payloadcms/next@3.84.1(@types/react@19.2.14)(graphql@16.14.2)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3))(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)(yjs@13.6.31)
       '@payloadcms/storage-vercel-blob':
         specifier: ^3.84.1
-        version: 3.86.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
+        version: 3.84.1(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
       '@payloadcms/ui':
         specifier: 3.84.1
         version: 3.84.1(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
@@ -1572,10 +1572,10 @@ packages:
       next: '>=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.2 <17.0.0'
       payload: 3.84.1
 
-  '@payloadcms/plugin-cloud-storage@3.86.0':
-    resolution: {integrity: sha512-735HPYY30voozZgeS1nNmUFiOEy0V8ZKvxDfU8yDYw7k/m1EspHOYAo70cJ8GxoMcjM0kCNKMFP1B2rWyQBDnA==}
+  '@payloadcms/plugin-cloud-storage@3.84.1':
+    resolution: {integrity: sha512-yr3dqTS65XcG6PmYvJpdYSmdqrpcxjPEJFjSBXC7ZQE/9pdfqcnY20PifvVze3CxfSqPqecJ0SBjMs4jz5mp6A==}
     peerDependencies:
-      payload: 3.86.0
+      payload: 3.84.1
       react: ^19.0.1 || ^19.1.2 || ^19.2.1
       react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
 
@@ -1590,17 +1590,14 @@ packages:
       react: ^19.0.1 || ^19.1.2 || ^19.2.1
       react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
 
-  '@payloadcms/storage-vercel-blob@3.86.0':
-    resolution: {integrity: sha512-1MaEWyrd2e9QuZv6hMPBYY071hpTFsFd9uNG6+s3gvf6Scr37KWeeBhqNzXZtCoMtGEgpnjwQxowRPq5F0XucQ==}
+  '@payloadcms/storage-vercel-blob@3.84.1':
+    resolution: {integrity: sha512-cBVhvTawc8LFKM+B++1h7p0c9BUqCQNYLMib9yLITLUBPGtnkbWoDPzkCatKmCwQb68TqT/RYji+EUVi3Zgz9Q==}
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
-      payload: 3.86.0
+      payload: 3.84.1
 
   '@payloadcms/translations@3.84.1':
     resolution: {integrity: sha512-1g4IsXvRfeQCn8YmPweaj8MMAFK9oSxYWKJG15j+Ah9Nra+f35/ZdOt/k80+vfoJmdKsOK/AnuzVdSTWy2GQpg==}
-
-  '@payloadcms/translations@3.86.0':
-    resolution: {integrity: sha512-FHOOK0GVnVz9tiK35lfdu1tSFnbwziE+eh8pckx5PjZHO8cnUAawvMGXuHMozOxmukTxUeMEqMpwzadMcb88yQ==}
 
   '@payloadcms/ui@3.84.1':
     resolution: {integrity: sha512-L9trD3/LcK1fiGg4AFexy9AQm4upMzRbicZFTNU/ac+x5o6Pwyr7FzrvbtfCr0l2t6QhawLBZmBCZJA8oBF2uA==}
@@ -1608,15 +1605,6 @@ packages:
     peerDependencies:
       next: '>=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.2 <17.0.0'
       payload: 3.84.1
-      react: ^19.0.1 || ^19.1.2 || ^19.2.1
-      react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
-
-  '@payloadcms/ui@3.86.0':
-    resolution: {integrity: sha512-tNvrDWFI59g6kXfSR7uX8rcQYUjhh5iFqw2am81R/CcQf9EETtFi8gqb2Rxghn8S5buNi8e96d0Qp4rcw8/adw==}
-    engines: {node: ^18.20.2 || >=20.9.0}
-    peerDependencies:
-      next: '>=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.6 <17.0.0'
-      payload: 3.86.0
       react: ^19.0.1 || ^19.1.2 || ^19.2.1
       react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
 
@@ -4849,10 +4837,6 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
-  uuid@13.0.2:
-    resolution: {integrity: sha512-vzi9uRZ926x4XV73S/4qQaTwPXM2JBj6/6lI/byHH1jOpCzb0zDbfytgA9LcN/hzb2l7WQSQnxITOVx5un/wGw==}
-    hasBin: true
-
   vfile-message@4.0.3:
     resolution: {integrity: sha512-QTHzsGd1EhbZs4AsQ20JX1rC3cOlt/IWJruk893DfLRr57lcnOeMaWG4K0JrRta4mIJZKth2Au3mM3u03/JWKw==}
 
@@ -6326,9 +6310,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@payloadcms/plugin-cloud-storage@3.86.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)':
+  '@payloadcms/plugin-cloud-storage@3.84.1(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)':
     dependencies:
-      '@payloadcms/ui': 3.86.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
+      '@payloadcms/ui': 3.84.1(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
       find-node-modules: 2.1.3
       payload: 3.84.1(graphql@16.14.2)(typescript@5.7.3)
       range-parser: 1.3.0
@@ -6386,9 +6370,9 @@ snapshots:
       - utf-8-validate
       - yjs
 
-  '@payloadcms/storage-vercel-blob@3.86.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)':
+  '@payloadcms/storage-vercel-blob@3.84.1(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)':
     dependencies:
-      '@payloadcms/plugin-cloud-storage': 3.86.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
+      '@payloadcms/plugin-cloud-storage': 3.84.1(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)
       '@vercel/blob': 2.3.1
       payload: 3.84.1(graphql@16.14.2)(typescript@5.7.3)
     transitivePeerDependencies:
@@ -6401,10 +6385,6 @@ snapshots:
       - typescript
 
   '@payloadcms/translations@3.84.1':
-    dependencies:
-      date-fns: 4.1.0
-
-  '@payloadcms/translations@3.86.0':
     dependencies:
       date-fns: 4.1.0
 
@@ -6437,41 +6417,6 @@ snapshots:
       ts-essentials: 10.0.3(typescript@5.7.3)
       use-context-selector: 2.0.0(react@19.2.6)(scheduler@0.25.0)
       uuid: 11.1.0
-    transitivePeerDependencies:
-      - '@types/react'
-      - monaco-editor
-      - supports-color
-      - typescript
-
-  '@payloadcms/ui@3.86.0(@types/react@19.2.14)(monaco-editor@0.56.0)(next@16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.84.1(graphql@16.14.2)(typescript@5.7.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.7.3)':
-    dependencies:
-      '@date-fns/tz': 1.2.0
-      '@dnd-kit/core': 6.3.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@dnd-kit/sortable': 10.0.0(@dnd-kit/core@6.3.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
-      '@dnd-kit/utilities': 3.2.2(react@19.2.6)
-      '@faceless-ui/modal': 3.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@faceless-ui/scroll-info': 2.0.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@faceless-ui/window-info': 3.0.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@monaco-editor/react': 4.7.0(monaco-editor@0.56.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@payloadcms/translations': 3.86.0
-      bson-objectid: 2.0.4
-      date-fns: 4.1.0
-      dequal: 2.0.3
-      md5: 2.3.0
-      next: 16.2.6(@babel/core@7.29.7)(@playwright/test@1.58.2)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4)
-      object-to-formdata: 4.5.1
-      payload: 3.84.1(graphql@16.14.2)(typescript@5.7.3)
-      qs-esm: 8.0.1
-      react: 19.2.6
-      react-datepicker: 7.6.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      react-dom: 19.2.6(react@19.2.6)
-      react-image-crop: 10.1.8(react@19.2.6)
-      react-select: 5.9.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      scheduler: 0.25.0
-      sonner: 1.7.4(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      ts-essentials: 10.0.3(typescript@5.7.3)
-      use-context-selector: 2.0.0(react@19.2.6)(scheduler@0.25.0)
-      uuid: 13.0.2
     transitivePeerDependencies:
       - '@types/react'
       - monaco-editor
@@ -10185,8 +10130,6 @@ snapshots:
   utf8-byte-length@1.0.5: {}
 
   uuid@11.1.0: {}
-
-  uuid@13.0.2: {}
 
   vfile-message@4.0.3:
     dependencies:
