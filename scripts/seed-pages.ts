@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { A_PROPOS_SECTION_DEFAULTS } from '@/app/(frontend)/a-propos/content'
 
 // ── Helpers Lexical ────────────────────────────────────────────────────────
 
@@ -52,6 +53,8 @@ const PAGES = [
     statut: 'publie',
     description: 'Le Cercle des Administrateurs Publics (CAP) rassemble les présidents de conseil d\'administration, de surveillance ou d\'orientation des établissements du secteur parapublic.',
     extrait: 'Le secteur parapublic sénégalais occupe une place stratégique dans l\'architecture de l\'État. Entreprises nationales, établissements publics, agences d\'exécution, offices et fonds : ces entités sont le bras opérationnel des politiques publiques, les instruments par lesquels l\'État traduit ses ambitions en actes concrets au bénéfice des citoyens.',
+    // Vrai contenu éditorial de la page « Qui sommes-nous ? » (champ JSON `sections`).
+    sections: A_PROPOS_SECTION_DEFAULTS,
     contenu: lexical(
       h2('Notre histoire'),
       p(t("Fondé il y a plus de vingt ans, le CAP rassemble des professionnels engagés dans la modernisation et l'amélioration continue des services publics. Notre réseau compte aujourd'hui plusieurs centaines de membres actifs issus de toutes les branches de l'administration.")),
@@ -124,7 +127,14 @@ async function main() {
     })
 
     if (docs.length > 0) {
-      console.log(`⏭  Page "${page.slug}" existe déjà — ignorée.`)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (payload.update as any)({
+        collection:     'pages',
+        id:             docs[0].id,
+        data:           page,
+        overrideAccess: true,
+      })
+      console.log(`↻  Page "${page.slug}" mise à jour.`)
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (payload.create as any)({
