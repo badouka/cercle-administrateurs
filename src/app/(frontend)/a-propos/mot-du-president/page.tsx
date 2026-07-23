@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Membre, Media, Page } from '@/payload-types'
@@ -41,6 +42,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MotDuPresidentPage() {
   const payload = await getPayload({ config })
 
+  const headersList = await headers()
+  let isGestionnaire = false
+  try {
+    const { user } = await payload.auth({ headers: headersList })
+    isGestionnaire = user?.role === 'gestionnaire' || user?.role === 'admin'
+  } catch (e) {
+    isGestionnaire = false
+  }
+
   const membresRes = await payload.find({
     collection:     'membres',
     depth:          1,
@@ -73,6 +83,16 @@ export default async function MotDuPresidentPage() {
 
   return (
     <div className="bg-white">
+      {isGestionnaire && (
+        <div className="fixed top-24 right-4 z-50 flex flex-col gap-2">
+          <Link
+            href="/gestionnaire/pages/mot-du-president"
+            className="flex items-center gap-2 bg-[#1a7a3a] text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg hover:bg-[#C8A24A] hover:text-[#14110B] transition-colors"
+          >
+            ✏️ Modifier cette page
+          </Link>
+        </div>
+      )}
       {/* ── 1. Hero éditorial (fond sombre) ─────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#062812] pt-24 pb-16">
         {/* Pattern de points */}

@@ -350,19 +350,25 @@ export async function updatePageSection(
   if ('error' in ctx) return ctx
 
   const titre          = (formData.get('titre') as string | null)?.trim()
+  const description    = formData.get('description') as string | null
   const citation       = formData.get('citation') as string | null
   const signatureNom   = formData.get('signature_nom') as string | null
   const signatureTitre = formData.get('signature_titre') as string | null
   const contenuJson    = formData.get('contenuJson') as string | null
+  const sectionsJson   = formData.get('sectionsJson') as string | null
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: Record<string, any> = {}
   if (titre)                    data.titre           = titre
+  if (description !== null)     data.description     = description
   if (citation !== null)        data.citation        = citation
   if (signatureNom !== null)    data.signature_nom   = signatureNom
   if (signatureTitre !== null)  data.signature_titre = signatureTitre
   if (contenuJson) {
     try { data.contenu = JSON.parse(contenuJson) } catch { return { error: 'Contenu invalide' } }
+  }
+  if (sectionsJson) {
+    try { data.sections = JSON.parse(sectionsJson) } catch { return { error: 'Sections invalides' } }
   }
 
   if (Object.keys(data).length === 0) return { success: true }
@@ -385,6 +391,7 @@ export async function updatePageSection(
       overrideAccess: true,
     })
 
+    revalidatePath('/a-propos')
     revalidatePath('/a-propos/mot-du-president')
     revalidatePath(`/gestionnaire/pages/${slug}`)
     return { success: true }

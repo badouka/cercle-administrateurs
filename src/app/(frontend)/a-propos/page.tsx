@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import config from '@payload-config'
 import type { Membre } from '@/payload-types'
 import { PageHero } from '@/components/PageHero'
+import { splitParas } from './content'
 import { Award, GraduationCap, MessageSquare, Lightbulb, Target, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -83,6 +85,25 @@ const CADRE = [
   },
 ]
 
+// ── Résolution du contenu dynamique (champ JSON `sections`) avec fallback ─────────
+
+function resolveSections(raw: unknown) {
+  const d = raw && typeof raw === 'object' && !Array.isArray(raw) ? (raw as Record<string, unknown>) : {}
+  const str = (v: unknown, fb: string) => (typeof v === 'string' && v.trim() ? v : fb)
+  const arr = (v: unknown, fb: string[]) =>
+    fb.map((f, i) =>
+      Array.isArray(v) && typeof v[i] === 'string' && (v[i] as string).trim() ? (v[i] as string) : f,
+    )
+  return {
+    secteurParapublic: str(d.secteurParapublic, [INTRO_LEAD, ...INTRO_RIGHT].join('\n\n')),
+    diagnostic:        str(d.diagnostic, DIAGNOSTIC_TEXTE),
+    raisonEtre:        str(d.raisonEtre, RAISON_PARAS.join('\n\n')),
+    engagements:       arr(d.engagements, ENGAGEMENTS.map(e => e.texte)),
+    cadre:             arr(d.cadre, CADRE.map(c => c.texte)),
+    vision:            typeof d.vision === 'string' ? d.vision.trim() : '',
+  }
+}
+
 // ── Sous-composants de présentation ──────────────────────────────────────────────
 
 function Eyebrow({ children }: { children: string }) {
@@ -116,6 +137,15 @@ function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; 
 export default async function AProposPage() {
   const payload = await getPayload({ config })
 
+  const headersList = await headers()
+  let isGestionnaire = false
+  try {
+    const { user } = await payload.auth({ headers: headersList })
+    isGestionnaire = user?.role === 'gestionnaire' || user?.role === 'admin'
+  } catch (e) {
+    isGestionnaire = false
+  }
+
   const { docs } = await payload.find({
     collection:     'membres',
     depth:          1,
@@ -129,8 +159,36 @@ export default async function AProposPage() {
     return p === 'Président' || p === 'Présidente'
   }) ?? null
 
+  // Contenu éditorial dynamique (champ JSON `sections`), avec fallback sur le codé en dur.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { docs: pageDocs } = await (payload.find as any)({
+    collection:     'pages',
+    where:          { slug: { equals: 'a-propos' } },
+    depth:          0,
+    limit:          1,
+    overrideAccess: true,
+  })
+  const s = resolveSections(pageDocs[0]?.sections)
+
+  const secteurParas = splitParas(s.secteurParapublic)
+  const introLead    = secteurParas[0] ?? INTRO_LEAD
+  const introRight   = secteurParas.slice(1)
+  const raisonParas  = splitParas(s.raisonEtre)
+  const engagements  = ENGAGEMENTS.map((e, i) => ({ ...e, texte: s.engagements[i] ?? e.texte }))
+  const cadre        = CADRE.map((c, i) => ({ ...c, texte: s.cadre[i] ?? c.texte }))
+
   return (
     <div className="bg-[#FAF8F3]">
+      {isGestionnaire && (
+        <div className="fixed top-24 right-4 z-50 flex flex-col gap-2">
+          <Link
+            href="/gestionnaire/pages/a-propos"
+            className="flex items-center gap-2 bg-[#1a7a3a] text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg hover:bg-[#C8A24A] hover:text-[#14110B] transition-colors"
+          >
+            ✏️ Modifier cette page
+          </Link>
+        </div>
+      )}
       {/* ── 1. Hero ─────────────────────────────────────────────────────────── */}
       <PageHero
         title="Qui sommes-nous ?"
@@ -147,11 +205,11 @@ export default async function AProposPage() {
               <p className="mb-4 text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
                 Le secteur parapublic
               </p>
-              <p className="font-serif text-2xl leading-snug text-[#083A1E]">{INTRO_LEAD}</p>
+              <p className="font-serif text-2xl leading-snug text-[#083A1E]">{introLead}</p>
             </div>
             {/* Droite */}
             <div className="flex flex-col gap-5 text-base leading-relaxed text-[#14110B]/70">
-              {INTRO_RIGHT.map((para, i) => (
+              {introRight.map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
@@ -181,7 +239,7 @@ export default async function AProposPage() {
                   Un diagnostic lucide
                 </p>
                 <h3 className="mb-4 font-serif text-2xl text-[#062812]">{DIAGNOSTIC_TITRE}</h3>
-                <p className="leading-relaxed text-[#14110B]/70">{DIAGNOSTIC_TEXTE}</p>
+                <p className="leading-relaxed text-[#14110B]/70">{s.diagnostic}</p>
               </div>
             </div>
           </div>
@@ -197,7 +255,7 @@ export default async function AProposPage() {
               <Eyebrow>{"La raison d'être du CAP"}</Eyebrow>
               <h2 className="mt-4 font-serif text-4xl leading-tight text-[#062812]">{RAISON_TITRE}</h2>
               <div className="mt-6 flex flex-col gap-4 leading-relaxed text-[#14110B]/70">
-                {RAISON_PARAS.map((para, i) => (
+                {raisonParas.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>
@@ -234,7 +292,7 @@ export default async function AProposPage() {
         <div className="mx-auto max-w-7xl px-6">
           <SectionHead eyebrow="Nos cinq engagements" title={ENGAGEMENTS_TITLE} />
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {ENGAGEMENTS.map(({ Icon, titre, texte }) => (
+            {engagements.map(({ Icon, titre, texte }) => (
               <div
                 key={titre}
                 className="rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#1a7a3a] bg-white p-7 transition-shadow hover:shadow-md"
@@ -259,7 +317,7 @@ export default async function AProposPage() {
             sub={CADRE_SUB}
           />
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {CADRE.map(({ titre, texte }) => (
+            {cadre.map(({ titre, texte }) => (
               <div
                 key={titre}
                 className="rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#C8A24A] bg-white p-7"
@@ -271,6 +329,26 @@ export default async function AProposPage() {
           </div>
         </div>
       </section>
+
+      {/* ── 7. Notre Vision (affichée uniquement si renseignée) ──────────────── */}
+      {s.vision && (
+        <section className="border-t border-[#14110B]/10 bg-[#FAF8F3] py-20">
+          <div className="mx-auto max-w-3xl px-6 text-center">
+            <div className="flex items-center justify-center gap-3">
+              <span className="h-0.5 w-8 bg-[#C8A24A]" />
+              <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C8A24A]">
+                Notre Vision
+              </span>
+              <span className="h-0.5 w-8 bg-[#C8A24A]" />
+            </div>
+            <div className="mt-6 flex flex-col gap-4 font-serif text-2xl leading-snug text-[#083A1E]">
+              {splitParas(s.vision).map((para, i) => (
+                <p key={i}>{para}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }

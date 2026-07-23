@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Partenaire, Media } from '@/payload-types'
@@ -12,6 +13,15 @@ export const metadata: Metadata = {
 
 export default async function NosPartenairesPage() {
   const payload = await getPayload({ config })
+
+  const headersList = await headers()
+  let isGestionnaire = false
+  try {
+    const { user } = await payload.auth({ headers: headersList })
+    isGestionnaire = user?.role === 'gestionnaire' || user?.role === 'admin'
+  } catch (e) {
+    isGestionnaire = false
+  }
 
   const { docs } = await payload.find({
     collection:     'partenaires',
@@ -25,6 +35,16 @@ export default async function NosPartenairesPage() {
 
   return (
     <div>
+      {isGestionnaire && (
+        <div className="fixed top-24 right-4 z-50 flex flex-col gap-2">
+          <Link
+            href="/gestionnaire/pages/partenaires"
+            className="flex items-center gap-2 bg-[#1a7a3a] text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-lg hover:bg-[#C8A24A] hover:text-[#14110B] transition-colors"
+          >
+            ✏️ Modifier cette page
+          </Link>
+        </div>
+      )}
       <PageHero
         title="Nos Partenaires"
         breadcrumb={[

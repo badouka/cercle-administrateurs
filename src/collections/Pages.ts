@@ -100,6 +100,11 @@ export const Pages: CollectionConfig = {
       }),
     },
     {
+      name: 'sections',
+      type: 'json',
+      label: 'Sections de la page',
+    },
+    {
       name: 'statut',
       type: 'select',
       required: true,

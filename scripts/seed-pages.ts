@@ -50,6 +50,8 @@ const PAGES = [
     slug:   'a-propos',
     titre:  'Qui sommes-nous ?',
     statut: 'publie',
+    description: 'Le Cercle des Administrateurs Publics (CAP) rassemble les présidents de conseil d\'administration, de surveillance ou d\'orientation des établissements du secteur parapublic.',
+    extrait: 'Le secteur parapublic sénégalais occupe une place stratégique dans l\'architecture de l\'État. Entreprises nationales, établissements publics, agences d\'exécution, offices et fonds : ces entités sont le bras opérationnel des politiques publiques, les instruments par lesquels l\'État traduit ses ambitions en actes concrets au bénéfice des citoyens.',
     contenu: lexical(
       h2('Notre histoire'),
       p(t("Fondé il y a plus de vingt ans, le CAP rassemble des professionnels engagés dans la modernisation et l'amélioration continue des services publics. Notre réseau compte aujourd'hui plusieurs centaines de membres actifs issus de toutes les branches de l'administration.")),
@@ -70,6 +72,7 @@ const PAGES = [
     slug:   'mot-du-president',
     titre:  'Mot du Président',
     statut: 'publie',
+    citation: 'Le Sénégal a toujours fait de la performance de son administration publique un chantier prioritaire. Du Plan Sénégal Émergent au Plan de Transformation Sénégal 2050 du Président Bassirou Diomaye Faye, la même conviction traverse les ambitions de notre pays : l\'État ne peut pleinement servir ses citoyens qu\'en se réformant lui-même, en s\'allégeant, en se concentrant sur ses missions essentielles et en confiant l\'exécution de certaines politiques publiques à des structures plus agiles et plus proches du terrain.',
     contenu: lexical(
       quote("« L'administration publique est le reflet de notre engagement collectif envers le bien commun. À travers le CAP, nous bâtissons ensemble les ponts entre les générations d'administrateurs, entre les expériences et les aspirations. »"),
       p(t('Chers membres, chers amis,')),

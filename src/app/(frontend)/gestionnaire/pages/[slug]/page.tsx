@@ -9,6 +9,7 @@ import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import { lexicalToHtml } from '@/lib/lexical-to-html'
 import { PageEditor } from './PageEditor'
 import { MotPresidentSections } from './MotPresidentSections'
+import { AProposSections } from './AProposSections'
 
 interface RawPage {
   id:      number
@@ -20,6 +21,7 @@ interface RawPage {
   signature_titre?: string | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contenu?: any
+  sections?: unknown
   statut:  'brouillon' | 'publie'
 }
 
@@ -66,11 +68,61 @@ export default async function ModifierPagePage({
     overrideAccess: true,
   })
 
-  const page = docs[0] as RawPage | undefined
-  if (!page) notFound()
+  let page = docs[0] as RawPage | undefined
+
+  // Le document n'existe pas encore : on le crée avec les valeurs par défaut.
+  if (!page) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const defaultData: Record<string, any> = {
+      titre: slug === 'mot-du-president' ? 'Mot du Président' :
+             slug === 'a-propos' ? 'Qui sommes-nous ?' : 'Nos Partenaires',
+      slug: slug,
+      statut: 'publie',
+      citation: slug === 'mot-du-president'
+        ? 'Le Sénégal a toujours fait de la performance de son administration publique un chantier prioritaire.'
+        : '',
+      contenu: null,
+    }
+
+    if (slug === 'a-propos') {
+      defaultData.description = 'Le Cercle des Administrateurs Publics accompagne les présidents des organes délibérants du secteur parapublic sénégalais.'
+      defaultData.extrait = 'Le secteur parapublic sénégalais occupe une place stratégique dans l\'architecture de l\'État.'
+    }
+
+    if (slug === 'partenaires') {
+      defaultData.description = 'Les partenaires du Cercle des Administrateurs Publics du Sénégal.'
+      defaultData.extrait = 'Nos partenaires institutionnels et associatifs.'
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    page = (await (payload.create as any)({
+      collection: 'pages',
+      data: defaultData,
+      overrideAccess: true,
+    })) as RawPage
+  }
 
   const htmlContent = lexicalToHtml(page.contenu)
   const publicPath  = PUBLIC_PATHS[slug]!
+
+  // Nom du président (fallback pour la signature) depuis la collection membres.
+  let presidentNomFallback = ''
+  if (slug === 'mot-du-president') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { docs: membres } = await (payload.find as any)({
+      collection:     'membres',
+      depth:          1,
+      limit:          500,
+      sort:           'nom',
+      overrideAccess: true,
+    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const president = (membres as any[]).find((m) => {
+      const p = (m.poste?.posteCap ?? '').trim()
+      return p === 'Président' || p === 'Présidente'
+    })
+    if (president) presidentNomFallback = `${president.prenom} ${president.nom}`
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -102,8 +154,15 @@ export default async function ModifierPagePage({
           initialTitre={page.titre}
           initialCitation={page.citation ?? ''}
           initialMessageHtml={htmlContent}
-          initialSignatureNom={page.signature_nom ?? ''}
-          initialSignatureTitre={page.signature_titre ?? ''}
+          initialSignatureNom={page.signature_nom || presidentNomFallback}
+          initialSignatureTitre={page.signature_titre || 'Président du CAP'}
+        />
+      ) : slug === 'a-propos' ? (
+        <AProposSections
+          initialTitre={page.titre}
+          initialDescription={page.description ?? ''}
+          initialSections={page.sections ?? null}
+          slug={slug}
         />
       ) : (
         <div className="rounded-2xl border border-[#E5E5E5] bg-white p-6 sm:p-8">

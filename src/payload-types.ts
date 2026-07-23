@@ -495,6 +495,15 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
+  sections?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   statut: 'brouillon' | 'publie';
   updatedAt: string;
   createdAt: string;
@@ -859,6 +868,7 @@ export interface PagesSelect<T extends boolean = true> {
   signature_nom?: T;
   signature_titre?: T;
   contenu?: T;
+  sections?: T;
   statut?: T;
   updatedAt?: T;
   createdAt?: T;
