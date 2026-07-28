@@ -79,13 +79,22 @@ export default async function GestionnairePage() {
             Gestion des membres et du contenu de la plateforme CAP.
           </p>
         </div>
-        <Link
-          href="/gestionnaire/articles/nouveau"
-          className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors shrink-0"
-        >
-          <PlusCircle size={15} />
-          Nouvel article
-        </Link>
+<div className="flex gap-2 shrink-0">
+  <Link
+    href="/gestionnaire/blog/nouveau"
+    className="inline-flex items-center gap-2 rounded-lg border border-black px-4 py-2.5 text-sm font-semibold text-black hover:bg-gray-50 transition-colors"
+  >
+    <PlusCircle size={15} />
+    Nouvel article blog
+  </Link>
+  <Link
+    href="/gestionnaire/articles/nouveau"
+    className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+  >
+    <PlusCircle size={15} />
+    Nouvel article
+  </Link>
+</div>
       </div>
 
       {/* ── Stats ── */}
