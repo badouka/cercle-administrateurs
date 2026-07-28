@@ -8,6 +8,7 @@ import config from '@payload-config'
 import { ArrowLeft, Calendar } from 'lucide-react'
 import { ShareButtons } from '@/components/ShareButtons'
 import { lexicalToHtml } from '@/lib/lexical-to-html'
+import { PageHero } from '@/components/PageHero'
 
 function formatDate(dateStr?: string | null): string {
   if (!dateStr) return ''
@@ -63,19 +64,18 @@ export default async function BlogDetailPage({
   const image    = typeof post.image === 'object' && post.image ? (post.image as Media) : null
   const htmlBody = lexicalToHtml(post.contenu)
 
-  return (
+return (
+  <div>
+    <PageHero
+      title={post.titre}
+      breadcrumb={[
+        { label: 'Accueil', href: '/' },
+        { label: 'Blog', href: '/blog' },
+        { label: post.titre, href: `/blog/${slug}` },
+      ]}
+    />
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-
-      {/* ── Back link ── */}
-      <Link
-        href="/blog"
-        className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-black transition-colors mb-8"
-      >
-        <ArrowLeft size={15} />
-        Retour au blog
-      </Link>
-
-      <article>
+    <article>
 
         {/* ── Featured image ── */}
         {image?.url ? (
@@ -136,6 +136,7 @@ export default async function BlogDetailPage({
           Retour au blog
         </Link>
       </div>
+    </div>
     </div>
   )
 }
