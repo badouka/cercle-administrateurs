@@ -105,7 +105,7 @@ export default async function ArticlesPage() {
             <table className="w-full text-sm min-w-[700px]">
               <thead>
                 <tr className="border-b border-gray-100 bg-[#F9F9F9]">
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Titre</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-2/5">Titre</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Catégorie</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Mis à jour</th>
@@ -115,12 +115,10 @@ export default async function ArticlesPage() {
               <tbody className="divide-y divide-gray-100">
                 {(posts as Post[]).map(post => (
                   <tr key={post.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3.5">
-                      <p className="font-medium text-black max-w-[240px] truncate">{post.titre}</p>
-                      {post.slug && (
-                        <p className="text-xs text-gray-400 font-mono mt-0.5 truncate">{post.slug}</p>
-                      )}
+                    <td className="px-5 py-3.5 font-medium text-black w-2/5">
+                      <span className="block truncate max-w-[180px]">{post.titre}</span>
                     </td>
+
                     <td className="px-5 py-3.5 text-xs text-gray-500">
                       {CATEGORIES[post.categorie] ?? post.categorie}
                     </td>

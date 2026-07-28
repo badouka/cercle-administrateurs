@@ -56,7 +56,7 @@ function ContentTable({
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gray-100 bg-[#F9F9F9]">
-            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Titre</th>
+            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-2/5">Titre</th>
             {categories && <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Catégorie</th>}
             <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
             <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Modifié le</th>
@@ -66,7 +66,9 @@ function ContentTable({
         <tbody className="divide-y divide-gray-100">
           {items.map(post => (
             <tr key={post.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-5 py-3.5 font-medium text-black max-w-[180px] truncate">{post.titre}</td>
+              <td className="px-5 py-3.5 font-medium text-black w-2/5">
+                <span className="block truncate max-w-[160px]">{post.titre}</span>
+              </td>
               {categories && (
                 <td className="hidden sm:table-cell px-5 py-3.5 text-gray-500 text-xs">
                   {categories[post.categorie] ?? post.categorie}

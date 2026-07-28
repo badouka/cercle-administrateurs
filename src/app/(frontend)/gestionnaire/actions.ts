@@ -222,11 +222,6 @@ export async function togglePostStatut(
   if ('error' in ctx) return ctx
 
   try {
-    if (ctx.user.role === 'gestionnaire') {
-      const post    = await ctx.payload.findByID({ collection: 'posts', id: postId, overrideAccess: true })
-      const auteurId = typeof post.auteur === 'object' ? post.auteur.id : post.auteur
-      if (auteurId !== ctx.user.id) return { error: 'Accès refusé : vous ne pouvez modifier que vos propres articles' }
-    }
     await ctx.payload.update({
       collection:     'posts',
       id:             postId,
@@ -284,6 +279,48 @@ export async function deleteBlogPost(postId: number): Promise<ActionResult> {
     return { success: true }
   } catch (err) {
     return { error: err instanceof Error ? err.message : 'Erreur' }
+  }
+}
+
+// ── Documents ─────────────────────────────────────────────────────────────────
+
+export async function updateDocumentAction(
+  documentId: number,
+  formData:   FormData,
+): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  const titre       = (formData.get('titre') as string | null)?.trim()
+  const categorie   = formData.get('categorie')   as string | null
+  const acces       = formData.get('acces')       as 'public' | 'membres' | null
+  const description = formData.get('description') as string | null
+  const fichierId   = formData.get('fichierId') ? Number(formData.get('fichierId')) : undefined
+
+  if (!titre) return { error: 'Le titre est requis' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: Record<string, any> = { titre }
+  if (categorie)            data.categorie   = categorie
+  if (acces)                data.acces       = acces
+  if (description !== null) data.description = description
+  if (fichierId)            data.fichier     = fichierId
+
+  try {
+    await ctx.payload.update({
+      collection:     'documents',
+      id:             documentId,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      data:           data as any,
+      overrideAccess: true,
+    })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/gestionnaire/documents')
+    revalidatePath('/documents')
+    revalidatePath('/magazines')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la mise à jour du document' }
   }
 }
 
@@ -567,11 +604,6 @@ export async function updatePostAction(
   if (publieLe)               data.publie_le = new Date(publieLe).toISOString()
 
   try {
-    if (ctx.user.role === 'gestionnaire') {
-      const post    = await ctx.payload.findByID({ collection: 'posts', id: postId, overrideAccess: true })
-      const auteurId = typeof post.auteur === 'object' ? post.auteur.id : post.auteur
-      if (auteurId !== ctx.user.id) return { error: 'Accès refusé : vous ne pouvez modifier que vos propres articles' }
-    }
     await ctx.payload.update({
       collection:     'posts',
       id:             postId,
