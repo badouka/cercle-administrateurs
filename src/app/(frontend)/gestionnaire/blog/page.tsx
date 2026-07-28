@@ -21,6 +21,7 @@ export default async function GestionnaireBlogPage() {
   if (!user) redirect('/connexion')
 
   const role = (user as User).role
+  const isAdmin = role === 'admin'
   if (role !== 'gestionnaire' && role !== 'admin') redirect('/dashboard')
 
   const { docs: posts, totalDocs } = await payload.find({
