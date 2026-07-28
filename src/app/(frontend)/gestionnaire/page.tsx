@@ -13,6 +13,8 @@ import {
 import type { Media } from '@/payload-types'
 import { MembreActionButtons } from './MembreActionButtons'
 import { PostListActions } from './articles/PostListActions'
+import { BlogListActions } from './blog/BlogListActions'
+
 
 export const metadata: Metadata = { title: 'Tableau de bord gestionnaire' }
 
@@ -307,12 +309,52 @@ export default async function GestionnairePage() {
             Voir tous <ChevronRight size={14} />
           </Link>
         </div>
-        <ContentTable
-          items={recentBlogs as unknown as Post[]}
-          editBase="/gestionnaire/blog"
-          isAdmin={isAdmin}
-          emptyLabel="Aucun article de blog. Créez le premier !"
-        />
+
+
+        {recentBlogs.length === 0 ? (
+          <div className="flex items-center gap-3 rounded-xl border border-[#E5E5E5] bg-[#F9F9F9] px-5 py-4">
+            <AlertCircle size={18} className="text-gray-400 shrink-0" />
+            <p className="text-sm text-gray-500">Aucun article de blog. Créez le premier !</p>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-[#E5E5E5] bg-white overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-[#F9F9F9]">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-2/5">Titre</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
+                  <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Modifié le</th>
+                  <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(recentBlogs as any[]).map(post => (
+                  <tr key={post.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-5 py-3.5 font-medium text-black w-2/5">
+                      <span className="block truncate max-w-[160px]">{post.titre}</span>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        post.statut === 'published' ? 'bg-black text-white' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {post.statut === 'published' ? 'Publié' : 'Brouillon'}
+                      </span>
+                    </td>
+                    <td className="hidden sm:table-cell px-5 py-3.5 text-gray-400 text-xs">
+                      {formatDate(post.updatedAt)}
+                    </td>
+                    <td className="px-5 py-3.5 text-right">
+                      <BlogListActions postId={post.id} titre={post.titre} statut={post.statut} isAdmin={isAdmin} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+
       </section>
 
 

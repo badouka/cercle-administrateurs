@@ -1,5 +1,6 @@
-import type { CollectionConfig } from 'payload'
-import type { User } from '@/payload-types'
+//import type { CollectionConfig } from 'payload'
+//import type { User } from '@/payload-types'
+//import { isAdmin, isAdminOrGestionnaire } from '@/access'
 import { isAdmin, isAdminOrGestionnaire } from '@/access'
 
 const toSlug = (value: string) =>

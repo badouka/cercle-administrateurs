@@ -255,6 +255,38 @@ export async function deletePost(postId: number): Promise<ActionResult> {
   }
 }
 
+// ── Blog posts ────────────────────────────────────────────────────────────────
+export async function toggleBlogStatut(postId: number, newStatut: 'published' | 'draft'): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+  try {
+    await ctx.payload.update({
+      collection:     'blog-posts',
+      id:             postId,
+      data:           { statut: newStatut },
+      overrideAccess: true,
+    })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/blog')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur' }
+  }
+}
+
+export async function deleteBlogPost(postId: number): Promise<ActionResult> {
+  const ctx = await requireRole('admin')
+  if ('error' in ctx) return ctx
+  try {
+    await ctx.payload.delete({ collection: 'blog-posts', id: postId, overrideAccess: true })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/blog')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur' }
+  }
+}
+
 // ── Media upload ──────────────────────────────────────────────────────────────
 
 export async function uploadMedia(

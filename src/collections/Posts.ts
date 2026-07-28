@@ -49,7 +49,7 @@ export const Posts: CollectionConfig = {
       if (!user) return false
       const { role, id } = user as User
       if (role === 'admin') return true
-      if (role === 'gestionnaire') return { auteur: { equals: id } }
+      if (role === 'gestionnaire') return true
       return false
     },
     delete: isAdmin,
