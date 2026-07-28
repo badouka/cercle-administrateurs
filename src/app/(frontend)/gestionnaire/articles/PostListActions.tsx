@@ -13,8 +13,7 @@ interface Props {
   editHref?:  string 
 }
 
-export function PostListActions({ postId, titre, statut, isAdmin }: Props) {
-  const [pending, startTransition] = useTransition()
+export function PostListActions({ postId, titre, statut, isAdmin, editHref }: Props) {  const [pending, startTransition] = useTransition()
   const [deleted, setDeleted]      = useState(false)
   const [error, setError]          = useState<string | null>(null)
 
