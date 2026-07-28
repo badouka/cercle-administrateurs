@@ -10,6 +10,7 @@ interface Props {
   titre:      string
   statut:     'publie' | 'brouillon'
   isAdmin:    boolean
+  editHref?:  string 
 }
 
 export function PostListActions({ postId, titre, statut, isAdmin }: Props) {
@@ -57,12 +58,13 @@ export function PostListActions({ postId, titre, statut, isAdmin }: Props) {
       </button>
 
       <Link
-        href={`/gestionnaire/articles/${postId}/modifier`}
+        href={editHref ?? `/gestionnaire/articles/${postId}/modifier`}
         className="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:border-black hover:text-black transition-colors"
       >
         <Pencil size={12} />
         Modifier
       </Link>
+
 
       {isAdmin && (
         <button
