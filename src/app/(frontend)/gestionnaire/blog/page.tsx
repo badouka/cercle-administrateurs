@@ -21,7 +21,7 @@ export default async function GestionnaireBlogPage() {
   if (!user) redirect('/connexion')
 
   const role = (user as User).role
-  const isAdmin = role === 'admin'
+  const canDelete = role === 'gestionnaire' || role === 'admin'
   if (role !== 'gestionnaire' && role !== 'admin') redirect('/dashboard')
 
   const { docs: posts, totalDocs } = await payload.find({
@@ -36,7 +36,7 @@ export default async function GestionnaireBlogPage() {
   const brouillons = posts.filter(p => p.statut === 'draft').length
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-8">
 
       {/* ── Header ── */}
       <div>
@@ -132,7 +132,7 @@ export default async function GestionnaireBlogPage() {
                         postId={post.id}
                         titre={post.titre}
                         statut={post.statut}
-                        isAdmin={isAdmin}
+                        canDelete={canDelete}
                       />
                     </td>
                   </tr>

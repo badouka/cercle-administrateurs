@@ -14,6 +14,7 @@ import type { Media } from '@/payload-types'
 import { MembreActionButtons } from './MembreActionButtons'
 import { PostListActions } from './articles/PostListActions'
 import { BlogListActions } from './blog/BlogListActions'
+import { DocumentListActions } from './documents/DocumentListActions'
 
 
 export const metadata: Metadata = { title: 'Tableau de bord gestionnaire' }
@@ -34,13 +35,13 @@ function ContentTable({
   items,
   editBase,
   categories,
-  isAdmin,
+  canDelete,
   emptyLabel,
 }: {
   items: Post[]
   editBase: string
   categories?: Record<string, string>
-  isAdmin: boolean
+  canDelete: boolean
   emptyLabel: string
 }) {
   if (items.length === 0) {
@@ -92,7 +93,7 @@ function ContentTable({
                   titre={post.titre}
                   statut={post.statut}
                   editHref={`${editBase}/${post.id}/modifier`}
-                  isAdmin={isAdmin}
+                  canDelete={canDelete}
                 />
               </td>
             </tr>
@@ -164,7 +165,7 @@ export default async function GestionnairePage() {
 
   ])
 
-  const isAdmin = role === 'admin'
+  const canDelete = role === 'gestionnaire' || role === 'admin'
 
   return (
     <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-10">
@@ -302,7 +303,7 @@ export default async function GestionnairePage() {
           items={recentPosts as Post[]}
           editBase="/gestionnaire/articles"
           categories={CATEGORIES}
-          isAdmin={isAdmin}
+          canDelete={canDelete}
           emptyLabel="Aucun article. Créez le premier !"
         />
       </section>
@@ -354,7 +355,7 @@ export default async function GestionnairePage() {
                       {formatDate(post.updatedAt)}
                     </td>
                     <td className="px-5 py-3.5 text-right">
-                      <BlogListActions postId={post.id} titre={post.titre} statut={post.statut} isAdmin={isAdmin} />
+                      <BlogListActions postId={post.id} titre={post.titre} statut={post.statut} canDelete={canDelete} />
                     </td>
                   </tr>
                 ))}
@@ -463,12 +464,7 @@ export default async function GestionnairePage() {
                 {formatDate(doc.updatedAt)}
               </td>
               <td className="px-5 py-3.5 text-right">
-                <Link
-                  href={`/gestionnaire/documents/${doc.id}/modifier`}
-                  className="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:border-black hover:text-black transition-colors"
-                >
-                  Modifier
-                </Link>
+                <DocumentListActions documentId={doc.id} titre={doc.titre} canDelete={canDelete} />
               </td>
             </tr>
           ))}

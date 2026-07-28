@@ -5,7 +5,8 @@ import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { User, Document } from '@/payload-types'
 import config from '@payload-config'
-import { FileText, ArrowLeft, Pencil, PlusCircle } from 'lucide-react'
+import { FileText, ArrowLeft, PlusCircle } from 'lucide-react'
+import { DocumentListActions } from './DocumentListActions'
 
 export const metadata: Metadata = { title: 'Gestion des documents' }
 
@@ -39,8 +40,10 @@ export default async function DocumentsPage() {
     overrideAccess: true,
   })
 
+  const canDelete = role === 'gestionnaire' || role === 'admin'
+
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-8">
 
       {/* ── Header ── */}
       <div>
@@ -109,12 +112,11 @@ export default async function DocumentsPage() {
                       {formatDate(doc.updatedAt)}
                     </td>
                     <td className="px-5 py-3.5 text-right">
-                      <Link
-                        href={`/gestionnaire/documents/${doc.id}/modifier`}
-                        className="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:border-black hover:text-black transition-colors"
-                      >
-                        <Pencil size={12} /> Modifier
-                      </Link>
+                      <DocumentListActions
+                        documentId={doc.id}
+                        titre={doc.titre}
+                        canDelete={canDelete}
+                      />
                     </td>
                   </tr>
                 ))}

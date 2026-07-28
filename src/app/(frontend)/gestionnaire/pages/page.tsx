@@ -8,7 +8,7 @@ export default function PagesListPage() {
     { slug: 'partenaires',      label: 'Nos partenaires',    desc: 'Partenaires institutionnels' },
   ]
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-8">
       <div>
         <Link href="/gestionnaire" className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-black mb-4">
           ← Tableau de bord

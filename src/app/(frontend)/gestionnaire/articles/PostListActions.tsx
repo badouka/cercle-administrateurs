@@ -9,11 +9,11 @@ interface Props {
   postId:     number
   titre:      string
   statut:     'publie' | 'brouillon'
-  isAdmin:    boolean
+  canDelete:    boolean
   editHref?:  string 
 }
 
-export function PostListActions({ postId, titre, statut, isAdmin, editHref }: Props) {  const [pending, startTransition] = useTransition()
+export function PostListActions({ postId, titre, statut, canDelete, editHref }: Props) {  const [pending, startTransition] = useTransition()
   const [deleted, setDeleted]      = useState(false)
   const [error, setError]          = useState<string | null>(null)
 
@@ -65,7 +65,7 @@ export function PostListActions({ postId, titre, statut, isAdmin, editHref }: Pr
       </Link>
 
 
-      {isAdmin && (
+      {canDelete && (
         <button
           onClick={handleDelete}
           disabled={pending}

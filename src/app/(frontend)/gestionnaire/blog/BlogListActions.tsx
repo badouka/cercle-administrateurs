@@ -9,10 +9,10 @@ interface Props {
   postId:  number
   titre:   string
   statut:  string
-  isAdmin: boolean
+  canDelete: boolean
 }
 
-export function BlogListActions({ postId, titre, statut, isAdmin }: Props) {
+export function BlogListActions({ postId, titre, statut, canDelete }: Props) {
   const [pending, startTransition] = useTransition()
   const [deleted, setDeleted]      = useState(false)
   const [error, setError]          = useState<string | null>(null)
@@ -49,7 +49,7 @@ export function BlogListActions({ postId, titre, statut, isAdmin }: Props) {
         className="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:border-black hover:text-black transition-colors">
         <Pencil size={12}/> Modifier
       </Link>
-      {isAdmin && (
+      {canDelete && (
         <button onClick={handleDelete} disabled={pending}
           className="inline-flex items-center gap-1 rounded-md border border-red-200 px-2.5 py-1.5 text-xs font-medium text-red-600 hover:border-red-500 hover:bg-red-50 transition-colors disabled:opacity-50">
           <Trash2 size={12}/> Supprimer

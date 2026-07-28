@@ -36,12 +36,12 @@ export default async function ArticlesPage() {
     overrideAccess: true,
   })
 
-  const isAdmin   = role === 'admin'
+  const canDelete   = role === 'gestionnaire' || role === 'admin'
   const publiés   = posts.filter(p => p.statut === 'publie').length
   const brouillons = posts.filter(p => p.statut === 'brouillon').length
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-8">
 
       {/* ── Header ── */}
       <div>
@@ -139,7 +139,7 @@ export default async function ArticlesPage() {
                         postId={post.id}
                         titre={post.titre}
                         statut={post.statut}
-                        isAdmin={isAdmin}
+                        canDelete={canDelete}
                       />
                     </td>
                   </tr>

@@ -237,7 +237,7 @@ export async function togglePostStatut(
 }
 
 export async function deletePost(postId: number): Promise<ActionResult> {
-  const ctx = await requireRole('admin')
+  const ctx = await requireRole()
   if ('error' in ctx) return ctx
 
   try {
@@ -270,7 +270,7 @@ export async function toggleBlogStatut(postId: number, newStatut: 'published' | 
 }
 
 export async function deleteBlogPost(postId: number): Promise<ActionResult> {
-  const ctx = await requireRole('admin')
+  const ctx = await requireRole()
   if ('error' in ctx) return ctx
   try {
     await ctx.payload.delete({ collection: 'blog-posts', id: postId, overrideAccess: true })
@@ -366,6 +366,22 @@ export async function updateDocumentAction(
     return { success: true }
   } catch (err) {
     return { error: err instanceof Error ? err.message : 'Erreur lors de la mise à jour du document' }
+  }
+}
+
+export async function deleteDocument(documentId: number): Promise<ActionResult> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  try {
+    await ctx.payload.delete({ collection: 'documents', id: documentId, overrideAccess: true })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/gestionnaire/documents')
+    revalidatePath('/documents')
+    revalidatePath('/magazines')
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la suppression du document' }
   }
 }
 

@@ -1,6 +1,6 @@
 import type { CollectionConfig, Access } from 'payload'
 import type { User } from '@/payload-types'
-import { isAdmin, isAdminOrGestionnaire } from '@/access'
+import { isAdminOrGestionnaire } from '@/access'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import {
   BoldFeature,
@@ -44,15 +44,9 @@ export const Posts: CollectionConfig = {
     }) as Access,
     // Admin et gestionnaire peuvent créer
     create: isAdminOrGestionnaire,
-    // Admin : tout ; gestionnaire : seulement ses propres articles
-    update: ({ req: { user } }) => {
-      if (!user) return false
-      const { role, id } = user as User
-      if (role === 'admin') return true
-      if (role === 'gestionnaire') return true
-      return false
-    },
-    delete: isAdmin,
+    // Admin et gestionnaire : tous les articles, sans restriction d'auteur
+    update: isAdminOrGestionnaire,
+    delete: isAdminOrGestionnaire,
   },
   hooks: {
     // beforeValidate : s'exécute avant la validation des champs "required"
