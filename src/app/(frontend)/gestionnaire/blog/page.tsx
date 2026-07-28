@@ -131,6 +131,7 @@ export default async function GestionnaireBlogPage() {
                         postId={post.id}
                         titre={post.titre}
                         statut={post.statut}
+                        isAdmin={isAdmin}
                       />
                     </td>
                   </tr>
