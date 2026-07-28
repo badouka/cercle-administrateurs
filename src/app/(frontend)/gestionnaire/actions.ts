@@ -613,7 +613,6 @@ export async function createPostAction(
   const documents = parseDocuments(documentsJson)
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const post = await ctx.payload.create({
       collection:     'posts',
       data: {

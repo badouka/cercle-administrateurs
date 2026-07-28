@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 import type { User, Membre, Post } from '@/payload-types'
 import config from '@payload-config'
 import {
-  Users, FileText, PlusCircle, Clock, CheckCircle2,
+  FileText, PlusCircle, Clock, CheckCircle2,
   ChevronRight, Settings2, AlertCircle, ExternalLink,
   BookOpen, Newspaper, LayoutTemplate,
 } from 'lucide-react'
@@ -118,7 +118,7 @@ export default async function GestionnairePage() {
     { docs: recentBlogs,      totalDocs: totalBlogs },
     { docs: recentPages },
     { totalDocs: totalMembres },
-    { docs: recentDocs, totalDocs: totalDocs },
+    { docs: recentDocs },
   ] = await Promise.all([
     payload.find({
       collection:     'membres',
