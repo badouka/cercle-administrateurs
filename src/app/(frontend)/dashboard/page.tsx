@@ -73,8 +73,8 @@ export default async function DashboardPage() {
           </div>
           <h1 className="text-2xl font-bold text-black">Tableau de bord administrateur</h1>
           <p className="mt-3 text-sm text-gray-500 leading-relaxed">
-            Vous êtes connecté en tant qu'administrateur. Gérez les membres, les contenus
-            et la configuration de la plateforme depuis le panneau d'administration.
+            Vous êtes connecté en tant qu&apos;administrateur. Gérez les membres, les contenus
+            et la configuration de la plateforme depuis le panneau d&apos;administration.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
@@ -82,7 +82,7 @@ export default async function DashboardPage() {
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
             >
               <LayoutDashboard size={15} />
-              Ouvrir le panneau d'administration
+              Ouvrir le panneau d&apos;administration
             </Link>
             <Link
               href="/"
@@ -146,8 +146,8 @@ export default async function DashboardPage() {
               <div>
                 <p className="text-sm font-semibold text-yellow-900">Votre demande est en cours de traitement</p>
                 <p className="mt-1 text-sm text-yellow-800 leading-relaxed">
-                  L'administrateur du CAP va examiner votre demande d'adhésion et activer votre compte.
-                  Vous aurez alors accès à l'ensemble des documents, ressources et activités réservés aux membres.
+                  L&apos;administrateur du CAP va examiner votre demande d&apos;adhésion et activer votre compte.
+                  Vous aurez alors accès à l&apos;ensemble des documents, ressources et activités réservés aux membres.
                 </p>
               </div>
             </div>
@@ -169,7 +169,7 @@ export default async function DashboardPage() {
 
         <div className="text-center">
           <Link href="/" className="text-sm text-gray-500 hover:text-black transition-colors">
-            ← Retour à l'accueil
+            ← Retour à l&apos;accueil
           </Link>
         </div>
       </div>
@@ -214,7 +214,7 @@ export default async function DashboardPage() {
             <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4">
               <AlertCircle size={18} className="mt-0.5 shrink-0 text-red-600" />
               <p className="text-sm text-red-800 leading-relaxed">
-                Votre compte a été suspendu. Veuillez contacter l'administrateur pour plus d'informations.
+                Votre compte a été suspendu. Veuillez contacter l&apos;administrateur pour plus d&apos;informations.
               </p>
             </div>
           </div>
@@ -222,7 +222,7 @@ export default async function DashboardPage() {
 
         <div className="text-center">
           <Link href="/" className="text-sm text-gray-500 hover:text-black transition-colors">
-            ← Retour à l'accueil
+            ← Retour à l&apos;accueil
           </Link>
         </div>
       </div>

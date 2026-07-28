@@ -166,7 +166,7 @@ export function ActualitesGrid({ posts }: { posts: Post[] }) {
                       href={href}
                       className="text-xs font-semibold text-black underline underline-offset-2 hover:text-gray-600 transition-colors self-start"
                     >
-                      Lire l'article →
+                      Lire l&apos;article →
                     </Link>
                   )}
 

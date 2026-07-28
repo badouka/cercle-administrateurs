@@ -243,7 +243,7 @@ export function EditProfileForm({ membre }: Props) {
               {posteCap || '—'}
             </p>
             <p className="mt-1 text-xs text-gray-400">
-              Ce champ est géré par l'administration et ne peut pas être modifié.
+              Ce champ est géré par l&apos;administration et ne peut pas être modifié.
             </p>
           </div>
 
