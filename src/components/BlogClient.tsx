@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useOrigin } from '@/hooks/useOrigin'
 import { ArrowRight } from 'lucide-react'
 
 export interface BlogPostCard {
@@ -17,11 +18,7 @@ export interface BlogPostCard {
 export function BlogClient({ posts }: { posts: BlogPostCard[] }) {
   const [query, setQuery] = useState('')
   const [filtre, setFiltre] = useState<string>('tous')
-  const [origin, setOrigin] = useState('')
-
-  useEffect(() => {
-    setOrigin(window.location.origin)
-  }, [])
+  const origin = useOrigin()
 
   // Catégories dynamiques issues des posts.
   const categories = useMemo(

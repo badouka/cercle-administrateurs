@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link2, Check } from 'lucide-react'
+import { useOrigin } from '@/hooks/useOrigin'
 
 interface ShareButtonsProps {
   title: string
@@ -9,10 +10,8 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ title, path }: ShareButtonsProps) {
-  const [origin,  setOrigin]  = useState('')
-  const [copied,  setCopied]  = useState(false)
-
-  useEffect(() => { setOrigin(window.location.origin) }, [])
+  const origin               = useOrigin()
+  const [copied,  setCopied] = useState(false)
 
   if (!origin) return null
 

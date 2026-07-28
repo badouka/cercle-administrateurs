@@ -17,7 +17,7 @@ interface BureauAutoCarouselProps {
 
 export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
   const [visibleCount, setVisibleCount] = useState(1)
-  const [index, setIndex] = useState(0)
+  const [indexBrut, setIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
   useEffect(() => {
@@ -31,24 +31,26 @@ export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
 
   const maxIndex = Math.max(0, membres.length - visibleCount)
 
-  useEffect(() => {
-    setIndex(i => Math.min(i, maxIndex))
-  }, [maxIndex])
+  // Index borné au rendu : quand visibleCount change (resize), maxIndex baisse
+  // et l'index affiché suit sans passer par un setState dans un effet.
+  const clamp = (i: number) => Math.min(Math.max(i, 0), maxIndex)
+  const index = clamp(indexBrut)
 
   useEffect(() => {
     if (isHovered || maxIndex === 0) return
     const id = setInterval(() => {
-      setIndex(i => (i >= maxIndex ? 0 : i + 1))
+      setIndex(i => (clamp(i) >= maxIndex ? 0 : clamp(i) + 1))
     }, 3000)
     return () => clearInterval(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovered, maxIndex])
 
   function goPrev() {
-    setIndex(i => (i <= 0 ? maxIndex : i - 1))
+    setIndex(index <= 0 ? maxIndex : index - 1)
   }
 
   function goNext() {
-    setIndex(i => (i >= maxIndex ? 0 : i + 1))
+    setIndex(index >= maxIndex ? 0 : index + 1)
   }
 
   return (

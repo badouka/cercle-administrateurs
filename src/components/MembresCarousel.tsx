@@ -54,7 +54,7 @@ function initiales(prenom: string, nom: string): string {
 
 export function MembresCarousel({ membres }: MembresCarouselProps) {
   const [perView, setPerView] = useState(4)
-  const [page, setPage] = useState(0)
+  const [pageBrute, setPage] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
   // Bureau d'abord (ordre des postes), puis membres simples (par nom).
@@ -86,16 +86,15 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
 
   const pageCount = Math.max(1, Math.ceil(membresTries.length / perView))
 
-  // Garde la page courante dans les bornes quand perView change.
-  useEffect(() => {
-    setPage(p => Math.min(p, pageCount - 1))
-  }, [pageCount])
+  // Page courante bornée au rendu : quand perView change (resize), pageCount
+  // baisse et la page affichée suit, sans setState dans un effet.
+  const page = Math.min(Math.max(pageBrute, 0), pageCount - 1)
 
   // Autoplay : avance d'un groupe toutes les 3s, en pause au survol.
   useEffect(() => {
     if (isHovered || pageCount <= 1) return
     const id = setInterval(() => {
-      setPage(p => (p + 1) % pageCount)
+      setPage(p => (Math.min(p, pageCount - 1) + 1) % pageCount)
     }, 3000)
     return () => clearInterval(id)
   }, [isHovered, pageCount])

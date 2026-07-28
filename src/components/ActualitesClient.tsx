@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useOrigin } from '@/hooks/useOrigin'
 import { ArrowRight } from 'lucide-react'
 
 export interface ActualitePost {
@@ -42,11 +43,7 @@ function matchFiltre(post: ActualitePost, filtre: Filtre): boolean {
 export function ActualitesClient({ posts }: { posts: ActualitePost[] }) {
   const [query, setQuery] = useState('')
   const [filtre, setFiltre] = useState<Filtre>('tous')
-  const [origin, setOrigin] = useState('')
-
-  useEffect(() => {
-    setOrigin(window.location.origin)
-  }, [])
+  const origin = useOrigin()
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
