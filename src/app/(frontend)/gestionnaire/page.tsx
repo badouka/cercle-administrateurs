@@ -113,6 +113,7 @@ export default async function GestionnairePage() {
     { docs: recentBlogs,      totalDocs: totalBlogs },
     { docs: recentPages },
     { totalDocs: totalMembres },
+    { docs: recentDocs, totalDocs: totalDocs },
   ] = await Promise.all([
     payload.find({
       collection:     'membres',
@@ -149,6 +150,14 @@ export default async function GestionnairePage() {
       limit:          0,
       overrideAccess: true,
     }),
+    payload.find({
+      collection:     'documents',
+      sort:           '-updatedAt',
+      limit:          3,
+      depth:          0,
+      overrideAccess: true,
+    }),
+
   ])
 
   const isAdmin = role === 'admin'
@@ -306,19 +315,19 @@ export default async function GestionnairePage() {
         />
       </section>
 
-      {/* ── Pages du site ── */}
+
+{/* ── Pages du site ── */}
       <section>
         <div className="flex items-center justify-between border-b-2 border-black pb-3 mb-5">
-            <div className="flex items-center justify-between border-b-2 border-black pb-3 mb-5">
-              <div className="flex items-center gap-2">
-                <LayoutTemplate size={17} className="text-black" />
-                <h2 className="text-lg font-bold text-black">Pages du site</h2>
-              </div>
-              <Link href="/gestionnaire/pages" className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-black transition-colors">
-                Voir toutes <ChevronRight size={14} />
-              </Link>
-            </div>
+          <div className="flex items-center gap-2">
+            <LayoutTemplate size={17} className="text-black" />
+            <h2 className="text-lg font-bold text-black">Pages du site</h2>
+          </div>
+          <Link href="/gestionnaire/pages" className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-black transition-colors">
+            Voir toutes <ChevronRight size={14} />
+          </Link>
         </div>
+
         <div className="rounded-xl border border-[#E5E5E5] bg-white overflow-hidden">
           <table className="w-full text-sm">
             <thead>
@@ -357,6 +366,67 @@ export default async function GestionnairePage() {
           </table>
         </div>
       </section>
+
+{/* ── Documents récents ── */}
+<section>
+  <div className="flex items-center justify-between border-b-2 border-black pb-3 mb-5">
+    <div className="flex items-center gap-2">
+      <FileText size={17} className="text-black" />
+      <h2 className="text-lg font-bold text-black">Documents récents</h2>
+    </div>
+    <Link href="/gestionnaire/documents" className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-black transition-colors">
+      Voir tous <ChevronRight size={14} />
+    </Link>
+  </div>
+  {recentDocs.length === 0 ? (
+    <div className="flex items-center gap-3 rounded-xl border border-[#E5E5E5] bg-[#F9F9F9] px-5 py-4">
+      <AlertCircle size={18} className="text-gray-400 shrink-0" />
+      <p className="text-sm text-gray-500">Aucun document.</p>
+    </div>
+  ) : (
+    <div className="rounded-xl border border-[#E5E5E5] bg-white overflow-hidden">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-gray-100 bg-[#F9F9F9]">
+            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Titre</th>
+            <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Catégorie</th>
+            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Accès</th>
+            <th className="hidden sm:table-cell px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Modifié le</th>
+            <th className="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {(recentDocs as any[]).map(doc => (
+            <tr key={doc.id} className="hover:bg-gray-50 transition-colors">
+              <td className="px-5 py-3.5 font-medium text-black max-w-[180px] truncate">{doc.titre}</td>
+              <td className="hidden sm:table-cell px-5 py-3.5 text-gray-500 text-xs">{doc.categorie ?? '—'}</td>
+              <td className="px-5 py-3.5">
+                <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                  doc.acces === 'public' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                }`}>
+                  {doc.acces === 'public' ? 'Public' : 'Membres'}
+                </span>
+              </td>
+              <td className="hidden sm:table-cell px-5 py-3.5 text-gray-400 text-xs">
+                {formatDate(doc.updatedAt)}
+              </td>
+              <td className="px-5 py-3.5 text-right">
+                <Link
+                  href={`/gestionnaire/documents/${doc.id}/modifier`}
+                  className="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:border-black hover:text-black transition-colors"
+                >
+                  Modifier
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</section>
+
 
     </div>
   )

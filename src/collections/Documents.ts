@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { User } from '@/payload-types'
-import { isAdmin } from '@/access'
+import { isAdmin, isAdminOrGestionnaire } from '@/access'
 
 const toSlug = (value: string) =>
   value
@@ -24,9 +24,9 @@ export const Documents: CollectionConfig = {
       if (!user) return { acces: { equals: 'public' } }
       return true
     },
-    create: isAdmin,
-    update: isAdmin,
-    delete: isAdmin,
+create: isAdminOrGestionnaire,
+update: isAdminOrGestionnaire,
+delete: isAdminOrGestionnaire,
   },
   hooks: {
     beforeChange: [
