@@ -93,15 +93,11 @@ export function AnnuaireClient({
               href={`/annuaire/${m.slug || m.id}`}
               className="relative cursor-pointer overflow-hidden rounded-2xl border border-[#14110B]/10 border-t-4 border-t-[#1a7a3a] bg-white transition-all hover:border-[#C8A24A]/50 hover:shadow-md"
             >
-              {m.isBureau ? (
-                <span className="absolute right-3 top-3 z-10 rounded-full bg-[#1a7a3a] px-2 py-0.5 text-xs font-bold text-white">
-                  Bureau
-                </span>
-              ) : (
-                <span className="absolute right-3 top-3 z-10 rounded-full border border-[#14110B]/15 bg-[#FAF8F3] px-2 py-0.5 text-xs text-[#14110B]/50">
-                  Membre
-                </span>
-              )}
+{m.isBureau && m.posteCap && (
+  <span className="absolute right-3 top-3 z-10 rounded-full bg-[#1a7a3a] px-2 py-0.5 text-xs font-bold text-white">
+    {m.posteCap}
+  </span>
+)}
 
               <div className="aspect-[3/4] overflow-hidden bg-gradient-to-br from-[#BFDDCD] to-[#EEF6F1]">
                 {m.photo ? (
