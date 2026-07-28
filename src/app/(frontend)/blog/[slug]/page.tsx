@@ -75,6 +75,18 @@ return (
       ]}
     />
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+
+            {/* ── Bottom back link ── */}
+      <div className="mt-10">
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-black transition-colors"
+        >
+          <ArrowLeft size={15} />
+          Retour au blog
+        </Link>
+      </div>
+      
     <article>
 
         {/* ── Featured image ── */}
