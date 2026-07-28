@@ -284,6 +284,47 @@ export async function deleteBlogPost(postId: number): Promise<ActionResult> {
 
 // ── Documents ─────────────────────────────────────────────────────────────────
 
+export async function createDocumentAction(
+  formData: FormData,
+): Promise<{ success: true; id: number } | { error: string }> {
+  const ctx = await requireRole()
+  if ('error' in ctx) return ctx
+
+  const titre       = (formData.get('titre') as string | null)?.trim()
+  const categorie   = formData.get('categorie')   as string | null
+  const acces       = formData.get('acces')       as 'public' | 'membres' | null
+  const description = formData.get('description') as string | null
+  const fichierId   = formData.get('fichierId')   ? Number(formData.get('fichierId'))   : undefined
+  const couvertureId = formData.get('couvertureId') ? Number(formData.get('couvertureId')) : undefined
+
+  if (!titre)     return { error: 'Le titre est requis' }
+  if (!categorie) return { error: 'La catégorie est requise' }
+  if (!fichierId) return { error: 'Le fichier est requis' }
+
+  try {
+    const doc = await ctx.payload.create({
+      collection: 'documents',
+      data: {
+        titre,
+        categorie,
+        acces:   acces ?? 'public',
+        fichier: fichierId,
+        ...(description ? { description } : {}),
+        ...(couvertureId ? { couverture: couvertureId } : {}),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any,
+      overrideAccess: true,
+    })
+    revalidatePath('/gestionnaire')
+    revalidatePath('/gestionnaire/documents')
+    revalidatePath('/documents')
+    revalidatePath('/magazines')
+    return { success: true, id: doc.id }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Erreur lors de la création du document' }
+  }
+}
+
 export async function updateDocumentAction(
   documentId: number,
   formData:   FormData,
@@ -296,6 +337,8 @@ export async function updateDocumentAction(
   const acces       = formData.get('acces')       as 'public' | 'membres' | null
   const description = formData.get('description') as string | null
   const fichierId   = formData.get('fichierId') ? Number(formData.get('fichierId')) : undefined
+  const couvertureId = formData.get('couvertureId') ? Number(formData.get('couvertureId')) : undefined
+  const removeCouverture = formData.get('removeCouverture') === '1'
 
   if (!titre) return { error: 'Le titre est requis' }
 
@@ -305,6 +348,8 @@ export async function updateDocumentAction(
   if (acces)                data.acces       = acces
   if (description !== null) data.description = description
   if (fichierId)            data.fichier     = fichierId
+  if (couvertureId)         data.couverture  = couvertureId
+  else if (removeCouverture) data.couverture = null
 
   try {
     await ctx.payload.update({

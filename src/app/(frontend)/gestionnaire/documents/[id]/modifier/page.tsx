@@ -40,7 +40,8 @@ export default async function ModifierDocumentPage({
     notFound()
   }
 
-  const fichier = typeof doc.fichier === 'object' && doc.fichier ? (doc.fichier as Media) : null
+  const fichier    = typeof doc.fichier === 'object' && doc.fichier ? (doc.fichier as Media) : null
+  const couverture = typeof doc.couverture === 'object' && doc.couverture ? (doc.couverture as Media) : null
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -75,6 +76,8 @@ export default async function ModifierDocumentPage({
             description: doc.description ?? undefined,
             fichierId:   fichier ? fichier.id : (typeof doc.fichier === 'number' ? doc.fichier : undefined),
             fichierName: fichier?.filename ?? undefined,
+            couvertureId:  couverture?.id ?? undefined,
+            couvertureUrl: couverture?.url ?? undefined,
           }}
         />
       </div>

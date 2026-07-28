@@ -182,6 +182,13 @@ export default async function GestionnairePage() {
         </div>
         <div className="flex gap-2 flex-wrap shrink-0">
           <Link
+            href="/gestionnaire/documents/nouveau"
+            className="inline-flex items-center gap-2 rounded-lg border border-black px-4 py-2.5 text-sm font-semibold text-black hover:bg-gray-50 transition-colors"
+          >
+            <PlusCircle size={15} />
+            Nouveau document
+          </Link>
+          <Link
             href="/gestionnaire/blog/nouveau"
             className="inline-flex items-center gap-2 rounded-lg border border-black px-4 py-2.5 text-sm font-semibold text-black hover:bg-gray-50 transition-colors"
           >

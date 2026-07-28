@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { User, Document } from '@/payload-types'
 import config from '@payload-config'
-import { FileText, ArrowLeft, Pencil } from 'lucide-react'
+import { FileText, ArrowLeft, Pencil, PlusCircle } from 'lucide-react'
 
 export const metadata: Metadata = { title: 'Gestion des documents' }
 
@@ -50,14 +50,23 @@ export default async function DocumentsPage() {
         >
           <ArrowLeft size={13} /> Tableau de bord
         </Link>
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-black p-3">
-            <FileText size={20} className="text-white" />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-black p-3">
+              <FileText size={20} className="text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-black">Documents</h1>
+              <p className="text-sm text-gray-500">{totalDocs} document{totalDocs > 1 ? 's' : ''} au total</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-black">Documents</h1>
-            <p className="text-sm text-gray-500">{totalDocs} document{totalDocs > 1 ? 's' : ''} au total</p>
-          </div>
+          <Link
+            href="/gestionnaire/documents/nouveau"
+            className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800 transition-colors shrink-0"
+          >
+            <PlusCircle size={15} />
+            Nouveau document
+          </Link>
         </div>
       </div>
 
