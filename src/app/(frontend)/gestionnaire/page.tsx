@@ -154,7 +154,7 @@ export default async function GestionnairePage() {
   const isAdmin = role === 'admin'
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pt-16 pb-10 sm:px-6 lg:px-8 space-y-10">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-10">
 
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
