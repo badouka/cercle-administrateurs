@@ -154,7 +154,7 @@ export default async function GestionnairePage() {
   const isAdmin = role === 'admin'
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 space-y-10">
+    <div className="mx-auto max-w-5xl px-4 pt-16 pb-10 sm:px-6 lg:px-8 space-y-10">
 
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -309,10 +309,15 @@ export default async function GestionnairePage() {
       {/* ── Pages du site ── */}
       <section>
         <div className="flex items-center justify-between border-b-2 border-black pb-3 mb-5">
-          <div className="flex items-center gap-2">
-            <LayoutTemplate size={17} className="text-black" />
-            <h2 className="text-lg font-bold text-black">Pages du site</h2>
-          </div>
+            <div className="flex items-center justify-between border-b-2 border-black pb-3 mb-5">
+              <div className="flex items-center gap-2">
+                <LayoutTemplate size={17} className="text-black" />
+                <h2 className="text-lg font-bold text-black">Pages du site</h2>
+              </div>
+              <Link href="/gestionnaire/pages" className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-black transition-colors">
+                Voir toutes <ChevronRight size={14} />
+              </Link>
+            </div>
         </div>
         <div className="rounded-xl border border-[#E5E5E5] bg-white overflow-hidden">
           <table className="w-full text-sm">
