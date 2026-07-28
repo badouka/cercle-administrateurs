@@ -137,7 +137,7 @@ export function Navbar() {
                     className="transition-transform group-hover:rotate-180"
                   />
                 </Link>
-                <div className="absolute top-full left-0 mt-1 hidden group-hover:block bg-white rounded-xl shadow-lg border border-[#1a7a3a]/10 py-2 min-w-[220px] z-50">
+                <div className="absolute top-full left-0 hidden group-hover:block pt-1 bg-white rounded-xl shadow-lg border border-[#1a7a3a]/10 py-2 min-w-[220px] z-50">
                   {item.children.map(child => (
                     <Link
                       key={child.href}
