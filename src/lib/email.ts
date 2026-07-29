@@ -1,20 +1,33 @@
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
-const transporter = nodemailer.createTransport({
-  host:   'mail.cercle-administrateurs.sn',
-  port:   465,
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-})
+// Client instancié à la première utilisation, et non au chargement du module :
+// `new Resend()` lève si la clé est absente, ce qui faisait échouer le build
+// entier (Next évalue les modules importés en collectant les pages) au lieu du
+// seul envoi d'e-mail.
+let resendClient: Resend | null = null
 
-export const GESTIONNAIRE_EMAIL = 'alla.faye@digissol.com'
+function resend(): Resend {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY manquante : impossible d'envoyer l'e-mail.")
+  }
+  resendClient ??= new Resend(process.env.RESEND_API_KEY)
+  return resendClient
+}
 
-const SITE_URL = 'https://cercle-administrateurs.sn/'
+const FROM_EMAIL = 'noreply@cercle-administrateurs.sn'
+const GESTIONNAIRE_EMAIL = 'contact@cercle-administrateurs.sn'
+const SITE_URL = 'https://cercle-administrateurs.sn'
 
-const FROM_EMAIL = process.env.SMTP_USER || 'noreply@cercle-administrateurs.sn'
+async function send(to: string, subject: string, html: string, replyTo?: string) {
+  const { error } = await resend().emails.send({
+    from:     `Cercle des Administrateurs Publics (CAP)<${FROM_EMAIL}>`,
+    to,
+    subject,
+    html,
+    replyTo,
+  })
+  if (error) throw new Error(error.message)
+}
 
 function emailTemplate(title: string, contentHtml: string): string {
   return `
@@ -50,11 +63,6 @@ function emailTemplate(title: string, contentHtml: string): string {
       </body>
     </html>
   `
-}
-
-async function send(to: string, subject: string, html: string, replyTo?: string) {
-  const result = await transporter.sendMail({ from: FROM_EMAIL, to, subject, html, replyTo })
-  console.log('[email] Envoi vers', to, '— réponse Nodemailer :', JSON.stringify(result))
 }
 
 // ── Membre : email de bienvenue après inscription ──────────────────────────────
