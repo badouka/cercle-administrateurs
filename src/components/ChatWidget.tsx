@@ -25,6 +25,41 @@ const MAX_HISTORIQUE = 20
 
 const VERT = '#1a7a3a'
 
+// Les bulles affichent du texte brut : le modèle reçoit pour consigne de ne pas
+// produire de Markdown, qui apparaîtrait littéralement. On rend malgré tout
+// cliquables les chemins internes, les URL et les adresses e-mail qu'il cite.
+const MOTIF_LIEN = /(https?:\/\/[^\s<>()]+|[\w.+-]+@[\w-]+\.[\w.]+|\/[a-z0-9-]+(?:\/[a-z0-9-]+)*)/gi
+
+function Texte({ contenu, clair }: { contenu: string; clair: boolean }) {
+  const couleur = clair ? '#fff' : VERT
+
+  return (
+    <>
+      {contenu.split(MOTIF_LIEN).map((partie, i) => {
+        // Les captures du split occupent les index impairs.
+        if (i % 2 === 0 || !partie) return partie
+
+        const href = partie.includes('@') && !partie.startsWith('http')
+          ? `mailto:${partie}`
+          : partie
+        const externe = partie.startsWith('http')
+
+        return (
+          <a
+            key={i}
+            href={href}
+            {...(externe ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            style={{ color: couleur }}
+            className="font-semibold underline underline-offset-2"
+          >
+            {partie}
+          </a>
+        )
+      })}
+    </>
+  )
+}
+
 export function ChatWidget() {
   const [ouvert,     setOuvert]     = useState(false)
   const [messages,   setMessages]   = useState<Message[]>([{ role: 'assistant', content: ACCUEIL }])
@@ -163,7 +198,7 @@ export function ChatWidget() {
                   }`}
                   style={m.role === 'user' ? { backgroundColor: VERT } : undefined}
                 >
-                  {m.content}
+                  <Texte contenu={m.content} clair={m.role === 'user'} />
                 </div>
               </div>
             ))}
