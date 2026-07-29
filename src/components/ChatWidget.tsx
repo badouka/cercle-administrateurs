@@ -205,8 +205,8 @@ export function ChatWidget() {
             {quotaAtteint ? (
               <p className="px-1 text-center text-xs text-[#14110B]/50">
                 Cette conversation a atteint sa limite. Pour poursuivre, écrivez-nous à{' '}
-                <a href="mailto:contact@cap-senegal.org" className="font-semibold text-[#1a7a3a] underline">
-                  contact@cap-senegal.org
+                <a href="mailto:contact@cercle-administrateurs.sn" className="font-semibold text-[#1a7a3a] underline">
+                  contact@cercle-administrateurs.sn
                 </a>
                 .
               </p>

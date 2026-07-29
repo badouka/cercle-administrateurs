@@ -41,44 +41,27 @@ const archivo = Archivo({
   display: 'swap',
 })
 
-export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayload({ config })
-  const membresRes = await payload.find({
-    collection:     'membres',
-    depth:          1,
-    limit:          200,
-    overrideAccess: true,
-  })
+// Mots-clés thématiques, statiques. La balise `keywords` est ignorée par
+// Google depuis 2009 : la liste était auparavant complétée par le nom de chaque
+// membre, ce qui imposait une requête de 200 membres à chaque rendu de page
+// sans le moindre bénéfice au référencement. Les noms des membres restent
+// indexés via les fiches /annuaire/[slug], désormais présentes au sitemap.
+const KEYWORDS = [
+  'Cercle des Administrateurs Publics',
+  'CAP Sénégal',
+  'gouvernance parapublic',
+  'administrateurs publics',
+  "conseil d'administration",
+  'secteur parapublic sénégalais',
+  'modernisation administration',
+  'Sénégal 2050',
+  'organes délibérants',
+  'gouvernance publique',
+  'performance administration publique',
+  'établissements publics Sénégal',
+]
 
-  // Mots-clés dynamiques : noms des membres, fonctions professionnelles et postes au CAP.
-  const nomsMembers = membresRes.docs.map(m => `${m.prenom} ${m.nom}`)
-  const fonctions = membresRes.docs
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map(m => (m.poste as any)?.fonctionProfessionnelle ?? '')
-    .filter(Boolean)
-  const postesCAP = membresRes.docs
-    .map(m => m.poste?.posteCap ?? '')
-    .filter(Boolean)
-
-  const allKeywords = [
-    'Cercle des Administrateurs Publics',
-    'CAP Sénégal',
-    'gouvernance parapublic',
-    'administrateurs publics',
-    'conseil d\'administration',
-    'secteur parapublic sénégalais',
-    'modernisation administration',
-    'Sénégal 2050',
-    'organes délibérants',
-    'gouvernance publique',
-    'Lansana Gagny SAKHO',
-    'performance administration publique',
-    'établissements publics Sénégal',
-    ...new Set(nomsMembers),
-    ...new Set(fonctions),
-    ...new Set(postesCAP),
-  ]
-
+export function generateMetadata(): Metadata {
   return {
     // Base des URL relatives (canoniques, images OG) et hôte de référence.
     metadataBase: new URL(SITE_URL),
@@ -90,7 +73,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: '%s | CAP Sénégal',
     },
     description: 'Le Cercle des Administrateurs Publics (CAP) rassemble les présidents des conseils d\'administration, de surveillance et d\'orientation des entités du secteur parapublic sénégalais. Un cadre de réflexion, d\'échanges et d\'impulsion d\'idées au service de la modernisation de l\'administration sénégalaise.',
-    keywords: allKeywords,
+    keywords: KEYWORDS,
     authors: [{ name: 'Cercle des Administrateurs Publics', url: SITE_URL }],
     creator: 'DIGISSOL',
     publisher: 'CAP Sénégal',
@@ -206,8 +189,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
               },
               "contactPoint": {
                 "@type": "ContactPoint",
-                "email": "contact@cap-senegal.org",
-                "telephone": "+221338000000",
+                "email": "contact@cercle-administrateurs.sn",
                 "contactType": "customer service"
               },
               "sameAs": []

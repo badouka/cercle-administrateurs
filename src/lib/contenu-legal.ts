@@ -44,7 +44,7 @@ export const MENTIONS_LEGALES_DEFAUT = lexical(
     t('Ce site est édité par le '),
     gras('CAP — Cercle des Administrateurs Publics'),
     t('. Dakar, Sénégal. '),
-    lien('mailto:contact@cap-senegal.org', 'contact@cap-senegal.org'),
+    lien('mailto:contact@cercle-administrateurs.sn', 'contact@cercle-administrateurs.sn'),
   ),
 
   h2('Hébergement'),
@@ -99,7 +99,7 @@ export const POLITIQUE_CONFIDENTIALITE_DEFAUT = lexical(
   h2('Contact'),
   p(
     t("Pour toute question relative à la présente politique ou à l'exercice de vos droits, vous pouvez nous écrire à l'adresse suivante : "),
-    lien('mailto:contact@cap-senegal.org', 'contact@cap-senegal.org'),
+    lien('mailto:contact@cercle-administrateurs.sn', 'contact@cercle-administrateurs.sn'),
     t('.'),
   ),
 )

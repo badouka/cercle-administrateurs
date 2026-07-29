@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { MapPin, Mail, Phone } from 'lucide-react'
+import { MapPin, Mail } from 'lucide-react'
 
 const NAVIGUER = [
   { href: '/',           label: 'Accueil' },
@@ -85,12 +85,6 @@ export function Footer() {
                 <Mail size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
                 <a href="mailto:contact@cercle-administrateurs.sn" className="transition-colors hover:text-[#1a7a3a]">
                   contact@cercle-administrateurs.sn
-                </a>
-              </div>
-              <div className="flex items-start gap-2">
-                <Phone size={14} className="text-[#1a7a3a] flex-none mt-0.5" />
-                <a href="tel:+221338000000" className="transition-colors hover:text-[#1a7a3a]">
-                  +221 33 800 00 00
                 </a>
               </div>
             </div>

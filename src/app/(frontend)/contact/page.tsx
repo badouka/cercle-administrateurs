@@ -49,7 +49,7 @@ export default function ContactPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Mail size={16} className="text-[#1a7a3a] flex-none" />
-                    <a href="mailto:contact@cap-senegal.org" className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">contact@cercle-administrateurs.sn</a>
+                    <a href="mailto:contact@cercle-administrateurs.sn" className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">contact@cercle-administrateurs.sn</a>
                   </div>
                   <div className="flex items-center gap-3">
                     <Phone size={16} className="text-[#1a7a3a] flex-none" />
