@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import config from '@payload-config'
 import type { User } from '@/payload-types'
 import { sendApprovalEmail, sendRejectionEmail, sendContactMessage } from '@/lib/email'
+import { CHEMIN_PUBLIC } from '@/lib/pages-site'
 
 type ActionResult = { success: true } | { error: string }
 type AuthOK       = { payload: BasePayload; user: User }
@@ -460,9 +461,7 @@ export async function updatePageAction(
       overrideAccess: true,
     })
 
-    revalidatePath('/a-propos')
-    revalidatePath('/a-propos/mot-du-president')
-    revalidatePath('/a-propos/partenaires')
+    if (CHEMIN_PUBLIC[slug]) revalidatePath(CHEMIN_PUBLIC[slug])
     revalidatePath(`/gestionnaire/pages/${slug}`)
     return { success: true }
   } catch (err) {
@@ -521,8 +520,7 @@ export async function updatePageSection(
       overrideAccess: true,
     })
 
-    revalidatePath('/a-propos')
-    revalidatePath('/a-propos/mot-du-president')
+    if (CHEMIN_PUBLIC[slug]) revalidatePath(CHEMIN_PUBLIC[slug])
     revalidatePath(`/gestionnaire/pages/${slug}`)
     return { success: true }
   } catch (err) {

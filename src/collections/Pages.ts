@@ -43,7 +43,7 @@ export const Pages: CollectionConfig = {
       index: true,
       required: true,
       admin: {
-        description: "Identifiant unique : 'a-propos', 'mot-du-president', 'partenaires'",
+        description: "Identifiant unique : 'a-propos', 'mot-du-president', 'partenaires', 'mentions-legales', 'politique-confidentialite'",
       },
     },
     {

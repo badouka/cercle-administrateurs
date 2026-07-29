@@ -7,6 +7,8 @@ import type { User } from '@/payload-types'
 import config from '@payload-config'
 import { ArrowLeft, FileText, ExternalLink } from 'lucide-react'
 import { lexicalToHtml } from '@/lib/lexical-to-html'
+import { CHEMIN_PUBLIC, SLUGS_VALIDES, PAGES_SITE } from '@/lib/pages-site'
+import { CONTENU_DEFAUT_PAR_SLUG } from '@/lib/contenu-legal'
 import { PageEditor } from './PageEditor'
 import { MotPresidentSections } from './MotPresidentSections'
 import { AProposSections } from './AProposSections'
@@ -25,13 +27,6 @@ interface RawPage {
   statut:  'brouillon' | 'publie'
 }
 
-const PUBLIC_PATHS: Record<string, string> = {
-  'a-propos':         '/a-propos',
-  'mot-du-president': '/a-propos/mot-du-president',
-  'partenaires':      '/a-propos/partenaires',
-}
-
-const VALID_SLUGS = Object.keys(PUBLIC_PATHS)
 
 export async function generateMetadata({
   params,
@@ -49,7 +44,7 @@ export default async function ModifierPagePage({
 }) {
   const { slug } = await params
 
-  if (!VALID_SLUGS.includes(slug)) notFound()
+  if (!SLUGS_VALIDES.includes(slug)) notFound()
 
   const [payload, hdrs] = await Promise.all([getPayload({ config }), getHeaders()])
   const { user }        = await payload.auth({ headers: hdrs })
@@ -74,14 +69,15 @@ export default async function ModifierPagePage({
   if (!page) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const defaultData: Record<string, any> = {
-      titre: slug === 'mot-du-president' ? 'Mot du Président' :
-             slug === 'a-propos' ? 'Qui sommes-nous ?' : 'Nos Partenaires',
+      titre: PAGES_SITE.find(p => p.slug === slug)?.label ?? slug,
       slug: slug,
       statut: 'publie',
       citation: slug === 'mot-du-president'
         ? 'Le Sénégal a toujours fait de la performance de son administration publique un chantier prioritaire.'
         : '',
-      contenu: null,
+      // Pages légales : on part du texte actuellement affiché en ligne, pour que
+      // l'éditeur s'ouvre pré-rempli plutôt que vide.
+      contenu: CONTENU_DEFAUT_PAR_SLUG[slug] ?? null,
     }
 
     if (slug === 'a-propos') {
@@ -103,7 +99,7 @@ export default async function ModifierPagePage({
   }
 
   const htmlContent = lexicalToHtml(page.contenu)
-  const publicPath  = PUBLIC_PATHS[slug]!
+  const publicPath  = CHEMIN_PUBLIC[slug]!
 
   // Nom du président (fallback pour la signature) depuis la collection membres.
   let presidentNomFallback = ''

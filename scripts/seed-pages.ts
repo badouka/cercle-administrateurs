@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { A_PROPOS_SECTION_DEFAULTS } from '@/app/(frontend)/a-propos/content'
+import { MENTIONS_LEGALES_DEFAUT, POLITIQUE_CONFIDENTIALITE_DEFAUT } from '@/lib/contenu-legal'
 
 // ── Helpers Lexical ────────────────────────────────────────────────────────
 
@@ -95,6 +96,18 @@ const PAGES = [
         "Sciences Po — Collaboration pour les programmes d'études et de recherche.",
       ),
     ),
+  },
+  {
+    slug:    'mentions-legales',
+    titre:   'Mentions légales',
+    statut:  'publie',
+    contenu: MENTIONS_LEGALES_DEFAUT,
+  },
+  {
+    slug:    'politique-confidentialite',
+    titre:   'Politique de confidentialité',
+    statut:  'publie',
+    contenu: POLITIQUE_CONFIDENTIALITE_DEFAUT,
   },
 ]
 

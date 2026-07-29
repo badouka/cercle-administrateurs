@@ -1,12 +1,9 @@
 import Link from 'next/link'
 import { Pencil } from 'lucide-react'
+import { PAGES_SITE } from '@/lib/pages-site'
 
 export default function PagesListPage() {
-  const pages = [
-    { slug: 'a-propos',         label: 'Qui sommes-nous ?',  desc: 'Histoire, mission et valeurs' },
-    { slug: 'mot-du-president', label: 'Mot du Président',   desc: 'Message du Président' },
-    { slug: 'partenaires',      label: 'Nos partenaires',    desc: 'Partenaires institutionnels' },
-  ]
+  const pages = PAGES_SITE
   return (
     <div className="mx-auto max-w-5xl px-4 pt-24 pb-10 sm:px-6 lg:px-8 space-y-8">
       <div>
