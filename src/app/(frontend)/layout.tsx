@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import React, { Suspense } from 'react'
+import Script from 'next/script'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { Newsreader, IBM_Plex_Mono, Archivo, Crimson_Pro, DM_Sans } from 'next/font/google'
@@ -40,6 +41,12 @@ const archivo = Archivo({
   variable: '--font-archivo',
   display: 'swap',
 })
+
+// Google Tag Manager. L'identifiant est surchargeable par NEXT_PUBLIC_GTM_ID
+// (utile pour un conteneur de recette). Le marqueur n'est pas chargé en
+// développement : les visites depuis localhost fausseraient les statistiques.
+const GTM_ID    = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-PJL7FMWF'
+const GTM_ACTIF = process.env.NODE_ENV === 'production' && Boolean(GTM_ID)
 
 // Mots-clés thématiques, statiques. La balise `keywords` est ignorée par
 // Google depuis 2009 : la liste était auparavant complétée par le nom de chaque
@@ -170,6 +177,31 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <html lang="fr" className={`${newsreader.variable} ${ibmPlexMono.variable} ${archivo.variable}`}>
       <body className={`${crimsonPro.variable} ${dmSans.variable} min-h-screen bg-white font-sans text-ink antialiased`}>
+        {/* Google Tag Manager — volet noscript, à placer juste après <body>. */}
+        {GTM_ACTIF && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
+        {/* Volet script. `afterInteractive` est la stratégie recommandée pour
+            GTM dans l'App Router : Next l'injecte tôt dans la page, sans
+            bloquer le rendu — l'équivalent du « le plus haut possible dans
+            <head> » de la consigne Google, qui vise le HTML statique. */}
+        {GTM_ACTIF && (
+          <Script id="google-tag-manager" strategy="afterInteractive">
+            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`}
+          </Script>
+        )}
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
