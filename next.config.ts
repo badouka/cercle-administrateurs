@@ -35,6 +35,37 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      // ── Anciennes URL publiques (301/308 permanents) ──────────────────────
+      {
+        // Renommée lors de la refonte du 16/06/2026.
+        source:      '/a-propos/partenaires',
+        destination: '/a-propos/nos-partenaires',
+        permanent:   true,
+      },
+      {
+        // Page qui hébergeait l'iframe ChatLab, supprimée le 09/07/2026.
+        // L'assistant est désormais un widget présent sur toutes les pages.
+        source:      '/assistant',
+        destination: '/',
+        permanent:   true,
+      },
+
+      // ── Hôte dupliqué ────────────────────────────────────────────────────
+      // Le site répond à l'identique sur l'alias .vercel.app : sans
+      // redirection, deux hôtes servent le même contenu. Seul l'alias stable
+      // de production est visé — les URL de prévisualisation
+      // (cercle-administrateurs-<hash>-<team>.vercel.app) ne correspondent pas
+      // à ce host exact et continuent de fonctionner normalement.
+      {
+        source:      '/:path*',
+        has:         [{ type: 'host', value: 'cercle-administrateurs.vercel.app' }],
+        destination: 'https://www.cercle-administrateurs.sn/:path*',
+        permanent:   true,
+      },
+    ]
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
