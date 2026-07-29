@@ -26,7 +26,7 @@ export const PAGES_SITE: PageSite[] = [
     slug:  'partenaires',
     label: 'Nos partenaires',
     desc:  'Partenaires institutionnels',
-    path:  '/a-propos/partenaires',
+    path:  '/a-propos/nos-partenaires',
   },
   {
     slug:  'mentions-legales',

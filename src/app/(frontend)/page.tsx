@@ -13,7 +13,10 @@ import {
 } from 'lucide-react'
 
 export const metadata = {
-  title: 'Accueil',
+  // `title.template` du layout ne s'applique pas au segment qui le définit :
+  // la page d'accueil doit porter le titre complet elle-même, sans quoi elle
+  // s'affiche « Accueil » tout court dans les résultats de recherche.
+  title: 'CAP — Cercle des Administrateurs Publics du Sénégal',
   description: 'Plateforme officielle du Cercle des Administrateurs Publics du Sénégal. Actualités, activités, annuaire des membres et ressources documentaires pour les présidents d\'organes délibérants du secteur parapublic.',
 }
 
