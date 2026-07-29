@@ -20,6 +20,7 @@ const NAV_LINKS: NavItem[] = [
       { href: '/a-propos', label: 'Qui sommes-nous' },
       { href: '/a-propos/mot-du-president', label: 'Mot du Président' },
       { href: '/a-propos/nos-partenaires', label: 'Nos Partenaires' },
+      { href: '/contact', label: 'Contact' },
     ],
   },
   {

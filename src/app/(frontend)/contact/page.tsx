@@ -1,6 +1,6 @@
 import { PageHero } from '@/components/PageHero'
 import { ContactFormClient } from '@/components/ContactFormClient'
-import { MapPin, Mail, Phone } from 'lucide-react'
+import { MapPin, Mail } from 'lucide-react'
 import Link from 'next/link'
 
 export const metadata = {
@@ -51,24 +51,6 @@ export default function ContactPage() {
                     <Mail size={16} className="text-[#1a7a3a] flex-none" />
                     <a href="mailto:contact@cercle-administrateurs.sn" className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">contact@cercle-administrateurs.sn</a>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Phone size={16} className="text-[#1a7a3a] flex-none" />
-                    <a href="tel:+221338000000" className="text-sm text-[#14110B]/70 hover:text-[#1a7a3a]">+221 33 800 00 00</a>
-                  </div>
-                </div>
-                <div className="border-t border-[#14110B]/10 my-6"></div>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#C8A24A] font-bold mb-3">RÉSEAUX SOCIAUX</p>
-                <div className="flex gap-3">
-                  {[
-                    { href: '#', icon: 'f', label: 'Facebook' },
-                    { href: '#', icon: 'in', label: 'LinkedIn' },
-                    { href: '#', icon: 'X', label: 'Twitter' },
-                  ].map(s => (
-                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full border border-[#14110B]/15 flex items-center justify-center text-xs font-bold text-[#14110B]/50 hover:bg-[#1a7a3a] hover:text-white hover:border-[#1a7a3a] transition-colors">
-                      {s.icon}
-                    </a>
-                  ))}
                 </div>
               </div>
 

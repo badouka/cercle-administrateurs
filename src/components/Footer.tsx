@@ -10,6 +10,7 @@ const NAVIGUER = [
   { href: '/annuaire',   label: 'Annuaire' },
   { href: '/actualites', label: 'Actualités' },
   { href: '/blog',       label: 'Blog' },
+  { href: '/contact',    label: 'Contact' },
 ]
 
 const RESSOURCES = [
