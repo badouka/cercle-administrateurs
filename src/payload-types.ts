@@ -457,7 +457,7 @@ export interface Page {
   id: number;
   titre: string;
   /**
-   * Identifiant unique : 'a-propos', 'mot-du-president', 'partenaires'
+   * Identifiant unique : 'a-propos', 'mot-du-president', 'partenaires', 'mentions-legales', 'politique-confidentialite'
    */
   slug: string;
   /**

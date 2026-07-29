@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Link2, Check } from 'lucide-react'
 import { useOrigin } from '@/hooks/useOrigin'
+import { IconeX } from '@/components/IconeX'
 
 interface ShareButtonsProps {
   title: string
@@ -20,10 +21,10 @@ export function ShareButtons({ title, path }: ShareButtonsProps) {
   const encodedTitle = encodeURIComponent(title)
 
   const links = [
-    { label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-    { label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-    { label: '𝕏',        href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}` },
-    { label: 'WhatsApp', href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
+    { key: 'Facebook', label: 'Facebook',   href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
+    { key: 'LinkedIn', label: 'LinkedIn',   href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+    { key: 'X',        label: <IconeX />,   href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}` },
+    { key: 'WhatsApp', label: 'WhatsApp',   href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
   ]
 
   async function handleCopy() {
@@ -42,13 +43,15 @@ export function ShareButtons({ title, path }: ShareButtonsProps) {
     <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs text-gray-400">Partager :</span>
 
-      {links.map(({ label, href }) => (
+      {links.map(({ key, label, href }) => (
         <a
-          key={label}
+          key={key}
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${btnBase} border-gray-300 text-gray-700 hover:border-black hover:text-black hover:bg-black hover:text-white`}
+          aria-label={`Partager sur ${key}`}
+          title={`Partager sur ${key}`}
+          className={`${btnBase} border-gray-300 text-gray-700 hover:border-black hover:bg-black hover:text-white`}
         >
           {label}
         </a>
