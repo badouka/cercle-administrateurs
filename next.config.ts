@@ -52,6 +52,28 @@ const nextConfig: NextConfig = {
         permanent:   true,
       },
 
+      // ── Anciennes URL du site WordPress ──────────────────────────────────
+      // Correspondances directes. Les cas nécessitant une recherche en base
+      // (fiches membres, articles à la racine) sont traités par le résolveur
+      // src/app/(frontend)/[...legacy]/page.tsx.
+      // Le slash final est déjà retiré automatiquement par Next (308).
+      { source: '/mot-du-president',                    destination: '/a-propos/mot-du-president', permanent: true },
+      { source: '/partenaires',                         destination: '/a-propos/nos-partenaires',  permanent: true },
+      { source: '/annuaire-des-membres',                destination: '/annuaire',                  permanent: true },
+      { source: '/annuaire-des-membres/le-bureau-executif', destination: '/annuaire/bureau',       permanent: true },
+      // Catégorie d'articles sur l'ancien site, désormais un filtre d'/actualites.
+      { source: '/ateliers-seminaires',                 destination: '/actualites',                permanent: true },
+      // Rubriques documentaires : toutes regroupées sous /documents, qui est
+      // public — contrairement à /mediatheque, réservée aux membres connectés.
+      { source: '/activites/mediatheque',               destination: '/documents',                 permanent: true },
+      { source: '/textes-statutaires',                  destination: '/documents',                 permanent: true },
+      { source: '/pv-de-reunion',                       destination: '/documents',                 permanent: true },
+      { source: '/docs-politique-economique',           destination: '/documents',                 permanent: true },
+      // Fichiers de l'ancien WordPress : les PDF sont désormais servis depuis
+      // Payload, sans correspondance de chemin possible. On oriente vers la
+      // page qui les recense plutôt que de laisser un 404.
+      { source: '/wp-content/:path*',                   destination: '/documents',                 permanent: true },
+
       // ── Hôte dupliqué ────────────────────────────────────────────────────
       // Le site répond à l'identique sur l'alias .vercel.app : sans
       // redirection, deux hôtes servent le même contenu. Seul l'alias stable
