@@ -29,7 +29,13 @@ async function send(to: string, subject: string, html: string, replyTo?: string)
   if (error) throw new Error(error.message)
 }
 
-function emailTemplate(title: string, contentHtml: string): string {
+/**
+ * @param mentionAutomatique  Affiche « ne pas répondre ». À laisser actif pour
+ *   les envois depuis noreply@, à désactiver quand l'e-mail porte un `replyTo`
+ *   exploitable — sans quoi la mention dit au destinataire de ne pas répondre
+ *   alors qu'il le peut et le doit.
+ */
+function emailTemplate(title: string, contentHtml: string, mentionAutomatique = true): string {
   return `
     <!DOCTYPE html>
     <html lang="fr">
@@ -49,13 +55,14 @@ function emailTemplate(title: string, contentHtml: string): string {
                     ${contentHtml}
                   </td>
                 </tr>
+                ${mentionAutomatique ? `
                 <tr>
                   <td style="padding:20px 32px;border-top:1px solid #eeeeee;">
                     <p style="color:#888; font-size:12px; text-align:center; margin-top:20px;">
                       Ceci est un mail automatique, merci de ne pas y répondre.
                     </p>
                   </td>
-                </tr>
+                </tr>` : ''}
               </table>
             </td>
           </tr>
@@ -165,6 +172,6 @@ export async function sendContactMessage(
       <li><strong>Objet :</strong> ${objet}</li>
     </ul>
     <p style="white-space:pre-wrap;">${message}</p>
-  `)
+  `, false)
   return send(GESTIONNAIRE_EMAIL, `Message de contact — ${objet}`, html, email)
 }
