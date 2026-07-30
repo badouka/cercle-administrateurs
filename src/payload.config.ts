@@ -5,6 +5,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -21,7 +22,20 @@ import { BlogPosts } from './collections/BlogPosts'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Sans adaptateur, Payload écrit ses e-mails dans la console : la
+// réinitialisation de mot de passe restait donc sans effet. L'adaptateur n'est
+// branché que si la clé existe, pour que son absence ne fasse pas échouer le
+// build (Payload retombe alors sur la sortie console).
+const emailAdapter = process.env.RESEND_API_KEY
+  ? resendAdapter({
+      defaultFromAddress: 'noreply@cercle-administrateurs.sn',
+      defaultFromName:    'Cercle des Administrateurs Publics (CAP)',
+      apiKey:             process.env.RESEND_API_KEY,
+    })
+  : undefined
+
 export default buildConfig({
+  email: emailAdapter,
   admin: {
     user: Users.slug,
     importMap: {
