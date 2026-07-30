@@ -30,6 +30,21 @@ async function send(to: string, subject: string, html: string, replyTo?: string)
 }
 
 /**
+ * Échappe une donnée saisie par un visiteur avant insertion dans le HTML d'un
+ * e-mail. Les formulaires de contact et d'inscription sont publics : sans
+ * échappement, n'importe qui peut injecter du balisage — un lien maquillé, par
+ * exemple — dans le message reçu par le CAP.
+ */
+function echapper(valeur: string): string {
+  return String(valeur ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+/**
  * @param mentionAutomatique  Affiche « ne pas répondre ». À laisser actif pour
  *   les envois depuis noreply@, à désactiver quand l'e-mail porte un `replyTo`
  *   exploitable — sans quoi la mention dit au destinataire de ne pas répondre
@@ -76,7 +91,7 @@ function emailTemplate(title: string, contentHtml: string, mentionAutomatique = 
 
 export async function sendWelcomeEmail(prenom: string, nom: string, email: string) {
   const html = emailTemplate('Bienvenue au CAP', `
-    <p>Bonjour ${prenom} ${nom},</p>
+    <p>Bonjour ${echapper(prenom)} ${echapper(nom)},</p>
     <p>
       Nous avons bien reçu votre demande d'adhésion au Cercle des Administrateurs Publics.
       Votre compte est en cours de validation par notre équipe.
@@ -105,10 +120,10 @@ export async function sendNewMemberNotification(
   const html = emailTemplate('Nouvelle demande d\'adhésion', `
     <p>Une nouvelle demande d'adhésion vient d'être soumise sur le site du CAP :</p>
     <ul style="padding-left:20px;">
-      <li><strong>Nom :</strong> ${prenom} ${nom}</li>
-      <li><strong>Email :</strong> ${email}</li>
-      ${fonction ? `<li><strong>Fonction :</strong> ${fonction}</li>` : ''}
-      ${organisation ? `<li><strong>Organisation :</strong> ${organisation}</li>` : ''}
+      <li><strong>Nom :</strong> ${echapper(prenom)} ${echapper(nom)}</li>
+      <li><strong>Email :</strong> ${echapper(email)}</li>
+      ${fonction ? `<li><strong>Fonction :</strong> ${echapper(fonction)}</li>` : ''}
+      ${organisation ? `<li><strong>Organisation :</strong> ${echapper(organisation)}</li>` : ''}
     </ul>
     <p>
       <a href="${SITE_URL}/gestionnaire/membres" style="color:#000000;font-weight:bold;">
@@ -123,7 +138,7 @@ export async function sendNewMemberNotification(
 
 export async function sendApprovalEmail(prenom: string, nom: string, email: string) {
   const html = emailTemplate('Félicitation', `
-    <p>Bonjour ${prenom} ${nom},</p>
+    <p>Bonjour ${echapper(prenom)} ${echapper(nom)},</p>
     <p>
       Bonne nouvelle ! Votre adhésion au Cercle des Administrateurs Publics a été
       approuvée par notre équipe.
@@ -143,7 +158,7 @@ export async function sendApprovalEmail(prenom: string, nom: string, email: stri
 
 export async function sendRejectionEmail(prenom: string, nom: string, email: string) {
   const html = emailTemplate('Votre demande d\'adhésion', `
-    <p>Bonjour ${prenom} ${nom},</p>
+    <p>Bonjour ${echapper(prenom)} ${echapper(nom)},</p>
     <p>
       Après examen, nous ne sommes malheureusement pas en mesure de valider votre
       demande d'adhésion au Cercle des Administrateurs Publics pour le moment.
@@ -167,11 +182,12 @@ export async function sendContactMessage(
   const html = emailTemplate('Nouveau message de contact', `
     <p>Un nouveau message a été envoyé depuis le formulaire de contact du site du CAP :</p>
     <ul style="padding-left:20px;">
-      <li><strong>Nom :</strong> ${nom}</li>
-      <li><strong>Email :</strong> ${email}</li>
-      <li><strong>Objet :</strong> ${objet}</li>
+      <li><strong>Nom :</strong> ${echapper(nom)}</li>
+      <li><strong>Email :</strong> ${echapper(email)}</li>
+      <li><strong>Objet :</strong> ${echapper(objet)}</li>
     </ul>
-    <p style="white-space:pre-wrap;">${message}</p>
+    <p style="white-space:pre-wrap;">${echapper(message)}</p>
   `, false)
+  // L'objet est du texte brut : l'échapper y ferait apparaître les entités HTML.
   return send(GESTIONNAIRE_EMAIL, `Message de contact — ${objet}`, html, email)
 }
