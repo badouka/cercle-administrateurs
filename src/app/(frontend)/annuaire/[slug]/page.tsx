@@ -13,7 +13,8 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
   const payload = await getPayload({ config })
   const res = await payload.find({
     collection: 'membres',
-    where: { slug: { equals: slug } },
+    // Une fiche désactivée n'est plus publique : 404 comme un slug inconnu.
+    where: { and: [{ slug: { equals: slug } }, { 'adhesion.statut': { equals: 'actif' } }] },
     depth: 1,
     limit: 1,
     overrideAccess: true,

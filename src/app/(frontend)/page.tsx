@@ -110,8 +110,11 @@ export default async function HomePage() {
   const payload = await getPayload({ config })
 
   const [membresRes, postsRes, magazinesRes] = await Promise.all([
+    // Une fiche désactivée disparaît du site sans être supprimée. Le statut
+    // est imbriqué dans `adhesion` : à la racine ce serait une QueryError.
     payload.find({
       collection:     'membres',
+      where:          { 'adhesion.statut': { equals: 'actif' } },
       depth:          1,
       limit:          500,
       sort:           'nom',

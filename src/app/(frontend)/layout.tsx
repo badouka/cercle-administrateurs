@@ -109,8 +109,11 @@ export function generateMetadata(): Metadata {
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   const payload = await getPayload({ config })
+  // Une fiche désactivée disparaît du site sans être supprimée. Le statut est
+  // imbriqué dans `adhesion` : l'interroger à la racine lèverait une QueryError.
   const membresRes = await payload.find({
     collection:     'membres',
+    where:          { 'adhesion.statut': { equals: 'actif' } },
     depth:          1,
     limit:          100,
     sort:           'nom',
