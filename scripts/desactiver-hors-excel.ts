@@ -39,6 +39,15 @@ const MEMBRES_EXCEL: [string, string][] = [
   ['Mbacké', 'Bassirou'],        ['Diop', 'Doudou Gnagna'],
 ]
 
+/**
+ * Membres conservés actifs bien qu'absents du fichier : le .xlsx ne recense
+ * que les présidents de conseil en exercice, il ignore les distinctions
+ * honorifiques. Sans cette liste, rejouer le script les désactiverait.
+ */
+const EXCEPTIONS: string[] = [
+  'mamadoufaye', // Mamadou Faye, membre d'honneur
+]
+
 /** Réplique du `toSlug` de src/collections/Membres.ts. */
 function toSlug(str: string): string {
   return str
@@ -52,11 +61,12 @@ async function main() {
   const { getPayload } = await import('payload')
   const { default: config } = await import('../src/payload.config')
 
-  const aConserver = new Set(MEMBRES_EXCEL.map(([nom, prenom]) => toSlug(`${prenom}${nom}`)))
+  const slugsExcel = MEMBRES_EXCEL.map(([nom, prenom]) => toSlug(`${prenom}${nom}`))
+  const aConserver = new Set([...slugsExcel, ...EXCEPTIONS])
 
   console.log('')
   console.log('  Désactivation des membres hors fichier Excel')
-  console.log(`  ${aConserver.size} slug(s) de référence`)
+  console.log(`  ${slugsExcel.length} slug(s) du fichier + ${EXCEPTIONS.length} exception(s)`)
   if (DRY_RUN) console.log('  MODE DRY-RUN — aucune écriture en base')
   console.log('')
 
@@ -73,7 +83,7 @@ async function main() {
 
   // Garde-fou : si une ligne du fichier ne retrouve pas sa fiche, le
   // rapprochement est faux quelque part et désactiver serait dangereux.
-  const introuvables = [...aConserver].filter(s => !fiches.some(f => f.slug === s))
+  const introuvables = slugsExcel.filter(s => !fiches.some(f => f.slug === s))
   if (introuvables.length > 0) {
     console.error(`  ABANDON — ${introuvables.length} slug(s) du fichier sans fiche en base :`)
     for (const s of introuvables) console.error(`   - ${s}`)
