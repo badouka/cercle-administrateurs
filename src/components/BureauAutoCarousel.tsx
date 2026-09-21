@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { ArrowUpRight, ChevronLeft, ChevronRight, User } from 'lucide-react'
+import { formatEntreprise } from '@/lib/utils'
 
 interface BureauAutoCarouselProps {
   membres: Array<{
@@ -11,7 +12,7 @@ interface BureauAutoCarouselProps {
     nom: string
     slug?: string | null
     photo?: { url?: string | null } | null
-    poste?: { posteCap?: string | null; entreprise?: string | null } | null
+    poste?: { posteCap?: string | null; entreprise?: string | null; sigle?: string | null } | null
   }>
 }
 
@@ -77,7 +78,7 @@ export function BureauAutoCarousel({ membres }: BureauAutoCarouselProps) {
                 {membres.map(membre => {
                   const photoUrl = membre.photo?.url ?? null
                   const posteCap  = membre.poste?.posteCap?.trim()
-                  const organisme = membre.poste?.entreprise?.trim()
+                  const organisme = formatEntreprise(membre.poste?.entreprise, membre.poste?.sigle)
 
                   return (
                     <div

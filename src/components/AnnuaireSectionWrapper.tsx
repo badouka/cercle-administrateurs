@@ -10,7 +10,7 @@ type Membre = {
   nom: string
   slug?: string | null
   photo?: { url?: string | null } | null
-  poste?: { posteCap?: string | null; entreprise?: string | null } | null
+  poste?: { posteCap?: string | null; entreprise?: string | null; sigle?: string | null } | null
 }
 
 export function AnnuaireSectionWrapper({ membres }: { membres: Membre[] }) {

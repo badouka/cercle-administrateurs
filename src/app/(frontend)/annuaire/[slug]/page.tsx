@@ -7,6 +7,7 @@ import { ArrowLeft, Building2, Lock, ArrowRight, Mail, Phone } from 'lucide-reac
 import type { Membre, Media } from '@/payload-types'
 import RichTextContent from '@/components/RichTextContent'
 import { PageHero } from '@/components/PageHero'
+import { formatEntreprise } from '@/lib/utils'
 
 export default async function MembrePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -41,6 +42,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
 
   const posteCap = membre.poste?.posteCap ?? ''
   const organisme = membre.poste?.entreprise ?? ''
+  const organismeAffiche = formatEntreprise(membre.poste?.entreprise, membre.poste?.sigle)
   const fonctionPro = membre.poste?.fonctionProfessionnelle ?? ''
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,8 +112,8 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
               {posteCap && (
                 <span className="inline-block mt-3 bg-[#C8A24A] text-[#062812] text-xs font-bold px-3 py-1 rounded-full">{posteCap}</span>
               )}
-              {organisme && (
-                <p className="mt-3 text-sm font-semibold uppercase tracking-wider text-[#6FAE8E]">{organisme}</p>
+              {organismeAffiche && (
+                <p className="mt-3 text-sm font-semibold uppercase tracking-wider text-[#6FAE8E]">{organismeAffiche}</p>
               )}
               {fonctionPro && (
                 <p className="mt-2 text-sm text-white/70">{fonctionPro}</p>
@@ -185,9 +187,9 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
               <span className="font-mono text-sm font-black uppercase tracking-widest text-[#062812]">{posteCap}</span>
             </div>
             {fonctionPro && <p className="text-sm text-white/80 mt-1">{fonctionPro}</p>}
-            {organisme && (
+            {organismeAffiche && (
               <p className="flex items-center gap-2 text-sm text-white/70 mt-3">
-                <Building2 size={14} className="text-white/60" /> {organisme}
+                <Building2 size={14} className="text-white/60" /> {organismeAffiche}
               </p>
             )}
           </div>

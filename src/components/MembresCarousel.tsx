@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { formatEntreprise } from '@/lib/utils'
 
 interface MembreCard {
   id: string | number
@@ -10,7 +11,7 @@ interface MembreCard {
   nom: string
   slug?: string | null
   photo?: string | null
-  poste?: { posteCap?: string | null; entreprise?: string | null } | null
+  poste?: { posteCap?: string | null; entreprise?: string | null; sigle?: string | null } | null
 }
 
 interface MembresCarouselProps {
@@ -128,7 +129,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
             >
               {group.map(membre => {
                 const posteCap = membre.poste?.posteCap?.trim()
-                const organisme = membre.poste?.entreprise?.trim()
+                const organisme = formatEntreprise(membre.poste?.entreprise, membre.poste?.sigle)
                 return (
                   <Link
                     key={membre.id}

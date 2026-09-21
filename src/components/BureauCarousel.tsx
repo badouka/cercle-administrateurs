@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import { formatEntreprise } from '@/lib/utils'
 
 interface BureauCarouselProps {
   membres: Array<{
@@ -10,7 +11,7 @@ interface BureauCarouselProps {
     nom: string
     slug?: string | null
     photo?: { url?: string | null } | null
-    poste?: { posteCap?: string | null; entreprise?: string | null } | null
+    poste?: { posteCap?: string | null; entreprise?: string | null; sigle?: string | null } | null
   }>
 }
 
@@ -64,7 +65,7 @@ export function BureauCarousel({ membres }: BureauCarouselProps) {
             {membres.slice(0, 3).map(membre => {
               const photoUrl = membre.photo?.url ?? null
               const posteCap  = membre.poste?.posteCap?.trim()
-              const organisme = membre.poste?.entreprise?.trim()
+              const organisme = formatEntreprise(membre.poste?.entreprise, membre.poste?.sigle)
 
               return (
                 <Link

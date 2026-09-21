@@ -4,6 +4,7 @@ import config from '@payload-config'
 import { PageHero } from '@/components/PageHero'
 import { AnnuaireClient, type AnnuaireMembre } from '@/components/AnnuaireClient'
 import type { Membre, Media } from '@/payload-types'
+import { formatEntreprise } from '@/lib/utils'
 
 export const metadata: Metadata = { title: 'Bureau exécutif' }
 
@@ -64,7 +65,7 @@ export default async function BureauPage() {
         photo: photoMedia?.url ?? null,
         posteCap: m.poste?.posteCap ?? null,
         fonctionProfessionnelle: m.poste?.fonctionProfessionnelle ?? null,
-        organisme: m.poste?.entreprise ?? null,
+        organisme: formatEntreprise(m.poste?.entreprise, m.poste?.sigle),
         isBureau: true,
       }
     })

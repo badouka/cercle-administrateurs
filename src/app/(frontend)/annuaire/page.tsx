@@ -4,6 +4,7 @@ import config from '@payload-config'
 import type { Membre, Media } from '@/payload-types'
 import { PageHero } from '@/components/PageHero'
 import { AnnuaireClient, type AnnuaireFiltre, type AnnuaireMembre } from '@/components/AnnuaireClient'
+import { formatEntreprise } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Annuaire des membres',
@@ -77,7 +78,7 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
         photo: photoMedia?.url ?? null,
         posteCap,
         fonctionProfessionnelle: m.poste?.fonctionProfessionnelle ?? null,
-        organisme: m.poste?.entreprise ?? null,
+        organisme: formatEntreprise(m.poste?.entreprise, m.poste?.sigle),
         isBureau: estAuBureau(posteCap),
       }
     })
