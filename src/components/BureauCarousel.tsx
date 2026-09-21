@@ -10,7 +10,7 @@ interface BureauCarouselProps {
     nom: string
     slug?: string | null
     photo?: { url?: string | null } | null
-    poste?: { posteCap?: string | null; organisme?: string | null } | null
+    poste?: { posteCap?: string | null; entreprise?: string | null } | null
   }>
 }
 
@@ -64,7 +64,7 @@ export function BureauCarousel({ membres }: BureauCarouselProps) {
             {membres.slice(0, 3).map(membre => {
               const photoUrl = membre.photo?.url ?? null
               const posteCap  = membre.poste?.posteCap?.trim()
-              const organisme = membre.poste?.organisme?.trim()
+              const organisme = membre.poste?.entreprise?.trim()
 
               return (
                 <Link

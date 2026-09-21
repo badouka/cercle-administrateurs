@@ -248,7 +248,8 @@ export interface Membre {
      * Titre professionnel (ex. DG, Président du Conseil d'Administration…)
      */
     fonctionProfessionnelle?: string | null;
-    organisme?: string | null;
+    entreprise?: string | null;
+    sigle?: string | null;
     /**
      * URL du site officiel (ex. https://pad.sn)
      */
@@ -737,7 +738,8 @@ export interface MembresSelect<T extends boolean = true> {
     | {
         posteCap?: T;
         fonctionProfessionnelle?: T;
-        organisme?: T;
+        entreprise?: T;
+        sigle?: T;
         siteOrganisme?: T;
         direction?: T;
         logoOrganisme?: T;

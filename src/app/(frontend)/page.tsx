@@ -161,7 +161,7 @@ export default async function HomePage() {
       slug: m.slug,
       photo: photo ?? null,
       poste: m.poste
-        ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
+        ? { posteCap: m.poste.posteCap ?? null, entreprise: m.poste.entreprise ?? null }
         : null,
     }
   })

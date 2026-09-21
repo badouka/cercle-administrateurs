@@ -87,7 +87,7 @@ export function EditProfileForm({ membre }: Props) {
       nom:                     fd.get('nom')                     as string,
       biographie:              bioEditorRef.current?.getHTML()   ?? '',
       fonctionProfessionnelle: fd.get('fonctionProfessionnelle') as string,
-      organisme:               fd.get('organisme')               as string,
+      entreprise:              fd.get('entreprise')              as string,
       siteOrganisme:           fd.get('siteOrganisme')           as string,
       direction:               fd.get('direction')               as string,
       telephone:               fd.get('telephone')               as string,
@@ -147,7 +147,7 @@ export function EditProfileForm({ membre }: Props) {
           )}
           <InfoRow label="Poste au CAP" value={p.posteCap} />
           <InfoRow label="Fonction"     value={p.fonctionProfessionnelle} />
-          <InfoRow label="Organisation" value={p.organisme} />
+          <InfoRow label="Organisation" value={p.entreprise} />
           {p.siteOrganisme && (
             <div>
               <dt className="text-xs text-gray-400">Site organisation</dt>
@@ -262,9 +262,9 @@ export function EditProfileForm({ membre }: Props) {
           </div>
 
           <div>
-            <label htmlFor="organisme" className="block text-xs font-medium text-gray-600 mb-1">Organisation</label>
-            <input id="organisme" name="organisme" type="text"
-              defaultValue={p.organisme ?? ''} className={INPUT_CLS} />
+            <label htmlFor="entreprise" className="block text-xs font-medium text-gray-600 mb-1">Organisation</label>
+            <input id="entreprise" name="entreprise" type="text"
+              defaultValue={p.entreprise ?? ''} className={INPUT_CLS} />
           </div>
 
           <div>

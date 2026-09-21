@@ -165,7 +165,7 @@ export default function InscriptionPage() {
       email:                    fd.get('email')                    as string,
       motDePasse:               fd.get('motDePasse')               as string,
       fonctionProfessionnelle:  fd.get('fonctionProfessionnelle')  as string,
-      organisme:                fd.get('organisme')                as string,
+      entreprise:               fd.get('entreprise')               as string,
       siteOrganisme:            fd.get('siteOrganisme')            as string,
       telephone:                fd.get('telephone')                as string,
       telephoneSecondaire:      fd.get('telephoneSecondaire')      as string,
@@ -337,7 +337,7 @@ export default function InscriptionPage() {
             </div>
 
             <Field
-              id="organisme" name="organisme" label="Organisation"
+              id="entreprise" name="entreprise" label="Organisation"
               required
               placeholder="Agence, Entreprise…"
             />

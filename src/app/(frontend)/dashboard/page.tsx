@@ -160,7 +160,7 @@ export default async function DashboardPage() {
                 <dl className="space-y-2 text-sm">
                   {membre.poste?.posteCap && <div><dt className="text-xs text-gray-400">Poste au CAP</dt><dd className="text-gray-900">{membre.poste.posteCap}</dd></div>}
                   {membre.poste?.fonctionProfessionnelle && <div><dt className="text-xs text-gray-400">Fonction</dt><dd className="text-gray-900">{membre.poste.fonctionProfessionnelle}</dd></div>}
-                  {membre.poste?.organisme && <div><dt className="text-xs text-gray-400">Organisme</dt><dd className="text-gray-900">{membre.poste.organisme}</dd></div>}
+                  {membre.poste?.entreprise && <div><dt className="text-xs text-gray-400">Organisme</dt><dd className="text-gray-900">{membre.poste.entreprise}</dd></div>}
                 </dl>
               </div>
             )}
@@ -283,7 +283,7 @@ export default async function DashboardPage() {
               <h1 className="text-xl font-bold">{membre.prenom} {membre.nom}</h1>
               {membre.poste?.posteCap && <p className="mt-0.5 text-gray-400 text-sm">{membre.poste.posteCap}</p>}
               {membre.poste?.fonctionProfessionnelle && <p className="mt-0 text-gray-500 text-xs">{membre.poste.fonctionProfessionnelle}</p>}
-              {membre.poste?.organisme && <p className="text-gray-300 text-sm font-medium">{membre.poste.organisme}</p>}
+              {membre.poste?.entreprise && <p className="text-gray-300 text-sm font-medium">{membre.poste.entreprise}</p>}
               <div className="mt-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-medium">
                   <span className="h-1.5 w-1.5 rounded-full bg-green-400" />

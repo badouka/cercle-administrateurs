@@ -77,7 +77,7 @@ export default async function AnnuairePage({ searchParams }: PageProps) {
         photo: photoMedia?.url ?? null,
         posteCap,
         fonctionProfessionnelle: m.poste?.fonctionProfessionnelle ?? null,
-        organisme: m.poste?.organisme ?? null,
+        organisme: m.poste?.entreprise ?? null,
         isBureau: estAuBureau(posteCap),
       }
     })

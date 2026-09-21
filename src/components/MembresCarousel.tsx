@@ -10,7 +10,7 @@ interface MembreCard {
   nom: string
   slug?: string | null
   photo?: string | null
-  poste?: { posteCap?: string | null; organisme?: string | null } | null
+  poste?: { posteCap?: string | null; entreprise?: string | null } | null
 }
 
 interface MembresCarouselProps {
@@ -128,7 +128,7 @@ export function MembresCarousel({ membres }: MembresCarouselProps) {
             >
               {group.map(membre => {
                 const posteCap = membre.poste?.posteCap?.trim()
-                const organisme = membre.poste?.organisme?.trim()
+                const organisme = membre.poste?.entreprise?.trim()
                 return (
                   <Link
                     key={membre.id}

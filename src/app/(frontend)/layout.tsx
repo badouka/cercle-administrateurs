@@ -126,7 +126,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         ? { url: (m.photo as { url?: string | null }).url ?? null }
         : null,
     poste: m.poste
-      ? { posteCap: m.poste.posteCap ?? null, organisme: m.poste.organisme ?? null }
+      ? { posteCap: m.poste.posteCap ?? null, entreprise: m.poste.entreprise ?? null }
       : null,
   }))
 

@@ -264,7 +264,7 @@ export default async function GestionnairePage() {
                 <li key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4">
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
-                    {m.poste?.organisme && <p className="text-xs text-gray-500 mt-0.5">{m.poste.organisme}</p>}
+                    {m.poste?.entreprise && <p className="text-xs text-gray-500 mt-0.5">{m.poste.entreprise}</p>}
                     <p className="text-xs text-gray-400 mt-0.5">Inscrit le {formatDate(m.createdAt)}</p>
                     {justifUrl && (
                       <a href={justifUrl} target="_blank" rel="noopener noreferrer"

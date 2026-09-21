@@ -64,7 +64,7 @@ export default async function BureauPage() {
         photo: photoMedia?.url ?? null,
         posteCap: m.poste?.posteCap ?? null,
         fonctionProfessionnelle: m.poste?.fonctionProfessionnelle ?? null,
-        organisme: m.poste?.organisme ?? null,
+        organisme: m.poste?.entreprise ?? null,
         isBureau: true,
       }
     })

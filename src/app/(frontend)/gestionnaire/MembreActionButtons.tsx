@@ -73,7 +73,7 @@ export interface MembreInfo {
   genre?:                   string | null
   email?:                   string | null
   fonctionProfessionnelle?: string | null
-  organisme?:               string | null
+  entreprise?:              string | null
   siteOrganisme?:           string | null
   telephone?:               string | null
   telephoneSecondaire?:     string | null
@@ -143,7 +143,7 @@ export function MembreInfoLink({ nom, info }: { nom: string; info: MembreInfo })
               <InfoRow label="Genre"  value={info.genre ? (GENRE_LABELS[info.genre] ?? info.genre) : null} />
               <InfoRow label="Email"  value={info.email} />
               <InfoRow label="Fonction"     value={info.fonctionProfessionnelle} />
-              <InfoRow label="Organisation" value={info.organisme} />
+              <InfoRow label="Organisation" value={info.entreprise} />
               {info.siteOrganisme && (
                 <div>
                   <dt className="text-xs text-gray-400">Site web</dt>

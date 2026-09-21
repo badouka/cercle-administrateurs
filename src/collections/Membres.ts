@@ -15,7 +15,7 @@ export const Membres: CollectionConfig = {
   slug: 'membres',
   admin: {
     useAsTitle: 'nom',
-    defaultColumns: ['nom', 'prenom', 'organisme', 'statut', 'createdAt'],
+    defaultColumns: ['nom', 'prenom', 'entreprise', 'statut', 'createdAt'],
   },
   access: {
     read: ({ req: { user } }) => {
@@ -188,8 +188,9 @@ export const Membres: CollectionConfig = {
               label: 'Fonction',
               admin: { description: "Titre professionnel (ex. DG, Président du Conseil d'Administration…)" },
             },
-            { name: 'organisme',     type: 'text',   label: 'Organisation' },
-            { name: 'siteOrganisme', type: 'text',   label: "Site web de l'organisation", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
+            { name: 'entreprise',    type: 'text',   label: 'Entreprise' },
+            { name: 'sigle',         type: 'text',   label: "Sigle de l'entreprise" },
+            { name: 'siteOrganisme', type: 'text',   label: "Site web de l'entreprise", admin: { description: 'URL du site officiel (ex. https://pad.sn)' } },
             { name: 'direction',     type: 'text',   label: 'Direction / Département' },
             {
               name:       'logoOrganisme',

@@ -18,7 +18,7 @@ export function MembresTableClient({ membres }: { membres: Membre[] }) {
     return membres.filter(m => {
       const prenom    = m.prenom?.toLowerCase() ?? ''
       const nom       = m.nom?.toLowerCase() ?? ''
-      const organisme = m.poste?.organisme?.toLowerCase() ?? ''
+      const organisme = m.poste?.entreprise?.toLowerCase() ?? ''
       return prenom.includes(q) || nom.includes(q) || organisme.includes(q)
     })
   }, [membres, query])
@@ -62,7 +62,7 @@ export function MembresTableClient({ membres }: { membres: Membre[] }) {
                     <td className="px-5 py-3.5 font-medium text-[#14110B]">{m.prenom}</td>
                     <td className="px-5 py-3.5 font-bold text-[#14110B] uppercase">{m.nom}</td>
                     <td className="px-5 py-3.5 text-gray-500 text-xs">
-                      {m.poste?.organisme ?? <span className="text-gray-300">—</span>}
+                      {m.poste?.entreprise ?? <span className="text-gray-300">—</span>}
                     </td>
                     <td className="px-5 py-3.5 text-xs font-mono text-gray-500">
                       {m.adhesion?.numeroAdhesion ?? <span className="text-gray-300">—</span>}

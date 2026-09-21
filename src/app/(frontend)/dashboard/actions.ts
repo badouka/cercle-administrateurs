@@ -38,7 +38,7 @@ export interface ProfileData {
   biographie?:              string
   posteCap?:                string
   fonctionProfessionnelle?: string
-  organisme?:               string
+  entreprise?:              string
   siteOrganisme?:           string
   direction?:               string
   telephone?:               string
@@ -78,7 +78,7 @@ export async function updateProfile(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const poste: any = {
       fonctionProfessionnelle: data.fonctionProfessionnelle?.trim() || undefined,
-      organisme:               data.organisme?.trim()               ?? '',
+      entreprise:              data.entreprise?.trim()              ?? '',
       siteOrganisme:           data.siteOrganisme?.trim()           || undefined,
       direction:               data.direction?.trim()               ?? '',
     }

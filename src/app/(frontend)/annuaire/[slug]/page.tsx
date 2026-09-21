@@ -40,7 +40,7 @@ export default async function MembrePage({ params }: { params: Promise<{ slug: s
     : null
 
   const posteCap = membre.poste?.posteCap ?? ''
-  const organisme = membre.poste?.organisme ?? ''
+  const organisme = membre.poste?.entreprise ?? ''
   const fonctionPro = membre.poste?.fonctionProfessionnelle ?? ''
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

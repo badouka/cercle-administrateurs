@@ -32,7 +32,7 @@ function buildMembreInfo(m: Membre): MembreInfo {
     genre:                   m.genre,
     email:                   typeof m.user === 'object' && m.user ? m.user.email : null,
     fonctionProfessionnelle: m.poste?.fonctionProfessionnelle,
-    organisme:               m.poste?.organisme,
+    entreprise:              m.poste?.entreprise,
     siteOrganisme:           m.poste?.siteOrganisme,
     telephone:               m.coordonnees?.telephone,
     telephoneSecondaire:     m.coordonnees?.telephoneSecondaire,
@@ -110,8 +110,8 @@ export default async function MembreManagementPage() {
                 <li key={m.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4">
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-black">{m.prenom} {m.nom}</p>
-                    {m.poste?.organisme && (
-                      <p className="text-xs text-gray-600 mt-0.5">{m.poste.posteCap ? `${m.poste.posteCap} — ` : ''}{m.poste.organisme}</p>
+                    {m.poste?.entreprise && (
+                      <p className="text-xs text-gray-600 mt-0.5">{m.poste.posteCap ? `${m.poste.posteCap} — ` : ''}{m.poste.entreprise}</p>
                     )}
                     {m.adhesion?.numeroAdhesion && (
                       <p className="text-xs text-gray-400 font-mono mt-0.5">N° {m.adhesion.numeroAdhesion}</p>

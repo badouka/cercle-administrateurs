@@ -108,7 +108,7 @@ async function contexteDuSite(): Promise<string> {
     const bureau = docs
       .filter(m => (m.poste?.posteCap ?? '').trim() && (m.poste?.posteCap ?? '').trim() !== 'Membre')
       .map(m => {
-        const organisme = m.poste?.organisme ? `, ${m.poste.organisme}` : ''
+        const organisme = m.poste?.entreprise ? `, ${m.poste.entreprise}` : ''
         return `- ${m.prenom} ${m.nom} — ${m.poste.posteCap}${organisme} (/annuaire/${m.slug})`
       })
 

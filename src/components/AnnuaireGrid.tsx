@@ -49,7 +49,7 @@ export function AnnuaireGrid({ membres, hideFilter = false }: AnnuaireGridProps)
     if (q) {
       result = result.filter(m => {
         const nom       = normalizeStr(`${m.prenom} ${m.nom}`)
-        const organisme = normalizeStr(m.poste?.organisme ?? '')
+        const organisme = normalizeStr(m.poste?.entreprise ?? '')
         return nom.includes(q) || organisme.includes(q)
       })
     }
@@ -156,10 +156,10 @@ export function AnnuaireGrid({ membres, hideFilter = false }: AnnuaireGridProps)
                       {membre.poste.fonctionProfessionnelle}
                     </p>
                   )}
-                  {membre.poste?.organisme && (
+                  {membre.poste?.entreprise && (
                     <p className="mt-1.5 inline-flex items-center gap-1 text-xs text-gray-500 line-clamp-1">
                       <Building2 size={11} className="shrink-0 text-gray-400" />
-                      {membre.poste.organisme}
+                      {membre.poste.entreprise}
                     </p>
                   )}
                 </Link>

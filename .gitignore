@@ -51,3 +51,12 @@ node_modules/
 
 # WordPress migration data
 wp-data/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Backups de base de donnees (peuvent contenir des donnees sensibles : hash/salt, PII)
+/backups/
+
+# Donnees membres brutes (PII)
+scripts/Liste_membres_structuree.xlsx

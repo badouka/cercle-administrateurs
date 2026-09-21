@@ -17,7 +17,7 @@ export interface InscriptionData {
   email:                    string
   motDePasse:               string
   fonctionProfessionnelle?: string
-  organisme?:               string
+  entreprise?:              string
   siteOrganisme?:           string
   telephone?:               string
   telephoneSecondaire?:     string
@@ -82,7 +82,7 @@ export async function inscrire(
 ): Promise<{ success: true } | { error: string }> {
   const {
     prenom, nom, genre, email, motDePasse,
-    fonctionProfessionnelle, organisme, siteOrganisme, telephone, telephoneSecondaire,
+    fonctionProfessionnelle, entreprise, siteOrganisme, telephone, telephoneSecondaire,
     justificatifId, photoId,
   } = data
 
@@ -115,7 +115,7 @@ export async function inscrire(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const posteData: any = {
       fonctionProfessionnelle: fonctionProfessionnelle?.trim() || undefined,
-      organisme:               organisme?.trim()               ?? '',
+      entreprise:              entreprise?.trim()              ?? '',
       siteOrganisme:           siteOrganisme?.trim()           || undefined,
     }
 
@@ -150,7 +150,7 @@ export async function inscrire(
         prenom.trim(),
         nom.trim(),
         email.toLowerCase().trim(),
-        organisme?.trim(),
+        entreprise?.trim(),
         fonctionProfessionnelle?.trim(),
       )
     } catch (err) {
