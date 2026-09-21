@@ -25,6 +25,7 @@ export const metadata = {
 const ORDRE_POSTES = [
   "Président d'honneur",
   "Présidente d'honneur",
+  "Membre d'honneur",
   'Président',
   'Présidente',
   'Vice-Président',

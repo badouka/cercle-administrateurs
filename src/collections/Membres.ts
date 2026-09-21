@@ -154,6 +154,7 @@ export const Membres: CollectionConfig = {
               options: [
                 { label: "Président d'honneur",                    value: "Président d'honneur" },
                 { label: "Présidente d'honneur",                   value: "Présidente d'honneur" },
+                { label: "Membre d'honneur",                       value: "Membre d'honneur" },
                 { label: 'Président',                              value: 'Président' },
                 { label: 'Présidente',                             value: 'Présidente' },
                 { label: 'Vice-Président',                         value: 'Vice-Président' },

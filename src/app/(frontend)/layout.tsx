@@ -134,7 +134,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   }))
 
   const ORDRE_POSTES = [
-    "Président d'honneur", "Présidente d'honneur",
+    "Président d'honneur", "Présidente d'honneur", "Membre d'honneur",
     'Président', 'Présidente',
     'Vice-Président', 'Vice-Présidente',
     'Secrétaire général', 'Secrétaire générale',

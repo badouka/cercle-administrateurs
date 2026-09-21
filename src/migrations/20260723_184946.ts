@@ -4,7 +4,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_users_role" AS ENUM('membre', 'gestionnaire', 'admin');
   CREATE TYPE "public"."enum_membres_genre" AS ENUM('homme', 'femme');
-  CREATE TYPE "public"."enum_membres_poste_poste_cap" AS ENUM('Président d''honneur', 'Présidente d''honneur', 'Président', 'Présidente', 'Vice-Président', 'Vice-Présidente', 'Secrétaire général', 'Secrétaire générale', 'Secrétaire général adjoint', 'Secrétaire générale adjointe', 'Trésorier', 'Trésorière', 'Trésorier Adjoint', 'Trésorière Adjointe', 'Présidente Commission Actions Sociales', 'Présidente Commission Communication', 'President Commission Strategie Vulgarisation', 'Président Commission Renforcement de Capacités', 'Membre');
+  CREATE TYPE "public"."enum_membres_poste_poste_cap" AS ENUM('Président d''honneur', 'Présidente d''honneur', 'Membre d''honneur', 'Président', 'Présidente', 'Vice-Président', 'Vice-Présidente', 'Secrétaire général', 'Secrétaire générale', 'Secrétaire général adjoint', 'Secrétaire générale adjointe', 'Trésorier', 'Trésorière', 'Trésorier Adjoint', 'Trésorière Adjointe', 'Présidente Commission Actions Sociales', 'Présidente Commission Communication', 'President Commission Strategie Vulgarisation', 'Président Commission Renforcement de Capacités', 'Membre');
   CREATE TYPE "public"."enum_membres_adhesion_statut" AS ENUM('actif', 'inactif', 'suspendu');
   CREATE TYPE "public"."enum_activities_type" AS ENUM('atelier', 'seminaire');
   CREATE TYPE "public"."enum_activities_statut" AS ENUM('a_venir', 'en_cours', 'termine');
